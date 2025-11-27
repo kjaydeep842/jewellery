@@ -48,7 +48,7 @@
 </div>
   <!-- Header / Navbar -->
 <header class="bg-white shadow">
-  <div class="container mx-auto  sm:text-sm md:text-base lg:text-xl md:w-auto md:text-right px-6 py-4 flex items-center justify-between items-center">
+  <div class="container mx-auto sm:text-sm md:text-base lg:text-xl md:w-auto md:text-right px-6 py-4 flex items-center justify-between items-center">
     <nav>
     <!-- Hamburger Button (Mobile) -->
       <button id="menu-btn" class="sm:hidden block text-3xl">
@@ -109,62 +109,42 @@
   </style>
   
   <!-- HERO (replace existing hero) -->
-  <section class="relative w-full h-50 bg-[#3d3d3f] text-white overflow-hidden">
-  
-    <!-- frame height = 817 (Figma) -->
-    <div class="flex max-w-[1920px] mx-auto relative" style="height:600px; md:text-right">
-  
-      <!-- background image -->
-      <img src="assets/hero1.png" alt="hero"
-           class="absolute inset-0 w-full h-full object-cover opacity-40 z-0" />
-  
-      <!-- dark gradient -->
-      <img src="assets/Rectangle 2.png" alt="dark background" class="absolute inset-0 w-full h-full object-cover z-10" />
-  
-      <!-- left content -->
-      <div class="absolute z-10 right-[670px] top-[100px] w-[48%]">
-        <h1 class="font-fahkwang font-semibold text-[40px] leading-[48px] tracking-tight text-white">
-          Where Timeless<br/>Elegance, Meets Modern<br/>Craftsmanship. </h1>
-  
-        <p class="text-[10px] mt-2 opacity-90 max-w-[400px]">
-          Where every gemstone whispers a story, and every design carries heritage.
+<!-- SIMPLE HERO SECTION USING mg.jpeg -->
+<section class="relative w-full h-[600px] overflow-hidden">
+
+    <!-- Main Hero Image -->
+    <img src="assets/mg.jpeg"
+         alt="Jewelry Hero Banner"
+         class="w-full h-full object-cover">
+
+    {{-- <!-- Optional dark overlay -->
+    <div class="absolute inset-0 bg-black/40"></div>
+
+    <!-- Hero Text -->
+    <div class="absolute top-1/2 left-10 transform -translate-y-1/2 text-white max-w-lg">
+
+        <h1 class="text-4xl font-bold leading-tight">
+            Where Timeless<br>Elegance Meets Modern<br>Craftsmanship.
+        </h1>
+
+        <p class="mt-3 text-sm opacity-90">
+            Where every gemstone whispers a story, and every design carries heritage.
         </p>
-  
-        <a href="#" class="mt-4 inline-flex items-center justify-center bg-white text-black 
-                           w-[120px] h-[38px] text-[12px] tracking-wide font-medium  shadow-sm
-                           hover:bg-gray-200 transition">
-          SHOP NOW
+
+        <a href="#"
+           class="mt-5 inline-block bg-white text-black px-6 py-3 font-medium text-sm
+                  hover:bg-gray-200 transition">
+            SHOP NOW
         </a>
-      </div>
-  
-      <!-- right artwork area -->
-      <div class="absolute z-20 right-0 top-8 w-[55%] h-full pointer-events-none">
-  
-        <!-- necklace artwork (use your transparent PNG exported from Figma or the mangalsutra.png) -->
-        <img src="assets/mang2.png" alt="necklace"
-             class="absolute right-[190px] top-[-25px] w-[804px] h-[440px] object-cover z-0"/>
-  
-        <!-- pedestal (ellipse) -->
-        <img src="assets/ellips.png" alt="pedestal"
-             class="absolute right-[55px] bottom-[30px] w-[700px] opacity-50 z-10"/>
-      </div>
-  
-      <!-- 10% Off badge (exact baseline offset) -->
-      <div class="absolute z-40 right-[40px] bottom-[90px] text-right select-none">
-  
-        <div class="flex items-end gap-1 leading-none">
-          <span class="font-editorial italic font-bold text-[70px] leading-[70px]">10</span>
-          <span class="font-roboto italic font-light text-[30px] leading-[70px]">%</span>
-          <span class="font-roboto italic font-light text-[30px] leading-[70px] relative" style="top:4px;">Off</span>
-        </div>
-  
-        <p class="text-[15px] mt-1 opacity-90 font-roboto leading-[12px]">
-          On Making Charges of <br/><br/>Selected Jewellery
-        </p>
-      </div>
-  
-    </div>
-  </section>
+
+    </div> --}}
+  <a href="#"
+           class="mt-5 inline-block bg-white text-black px-6 py-3 font-medium text-sm
+                  hover:bg-gray-200 transition">
+            SHOP NOW
+        </a>
+</section>
+
   
 
 
@@ -644,7 +624,7 @@ Exquisite Jewelry</h3>
     <button id="prevBtn" class="absolute top-1/2 left-2 -translate-y-1/2 
             bg-black/50 text-white px-3 py-1 rounded">‹</button>
 
-    <button id="nextBtn" class="absolute top-1/2 right-2 -translate-y-1/2
+    <button id="nextBtn" class=" absolute top-1/2 right-2 -translate-y-1/2
             bg-black/50 text-white px-3 py-1 rounded">›</button>
 </div>   
 </section>
@@ -752,8 +732,8 @@ Exquisite Jewelry</h3>
        <div>
             <p class="mb-4">Sign up to our newsletter for exclusive access:</p>
         <form class="flex flex-col sm:flex-row gap-2">
-          <input type="email" placeholder="Enter your email" class="p-2 rounded-lg text-gray-900 flex-1">
-          <button type="submit" class="bg-rose-600 hover:bg-rose-500 text-white font-semibold px-4 py-2 rounded-lg">Submit</button>
+          <input type="email" placeholder="Enter your email" class="p-2 rounded-lg text-gray-900 flex-1"><br>
+         <br><button type="submit" class="bg-pink-600 hover:bg-rose-500 text-black font-semibold px-4 py-2">Submit</button>
         </form>
       </div>
       <!-- Pages -->

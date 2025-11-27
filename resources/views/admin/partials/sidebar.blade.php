@@ -11,34 +11,50 @@
 
     {{-- DYNAMIC MENU --}}
     @php
-        $menu = [
-            [
-                'name' => 'Dashboard',
-                'icon' => '📊',
-                'route' => 'admin.dashboard',
-            ],
-            [
-                'name' => 'Products',
-                'icon' => '💎',
-                'route' => 'admin.products.index',
-            ],
-            [
-                'name' => 'Categories',
-                'icon' => '📁',
-                'route' => 'admin.categories.index',   // 🔥 Add this route
-            ],
-            [
-                'name' => 'Orders',
-                'icon' => '🛒',
-                'route' => 'admin.orders.index',
-            ],
-            [
-                'name' => 'Users',
-                'icon' => '👥',
-                'route' => 'admin.users.index',
-            ],
-        ];
-    @endphp
+    $menu = [
+        [
+            'name' => 'Dashboard',
+            'icon' => '📊',
+            'route' => 'admin.dashboard',
+        ],
+        [
+            'name' => 'Products',
+            'icon' => '💎',
+            'route' => 'admin.products.index',
+        ],
+        [
+            'name' => 'Categories',
+            'icon' => '📁',
+            'route' => 'admin.categories.index',
+        ],
+        [
+            'name' => 'Subcategories',
+            'icon' => '📂',
+            'route' => 'admin.subcategories.index',
+        ],
+        [
+            'name' => 'Tags',
+            'icon' => '🏷️',
+            'route' => 'admin.tags.index',
+        ],
+        [
+            'name' => 'Orders',
+            'icon' => '🛒',
+            'route' => 'admin.orders.index',
+        ],
+        [
+            'name' => 'Users',
+            'icon' => '👥',
+            'route' => 'admin.users.index',
+        ],
+        [
+            'name' => 'Banners',
+            'icon' => '🖼️',
+            'route' => 'admin.banners.index',
+        ],
+    ];
+@endphp
+
 
     <nav class="flex-1 p-4 space-y-2">
         @foreach ($menu as $item)

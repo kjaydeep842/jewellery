@@ -26,6 +26,7 @@
                 <th class="p-3 text-left">Image</th>
                 <th class="p-3 text-left">Name</th>
                 <th class="p-3 text-left">Category</th>
+                <th class="p-2 border">Tags</th>
                 <th class="p-3 text-left">Price</th>
                 <th class="p-3 text-left">Actions</th>
             </tr>
@@ -46,11 +47,20 @@
             </td>
 
                 
-                <td class="p-3">{{ $product->name }}</td>
-                <td class="p-3">{{ $product->category?->name ?? 'No Category' }}</td>
-                <td class="p-3">₹{{ number_format($product->price, 2) }}</td>
+                <td class="p-3 border">{{ $product->name }}</td>
+                <td class="p-3 border">{{ $product->category?->name ?? 'No Category' }}</td>
+                <td class="p-3 border">
+                        @foreach($product->tags as $tag)
+                            <span class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs">
+                                {{ $tag->name }}
+                            </span>
+                        @endforeach
+                </td>
 
-                <td class="p-3 space-x-2">
+                <td class="p-3 border">₹{{ number_format($product->price, 2) }}</td>
+             
+
+                <td class="p-3 border space-x-2">
 
                     <a href="{{ route('admin.products.edit', $product->id) }}"
                        class="text-blue-600 hover:underline">Edit</a>

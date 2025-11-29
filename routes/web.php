@@ -138,7 +138,12 @@ Route::middleware(['auth', 'admin'])
         Route::patch('banners/{banner}/toggle', [\App\Http\Controllers\Admin\BannerController::class, 'toggleStatus'])->name('banners.toggle');
     });
 
+
 Route::get('/fix-cache', function () {
     Artisan::call('optimize:clear');
-    return 'Cache cleared!';
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+
+    return "Cache Cleared";
 });

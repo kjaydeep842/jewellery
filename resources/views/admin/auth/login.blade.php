@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Login</title>
-    <link rel="stylesheet" href="https://cdn.tailwindcss.com">
-</head>
-<body class="bg-gray-100">
-
-<div class="min-h-screen flex items-center justify-center">
+<x-guest-layout>
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
 
     <div class="bg-white p-8 rounded shadow-md w-96">
         <h2 class="text-xl font-bold mb-4 text-center">Admin Login</h2>
@@ -38,5 +33,5 @@
 
 </div>
 
-</body>
-</html>
+
+</x-guest-layout>

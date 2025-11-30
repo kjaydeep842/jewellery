@@ -156,41 +156,42 @@
             Route::patch('banners/{banner}/toggle', [\App\Http\Controllers\Admin\BannerController::class, 'toggleStatus'])->name('banners.toggle');
         });
 
-        Route::get('/fix-cache', function () {
-            Artisan::call('optimize:clear');
-            Artisan::call('config:clear');
-            Artisan::call('cache:clear');
-            Artisan::call('route:clear');
-        
-            return "Cache Cleared";
-        });
-        
-        
-        
-        Route::get('/test-auth', function () {
-            $creds = [
-                'email' => 'kjaydee842@gmail.com',
-                'password' => '123456789'
-            ];
-        
-            if (Auth::validate($creds)) {
-                return 'VALID LOGIN';
-            } else {
-                return 'INVALID LOGIN';
-            }
-        });
-        
-        
-        
-        Route::get('/force-fix-password', function () {
-            $user = \App\Models\User::where('email', 'kjaydeep842@gmail.com')->first();
-        
-            if (!$user) {
-                return 'User not found!';
-            }
-        
-            $user->password = bcrypt('123456789');
-            $user->save();
-        
-            return 'Admin password reset successfully!';
-        });
+    /*
+    |--------------------------------------------------------------------------
+    | TEST/UTILITY ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/fix-cache', function () {
+        Artisan::call('optimize:clear');
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('route:clear');
+    
+        return "Cache Cleared";
+    });
+
+    Route::get('/test-auth', function () {
+        $creds = [
+            'email' => 'kjaydee842@gmail.com',
+            'password' => '123456789'
+        ];
+    
+        if (Auth::validate($creds)) {
+            return 'VALID LOGIN';
+        } else {
+            return 'INVALID LOGIN';
+        }
+    });
+
+    Route::get('/force-fix-password', function () {
+        $user = \App\Models\User::where('email', 'kjaydeep842@gmail.com')->first();
+    
+        if (!$user) {
+            return 'User not found!';
+        }
+    
+        $user->password = bcrypt('123456789');
+        $user->save();
+    
+        return 'Admin password reset successfully!';
+    });

@@ -30,28 +30,29 @@ public function login(Request $request)
 {
     $credentials = $request->only('email', 'password');
 
-    // Check if user exists
+    // Step 1: Get user
     $user = \App\Models\User::where('email', $credentials['email'])->first();
 
     if (!$user) {
-        return back()->withErrors(['email' => 'Invalid admin credentials']);
+        return back()->withErrors(['email' => 'User not found']);
     }
 
-    // Check password using Laravel's Hash::check
-    if (!\Hash::check($credentials['password'], $user->password)) {
-        return back()->withErrors(['email' => 'Invalid admin credentials']);
-    }
-
-    // Check admin flag
+    // Step 2: Check if admin
     if ($user->is_admin != 1) {
-        return back()->withErrors(['email' => 'You are not authorized as admin']);
+        return back()->withErrors(['email' => 'Not an admin']);
     }
 
-    // Log user in
-    Auth::login($user);
+    // Step 3: Check password manually
+    if (!\Hash::check($credentials['password'], $user->password)) {
+        return back()->withErrors(['email' => 'Invalid password']);
+    }
+
+    // Step 4: Login with ADMIN guard
+    Auth::guard('admin')->login($user);
 
     return redirect()->route('admin.dashboard');
 }
+
 
 
     public function logout()

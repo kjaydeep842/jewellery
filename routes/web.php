@@ -147,3 +147,18 @@ Route::get('/fix-cache', function () {
 
     return "Cache Cleared";
 });
+
+
+
+Route::get('/test-auth', function () {
+    $creds = [
+        'email' => 'kjaydee842@gmail.com',
+        'password' => '123456789'
+    ];
+
+    if (Auth::validate($creds)) {
+        return 'VALID LOGIN';
+    } else {
+        return 'INVALID LOGIN';
+    }
+});

@@ -162,3 +162,18 @@ Route::get('/test-auth', function () {
         return 'INVALID LOGIN';
     }
 });
+
+
+
+Route::get('/force-fix-password', function () {
+    $user = \App\Models\User::where('email', 'kjaydee842@gmail.com')->first();
+
+    if (!$user) {
+        return 'User not found!';
+    }
+
+    $user->password = bcrypt('123456789');
+    $user->save();
+
+    return 'Admin password reset successfully!';
+});

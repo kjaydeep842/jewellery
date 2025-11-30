@@ -27,22 +27,29 @@ public function login(Request $request)
 {
     $credentials = $request->only('email', 'password');
 
-    // First try authentication (email + password)
-    if (Auth::validate($credentials)) {
+    // Check if user exists
+    $user = \App\Models\User::where('email', $credentials['email'])->first();
 
-        $user = Auth::getLastAttempted();
+    if (!$user) {
+        return back()->withErrors(['email' => 'Invalid admin credentials']);
+    }
 
-        // Now check if this user is admin
-        if ($user->is_admin == 1) {
-            Auth::login($user);
-            return redirect()->route('admin.dashboard');
-        }
+    // Check password using Laravel's Hash::check
+    if (!\Hash::check($credentials['password'], $user->password)) {
+        return back()->withErrors(['email' => 'Invalid admin credentials']);
+    }
 
+    // Check admin flag
+    if ($user->is_admin != 1) {
         return back()->withErrors(['email' => 'You are not authorized as admin']);
     }
 
-    return back()->withErrors(['email' => 'Invalid admin credentials']);
+    // Log user in
+    Auth::login($user);
+
+    return redirect()->route('admin.dashboard');
 }
+
 
     public function logout()
     {

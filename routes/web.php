@@ -1,4 +1,4 @@
-<?php
+fv<?php
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -166,7 +166,7 @@ Route::get('/test-auth', function () {
 
 
 Route::get('/force-fix-password', function () {
-    $user = \App\Models\User::where('email', 'kjaydee842@gmail.com')->first();
+    $user = \App\Models\User::where('email', 'kjaydeep842@gmail.com')->first();
 
     if (!$user) {
         return 'User not found!';

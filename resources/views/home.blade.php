@@ -32,14 +32,14 @@
   
 
   <!-- Top Promo Bar -->
-<div class="w-full bg-gray-900 text-white text-sm py-2 px-4 flex flex-col md:flex-row  sm:text-sm md:text-base lg:text-xl items-center justify-between text-sm md:text-base">
-    <p class="text-center md:text-left">
+<div class="w-full bg-gray-900 text-white text-sm py-2 px-4 flex flex-col md:flex-row items-center justify-between">
+    <p class="text-center md:text-left text-xs sm:text-sm md:text-base">
         Free Insured Shipping Worldwide on all orders.
         <span class="font-semibold">Use Code: FESTIVE10</span> for 10% Off.
     </p>
 
-    <div class="flex items-center space-x-1 mt-1  md:text-right">
-        <img src="assets/h.png"  class="w-5 h-5  rounded-full mx-auto mb-auto object-cover">
+    <div class="flex items-center space-x-1 mt-1 md:mt-0 text-xs sm:text-sm md:text-base">
+        <img src="assets/h.png"  class="w-4 h-4 md:w-5 md:h-5 rounded-full object-cover">
         <span>IND</span>
         <i class="fa-solid fa-indian-rupee-sign"></i>
         <i class="fa-solid fa-chevron-down"></i>
@@ -48,45 +48,58 @@
 </div>
   <!-- Header / Navbar -->
 <header class="bg-white shadow">
-  <div class="container mx-auto sm:text-sm md:text-base lg:text-xl md:w-auto md:text-right px-6 py-4 flex items-center justify-between items-center">
-    <nav>
+  <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+    <nav class="flex items-center justify-between w-full md:w-auto">
     <!-- Hamburger Button (Mobile) -->
-      <button id="menu-btn" class="sm:hidden block text-3xl">
+      <button id="menu-btn" class="block md:hidden text-2xl text-gray-700 focus:outline-none">
         ☰
       </button>
-
-    <!-- Navigation Menu -->
-    <ul id="menu" class="hidden flex-col absolute top-16 left-0 w-full bg-white shadow-md py-4 space-y-4 text-center md:flex md:flex-row md:space-x-8 md:space-y-0 md:static md:shadow-none md:py-0 md:text-left text-gray-700 font-medium md:items-center">
-      <li><a href="#" class="hover:text-rose-600 transition">Earrings</a></li>
-      <li><a href="#" class="hover:text-rose-600 transition">Pendants & Necklaces</a></li>
-      <li><a href="#" class="hover:text-rose-600 transition">Bracelets & Bangles</a></li>
-     <!-- Logo -->
-   
-       <img id ="navImage" src="assets/logo.png" alt="logo photo" class="md:flex w-20 h-25 mx-auto mb-4 object-cover md:mb-0">
     
-      <li><a href="#" class="hover:text-rose-600 transition">Mangalsutra</a></li>
-      <li><a href="#" class="hover:text-rose-600 transition">Gifts</a></li>
-      <li><a href="#" class="hover:text-rose-600 transition">New Arrivals</a></li>
+      <!-- Logo for Mobile (moved to be always visible) -->
+      <img src="assets/logo.png" alt="logo photo" class="w-16 h-auto object-cover md:hidden block" id="mobile-logo">
+      
+    <!-- Navigation Menu -->
+    <ul id="menu" class="hidden flex-col absolute top-[60px] left-0 w-full bg-white shadow-md py-4 space-y-4 text-center 
+               md:flex md:flex-row md:space-x-8 md:space-y-0 md:static md:shadow-none md:py-0 md:text-left 
+               text-gray-700 font-medium md:items-center z-50">
+      <li><a href="#" class="hover:text-rose-600 transition text-sm md:text-base">Earrings</a></li>
+      <li><a href="#" class="hover:text-rose-600 transition text-sm md:text-base">Pendants & Necklaces</a></li>
+      <li><a href="#" class="hover:text-rose-600 transition text-sm md:text-base">Bracelets & Bangles</a></li>
+     <!-- Logo for Desktop -->
+       <img id ="navImage" src="assets/logo.png" alt="logo photo" class="hidden md:block w-20 h-auto object-cover">
+      <li><a href="#" class="hover:text-rose-600 transition text-sm md:text-base">Mangalsutra</a></li>
+      <li><a href="#" class="hover:text-rose-600 transition text-sm md:text-base">Gifts</a></li>
+      <li><a href="#" class="hover:text-rose-600 transition text-sm md:text-base">New Arrivals</a></li>
     </ul>
   </nav>   
     <!-- Right Section (Cart & Mobile Menu) -->
-    <div class="flex items-center gap-3 ">
+    <div class="flex items-center gap-3 text-gray-700 text-xl">
  
       <!-- icons -->
-     <i class="fa-solid fa-magnifying-glass text-gray-700 text-xl"></i>
-     <i class="fa-regular fa-user text-gray-700 text-xl"></i>
-     <i class="fa-regular fa-heart text-gray-700 text-xl"></i>
-        <i class="fa-solid fa-bag-shopping text-gray-700 text-xl"></i>
+     <i class="fa-solid fa-magnifying-glass"></i>
+     <i class="fa-regular fa-user"></i>
+     <i class="fa-regular fa-heart"></i>
+        <i class="fa-solid fa-bag-shopping"></i>
     </div>
   </div>
   <script>
     const btn = document.getElementById('menu-btn');
     const menu = document.getElementById('menu');
-    const navImage = document.getElementById('navImage'); // Corrected variable declaration
+    const navImage = document.getElementById('navImage'); 
+    const mobileLogo = document.getElementById('mobile-logo'); // Get the mobile logo
 
     btn.addEventListener("click", () => {
       menu.classList.toggle("hidden");
-      navImage.classList.toggle("hidden");
+      // Toggle visibility of the mobile logo when the menu is toggled
+      if (menu.classList.contains("hidden")) {
+        mobileLogo.classList.remove("hidden");
+      } else {
+        mobileLogo.classList.add("hidden");
+      }
+      // Also toggle the desktop logo if it's visible on larger screens (though it should be hidden by default on small screens)
+      if (navImage) {
+        navImage.classList.toggle("hidden");
+      }
     });
   </script>
 
@@ -142,11 +155,11 @@
   
         <!-- necklace artwork (use your transparent PNG exported from Figma or the mangalsutra.png) -->
         <img src="assets/mang2.png" alt="necklace"
-             class="w-[60%] md:w-[804px] h-auto md:h-[440px] object-cover "/>
+             class="w-full max-w-[804px] h-auto max-h-[440px] object-contain "/>
   
         <!-- pedestal (ellipse) -->
         <img src="assets/ellips.png" alt="pedestal"
-             class="absolute bottom-0 md:bottom-[30px] w-[80%] md:w-[700px] opacity-50 "/>
+             class="absolute bottom-0 md:bottom-[30px] w-full max-w-[700px] opacity-50 "/>
       </div>
   
       <!-- 10% Off badge (exact baseline offset) -->
@@ -185,9 +198,9 @@
       <span class="absolute top-3 right-3 text-xs px-3 py-1"><i class="fa-regular fa-heart text-gray-700 text-xl"></i></span>
       <span class="absolute top-10 right-3 text-xs px-3 py-1"><i class="fa-regular fa-eye text-gray-600 text-xl"></i></span>
         
-      <img src="assets/nww1.png" class="mx-auto mb-4 rounded-lg object-cover transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
+      <img src="assets/nww1.png" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
    <!-- Second Image (Hover State) -->
-       <img src="assets/nw1.png" class="mx-auto mb-4 rounded-lg object-cover absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+       <img src="assets/nw1.png" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
      
       <h3 class="text-lg text-gray-800 mb-2">Eternity Band</h3>
       <div class="mb-3">
@@ -204,8 +217,8 @@
       <span class="absolute top-3 right-3 text-xs px-3 py-1"><i class="fa-regular fa-heart text-gray-700 text-xl"></i></span>
       <span class="absolute top-10 right-3 text-xs px-3 py-1"><i class="fa-regular fa-eye text-gray-600 text-xl"></i></span>
         
-      <img src="assets/nww2.png" alt="Birthstone Earrings" class="mx-auto mb-4 rounded-lg object-cover transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
-      <img src="assets/nw2.jpg" class="mx-auto mb-4 rounded-lg object-cover absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+      <img src="assets/nww2.png" alt="Birthstone Earrings" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
+      <img src="assets/nw2.jpg" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
      
      <h3 class="text-lg text-gray-800 mb-2">Birthstone Earrings</h3>
       <div class="mb-3">
@@ -222,8 +235,8 @@
      <span class="absolute top-3 right-3 text-xs px-3 py-1"><i class="fa-regular fa-heart text-gray-700 text-xl"></i></span>
       <span class="absolute top-10 right-3 text-xs px-3 py-1"><i class="fa-regular fa-eye text-gray-600 text-xl"></i></span>
         
-      <img src="assets/nww3.png" alt="Byzantine Bracelet" class="mx-auto mb-4 rounded-lg object-cover transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
-     <img src="assets/nw3.png" class="mx-auto mb-4 rounded-lg object-cover absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+      <img src="assets/nww3.png" alt="Byzantine Bracelet" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
+     <img src="assets/nw3.png" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
      
  <h3 class="text-lg text-gray-800 mb-2">Byzantine Bracelet</h3>
       <div class="mb-3">
@@ -240,8 +253,8 @@
       <span class="absolute top-3 right-3 text-xs px-3 py-1"><i class="fa-regular fa-heart text-gray-700 text-xl"></i></span>
       <span class="absolute top-10 right-3 text-xs px-3 py-1"><i class="fa-regular fa-eye text-gray-600 text-xl"></i></span>
         
-      <img src="assets/nww4.png" alt="Infinity Bracelet" class="mx-auto mb-4 rounded-lg object-cover transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
-      <img src="assets/nw4.jpg" class="mx-auto mb-4 rounded-lg object-cover absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+      <img src="assets/nww4.png" alt="Infinity Bracelet" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
+      <img src="assets/nw4.jpg" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
      
       <h3 class="text-lg text-gray-800 mb-2">Infinity Bracelet</h3>
       <div class="mb-3">
@@ -306,8 +319,8 @@
       <span class="absolute top-3 right-3 text-xs px-3 py-1"><i class="fa-regular fa-heart text-gray-700 text-xl"></i></span>
       <span class="absolute top-10 right-3 text-xs px-3 py-1"><i class="fa-regular fa-eye text-gray-600 text-xl"></i></span>
         
-      <img src="assets/bss1.png" class="mx-auto mb-4 rounded-lg object-cover transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
-      <img src="assets/bs1.jpg" class="mx-auto mb-4 rounded-lg object-cover absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+      <img src="assets/bss1.png" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
+      <img src="assets/bs1.jpg" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
            
    <h3 class="text-lg text-gray-800 mb-2">Anniversary Ring</h3>
       <div class="mb-3">
@@ -324,8 +337,8 @@
       <span class="absolute top-3 right-3 text-xs px-3 py-1"><i class="fa-regular fa-heart text-gray-700 text-xl"></i></span>
       <span class="absolute top-10 right-3 text-xs px-3 py-1"><i class="fa-regular fa-eye text-gray-600 text-xl"></i></span>
         
-     <img src="assets/bss2.png" alt="Vintage-Inspired Earrings" class="mx-auto mb-4 rounded-lg object-cover transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
-     <img src="assets/bs2.jpg" class="mx-auto mb-4 rounded-lg object-cover absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+     <img src="assets/bss2.png" alt="Vintage-Inspired Earrings" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
+     <img src="assets/bs2.jpg" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
     
       <h3 class="text-lg text-gray-800 mb-2">Vintage-Inspired Earrings</h3>
       <div class="mb-3">
@@ -342,8 +355,8 @@
       <span class="absolute top-3 right-3 text-xs px-3 py-1"><i class="fa-regular fa-heart text-gray-700 text-xl"></i></span>
       <span class="absolute top-10 right-3 text-xs px-3 py-1"><i class="fa-regular fa-eye text-gray-600 text-xl"></i></span>
         
-      <img src="assets/bss3.png" alt="Wedding Band" class="mx-auto mb-4 rounded-lg object-cover transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
-      <img src="assets/bs3.jpg" class="mx-auto mb-4 rounded-lg object-cover absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+      <img src="assets/bss3.png" alt="Wedding Band" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
+      <img src="assets/bs3.jpg" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
      
      <h3 class="text-lg text-gray-800 mb-2">Wedding Band</h3>
       <div class="mb-3">
@@ -360,8 +373,8 @@
       <span class="absolute top-3 right-3 text-xs px-3 py-1"><i class="fa-regular fa-heart text-gray-700 text-xl"></i></span>
       <span class="absolute top-10 right-3 text-xs px-3 py-1"><i class="fa-regular fa-eye text-gray-600 text-xl"></i></span>
         
-     <img src="assets/bss4.png" class="mx-auto mb-4 rounded-lg object-cover transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
-     <img src="assets/bs4.jpg" class="mx-auto mb-4 rounded-lg object-cover absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+     <img src="assets/bss4.png" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 transition-opacity duration-500 ease-in-out  group-hover:opacity-0">
+     <img src="assets/bs4.jpg" class="mx-auto mb-4 rounded-lg object-contain w-full h-48 sm:h-56 md:h-64 absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
       
      <h3 class="text-lg text-gray-800 mb-2">Huggie Earrings</h3>
       <div class="mb-3">
@@ -454,7 +467,7 @@
     <!-- Category 1: Earrings -->
   <div class="inline-block w-[180px] md:w-[250px] bg-white rounded-lg shadow-md p-3 md:p-4 text-center flex-shrink-0">
       <a href="#earrings" class="flex flex-col items-center bg-white rounded-lg shadow hover:shadow-lg transition p-3 md:p-4 text-center">
-       <img src="assets/ex1.png" alt="Earrings" class="inline-block w-[150px] h-[100px] md:w-[250px] md:h-[170px] mb-2 rounded-full object-cover">
+       <img src="assets/ex1.png" alt="Earrings" class="inline-block w-full h-32 md:h-48 mb-2 rounded-full object-cover">
       <span class="text-gray-800 w-full font-medium text-sm md:text-base">Earring</span>
     </a>
    </div>
@@ -462,7 +475,7 @@
     <!-- Category 2: Bracelets & Bangles -->
   <div class="inline-block w-[180px] md:w-[250px] bg-white rounded-lg shadow-md p-3 md:p-4 text-center flex-shrink-0">
      <a href="#bracelets" class="flex flex-col items-center bg-white rounded-lg shadow hover:shadow-lg transition p-3 md:p-4 text-center">
-      <img src="assets/ex2.png" alt="Bracelets & Bangles" class="inline-block w-[150px] h-[100px] md:w-[250px] md:h-[170px] mb-2 rounded-full object-cover">
+      <img src="assets/ex2.png" alt="Bracelets & Bangles" class="inline-block w-full h-32 md:h-48 mb-2 rounded-full object-cover">
       <span class="text-gray-800 w-full font-medium text-sm md:text-base">Bracelets & Bangles</span>
     </a>
  </div>
@@ -470,7 +483,7 @@
     <!-- Category 3: Rings -->
    <div class="inline-block w-[180px] md:w-[250px] bg-white rounded-lg shadow-md p-3 md:p-4 text-center flex-shrink-0">
      <a href="#rings" class="flex flex-col items-center bg-white rounded-lg shadow hover:shadow-lg transition p-3 md:p-4 text-center">
-      <img src="assets/ex3.png" alt="Rings" class="inline-block w-[150px] h-[100px] md:w-[250px] md:h-[170px] mb-2 rounded-full object-cover">
+      <img src="assets/ex3.png" alt="Rings" class="inline-block w-full h-32 md:h-48 mb-2 rounded-full object-cover">
       <span class="text-gray-800 w-full font-medium text-sm md:text-base">Rings</span>
     </a>
   </div>
@@ -478,7 +491,7 @@
     <!-- Category 4: Gifts -->
    <div class="inline-block w-[180px] md:w-[250px] bg-white rounded-lg shadow-md p-3 md:p-4 text-center flex-shrink-0">     
      <a href="#gifts" class="flex flex-col items-center bg-white rounded-lg shadow hover:shadow-lg transition p-3 md:p-4 text-center">
-      <img src="assets/ex4.png" alt="Gifts" class="inline-block w-[150px] h-[100px] md:w-[250px] md:h-[170px] mb-2 rounded-full object-cover">
+      <img src="assets/ex4.png" alt="Gifts" class="inline-block w-full h-32 md:h-48 mb-2 rounded-full object-cover">
       <span class="text-gray-800 w-full font-medium text-sm md:text-base">Gifts</span>
     </a>
   </div>
@@ -486,7 +499,7 @@
     <!-- Category 5: Pendants & Necklaces -->
  <div class="inline-block w-[180px] md:w-[250px] bg-white rounded-lg shadow-md p-3 md:p-4 text-center flex-shrink-0">
        <a href="#pendants" class="flex flex-col items-center bg-white rounded-lg shadow hover:shadow-lg transition p-3 md:p-4 text-center">
-      <img src="assets/ex5.png" alt="Pendants & Necklaces" class="inline-block w-[150px] h-[100px] md:w-[250px] md:h-[170px] mb-2 rounded-full object-cover">
+      <img src="assets/ex5.png" alt="Pendants & Necklaces" class="inline-block w-full h-32 md:h-48 mb-2 rounded-full object-cover">
       <span class="text-gray-800 w-full font-medium text-sm md:text-base">Pendants & Necklaces</span>
     </a>
  </div>
@@ -512,7 +525,7 @@
     
     <!-- Product Image -->
     <div class="w-full md:w-1/2">
-      <img src="assets/hero.png" alt="Pearl Earrings" class="rounded-lg shadow-lg object-cover w-full h-auto mx-auto">
+      <img src="assets/hero.png" alt="Pearl Earrings" class="rounded-lg shadow-lg object-contain w-full h-auto max-h-[300px] md:max-h-[400px] mx-auto">
     </div>
 
     <!-- Product Details -->

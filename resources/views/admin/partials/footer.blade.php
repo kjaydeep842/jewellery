@@ -1,5 +1,5 @@
-<footer class="bg-white text-center py-4 border-t">
-    <p class="text-sm text-gray-500">
-        © {{ date('Y') }} Jewelry Store Admin Panel. All rights reserved.
+<footer class="py-6 text-center text-sm text-slate-400">
+    <p>
+        &copy; {{ date('Y') }} LuxeGems Admin Panel. Crafted with <span class="text-red-400">♥</span>
     </p>
 </footer>

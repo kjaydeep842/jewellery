@@ -4,164 +4,154 @@
 
 @section('content')
 
-<h1 class="text-2xl font-bold mb-4">Edit Product</h1>
+    <h1 class="text-3xl font-premium font-bold mb-6 text-zinc-900">Edit Product</h1>
 
-<div class="bg-white p-6 rounded shadow-md">
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-zinc-100 animate-enter">
 
-    <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+        <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
 
-        {{-- Name + Category --}}
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div>
-                <label class="font-medium">Product Name</label>
-                <input type="text" name="name"
-                       value="{{ $product->name }}"
-                       class="w-full border p-2 rounded" required>
+            {{-- Name + Category --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="font-bold text-zinc-700 mb-2 block font-heading">Product Name</label>
+                    <input type="text" name="name" value="{{ $product->name }}" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5" required>
+                </div>
+
+                <div>
+                    <label class="font-medium">Category</label>
+                    <select name="category_id" id="category" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5" required>
+                        <option value="">-- Select Category --</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
-            <div>
-                <label class="font-medium">Category</label>
-                <select name="category_id" id="category" class="w-full border p-2 rounded" required>
-                    <option value="">-- Select Category --</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}"
-                            {{ $product->category_id == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
+            {{-- Subcategory + Tags --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="font-medium">Subcategory</label>
+                    <select name="subcategory_id" id="subcategory" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                        <option value="">-- Select Subcategory --</option>
+                        @foreach($subcategories as $sub)
+                            <option value="{{ $sub->id }}" {{ $product->subcategory_id == $sub->id ? 'selected' : '' }}>
+                                {{ $sub->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label class="font-medium">Tags</label>
+                    <select name="tags[]" id="tags" multiple class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                        @foreach($tags as $tag)
+                            <option value="{{ $tag->id }}" {{ $product->tags->contains($tag->id) ? 'selected' : '' }}>
+                                {{ $tag->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            {{-- Price fields --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="font-medium">Price</label>
+                    <input type="number" step="0.01" name="price" value="{{ $product->price }}"
+                        class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5" required>
+                </div>
+
+                <div>
+                    <label class="font-medium">Discount Price</label>
+                    <input type="number" step="0.01" name="discount_price" value="{{ $product->discount_price }}"
+                        class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                </div>
+            </div>
+
+            {{-- SKU + Stock --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="font-medium">SKU</label>
+                    <input type="text" name="sku" value="{{ $product->sku }}" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                </div>
+
+                <div>
+                    <label class="font-medium">Stock</label>
+                    <input type="number" name="stock" value="{{ $product->stock }}" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                </div>
+            </div>
+
+            {{-- Material + Weight --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="font-medium">Material</label>
+                    <input type="text" name="material" value="{{ $product->material }}" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                </div>
+
+                <div>
+                    <label class="font-medium">Weight (in grams)</label>
+                    <input type="number" step="0.01" name="weight" value="{{ $product->weight }}"
+                        class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                </div>
+            </div>
+
+            {{-- Status --}}
+            <div class="mb-4">
+                <label class="font-medium">Status</label>
+                <select name="status" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                    <option value="active" {{ $product->status == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ $product->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
             </div>
-        </div>
 
-        {{-- Subcategory + Tags --}}
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div>
-                <label class="font-medium">Subcategory</label>
-                <select name="subcategory_id" id="subcategory" class="w-full border p-2 rounded">
-                    <option value="">-- Select Subcategory --</option>
-                    @foreach($subcategories as $sub)
-                        <option value="{{ $sub->id }}"
-                            {{ $product->subcategory_id == $sub->id ? 'selected' : '' }}>
-                            {{ $sub->name }}
-                        </option>
-                    @endforeach
-                </select>
+            {{-- Description --}}
+            <div class="mb-4">
+                <label class="font-medium">Description</label>
+                <textarea name="description" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5"
+                    rows="4">{{ $product->description }}</textarea>
             </div>
 
-            <div>
-                <label class="font-medium">Tags</label>
-                <select name="tags[]" id="tags" multiple class="w-full border p-2 rounded">
-                    @foreach($tags as $tag)
-                        <option value="{{ $tag->id }}"
-                            {{ $product->tags->contains($tag->id) ? 'selected' : '' }}>
-                            {{ $tag->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
+            {{-- Image uploads --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="font-medium">Main Image</label>
+                    <input type="file" name="image" class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                    @if($product->image)
+                        <img src="{{ asset('storage/' . $product->image) }}" class="h-20 mt-2 rounded border">
+                    @endif
+                </div>
 
-        {{-- Price fields --}}
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div>
-                <label class="font-medium">Price</label>
-                <input type="number" step="0.01" name="price"
-                       value="{{ $product->price }}"
-                       class="w-full border p-2 rounded" required>
+                <div>
+                    <label class="font-bold text-zinc-700 mb-2 block font-heading">Gallery Images</label>
+                    <input type="file" multiple name="images[]"
+                        class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                </div>
             </div>
 
-            <div>
-                <label class="font-medium">Discount Price</label>
-                <input type="number" step="0.01" name="discount_price"
-                       value="{{ $product->discount_price }}"
-                       class="w-full border p-2 rounded">
-            </div>
-        </div>
+            <button
+                class="px-8 py-3 btn-gold rounded-lg font-bold text-lg tracking-wide transform hover:-translate-y-1 transition-all shadow-lg">Update
+                Product</button>
+        </form>
 
-        {{-- SKU + Stock --}}
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div>
-                <label class="font-medium">SKU</label>
-                <input type="text" name="sku"
-                       value="{{ $product->sku }}"
-                       class="w-full border p-2 rounded">
-            </div>
+    </div>
 
-            <div>
-                <label class="font-medium">Stock</label>
-                <input type="number" name="stock"
-                       value="{{ $product->stock }}"
-                       class="w-full border p-2 rounded">
-            </div>
-        </div>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-        {{-- Material + Weight --}}
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div>
-                <label class="font-medium">Material</label>
-                <input type="text" name="material"
-                       value="{{ $product->material }}"
-                       class="w-full border p-2 rounded">
-            </div>
-
-            <div>
-                <label class="font-medium">Weight (in grams)</label>
-                <input type="number" step="0.01" name="weight"
-                       value="{{ $product->weight }}"
-                       class="w-full border p-2 rounded">
-            </div>
-        </div>
-
-        {{-- Status --}}
-        <div class="mb-4">
-            <label class="font-medium">Status</label>
-            <select name="status" class="w-full border p-2 rounded">
-                <option value="active" {{ $product->status == 'active' ? 'selected' : '' }}>Active</option>
-                <option value="inactive" {{ $product->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-            </select>
-        </div>
-
-        {{-- Description --}}
-        <div class="mb-4">
-            <label class="font-medium">Description</label>
-            <textarea name="description" class="w-full border p-2 rounded" rows="4">{{ $product->description }}</textarea>
-        </div>
-
-        {{-- Image uploads --}}
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div>
-                <label class="font-medium">Main Image</label>
-                <input type="file" name="image" class="w-full border p-2 rounded">
-                @if($product->image)
-                    <img src="{{ asset('storage/'.$product->image) }}" class="h-20 mt-2 rounded border">
-                @endif
-            </div>
-
-            <div>
-                <label class="font-medium">Gallery Images</label>
-                <input type="file" multiple name="images[]" class="w-full border p-2 rounded">
-            </div>
-        </div>
-
-        <button class="px-4 py-2 bg-indigo-600 text-white rounded">Update Product</button>
-    </form>
-
-</div>
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    $('#tags').select2({
-        placeholder: "Select Tags",
-        allowClear: true,
-        width: '100%'
-    });
-});
-</script>
+    <script>
+        $(document).ready(function () {
+            $('#tags').select2({
+                placeholder: "Select Tags",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 
 @endsection

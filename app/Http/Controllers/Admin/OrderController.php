@@ -23,16 +23,16 @@ class OrderController extends Controller
     {
         $request->validate([
             'customer_name' => 'required|string|max:255',
-            'email'         => 'nullable|email',
-            'phone'         => 'nullable|string|max:20',
-            'total_amount'  => 'required|numeric',
-            'status'        => 'required|string',
+            'email' => 'nullable|email',
+            'phone' => 'nullable|string|max:20',
+            'total_amount' => 'required|numeric',
+            'status' => 'required|string',
         ]);
 
         Order::create($request->all());
 
         return redirect()->route('admin.orders.index')
-                         ->with('success', 'Order created successfully.');
+            ->with('success', 'Order created successfully.');
     }
 
     public function edit(Order $order)
@@ -44,16 +44,21 @@ class OrderController extends Controller
     {
         $request->validate([
             'customer_name' => 'required|string|max:255',
-            'email'         => 'nullable|email',
-            'phone'         => 'nullable|string|max:20',
-            'total_amount'  => 'required|numeric',
-            'status'        => 'required|string',
+            'email' => 'nullable|email',
+            'phone' => 'nullable|string|max:20',
+            'total_amount' => 'required|numeric',
+            'status' => 'required|string',
         ]);
 
         $order->update($request->all());
 
         return redirect()->route('admin.orders.index')
-                         ->with('success', 'Order updated successfully.');
+            ->with('success', 'Order updated successfully.');
+    }
+
+    public function show(Order $order)
+    {
+        return view('admin.orders.show', compact('order'));
     }
 
     public function destroy(Order $order)
@@ -61,6 +66,6 @@ class OrderController extends Controller
         $order->delete();
 
         return redirect()->route('admin.orders.index')
-                         ->with('success', 'Order deleted successfully.');
+            ->with('success', 'Order deleted successfully.');
     }
 }

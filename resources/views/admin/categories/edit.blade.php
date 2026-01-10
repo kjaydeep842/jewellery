@@ -4,29 +4,30 @@
 
 @section('content')
 
-<h1 class="text-2xl font-bold mb-4">Edit Category</h1>
+    <h1 class="text-3xl font-premium font-bold mb-6 text-zinc-900">Edit Category</h1>
 
-<div class="bg-white p-6 rounded-xl shadow-md">
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-zinc-100 animate-enter">
 
-    <form action="{{ route('admin.categories.update', $category->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+        <form action="{{ route('admin.categories.update', $category->id) }}" method="POST">
+            @csrf
+            @method('PUT')
 
-        <div class="mb-4">
-            <label class="font-medium">Name</label>
-            <input type="text" name="name" class="w-full border p-2 rounded"
-                   value="{{ $category->name }}" required>
-        </div>
+            <label class="font-bold text-zinc-700 mb-2 block font-heading">Name</label>
+            <input type="text" name="name"
+                class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5"
+                value="{{ $category->name }}" required>
 
-        <div class="mb-4">
-            <label class="font-medium">Description</label>
-            <textarea name="description" class="w-full border p-2 rounded"
-                      rows="4">{{ $category->description }}</textarea>
-        </div>
+            <label class="font-bold text-zinc-700 mb-2 block font-heading">Description</label>
+            <textarea name="description"
+                class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5"
+                rows="4">{{ $category->description }}</textarea>
+    </div>
 
-        <button class="px-4 py-2 bg-indigo-600 text-white rounded">Update</button>
+    <button
+        class="px-8 py-3 btn-gold rounded-lg font-bold text-lg tracking-wide transform hover:-translate-y-1 transition-all shadow-lg">Update
+        Category</button>
     </form>
 
-</div>
+    </div>
 
 @endsection

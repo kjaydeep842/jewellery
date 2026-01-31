@@ -114,23 +114,34 @@
         }
         
         /* Mobile Responsiveness for DataTables Controls */
+        /* Mobile Responsiveness for DataTables Controls */
         @media (max-width: 768px) {
             .dataTables_wrapper .dataTables_length,
             .dataTables_wrapper .dataTables_filter {
                 float: none !important;
-                text-align: left;
-                margin-left: 0;
-                margin-bottom: 0.5rem;
-                width: 100%;
+                text-align: left !important;
+                margin-left: 0 !important;
+                margin-bottom: 1rem !important;
+                width: 100% !important;
+                display: block !important;
+            }
+            .dataTables_wrapper .dataTables_filter label {
+               width: 100%;
+               display: block;
             }
             .dataTables_wrapper .dataTables_filter input {
-                width: 100%; /* Full width search on mobile */
-                margin-left: 0;
-                margin-top: 0.25rem;
-                min-width: 0; /* Override the desktop min-width */
+                width: 100% !important; /* Full width search on mobile */
+                margin-left: 0 !important;
+                margin-top: 0.5rem !important;
+                display: block !important;
+                min-width: 0 !important; /* Override the desktop min-width */
             }
             .dataTables_wrapper {
                 padding: 1rem; /* Slightly less padding on mobile */
+            }
+            /* Force table min-width to prevent squishing */
+            table.dataTable {
+                min-width: 800px !important;
             }
         }
         

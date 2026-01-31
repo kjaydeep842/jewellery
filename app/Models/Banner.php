@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Banner extends Model
 {
-    protected $fillable = [
-        'title', 'desc', 'image', 'status'
-    ];
+    protected $fillable = ['title', 'desc', 'image', 'status', 'type'];
 
     protected $casts = [
         'status' => 'boolean',
@@ -16,6 +14,6 @@ class Banner extends Model
 
     public function imageUrl()
     {
-        return $this->image ? asset('storage/'.$this->image) : null;
+        return $this->image ? asset('storage/' . $this->image) : null;
     }
 }

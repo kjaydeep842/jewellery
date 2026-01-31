@@ -4,15 +4,15 @@
 
 @section('content')
 
-<div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-premium font-bold text-zinc-900 tracking-wide">Banners</h1>
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <h1 class="text-2xl sm:text-3xl font-premium font-bold text-zinc-900 tracking-wide">Banners</h1>
 
-    <a href="{{ route('admin.banners.create') }}"
-       class="flex items-center space-x-2 px-6 py-2.5 btn-gold rounded-lg shadow-lg hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5">
-       <span class="text-xl">+</span>
-       <span>Add Banner</span>
-    </a>
-</div>
+        <a href="{{ route('admin.banners.create') }}"
+            class="flex items-center space-x-2 px-6 py-2.5 btn-gold rounded-lg shadow-lg hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5">
+            <span class="text-xl">+</span>
+            <span>Add Banner</span>
+        </a>
+    </div>
 
 @if(session('success'))
     <div class="p-4 mb-6 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg flex items-center">
@@ -21,12 +21,13 @@
     </div>
 @endif
 
-    <div class="bg-white border border-zinc-100 rounded-xl shadow-lg shadow-zinc-200/50 overflow-hidden animate-enter p-4">
+    <div class="bg-white border border-zinc-100 rounded-xl shadow-lg shadow-zinc-200/50 overflow-x-auto animate-enter p-4">
         <table id="bannersTable" class="w-full text-left border-collapse stripe hover">
             <thead class="bg-zinc-50 text-zinc-900 border-b border-zinc-200">
                 <tr>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">ID</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Title</th>
+                    <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Section</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Image</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Status</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Actions</th>
@@ -37,6 +38,11 @@
                 <tr class="group hover:bg-amber-50/50 transition-colors">
                     <td class="p-4 text-zinc-500">#{{ $banner->id }}</td>
                     <td class="p-4 font-bold text-zinc-800">{{ $banner->title }}</td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider {{ $banner->type == 'top' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700' }}">
+                            {{ ucfirst($banner->type) }}
+                        </span>
+                    </td>
                     <td class="p-4">
                         @if($banner->image)
                             <div class="h-12 w-24 rounded-lg overflow-hidden border border-zinc-200 shadow-sm relative group/img">
@@ -82,7 +88,7 @@
     $(document).ready(function() {
         // Initialize DataTable
         $('#bannersTable').DataTable({
-            responsive: true,
+            responsive: false,
             autoWidth: false,
             language: {
                 search: "_INPUT_",

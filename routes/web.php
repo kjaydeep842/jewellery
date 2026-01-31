@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 | FRONT CONTROLLERS
 |--------------------------------------------------------------------------
 */
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Frontend\ProductController;
 use App\Http\Controllers\Frontend\ProductFrontendController;
 
 
@@ -38,9 +38,8 @@ use App\Http\Controllers\Admin\AuthController;
 | PUBLIC ROUTES
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/filter-products', [\App\Http\Controllers\HomeController::class, 'filterProducts'])->name('home.filter');
 
 
 
@@ -52,11 +51,32 @@ Route::get('/', function () {
 
 
 
-Route::get('/product-details', [ProductFrontendController::class, 'details'])
-    ->name('product.details');
+Route::get('/product/{slug}', [\App\Http\Controllers\Frontend\ProductController::class, 'show'])->name('product.details');
 
+// Cart Routes
+use App\Http\Controllers\Frontend\CartController;
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'store'])->name('cart.store');
+Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 
+// Checkout Routes
+use App\Http\Controllers\Frontend\CheckoutController;
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout/address', [CheckoutController::class, 'address'])->name('checkout.address');
+    Route::post('/checkout/address', [CheckoutController::class, 'storeAddress'])->name('checkout.address.store');
+    Route::get('/checkout/select-address/{id}', [CheckoutController::class, 'selectAddress'])->name('checkout.select-address');
+    Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+    Route::post('/checkout/process', [CheckoutController::class, 'processOrder'])->name('checkout.process');
+});
 
+// Wishlist Routes
+use App\Http\Controllers\Frontend\WishlistController;
+Route::middleware(['auth'])->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +86,10 @@ Route::get('/product-details', [ProductFrontendController::class, 'details'])
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Product AJAX Routes
+Route::get('/ajax/products/category/{id}', [\App\Http\Controllers\Frontend\ProductController::class, 'fetchByCategory'])
+    ->name('ajax.products.category');
 
 /*
 |--------------------------------------------------------------------------
@@ -154,6 +178,8 @@ Route::middleware(['auth', 'admin'])
 
         Route::resource('banners', \App\Http\Controllers\Admin\BannerController::class);
         Route::patch('banners/{banner}/toggle', [\App\Http\Controllers\Admin\BannerController::class, 'toggleStatus'])->name('banners.toggle');
+
+        Route::resource('shapes', \App\Http\Controllers\Admin\ShapeController::class);
 
         // General Settings
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');

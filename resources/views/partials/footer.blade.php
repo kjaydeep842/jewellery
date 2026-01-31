@@ -1,47 +1,173 @@
-<!-- Footer Section -->
-<footer class="bg-white text-gray-800 py-8 md:py-12">
-  <div class="container mx-auto px-6">
+<!-- Footer section-->
+<footer
+  class="bg-white pt-16 pb-8 px-6 md:px-20 border-t border-pink-100 relative overflow-hidden w-full max-w-[100vw]">
+  <div class="max-w-[1440px] mx-auto">
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center md:text-left">
+    <!-- Logo Row -->
 
-      <!-- Company -->
-      <div>
-        <h3 class="text-lg font-bold mb-3">Company</h3>
-        <ul class="space-y-1 text-sm">
-          <li><a href="#" class="hover:text-rose-600 transition">HOME</a></li>
-          <li><a href="#" class="hover:text-rose-600">PAGES</a></li>
-          <li><a href="#" class="hover:text-rose-600">SHOP</a></li>
-          <li><a href="#" class="hover:text-rose-600">PORTFOLIO</a></li>
-          <li><a href="#" class="hover:text-rose-600">FEATURES</a></li>
-        </ul>
+    <div class="w-[130px] h-[30px]  flex items-center justify-center mb-10 gap-2">
+      <img src="assets/logo_black.png" alt="logo">
+    </div>
+
+
+    <!-- Columns Row -->
+    <!-- Columns Row -->
+    <div class="flex flex-col lg:flex-row justify-between items-start mt-12 w-full gap-10 relative z-10">
+
+      <!-- Left: Link Columns Group -->
+      <div class="flex flex-wrap gap-x-12 md:gap-x-[88px] gap-y-10">
+        <!-- About Us -->
+        <div class="flex flex-col items-start gap-[22px] w-[160px] md:w-auto">
+          <h4 style="font-family: 'Outfit', sans-serif;" class="font-['Outfit'] font-semibold text-[#0D0D0E] text-lg">
+            About us</h4>
+          <ul class="flex flex-col gap-[16px]">
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Our
+                Story</a></li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Careers</a>
+            </li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Blogs</a>
+            </li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Contact
+                Us</a></li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Store
+                & Services</a></li>
+          </ul>
+        </div>
+
+        <!-- Categories -->
+        <div class="flex flex-col items-start gap-[22px] w-[160px] md:w-auto">
+          <h4 style="font-family: 'Outfit', sans-serif;" class="font-Outfit font-semibold text-[#0D0D0E] text-lg">
+            Categories</h4>
+          <ul class="flex flex-col gap-[16px]">
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Rings</a>
+            </li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Earrings</a>
+            </li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Bracelets</a>
+            </li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Necklaces</a>
+            </li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Bangles</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Customer Service -->
+        <div class="flex flex-col items-start gap-[22px] w-[160px] md:w-auto">
+          <h4 style="font-family: 'Outfit', sans-serif;" class="font-Outfit font-semibold text-[#0D0D0E] text-lg">
+            Customer Service</h4>
+          <ul class="flex flex-col gap-[16px]">
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Contact
+                Us</a></li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">FAQs</a>
+            </li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Jewellery
+                Care</a></li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Lifetime
+                Warranty</a></li>
+            <li><a href="#"
+                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Book
+                an Appointment</a></li>
+          </ul>
+        </div>
       </div>
-       <!-- Newsletter -->
-       <div class="mt-6 md:mt-0">
-       <p class="mb-3 text-sm">Sign up to our newsletter for exclusive access:</p>
-        <form class="flex flex-col gap-2">
-          <input type="email" placeholder="Enter your email" class="p-2 rounded-md text-gray-900 w-full text-sm">
-          <button type="submit" class="border border-black bg-black text-white w-full py-2 rounded-md hover:bg-rose-500 hover:border-rose-500 transition text-sm">
+
+      <!-- Right: Sign Up -->
+      <div class="flex flex-col items-start gap-4 lg:w-[400px]">
+        <h4 style="font-family: 'Outfit', sans-serif;"
+          class="font-['Outfit'] font-bold text-[#0D0D0E] text-[28px] leading-[1.2]">
+          Sign up <br>for Exclusive Offers
+        </h4>
+        <p class="font-['Outfit'] text-base text-[#6E6E6E] leading-relaxed max-w-[350px]">
+          Be the first to know about new collections, exclusive deals & more!
+        </p>
+        <div class="flex flex-row gap-3 mt-4 w-full">
+          <input type="email" placeholder="Email Address"
+            class="border border-[#E5E5E5] rounded-full px-6 py-3 text-base w-full outline-none focus:border-[#CBA65A] font-Outfit bg-white placeholder-gray-400 h-[54px] flex-grow">
+          <button
+            class="bg-[#F9F4E8] text-[#5C4522] px-10 py-3 rounded-full text-base font-medium border border-[#EADDCC] hover:bg-[#F0E6D6] transition-colors font-Outfit whitespace-nowrap h-[54px] shadow-sm">
             Submit
           </button>
-        </form>
+        </div>
       </div>
-      <!-- Customer Care -->
-      <div class="mt-6 md:mt-0">
-          <h3 class="text-lg font-bold mb-3">Customer Care</h3>
-        
-        <ul class="space-y-1 text-sm">
-          <li><a href="#" class="hover:text-rose-600">CONTACT US</a></li>
-          <li><a href="#" class="hover:text-rose-600">FAQ</a></li>
-          <li><a href="#" class="hover:text-rose-600">DELIVERY</a></li>
-          <li><a href="#" class="hover:text-rose-600">RETURNS</a></li>
-           <li><a href="#" class="hover:text-rose-600">SIZE GUIDE</a></li>
-        </ul>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="mt-16 pt-8 border-t border-gray-100 flex flex-col gap-8 relative z-10">
+      <div class="flex flex-col md:flex-row justify-between items-center md:items-end gap-8">
+        <!-- Left: QR and Apps -->
+        <div class="flex items-center gap-6">
+          <img src="assets/MobileQrNew.png" alt="QR Code" class="w-40 h-40 object-contain">
+          <div class="flex flex-col gap-2">
+            <a href="#"><img src="assets/ioslogo.png" alt="App Store" class="h-[45px] md:h-[65px] w-auto"></a>
+            <a href="#"><img src="assets/Androidelogo.png" alt="Google Play" class="h-[45px] md:h-[65px] w-auto"></a>
+          </div>
+        </div>
+
+        <!-- Right Group: Socials, Rights, Payments -->
+        <div class="flex flex-col items-center md:items-start gap-6">
+          <!-- Socials -->
+          <div class="flex gap-5">
+            <a href="#"
+              class="w-[50px] h-[50px] rounded-full border border-[#5C4522] flex items-center justify-center text-[#5C4522] text-2xl hover:bg-[#5C4522] hover:text-white transition-all">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#"
+              class="w-[50px] h-[50px] rounded-full border border-[#5C4522] flex items-center justify-center text-[#5C4522] text-2xl hover:bg-[#5C4522] hover:text-white transition-all">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#"
+              class="w-[50px] h-[50px] rounded-full border border-[#5C4522] flex items-center justify-center text-[#5C4522] text-2xl hover:bg-[#5C4522] hover:text-white transition-all">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#"
+              class="w-[50px] h-[50px] rounded-full border border-[#5C4522] flex items-center justify-center text-[#5C4522] text-2xl hover:bg-[#5C4522] hover:text-white transition-all">
+              <i class="fab fa-x-twitter"></i>
+            </a>
+          </div>
+
+          <!-- Rights & Payments Group (Left Aligned) -->
+          <div class="flex flex-col items-start gap-3">
+            <!-- Rights Text -->
+            <p class="font-['Outfit'] text-[14px] text-[#5C5C5C]">All Rights Reserved © Tattsvi</p>
+
+            <!-- Payments -->
+            <div class="flex items-center gap-3">
+              <img src="assets/google_pay.png" alt="GPay" class="h-6">
+              <img src="assets/visa.png" alt="Visa" class="h-4">
+              <img src="assets/paypal.png" alt="PayPal" class="h-6">
+              <img src="assets/master-card.png" alt="Mastercard" class="h-8">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Copyright -->
+      <div class="text-center mt-4">
+        <p class="font-Outfit text-[14px] text-[#0D0D0E]">Copyright © Tattsvi 2026. All Right Reserved</p>
       </div>
     </div>
   </div>
-  <!-- Extra Info -->
-      <div class="text-center mt-8">
-        <h3 class="text-xs text-gray-600">2025. All rights reserved.</h3>
-        
-      </div>
+
+  <!-- Watermark -->
+  <div class="w-full flex justify-center pointer-events-none mt-10">
+    <h1 class="text-[15vw] font-Outfit font-[900] uppercase tracking-[0.2em] leading-none select-none"
+      style="background: linear-gradient(180deg, rgba(151, 102, 0, 0.07) 0%, rgba(219, 179, 88, 0.021) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">
+      TATTSVI
+    </h1>
+  </div>
 </footer>

@@ -28,13 +28,14 @@ class BannerController extends Controller
         }
 
         $request->validate([
-            'title'  => 'required|string',
-            'desc'   => 'nullable|string',
-            'image'  => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'title' => 'required|string',
+            'desc' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp',
             'status' => 'nullable|boolean', // accepts 0,1,true,false
+            'type' => 'required|in:top,middle',
         ]);
 
-        $data = $request->only(['title', 'desc']);
+        $data = $request->only(['title', 'desc', 'type']);
 
         // Always convert checkbox to boolean 1/0
         $data['status'] = $request->boolean('status') ? 1 : 0;
@@ -61,13 +62,14 @@ class BannerController extends Controller
         }
 
         $request->validate([
-            'title'  => 'required|string',
-            'desc'   => 'nullable|string',
-            'image'  => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'title' => 'required|string',
+            'desc' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp',
             'status' => 'nullable|boolean',
+            'type' => 'required|in:top,middle',
         ]);
 
-        $data = $request->only(['title', 'desc']);
+        $data = $request->only(['title', 'desc', 'type']);
 
         // Convert checkbox
         $data['status'] = $request->boolean('status') ? 1 : 0;

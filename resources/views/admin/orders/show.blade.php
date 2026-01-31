@@ -40,7 +40,8 @@
                 <div>
                     <label class="block text-xs uppercase text-zinc-400 font-bold tracking-wider mb-1">Name</label>
                     <p class="text-zinc-900 font-medium text-lg">
-                        {{ $order->customer_name ?: ($order->user ? $order->user->name : 'N/A') }}</p>
+                        {{ $order->customer_name ?: ($order->user ? $order->user->name : 'N/A') }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-xs uppercase text-zinc-400 font-bold tracking-wider mb-1">Email</label>
@@ -60,9 +61,22 @@
 
             <div class="mt-6">
                 <label class="block text-xs uppercase text-zinc-400 font-bold tracking-wider mb-2">Shipping Address</label>
-                <p class="text-zinc-700 bg-zinc-50 p-3 rounded-lg border border-zinc-100 italic">
-                    {{ $order->address ?? 'No address provided' }}
-                </p>
+                <div class="text-zinc-700 bg-zinc-50 p-4 rounded-lg border border-zinc-100 italic">
+                    @if($order->address)
+                        <p class="font-bold text-zinc-900 not-italic mb-1">{{ $order->address->name }}</p>
+                        <p>{{ $order->address->address_line_1 }}</p>
+                        @if($order->address->address_line_2)
+                            <p>{{ $order->address->address_line_2 }}</p>
+                        @endif
+                        <p>{{ $order->address->city }}, {{ $order->address->state }} {{ $order->address->zip }}</p>
+                        <p>{{ $order->address->country }}</p>
+                        <p class="mt-2 text-sm text-zinc-500 not-italic">
+                            <span class="font-bold text-zinc-600">Tel:</span> {{ $order->address->phone }}
+                        </p>
+                    @else
+                        <p class="text-zinc-400">No address provided</p>
+                    @endif
+                </div>
             </div>
         </div>
 
@@ -72,9 +86,8 @@
 
             <div class="flex justify-between items-center mb-4">
                 <span class="text-zinc-500 font-medium">Status</span>
-                <span
-                    class="px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider
-                        {{ $order->status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
+                <span class="px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider
+                            {{ $order->status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
         ($order->status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-zinc-100 text-zinc-600') }}">
                     {{ $order->status }}
                 </span>

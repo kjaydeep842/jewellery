@@ -1,10 +1,10 @@
 <header x-data="{ notificationOpen: false, profileOpen: false }" style="background-color: var(--color-header);"
-    class="flex items-center justify-between px-8 py-5 sticky top-0 z-40 mb-6 transition-all duration-300 shadow-sm border-b border-amber-100">
+    class="flex items-center justify-between px-4 md:px-8 py-4 md:py-5 sticky top-0 z-40 mb-6 transition-all duration-300 shadow-sm border-b border-amber-100">
 
     <div class="flex items-center relative z-10">
         <!-- Mobile Sidebar Toggle -->
         <button @click="sidebarOpen = !sidebarOpen"
-            class="mr-4 text-zinc-500 hover:text-amber-600 focus:outline-none transition-colors">
+            class="mr-2 md:mr-4 text-zinc-500 hover:text-amber-600 focus:outline-none transition-colors">
             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
                 </path>
@@ -12,13 +12,13 @@
         </button>
 
         <h1
-            class="text-xl md:text-3xl font-premium font-bold tracking-wider text-zinc-900 drop-shadow-sm flex flex-col">
+            class="text-lg md:text-3xl font-premium font-bold tracking-wider text-zinc-900 drop-shadow-sm flex flex-col">
             @yield('title', 'Dashboard')
-            <span class="block h-1 w-12 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full mt-1"></span>
+            <span class="block h-1 w-8 md:w-12 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full mt-1"></span>
         </h1>
     </div>
 
-    <div class="flex items-center space-x-6 relative z-10">
+    <div class="flex items-center space-x-2 md:space-x-6 relative z-10">
         <!-- Notifications -->
         <div class="relative">
             <button @click="notificationOpen = !notificationOpen"
@@ -116,7 +116,7 @@
             </div>
         </div>
 
-        <div class="h-8 w-px bg-zinc-200"></div>
+        <div class="h-8 w-px bg-zinc-200 hidden md:block"></div>
 
         <!-- Profile Dropdown -->
         <div class="relative" x-data="{ open: false }">
@@ -134,22 +134,32 @@
                 </div>
             </button>
 
+            <!-- Mobile Backdrop -->
+            <div x-show="open" @click="open = false" x-transition.opacity
+                class="fixed inset-0 bg-black/50 z-40 md:hidden"></div>
+
             <!-- Profile Menu -->
             <div x-show="open" x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-                x-transition:leave="transition ease-in duration-150"
-                x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
-                class="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-2xl border border-amber-100 overflow-hidden z-50">
-                <a href="{{ route('admin.dashboard') }}"
-                    class="block px-4 py-2 text-sm text-zinc-700 hover:bg-amber-50 hover:text-amber-600">Dashboard</a>
-                <a href="{{ route('admin.settings.index') }}"
-                    class="block px-4 py-2 text-sm text-zinc-700 hover:bg-amber-50 hover:text-amber-600">Settings</a>
-                <div class="border-t border-zinc-100 my-1"></div>
+                x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-xs bg-white rounded-xl shadow-2xl border border-amber-100 overflow-hidden z-50 md:absolute md:top-full md:left-auto md:right-0 md:translate-x-0 md:translate-y-0 md:mt-3 md:w-48">
 
-                <!-- Logout (keeping form submission) -->
+                <div class="px-4 py-3 border-b border-zinc-100 bg-amber-50/50 md:hidden">
+                    <p class="text-sm font-bold text-zinc-800">{{ Auth::user()->name }}</p>
+                    <p class="text-xs text-amber-600 font-bold uppercase tracking-wider">Administrator</p>
+                </div>
+
+                <a href="{{ route('admin.dashboard') }}"
+                    class="block px-4 py-3 text-sm text-zinc-700 hover:bg-amber-50 hover:text-amber-600 border-b border-zinc-50 last:border-0">Dashboard</a>
+                <a href="{{ route('admin.settings.index') }}"
+                    class="block px-4 py-3 text-sm text-zinc-700 hover:bg-amber-50 hover:text-amber-600 border-b border-zinc-50 last:border-0">Settings</a>
+
+                <!-- Logout -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                    <button type="submit"
+                        class="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
                         Sign Out
                     </button>
                 </form>

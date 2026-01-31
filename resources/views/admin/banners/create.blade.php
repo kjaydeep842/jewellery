@@ -36,6 +36,15 @@
             </div>
 
             <div class="mb-4">
+                <label class="font-bold text-zinc-700 mb-2 block font-heading">Banner Section</label>
+                <select name="type"
+                    class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                    <option value="top">Top Banner (Slider)</option>
+                    <option value="middle">Middle Section Banner</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
                 <label class="font-bold text-zinc-700 mb-2 block font-heading">Image</label>
                 <input type="file" name="image"
                     class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">

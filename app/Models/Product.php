@@ -15,7 +15,13 @@ class Product extends Model
         'subcategory_id',
         'description',
         'price',
-        'image',   
+        'image',
+        'making_charges',
+        'tax_rate',
+        'metal_type',
+        'metal_purity',
+        'gender',
+        'occasion',
     ];
 
     public function category()
@@ -36,6 +42,21 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function stones()
+    {
+        return $this->hasMany(ProductStone::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
 

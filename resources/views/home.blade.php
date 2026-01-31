@@ -436,11 +436,11 @@
     <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
       <div class="flex flex-col md:flex-row items-center justify-between">
         <!-- 
-                        <div
-                            class="relative w-[910px] h-[700px] flex flex-col items-start py-[120px] px-0 gap-[10px] self-stretch grow flex-none order-0">
-                            -->
+                            <div
+                                class="relative w-[910px] h-[700px] flex flex-col items-start py-[120px] px-0 gap-[10px] self-stretch grow flex-none order-0">
+                                -->
         <div class="relative w-full md:w-1/2 lg:w-[50%] h-auto lg:min-h-[700px] flex flex-col items-center lg:items-start py-10 lg:py-[120px] px-4 lg:px-0 gap-6 lg:gap-[10px]
-                                self-stretch grow flex-none order-0 lg:-translate-x-12">
+                                    self-stretch grow flex-none order-0 lg:-translate-x-12">
 
           <!-- Content Frame -->
           <div
@@ -508,918 +508,919 @@
         </div>
       </div>
   </section>
+
   <!-- Product Images-->
-  <!---category image 1-->
-  <div id="productsliderGrid" class="grid grid-cols-2 bg-[#F3E5E5] lg:grid-cols-5 gap-2 md:gap-3 mb-12">
-    @if(isset($products) && $products->count() > 0)
-      @foreach($products as $product)
-        <div class="flex flex-col gap-3">
-          <div
-            class="bg-[#FDFBF7] box-border relative w-full aspect-square border border-[#D7D7DA] rounded-[14px] group transition-all overflow-hidden shadow-md hover:shadow-xl">
-            <span
-              class="absolute font-['Alexandria'] font-light top-2 right-0 w-[65px] h-[20px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[10px] z-10 tracking-wide shadow-sm">Best
-              Seller</span>
-            <button
-              class="absolute flex bottom-3 left-2 bg-white h-[27px] w-[27px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors z-20 shadow-sm">
-              <img src="assets/ic_wishlist1.png" class="w-4 h-4" alt="">
-            </button>
-            <div class="w-full h-full flex items-center justify-center">
-              <!-- Dynamic Image with Fallback -->
-              <img src="{{ $product->images->first()->url ?? 'assets/ring_2.png' }}" alt="{{ $product->name }}"
-                class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-              <img src="{{ $product->images->skip(1)->first()->url ?? 'assets/hover_image_p.png' }}"
-                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+    <!---category image 1-->
+    <div id="productsliderGrid" class="grid grid-cols-2 bg-[#F3E5E5] lg:grid-cols-5 gap-2 md:gap-3 mb-12">
+      @if(isset($products) && $products->count() > 0)
+        @foreach($products as $product)
+          <div class="flex flex-col gap-3">
+            <div
+              class="bg-[#FDFBF7] box-border relative w-full aspect-square border border-[#D7D7DA] rounded-[14px] group transition-all overflow-hidden shadow-md hover:shadow-xl">
+              <span
+                class="absolute font-['Alexandria'] font-light top-2 right-0 w-[65px] h-[20px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[10px] z-10 tracking-wide shadow-sm">Best
+                Seller</span>
+              <button
+                class="absolute flex bottom-3 left-2 bg-white h-[27px] w-[27px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors z-20 shadow-sm">
+                <img src="assets/ic_wishlist1.png" class="w-4 h-4" alt="">
+              </button>
+              <div class="w-full h-full flex items-center justify-center">
+                <!-- Dynamic Image with Fallback -->
+                <img src="{{ $product->images->first()->url ?? 'assets/ring_2.png' }}" alt="{{ $product->name }}"
+                  class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
+                <img src="{{ $product->images->skip(1)->first()->url ?? 'assets/hover_image_p.png' }}"
+                  class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+              </div>
+            </div>
+            <div class="text-center font-['Outfit']">
+              <!-- Dynamic Name -->
+              <h3 class="text-sm font-['outfit'] text-[#1A1A1A] mb-1">{{ $product->name }}</h3>
+              <div class="flex items-center justify-center gap-2 text-xs">
+                <!-- Dynamic Price -->
+                <span class="font-bold font-['outfit'] text-[#1A1A1A]">₹ {{ number_format($product->price, 2) }}</span>
+                <!-- Dummy Original Price Logic (e.g. +20%) -->
+                <span class="text-[#999999] line-through">₹ {{ number_format($product->price * 1.2, 2) }}</span>
+              </div>
             </div>
           </div>
-          <div class="text-center font-['Outfit']">
-            <!-- Dynamic Name -->
-            <h3 class="text-sm font-['outfit'] text-[#1A1A1A] mb-1">{{ $product->name }}</h3>
-            <div class="flex items-center justify-center gap-2 text-xs">
-              <!-- Dynamic Price -->
-              <span class="font-bold font-['outfit'] text-[#1A1A1A]">₹ {{ number_format($product->price, 2) }}</span>
-              <!-- Dummy Original Price Logic (e.g. +20%) -->
-              <span class="text-[#999999] line-through">₹ {{ number_format($product->price * 1.2, 2) }}</span>
-            </div>
-          </div>
-        </div>
-      @endforeach
-    @endif
-  </div>
-  </div>
-
-  <div class="flex justify-center">
-    <a href="{{ route('products.index') }}"
-      class="flex flex-row justify-center items-center px-4 py-2 md:px-[26px] gap-2 md:gap-[10px] w-auto md:w-[194px] h-[45px] md:h-[60px] bg-white border-[1.8px] border-[#A87E3E] rounded-[200px] text-[#A87E3E] font-['Outfit'] font-normal text-[16px] md:text-[22px] leading-tight hover:bg-gray-50 transition-colors group">
-      Explore All
-      <img src="assets/ic_back_2.png" alt="arrow"
-        class="w-3 h-3 md:w-4 md:h-4 object-contain group-hover:translate-x-1 transition-transform">
-    </a>
-  </div>
-  </div>
-  </section>
-
-  <section class="py-8 md:py-16 bg-silk/30 text-center overflow-hidden relative w-full max-w-[100vw]">
-    <div class="flex items-center justify-center mb-6 md:mb-10 gap-3 md:gap-6">
-      <!-- Left Design -->
-      <div class="hidden md:flex flex-row justify-end items-center pl-[40px] gap-[4px] w-full max-w-[398px] h-[24px]">
-        <img src="assets/Design_new.png" alt="design left" class="h-full object-contain">
-      </div>
-
-      <!-- Center Text -->
-      <div
-        class="flex flex-col justify-center items-center px-[10px] w-auto md:w-[431px] h-auto md:h-[120px] rounded-[10px]">
-        <span
-          class="bg-[#C34A37] text-white text-base md:text-[24px] px-6 py-2 rounded-full font-Alexandria font-normal mb-2">
-          This Is New
-        </span>
-        <h2 style="font-family: 'Outfit', sans-serif;"
-          class="font-medium text-3xl md:text-[54px] leading-tight text-[#CBA65A] text-center whitespace-nowrap">
-          Launch Jewellery
-        </h2>
-      </div>
-
-      <!-- Right Design -->
-      <div class="hidden md:flex flex-row justify-start items-center pr-[40px] gap-[4px] w-full max-w-[398px] h-[24px]">
-        <img src="assets/Design_new.png" alt="design right" class="h-full object-contain transform scale-x-[-1]">
-      </div>
+        @endforeach
+      @endif
+    </div>
     </div>
 
-    <div class="relative w-full max-w-7xl mx-auto px-4 md:px-8 mb-0 md:mb-20 group-container">
-      <!-- Background Ellipse -->
-      <div
-        class="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[2416px] h-[1138px] max-w-none bg-[#FDFBF7] rounded-[50%] -z-10 blur-xl pointer-events-none">
-      </div>
+    <div class="flex justify-center">
+      <a href="{{ route('products.index') }}"
+        class="flex flex-row justify-center items-center px-4 py-2 md:px-[26px] gap-2 md:gap-[10px] w-auto md:w-[194px] h-[45px] md:h-[60px] bg-white border-[1.8px] border-[#A87E3E] rounded-[200px] text-[#A87E3E] font-['Outfit'] font-normal text-[16px] md:text-[22px] leading-tight hover:bg-gray-50 transition-colors group">
+        Explore All
+        <img src="assets/ic_back_2.png" alt="arrow"
+          class="w-3 h-3 md:w-4 md:h-4 object-contain group-hover:translate-x-1 transition-transform">
+      </a>
+    </div>
+    </div>
+    </section>
 
-      <!-- Product Cards Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10 group-hover:scale-110">
-        <!--launch section product 1-->
-        <div class="flex flex-col gap-0 group cursor-pointer px-4">
-          <!-- Main Card -->
-          <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden">
-            <img src="assets/launch_ring.png"
-              class="relative z-0 w-full h-full object-cover object-bottom transition-transform duration-500 drop-shadow-lg"
-              alt="Rings">
-
-            <!-- Corner Images -->
-            <img src="assets/launchcategorycurv1.png"
-              style="position: absolute; width: 29px; height: 21px; left: 0px; top: 275px; z-index: 20;" alt="curve left">
-            <img src="assets/launchcategorycurv1.png"
-              style="position: absolute; width: 29px; height: 21px; right: 0px; top: 275px; transform: scaleX(-1); z-index: 20;"
-              alt="curve right">
-
-            <!-- SVG Shape -->
-            <div class="absolute bottom-0 left-0 overflow-hidden  w-full h-auto z-10 pointer-events-none">
-              <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg"
-                class="w-full overflow-hidden h-auto">
-                <path
-                  d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
-                  fill="url(#paint_ring_launch)" />
-                <path
-                  d="M350.5 189C350.5 205.292 337.292 218.5 321 218.5H30C13.7076 218.5 0.5 205.292 0.5 189V20.826172C110 75.8557 241 75.8557 350.5 20.818359V189Z"
-                  stroke="#D8B1B6" stroke-opacity="0.2" />
-                <defs>
-                  <linearGradient id="paint_ring_launch" x1="175.5" y1="0" x2="175.5" y2="219"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FFF6E3" />
-                    <stop offset="1" stop-color="#E8C889" />
-                  </linearGradient>
-                </defs>
-              </svg>
-
-            </div>
-
-            <!-- Text -->
-            <div class="absolute bottom-5 w-full text-center z-20">
-              <p class="font-Outfit text-sm text-[#5C4522] mb-1">9KT Solid Gold</p>
-              <h3 class="font-Outfit text-xl font-medium text-[#5C4522]">Rings</h3>
-            </div>
-          </div>
-          <!-- Reflection -->
-          <div
-            class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden transform scale-y-[-1] opacity-20 -mt-16 pointer-events-none mask-image-b-to-t">
-            <img src="assets/launch_ring.png" class="relative w-[] h-full object-contain object-bottom"
-              alt="Rings Reflection">
-            <div class="absolute bottom-0 left-0 w-full h-auto z-10">
-
-              <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                <path
-                  d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
-                  fill="url(#paint_ring_launch_ref)" />
-                <defs>
-                  <linearGradient id="paint_ring_launch_ref" x1="175.5" y1="0" x2="175.5" y2="219"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FFF6E3" />
-                    <stop offset="1" stop-color="#E8C889" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <!--launch section product 2-->
-        <div class="flex flex-col gap-0 group cursor-pointer px-4">
-          <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden">
-            <img src="assets/launch_pendant.png"
-              class="relative z-0 w-full h-full object-cover object-bottom transition-transform duration-500 group-hover:scale-110 drop-shadow-lg"
-              alt="Pendants">
-
-            <!-- Corner Images -->
-            <img src="assets/launchcategorycurv1.png"
-              style="position: absolute; width: 32px; height: 21px; left: 0px; top: 275px; z-index: 20;" alt="curve left">
-            <img src="assets/launchcategorycurv1.png"
-              style="position: absolute; width: 32px; height: 21px; right: 0px; top: 275px; transform: scaleX(-1); z-index: 20;"
-              alt="curve right">
-            <div class="absolute bottom-0 left-0 w-full h-auto z-10 pointer-events-none">
-              <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 left-0">
-                <path
-                  d="M4.5 19.8389L0 0.838867L4.36339 0.317865C12.4683 -0.649886 20.6838 0.605068 28.1302 3.94834L29 4.33887L4.5 19.8389Z"
-                  fill="#F0D194" />
-              </svg>
-              <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 right-0">
-                <path
-                  d="M24.5 19.8389L29 0.838867L24.6366 0.317865C16.5317 -0.649886 8.31619 0.605068 0.869804 3.94834L0 4.33887L24.5 19.8389Z"
-                  fill="#F0D194" />
-              </svg>
-              <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                <path
-                  d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
-                  fill="url(#paint_pendant_launch)" />
-                <path
-                  d="M350.5 189C350.5 205.292 337.292 218.5 321 218.5H30C13.7076 218.5 0.5 205.292 0.5 189V20.826172C110 75.8557 241 75.8557 350.5 20.818359V189Z"
-                  stroke="#D8B1B6" stroke-opacity="0.2" />
-                <defs>
-                  <linearGradient id="paint_pendant_launch" x1="175.5" y1="0" x2="175.5" y2="219"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FFF6E3" />
-                    <stop offset="1" stop-color="#E8C889" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <div class="absolute bottom-5 w-full text-center z-20">
-              <p class="font-Outfit text-sm text-[#5C4522] mb-1">9KT Solid Gold</p>
-              <h3 class="font-Outfit text-xl font-medium text-[#5C4522]">Pendants</h3>
-            </div>
-          </div>
-          <div
-            class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden transform scale-y-[-1] opacity-20 -mt-16 pointer-events-none">
-            <img src="assets/launch_pendant.png" class="relative z-0 w-full h-full object-cover object-bottom"
-              alt="Pendants Reflection">
-            <div class="absolute bottom-0 left-0 w-full h-auto z-10">
-              <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 left-0">
-                <path
-                  d="M4.5 19.8389L0 0.838867L4.36339 0.317865C12.4683 -0.649886 20.6838 0.605068 28.1302 3.94834L29 4.33887L4.5 19.8389Z"
-                  fill="#F0D194" />
-              </svg>
-              <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 right-0">
-                <path
-                  d="M24.5 19.8389L29 0.838867L24.6366 0.317865C16.5317 -0.649886 8.31619 0.605068 0.869804 3.94834L0 4.33887L24.5 19.8389Z"
-                  fill="#F0D194" />
-              </svg>
-              <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                <path
-                  d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
-                  fill="url(#paint_pendant_launch_ref)" />
-                <defs>
-                  <linearGradient id="paint_pendant_launch_ref" x1="175.5" y1="0" x2="175.5" y2="219"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FFF6E3" />
-                    <stop offset="1" stop-color="#E8C889" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-          </div>
+    <section class="py-8 md:py-16 bg-silk/30 text-center overflow-hidden relative w-full max-w-[100vw]">
+      <div class="flex items-center justify-center mb-6 md:mb-10 gap-3 md:gap-6">
+        <!-- Left Design -->
+        <div class="hidden md:flex flex-row justify-end items-center pl-[40px] gap-[4px] w-full max-w-[398px] h-[24px]">
+          <img src="assets/Design_new.png" alt="design left" class="h-full object-contain">
         </div>
 
-        <div class="flex flex-col gap-0 group cursor-pointer px-4">
-          <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden">
-            <img src="assets/launch_bracelet.png"
-              class="relative z-0 w-full h-full object-cover object-bottom transition-transform duration-500 group-hover:scale-110 drop-shadow-lg"
-              alt="Bracelets">
-
-            <!-- Corner Images -->
-            <img src="assets/launchcategorycurv1.png"
-              style="position: absolute; width: 29px; height: 21px; left: 0px; top: 275px; z-index: 20;" alt="curve left">
-            <img src="assets/launchcategorycurv1.png"
-              style="position: absolute; width: 29px; height: 21px; right: 0px; top: 275px; transform: scaleX(-1); z-index: 20;"
-              alt="curve right">
-            <div class="absolute bottom-0 left-0 w-full h-auto z-10 pointer-events-none">
-
-              <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                <path
-                  d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
-                  fill="url(#paint_bracelet_launch)" />
-                <path
-                  d="M350.5 189C350.5 205.292 337.292 218.5 321 218.5H30C13.7076 218.5 0.5 205.292 0.5 189V20.826172C110 75.8557 241 75.8557 350.5 20.818359V189Z"
-                  stroke="#D8B1B6" stroke-opacity="0.2" />
-                <defs>
-                  <linearGradient id="paint_bracelet_launch" x1="175.5" y1="0" x2="175.5" y2="219"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FFF6E3" />
-                    <stop offset="1" stop-color="#E8C889" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <div class="absolute bottom-5 w-full text-center z-20">
-              <p class="font-Outfit text-sm text-[#5C4522] mb-1">9KT Solid Gold</p>
-              <h3 class="font-Outfit text-xl font-medium text-[#5C4522]">Bracelets</h3>
-            </div>
-          </div>
-          <div
-            class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden transform scale-y-[-1] opacity-20 -mt-16 pointer-events-none">
-            <img src="assets/launch_bracelet.png" class="relative z-0 w-full h-full object-cover object-bottom"
-              alt="Bracelets Reflection">
-            <div class="absolute bottom-0 left-0 w-full h-auto z-10">
-              <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 left-0">
-                <path
-                  d="M4.5 19.8389L0 0.838867L4.36339 0.317865C12.4683 -0.649886 20.6838 0.605068 28.1302 3.94834L29 4.33887L4.5 19.8389Z"
-                  fill="#F0D194" />
-              </svg>
-              <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 right-0">
-                <path
-                  d="M24.5 19.8389L29 0.838867L24.6366 0.317865C16.5317 -0.649886 8.31619 0.605068 0.869804 3.94834L0 4.33887L24.5 19.8389Z"
-                  fill="#F0D194" />
-              </svg>
-              <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                <path
-                  d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
-                  fill="url(#paint_bracelet_launch_ref)" />
-                <defs>
-                  <linearGradient id="paint_bracelet_launch_ref" x1="175.5" y1="0" x2="175.5" y2="219"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FFF6E3" />
-                    <stop offset="1" stop-color="#E8C889" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <!--launch section product 3-->
-        <div class="flex flex-col gap-0 group cursor-pointer px-4">
-          <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden">
-            <img src="assets/launch_earring.png"
-              class="relative z-0 w-full h-full object-cover object-bottom transition-transform duration-500 group-hover:scale-110 drop-shadow-lg"
-              alt="Earrings">
-
-            <!-- Corner Images -->
-            <img src="assets/launchcategorycurv1.png"
-              style="position: absolute; width: 29px; height: 21px; left: 0px; top: 275px; z-index: 20;" alt="curve left">
-            <img src="assets/launchcategorycurv1.png"
-              style="position: absolute; width: 29px; height: 21px; right: 0px; top: 275px; transform: scaleX(-1); z-index: 20;"
-              alt="curve right">
-            <div class="absolute bottom-0 left-0 w-full h-auto z-10 pointer-events-none">
-
-              <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                <path
-                  d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
-                  fill="url(#paint_earring_launch)" />
-                <path
-                  d="M350.5 189C350.5 205.292 337.292 218.5 321 218.5H30C13.7076 218.5 0.5 205.292 0.5 189V20.826172C110 75.8557 241 75.8557 350.5 20.818359V189Z"
-                  stroke="#D8B1B6" stroke-opacity="0.2" />
-                <defs>
-                  <linearGradient id="paint_earring_launch" x1="175.5" y1="0" x2="175.5" y2="219"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FFF6E3" />
-                    <stop offset="1" stop-color="#E8C889" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <div class="absolute bottom-5 w-full text-center z-20">
-              <p class="font-Outfit text-sm text-[#5C4522] mb-1">9KT Solid Gold</p>
-              <h3 class="font-Outfit text-xl font-medium text-[#5C4522]">Earrings</h3>
-            </div>
-          </div>
-          <div
-            class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden transform scale-y-[-1] opacity-20 -mt-16 pointer-events-none">
-            <img src="assets/launch_earring.png" class="relative z-0 w-full h-full object-cover object-bottom"
-              alt="Earrings Reflection">
-            <div class="absolute bottom-0 left-0 w-full h-auto z-10">
-              <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 left-0">
-                <path
-                  d="M4.5 19.8389L0 0.838867L4.36339 0.317865C12.4683 -0.649886 20.6838 0.605068 28.1302 3.94834L29 4.33887L4.5 19.8389Z"
-                  fill="#F0D194" />
-              </svg>
-              <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 right-0">
-                <path
-                  d="M24.5 19.8389L29 0.838867L24.6366 0.317865C16.5317 -0.649886 8.31619 0.605068 0.869804 3.94834L0 4.33887L24.5 19.8389Z"
-                  fill="#F0D194" />
-              </svg>
-              <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                <path
-                  d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
-                  fill="url(#paint_earring_launch_ref)" />
-                <defs>
-                  <linearGradient id="paint_earring_launch_ref" x1="175.5" y1="0" x2="175.5" y2="219"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FFF6E3" />
-                    <stop offset="1" stop-color="#E8C889" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <!--launch section product 3-->
-      </div>
-
-
-    </div>
-  </section>
-
-  <!-- Unique Style Section -->
-  <section class="bg-white pt-0 pb-8 md:pt-16 md:pb-0 overflow-hidden relative w-full max-w-[100vw]">
-    <!-- Title -->
-    <div class="text-center mb-0 relative z-30">
-      <div class="flex items-center justify-center gap-1 md:gap-4 mb-2">
-        <img src="assets/Design_new.png" class="h-3 md:h-5 w-auto object-contain" alt="decoration">
-        <span style="font-family: 'Alexandria', sans-serif;"
-          class="font-Alexandria text-[#5C4522] text-sm md:text-2xl tracking-normal font-normal whitespace-nowrap">Express
-          Your Identity with</span>
-        <img src="assets/Design_new.png" class="h-3 md:h-5 w-auto object-contain transform scale-x-[-1]" alt="decoration">
-      </div>
-      <h2 style="font-family: 'Outfit', sans-serif;"
-        class="font-Outfit text-[#CBA65A] text-3xl md:text-[54px] font-medium leading-tight">Our Unique Style
-      </h2>
-    </div>
-
-    <!-- Lens Grid Wrapper -->
-    <div class="relative w-full h-[350px] md:h-[500px] lg:h-[850px] z-10 -mt-8 md:-mt-48">
-      <!-- Top Curve Mask (White) -->
-      <div
-        class="absolute -top-[100px] md:-top-[698px] left-1/2 -translate-x-1/2 w-[120%] md:w-[2416px] h-[150px] md:h-[918px] max-w-none bg-white rounded-b-[100%] md:rounded-b-[50%] z-20 pointer-events-none">
-      </div>
-
-      <!-- Grid -->
-      <!-- Mobile: 2x2 Grid (grid-cols-2), Laptop: 4x1 (grid-cols-4) -->
-      <!-- Added gap-1 for mobile to remove whitespace, larger gap for desktop -->
-      <!-- Slider Wrapper -->
-      <!-- Added Buttons and Flex container -->
-      <div class="relative h-full w-full">
-        <!-- Navigation Buttons Removed -->
-
-
-        <!-- Slider -->
-        <div id="uniqueStyleSlider"
-          class="h-full w-full flex gap-1 md:gap-5 overflow-x-auto snap-x snap-mandatory no-scrollbar bg-white">
-          <!-- Original Items -->
-          <div
-            class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
-            <img src="assets/Uniq1.png"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-          </div>
-          <div
-            class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
-            <img src="assets/Uniq2.png"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-          </div>
-          <div
-            class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
-            <img src="assets/Uniq3.png"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-          </div>
-          <div
-            class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
-            <img src="assets/Uniq4.png"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-          </div>
-
-          <!-- Duplicated Items for continuous feel -->
-          <div
-            class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
-            <img src="assets/Uniq1.png"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-
-          </div>
-          <div
-            class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
-            <img src="assets/Uniq2.png"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-          </div>
-          <div
-            class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
-            <img src="assets/Uniq3.png"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-          </div>
-          <div
-            class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
-            <img src="assets/Uniq4.png"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Curve Mask (White) -->
-      <div
-        class="absolute -bottom-[100px] md:-bottom-[698px] left-1/2 -translate-x-1/2 w-[120%] md:w-[2416px] h-[150px] md:h-[918px] max-w-none bg-white rounded-t-[100%] md:rounded-t-[50%] z-20 pointer-events-none">
-      </div>
-    </div>
-
-    <!-- Button -->
-    <div class="absolute bottom-4 md:bottom-[60px] left-1/2 -translate-x-1/2 z-30">
-      <button
-        class="w-[150px] h-[45px] md:w-[195px] md:h-[60px] bg-[#0D0D0E] text-white hover:bg-gray-800 rounded-[200px] font-Outfit tracking-widest text-xs md:text-sm transition-all flex items-center justify-center gap-[10px] group shadow-lg px-[26px]">
-        View More
-        <img src="assets/ic_back_2_white.png"
-          class="h-3 md:h-4 w-auto transform group-hover:translate-x-1 transition-transform" alt="arrow">
-      </button>
-    </div>
-
-    <!-- Background Ellipse (Bottom) -->
-    <div
-      class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[140%] h-[800px] bg-[#FDFBF7] rounded-[50%] z-0 blur-xl pointer-events-none">
-    </div>
-  </section>
-
-  <!--Best Seller Section -->
-  <section
-    class="relative w-full flex justify-center  items-center py-[40px] px-4 md:px-[40px] gap-[20px] z-10 overflow-hidden bg-[#FDFBF7]">
-
-    <!-- Ellipse Background -->
-    <div
-      style="position: absolute; width: 100%; height: 100%; left: 0; top: 0; background: radial-gradient(50% 50% at 50% 50%, #F3EAD8 0%, #FDFBF7 100%); pointer-events: none; z-index: 0;">
-    </div>
-
-    <div class="relative z-20 max-w-[1440px]  w-full mx-auto">
-      <div class="flex flex-col lg:flex-row items-center justify-center gap-[60px] w-full h-auto py-0">
-
-        <!-- Left Image -->
+        <!-- Center Text -->
         <div
-          class="flex-1 flex justify-center border:shadow-lg items-center relative w-full h-full order-first lg:order-none lg:-translate-x-12">
-          <img src="assets/Product Photo.png"
-            class="w-full max-w-[400px] lg:max-w-[500px] h-auto object-contain hover:scale-105 transition-transform duration-500"
-            alt="Bestseller Spotlight">
+          class="flex flex-col justify-center items-center px-[10px] w-auto md:w-[431px] h-auto md:h-[120px] rounded-[10px]">
+          <span
+            class="bg-[#C34A37] text-white text-base md:text-[24px] px-6 py-2 rounded-full font-Alexandria font-normal mb-2">
+            This Is New
+          </span>
+          <h2 style="font-family: 'Outfit', sans-serif;"
+            class="font-medium text-3xl md:text-[54px] leading-tight text-[#CBA65A] text-center whitespace-nowrap">
+            Launch Jewellery
+          </h2>
         </div>
 
-        <!-- Right Content -->
-        <div class="flex-1 flex flex-col  justify-center space-y-8 lg:pl-10">
-          <div class="text-center lg:text-left xl:text-center">
-            <h2 class="font-['Alexandria'] text-[#0D0D0E] text-4xl md:text-[44px] font-normal leading-tight mb-2">
-              Tattsvi Bestseller</h2>
-            <p class="font-['Outfit'] text-[#0D0D0E] text-xl md:text-[24px] font-normal tracking-normal leading-tight">
-              Jewellery that defines choice, elegance and trust</p>
+        <!-- Right Design -->
+        <div class="hidden md:flex flex-row justify-start items-center pr-[40px] gap-[4px] w-full max-w-[398px] h-[24px]">
+          <img src="assets/Design_new.png" alt="design right" class="h-full object-contain transform scale-x-[-1]">
+        </div>
+      </div>
+
+      <div class="relative w-full max-w-7xl mx-auto px-4 md:px-8 mb-0 md:mb-20 group-container">
+        <!-- Background Ellipse -->
+        <div
+          class="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[2416px] h-[1138px] max-w-none bg-[#FDFBF7] rounded-[50%] -z-10 blur-xl pointer-events-none">
+        </div>
+
+        <!-- Product Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10 group-hover:scale-110">
+          <!--launch section product 1-->
+          <div class="flex flex-col gap-0 group cursor-pointer px-4">
+            <!-- Main Card -->
+            <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden">
+              <img src="assets/launch_ring.png"
+                class="relative z-0 w-full h-full object-cover object-bottom transition-transform duration-500 drop-shadow-lg"
+                alt="Rings">
+
+              <!-- Corner Images -->
+              <img src="assets/launchcategorycurv1.png"
+                style="position: absolute; width: 29px; height: 21px; left: 0px; top: 275px; z-index: 20;" alt="curve left">
+              <img src="assets/launchcategorycurv1.png"
+                style="position: absolute; width: 29px; height: 21px; right: 0px; top: 275px; transform: scaleX(-1); z-index: 20;"
+                alt="curve right">
+
+              <!-- SVG Shape -->
+              <div class="absolute bottom-0 left-0 overflow-hidden  w-full h-auto z-10 pointer-events-none">
+                <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  class="w-full overflow-hidden h-auto">
+                  <path
+                    d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
+                    fill="url(#paint_ring_launch)" />
+                  <path
+                    d="M350.5 189C350.5 205.292 337.292 218.5 321 218.5H30C13.7076 218.5 0.5 205.292 0.5 189V20.826172C110 75.8557 241 75.8557 350.5 20.818359V189Z"
+                    stroke="#D8B1B6" stroke-opacity="0.2" />
+                  <defs>
+                    <linearGradient id="paint_ring_launch" x1="175.5" y1="0" x2="175.5" y2="219"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFF6E3" />
+                      <stop offset="1" stop-color="#E8C889" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+              </div>
+
+              <!-- Text -->
+              <div class="absolute bottom-5 w-full text-center z-20">
+                <p class="font-Outfit text-sm text-[#5C4522] mb-1">9KT Solid Gold</p>
+                <h3 class="font-Outfit text-xl font-medium text-[#5C4522]">Rings</h3>
+              </div>
+            </div>
+            <!-- Reflection -->
+            <div
+              class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden transform scale-y-[-1] opacity-20 -mt-16 pointer-events-none mask-image-b-to-t">
+              <img src="assets/launch_ring.png" class="relative w-[] h-full object-contain object-bottom"
+                alt="Rings Reflection">
+              <div class="absolute bottom-0 left-0 w-full h-auto z-10">
+
+                <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                  <path
+                    d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
+                    fill="url(#paint_ring_launch_ref)" />
+                  <defs>
+                    <linearGradient id="paint_ring_launch_ref" x1="175.5" y1="0" x2="175.5" y2="219"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFF6E3" />
+                      <stop offset="1" stop-color="#E8C889" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <!--launch section product 2-->
+          <div class="flex flex-col gap-0 group cursor-pointer px-4">
+            <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden">
+              <img src="assets/launch_pendant.png"
+                class="relative z-0 w-full h-full object-cover object-bottom transition-transform duration-500 group-hover:scale-110 drop-shadow-lg"
+                alt="Pendants">
+
+              <!-- Corner Images -->
+              <img src="assets/launchcategorycurv1.png"
+                style="position: absolute; width: 32px; height: 21px; left: 0px; top: 275px; z-index: 20;" alt="curve left">
+              <img src="assets/launchcategorycurv1.png"
+                style="position: absolute; width: 32px; height: 21px; right: 0px; top: 275px; transform: scaleX(-1); z-index: 20;"
+                alt="curve right">
+              <div class="absolute bottom-0 left-0 w-full h-auto z-10 pointer-events-none">
+                <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 left-0">
+                  <path
+                    d="M4.5 19.8389L0 0.838867L4.36339 0.317865C12.4683 -0.649886 20.6838 0.605068 28.1302 3.94834L29 4.33887L4.5 19.8389Z"
+                    fill="#F0D194" />
+                </svg>
+                <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 right-0">
+                  <path
+                    d="M24.5 19.8389L29 0.838867L24.6366 0.317865C16.5317 -0.649886 8.31619 0.605068 0.869804 3.94834L0 4.33887L24.5 19.8389Z"
+                    fill="#F0D194" />
+                </svg>
+                <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                  <path
+                    d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
+                    fill="url(#paint_pendant_launch)" />
+                  <path
+                    d="M350.5 189C350.5 205.292 337.292 218.5 321 218.5H30C13.7076 218.5 0.5 205.292 0.5 189V20.826172C110 75.8557 241 75.8557 350.5 20.818359V189Z"
+                    stroke="#D8B1B6" stroke-opacity="0.2" />
+                  <defs>
+                    <linearGradient id="paint_pendant_launch" x1="175.5" y1="0" x2="175.5" y2="219"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFF6E3" />
+                      <stop offset="1" stop-color="#E8C889" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div class="absolute bottom-5 w-full text-center z-20">
+                <p class="font-Outfit text-sm text-[#5C4522] mb-1">9KT Solid Gold</p>
+                <h3 class="font-Outfit text-xl font-medium text-[#5C4522]">Pendants</h3>
+              </div>
+            </div>
+            <div
+              class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden transform scale-y-[-1] opacity-20 -mt-16 pointer-events-none">
+              <img src="assets/launch_pendant.png" class="relative z-0 w-full h-full object-cover object-bottom"
+                alt="Pendants Reflection">
+              <div class="absolute bottom-0 left-0 w-full h-auto z-10">
+                <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 left-0">
+                  <path
+                    d="M4.5 19.8389L0 0.838867L4.36339 0.317865C12.4683 -0.649886 20.6838 0.605068 28.1302 3.94834L29 4.33887L4.5 19.8389Z"
+                    fill="#F0D194" />
+                </svg>
+                <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 right-0">
+                  <path
+                    d="M24.5 19.8389L29 0.838867L24.6366 0.317865C16.5317 -0.649886 8.31619 0.605068 0.869804 3.94834L0 4.33887L24.5 19.8389Z"
+                    fill="#F0D194" />
+                </svg>
+                <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                  <path
+                    d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
+                    fill="url(#paint_pendant_launch_ref)" />
+                  <defs>
+                    <linearGradient id="paint_pendant_launch_ref" x1="175.5" y1="0" x2="175.5" y2="219"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFF6E3" />
+                      <stop offset="1" stop-color="#E8C889" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
           </div>
 
-          <div class="space-y-6 max-w-lg mx-auto lg:mx-0 xl:mx-auto">
-            <!-- Feature 1 -->
-            <div class="flex items-center gap-5">
-              <div
-                class="w-[60px] h-[60px] md:w-[60px] md:h-[60px] flex-shrink-0 bg-white rounded-[16px] flex items-center justify-center shadow-sm border border-[#F5F5F5]">
-                <img src="assets/cer1.png" class="w-8 h-8 md:w-10 md:h-10 object-contain" alt="icon">
+          <div class="flex flex-col gap-0 group cursor-pointer px-4">
+            <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden">
+              <img src="assets/launch_bracelet.png"
+                class="relative z-0 w-full h-full object-cover object-bottom transition-transform duration-500 group-hover:scale-110 drop-shadow-lg"
+                alt="Bracelets">
+
+              <!-- Corner Images -->
+              <img src="assets/launchcategorycurv1.png"
+                style="position: absolute; width: 29px; height: 21px; left: 0px; top: 275px; z-index: 20;" alt="curve left">
+              <img src="assets/launchcategorycurv1.png"
+                style="position: absolute; width: 29px; height: 21px; right: 0px; top: 275px; transform: scaleX(-1); z-index: 20;"
+                alt="curve right">
+              <div class="absolute bottom-0 left-0 w-full h-auto z-10 pointer-events-none">
+
+                <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                  <path
+                    d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
+                    fill="url(#paint_bracelet_launch)" />
+                  <path
+                    d="M350.5 189C350.5 205.292 337.292 218.5 321 218.5H30C13.7076 218.5 0.5 205.292 0.5 189V20.826172C110 75.8557 241 75.8557 350.5 20.818359V189Z"
+                    stroke="#D8B1B6" stroke-opacity="0.2" />
+                  <defs>
+                    <linearGradient id="paint_bracelet_launch" x1="175.5" y1="0" x2="175.5" y2="219"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFF6E3" />
+                      <stop offset="1" stop-color="#E8C889" />
+                    </linearGradient>
+                  </defs>
+                </svg>
               </div>
-              <div class="text-left">
-                <h4 style="font-family: 'Outfit', sans-serif;"
-                  class="font-Outfit text-[18px] md:text-[20px] font-semibold text-[#0D0D0E] leading-tight mb-1">
-                  Interwoven Gold Ring</h4>
-                <p style="font-family: 'Outfit', sans-serif;"
-                  class="font-Outfit font-light text-[14px] md:text-[15px] text-[#5C5C5C] leading-snug">
-                  A Signature Design Crafted For Everyday Elegance</p>
+              <div class="absolute bottom-5 w-full text-center z-20">
+                <p class="font-Outfit text-sm text-[#5C4522] mb-1">9KT Solid Gold</p>
+                <h3 class="font-Outfit text-xl font-medium text-[#5C4522]">Bracelets</h3>
+              </div>
+            </div>
+            <div
+              class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden transform scale-y-[-1] opacity-20 -mt-16 pointer-events-none">
+              <img src="assets/launch_bracelet.png" class="relative z-0 w-full h-full object-cover object-bottom"
+                alt="Bracelets Reflection">
+              <div class="absolute bottom-0 left-0 w-full h-auto z-10">
+                <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 left-0">
+                  <path
+                    d="M4.5 19.8389L0 0.838867L4.36339 0.317865C12.4683 -0.649886 20.6838 0.605068 28.1302 3.94834L29 4.33887L4.5 19.8389Z"
+                    fill="#F0D194" />
+                </svg>
+                <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 right-0">
+                  <path
+                    d="M24.5 19.8389L29 0.838867L24.6366 0.317865C16.5317 -0.649886 8.31619 0.605068 0.869804 3.94834L0 4.33887L24.5 19.8389Z"
+                    fill="#F0D194" />
+                </svg>
+                <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                  <path
+                    d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
+                    fill="url(#paint_bracelet_launch_ref)" />
+                  <defs>
+                    <linearGradient id="paint_bracelet_launch_ref" x1="175.5" y1="0" x2="175.5" y2="219"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFF6E3" />
+                      <stop offset="1" stop-color="#E8C889" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <!--launch section product 3-->
+          <div class="flex flex-col gap-0 group cursor-pointer px-4">
+            <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden">
+              <img src="assets/launch_earring.png"
+                class="relative z-0 w-full h-full object-cover object-bottom transition-transform duration-500 group-hover:scale-110 drop-shadow-lg"
+                alt="Earrings">
+
+              <!-- Corner Images -->
+              <img src="assets/launchcategorycurv1.png"
+                style="position: absolute; width: 29px; height: 21px; left: 0px; top: 275px; z-index: 20;" alt="curve left">
+              <img src="assets/launchcategorycurv1.png"
+                style="position: absolute; width: 29px; height: 21px; right: 0px; top: 275px; transform: scaleX(-1); z-index: 20;"
+                alt="curve right">
+              <div class="absolute bottom-0 left-0 w-full h-auto z-10 pointer-events-none">
+
+                <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                  <path
+                    d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
+                    fill="url(#paint_earring_launch)" />
+                  <path
+                    d="M350.5 189C350.5 205.292 337.292 218.5 321 218.5H30C13.7076 218.5 0.5 205.292 0.5 189V20.826172C110 75.8557 241 75.8557 350.5 20.818359V189Z"
+                    stroke="#D8B1B6" stroke-opacity="0.2" />
+                  <defs>
+                    <linearGradient id="paint_earring_launch" x1="175.5" y1="0" x2="175.5" y2="219"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFF6E3" />
+                      <stop offset="1" stop-color="#E8C889" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div class="absolute bottom-5 w-full text-center z-20">
+                <p class="font-Outfit text-sm text-[#5C4522] mb-1">9KT Solid Gold</p>
+                <h3 class="font-Outfit text-xl font-medium text-[#5C4522]">Earrings</h3>
+              </div>
+            </div>
+            <div
+              class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden transform scale-y-[-1] opacity-20 -mt-16 pointer-events-none">
+              <img src="assets/launch_earring.png" class="relative z-0 w-full h-full object-cover object-bottom"
+                alt="Earrings Reflection">
+              <div class="absolute bottom-0 left-0 w-full h-auto z-10">
+                <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 left-0">
+                  <path
+                    d="M4.5 19.8389L0 0.838867L4.36339 0.317865C12.4683 -0.649886 20.6838 0.605068 28.1302 3.94834L29 4.33887L4.5 19.8389Z"
+                    fill="#F0D194" />
+                </svg>
+                <svg width="29" height="20" viewBox="0 0 29 20" fill="none" class="absolute top-0 right-0">
+                  <path
+                    d="M24.5 19.8389L29 0.838867L24.6366 0.317865C16.5317 -0.649886 8.31619 0.605068 0.869804 3.94834L0 4.33887L24.5 19.8389Z"
+                    fill="#F0D194" />
+                </svg>
+                <svg viewBox="0 0 351 219" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                  <path
+                    d="M0 20C110 75 241 75 351 20V189C351 205.569 337.569 219 321 219H30C13.4315 219 0 205.569 0 189V20Z"
+                    fill="url(#paint_earring_launch_ref)" />
+                  <defs>
+                    <linearGradient id="paint_earring_launch_ref" x1="175.5" y1="0" x2="175.5" y2="219"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFF6E3" />
+                      <stop offset="1" stop-color="#E8C889" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <!--launch section product 3-->
+        </div>
+
+
+      </div>
+    </section>
+
+    <!-- Unique Style Section -->
+    <section class="bg-white pt-0 pb-8 md:pt-16 md:pb-0 overflow-hidden relative w-full max-w-[100vw]">
+      <!-- Title -->
+      <div class="text-center mb-0 relative z-30">
+        <div class="flex items-center justify-center gap-1 md:gap-4 mb-2">
+          <img src="assets/Design_new.png" class="h-3 md:h-5 w-auto object-contain" alt="decoration">
+          <span style="font-family: 'Alexandria', sans-serif;"
+            class="font-Alexandria text-[#5C4522] text-sm md:text-2xl tracking-normal font-normal whitespace-nowrap">Express
+            Your Identity with</span>
+          <img src="assets/Design_new.png" class="h-3 md:h-5 w-auto object-contain transform scale-x-[-1]" alt="decoration">
+        </div>
+        <h2 style="font-family: 'Outfit', sans-serif;"
+          class="font-Outfit text-[#CBA65A] text-3xl md:text-[54px] font-medium leading-tight">Our Unique Style
+        </h2>
+      </div>
+
+      <!-- Lens Grid Wrapper -->
+      <div class="relative w-full h-[350px] md:h-[500px] lg:h-[850px] z-10 -mt-8 md:-mt-48">
+        <!-- Top Curve Mask (White) -->
+        <div
+          class="absolute -top-[100px] md:-top-[698px] left-1/2 -translate-x-1/2 w-[120%] md:w-[2416px] h-[150px] md:h-[918px] max-w-none bg-white rounded-b-[100%] md:rounded-b-[50%] z-20 pointer-events-none">
+        </div>
+
+        <!-- Grid -->
+        <!-- Mobile: 2x2 Grid (grid-cols-2), Laptop: 4x1 (grid-cols-4) -->
+        <!-- Added gap-1 for mobile to remove whitespace, larger gap for desktop -->
+        <!-- Slider Wrapper -->
+        <!-- Added Buttons and Flex container -->
+        <div class="relative h-full w-full">
+          <!-- Navigation Buttons Removed -->
+
+
+          <!-- Slider -->
+          <div id="uniqueStyleSlider"
+            class="h-full w-full flex gap-1 md:gap-5 overflow-x-auto snap-x snap-mandatory no-scrollbar bg-white">
+            <!-- Original Items -->
+            <div
+              class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
+              <img src="assets/Uniq1.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+            </div>
+            <div
+              class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
+              <img src="assets/Uniq2.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+            </div>
+            <div
+              class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
+              <img src="assets/Uniq3.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+            </div>
+            <div
+              class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
+              <img src="assets/Uniq4.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+            </div>
+
+            <!-- Duplicated Items for continuous feel -->
+            <div
+              class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
+              <img src="assets/Uniq1.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+
+            </div>
+            <div
+              class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
+              <img src="assets/Uniq2.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+            </div>
+            <div
+              class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
+              <img src="assets/Uniq3.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+            </div>
+            <div
+              class="relative min-w-[50%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer snap-start">
+              <img src="assets/Uniq4.png"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Curve Mask (White) -->
+        <div
+          class="absolute -bottom-[100px] md:-bottom-[698px] left-1/2 -translate-x-1/2 w-[120%] md:w-[2416px] h-[150px] md:h-[918px] max-w-none bg-white rounded-t-[100%] md:rounded-t-[50%] z-20 pointer-events-none">
+        </div>
+      </div>
+
+      <!-- Button -->
+      <div class="absolute bottom-4 md:bottom-[60px] left-1/2 -translate-x-1/2 z-30">
+        <button
+          class="w-[150px] h-[45px] md:w-[195px] md:h-[60px] bg-[#0D0D0E] text-white hover:bg-gray-800 rounded-[200px] font-Outfit tracking-widest text-xs md:text-sm transition-all flex items-center justify-center gap-[10px] group shadow-lg px-[26px]">
+          View More
+          <img src="assets/ic_back_2_white.png"
+            class="h-3 md:h-4 w-auto transform group-hover:translate-x-1 transition-transform" alt="arrow">
+        </button>
+      </div>
+
+      <!-- Background Ellipse (Bottom) -->
+      <div
+        class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[140%] h-[800px] bg-[#FDFBF7] rounded-[50%] z-0 blur-xl pointer-events-none">
+      </div>
+    </section>
+
+    <!--Best Seller Section -->
+    <section
+      class="relative w-full flex justify-center  items-center py-[40px] px-4 md:px-[40px] gap-[20px] z-10 overflow-hidden bg-[#FDFBF7]">
+
+      <!-- Ellipse Background -->
+      <div
+        style="position: absolute; width: 100%; height: 100%; left: 0; top: 0; background: radial-gradient(50% 50% at 50% 50%, #F3EAD8 0%, #FDFBF7 100%); pointer-events: none; z-index: 0;">
+      </div>
+
+      <div class="relative z-20 max-w-[1440px]  w-full mx-auto">
+        <div class="flex flex-col lg:flex-row items-center justify-center gap-[60px] w-full h-auto py-0">
+
+          <!-- Left Image -->
+          <div
+            class="flex-1 flex justify-center border:shadow-lg items-center relative w-full h-full order-first lg:order-none lg:-translate-x-12">
+            <img src="assets/Product Photo.png"
+              class="w-full max-w-[400px] lg:max-w-[500px] h-auto object-contain hover:scale-105 transition-transform duration-500"
+              alt="Bestseller Spotlight">
+          </div>
+
+          <!-- Right Content -->
+          <div class="flex-1 flex flex-col  justify-center space-y-8 lg:pl-10">
+            <div class="text-center lg:text-left xl:text-center">
+              <h2 class="font-['Alexandria'] text-[#0D0D0E] text-4xl md:text-[44px] font-normal leading-tight mb-2">
+                Tattsvi Bestseller</h2>
+              <p class="font-['Outfit'] text-[#0D0D0E] text-xl md:text-[24px] font-normal tracking-normal leading-tight">
+                Jewellery that defines choice, elegance and trust</p>
+            </div>
+
+            <div class="space-y-6 max-w-lg mx-auto lg:mx-0 xl:mx-auto">
+              <!-- Feature 1 -->
+              <div class="flex items-center gap-5">
+                <div
+                  class="w-[60px] h-[60px] md:w-[60px] md:h-[60px] flex-shrink-0 bg-white rounded-[16px] flex items-center justify-center shadow-sm border border-[#F5F5F5]">
+                  <img src="assets/cer1.png" class="w-8 h-8 md:w-10 md:h-10 object-contain" alt="icon">
+                </div>
+                <div class="text-left">
+                  <h4 style="font-family: 'Outfit', sans-serif;"
+                    class="font-Outfit text-[18px] md:text-[20px] font-semibold text-[#0D0D0E] leading-tight mb-1">
+                    Interwoven Gold Ring</h4>
+                  <p style="font-family: 'Outfit', sans-serif;"
+                    class="font-Outfit font-light text-[14px] md:text-[15px] text-[#5C5C5C] leading-snug">
+                    A Signature Design Crafted For Everyday Elegance</p>
+                </div>
+              </div>
+
+              <!-- Feature 2 -->
+              <div class="flex items-center gap-5">
+                <div
+                  class="w-[60px] h-[60px] md:w-[60px] md:h-[60px] flex-shrink-0 bg-white rounded-[16px] flex items-center justify-center shadow-sm border border-[#F5F5F5]">
+                  <img src="assets/cer1.png" class="w-8 h-8 md:w-10 md:h-10 object-contain" alt="icon">
+                </div>
+                <div class="text-left">
+                  <h4 style="font-family: 'Outfit', sans-serif;"
+                    class="font-Outfit text-[18px] md:text-[20px] font-semibold text-[#0D0D0E] leading-tight mb-1">
+                    Transparent & Fair Pricing</h4>
+                  <p style="font-family: 'Outfit', sans-serif;"
+                    class="font-Outfit font-light text-[14px] md:text-[15px] text-[#5C5C5C] leading-snug">
+                    Value That Reflect Purity, Craftsmanship And Trust</p>
+                </div>
+              </div>
+
+              <!-- Feature 3 -->
+              <div class="flex items-center gap-5">
+                <div
+                  class="w-[60px] h-[60px] md:w-[60px] md:h-[60px] flex-shrink-0 bg-white rounded-[16px] flex items-center justify-center shadow-sm border border-[#F5F5F5]">
+                  <img src="assets/cer1.png" class="w-8 h-8 md:w-10 md:h-10 object-contain" alt="icon">
+                </div>
+                <div class="text-left">
+                  <h4 style="font-family: 'Outfit', sans-serif;"
+                    class="font-Outfit text-[18px] md:text-[20px] font-semibold text-[#0D0D0E] leading-tight mb-1">
+                    Certified Pure Gold</h4>
+                  <p style="font-family: 'Outfit', sans-serif;"
+                    class="font-Outfit font-light text-[14px] md:text-[15px] text-[#5C5C5C] leading-snug">
+                    Hallmarked Jewellery You Can Wear With Confidence</p>
+                </div>
               </div>
             </div>
 
-            <!-- Feature 2 -->
-            <div class="flex items-center gap-5">
+            <div class="pt-10 text-center w-full flex flex-col items-center">
+              <p style="font-family: 'Outfit', sans-serif;"
+                class="font-Outfit font-medium text-[16px] md:text-[18px] text-[#3D3D3D] mb-6 text-center">
+                Loved Beyond Trends Jewellery that continues to be chosen.</p>
+              <button style="background: #CD9C56;"
+                class="inline-flex items-center justify-center w-auto h-[50px] px-8 rounded-full text-white font-Outfit font-medium text-[16px] shadow-sm hover:bg-[#b38f45] transition-colors leading-tight">
+                View All Bestsellers
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flexible solutions-->
+    <section class="bg-gradient-to-r from-[#FCE4EC] to-[#FFF5F6] py-8 px-4">
+      <div class="max-w-[1440px] mx-auto text-center">
+        <p style="font-family: 'Alexandria', sans-serif;"
+          class="font-Alexandria text-[20px] md:text-[24px] font-normal text-[#5C4522] leading-[29px] text-center my-[-9px] mb-4">
+          Upgrade Your Sparkle, Stress-Free</p>
+
+        <div class="flex items-center justify-center gap-3 md:gap-4 mb-8">
+          <img src="assets/Design_pink_left.png" class="h-4 md:h-5 w-auto object-contain" alt="decoration">
+          <h2
+            class="font-Outfit text-[#B76E79] text-2xl md:text-[36px] font-medium leading-tight whitespace-normal md:whitespace-nowrap">
+            Flexible
+            solutions
+            for your jewellery</h2>
+          <img src="assets/Design_pink_right.png" class="h-4 md:h-5 w-auto object-contain" alt="decoration">
+        </div>
+
+        <!-- Responsive Grid: 2 cols mobile, 3 cols tablet, 6 cols desktop -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-y-10 gap-x-4 md:gap-x-6 justify-items-center">
+
+          <!-- Item 1 -->
+          <div class="flex flex-col items-center group w-full">
+            <div
+              class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
               <div
-                class="w-[60px] h-[60px] md:w-[60px] md:h-[60px] flex-shrink-0 bg-white rounded-[16px] flex items-center justify-center shadow-sm border border-[#F5F5F5]">
-                <img src="assets/cer1.png" class="w-8 h-8 md:w-10 md:h-10 object-contain" alt="icon">
+                class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
+                style="background-image: url('assets/Cat 1.png');">
+                <img src="assets/Frame1.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Easy 15 Day Exchange">
               </div>
-              <div class="text-left">
-                <h4 style="font-family: 'Outfit', sans-serif;"
-                  class="font-Outfit text-[18px] md:text-[20px] font-semibold text-[#0D0D0E] leading-tight mb-1">
-                  Transparent & Fair Pricing</h4>
-                <p style="font-family: 'Outfit', sans-serif;"
-                  class="font-Outfit font-light text-[14px] md:text-[15px] text-[#5C5C5C] leading-snug">
-                  Value That Reflect Purity, Craftsmanship And Trust</p>
+            </div>
+            <span
+              class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
+              Easy 15 Day Exchange
+            </span>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="flex flex-col items-center group w-full">
+            <div
+              class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
+              <div
+                class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
+                style="background-image: url('assets/Cat 1.png');">
+                <img src="assets/Group.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Guaranteed Purity">
+              </div>
+            </div>
+            <span
+              class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
+              Guaranteed Purity
+            </span>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="flex flex-col items-center group w-full">
+            <div
+              class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
+              <div
+                class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
+                style="background-image: url('assets/Cat 1.png');">
+                <img src="assets/tr.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Fast & Secure Shipping">
+              </div>
+            </div>
+            <span
+              class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
+              Fast & Secure Shipping
+            </span>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="flex flex-col items-center group w-full">
+            <div
+              class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
+              <div
+                class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
+                style="background-image: url('assets/Cat 1.png');">
+                <img src="assets/cj.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Certified Jewellery">
+              </div>
+            </div>
+            <span
+              class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
+              Certified Jewellery
+            </span>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="flex flex-col items-center group w-full">
+            <div
+              class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
+              <div
+                class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
+                style="background-image: url('assets/Cat 1.png');">
+                <img src="assets/pc.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Premium Craftsmanship">
+              </div>
+            </div>
+            <span
+              class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
+              Premium Craftsmanship
+            </span>
+          </div>
+
+          <!-- Item 6 -->
+          <div class="flex flex-col items-center group w-full">
+            <div
+              class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white  rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
+              <div
+                class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
+                style="background-image: url('assets/Cat 1.png');">
+                <img src="assets/ee.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Ethical & Eco-Conscious">
+              </div>
+            </div>
+            <span
+              class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
+              Ethical & Eco-Conscious
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="py-8 md:py-20 bg-white px-4 md:px-8 w-full max-w-[100vw] overflow-hidden">
+      <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+          <p style="font-family: 'Alexandria', sans-serif;"
+            class="font-Alexandria text-[16px] md:text-[20px] font-normal text-[#5C4522] leading-[29px] text-center my-[-5px] mb-2">
+            Here From
+          </p>
+          <div class="flex items-center justify-center gap-3 md:gap-4">
+            <img src="assets/Design.png" class="h-4 md:h-5 w-auto object-contain" alt="decoration">
+            <h2 style="font-family: 'Outfit', sans-serif;"
+              class="font-Outfit text-[#CBA65A] text-2xl md:text-[36px] font-medium leading-tight md:leading-[48px] whitespace-nowrap">
+              Our Customers
+            </h2>
+            <img src="assets/DesignRight.png" class="h-4 md:h-5 w-auto object-contain" alt="decoration">
+          </div>
+        </div>
+
+        <div class="relative group w-full max-w-[1440px] mx-auto">
+          <!-- Slider -->
+          <div id="testimonialSlider"
+            class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar pb-8 px-4 w-full">
+
+            <!-- Review 1 -->
+            <div
+              class="w-full md:w-full lg:w-[800px] flex-shrink-0 snap-center bg-[#F9F4E8] p-6 md:p-8 lg:p-10 rounded-[24px] relative flex flex-col h-auto min-h-[320px] justify-between group transition-all hover:shadow-md">
+              <div class="flex items-start gap-4">
+                <img src="assets/ReviewQuote.png" class="w-10 h-8 md:w-12 md:h-10 object-contain opacity-40 md:opacity-100"
+                  alt="quote">
+                <p class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg leading-relaxed mt-2">
+                  Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
+                  subtle yet elegant, making them perfect for everyday styling. You can genuinely feel the
+                  attention to detail in every piece."
+                </p>
+              </div>
+
+              <div class="flex items-center gap-4 mt-6 pl-0 md:pl-6 lg:pl-16">
+                <img src="assets/client1.png" class="w-12 h-12 rounded-[10px] object-cover" alt="User">
+                <div>
+                  <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-lg">Ananya R.</h4>
+                  <div class="flex gap-1 text-[#CBA65A] text-xs">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                      class="fas fa-star"></i><i class="fas fa-star"></i>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- Feature 3 -->
-            <div class="flex items-center gap-5">
-              <div
-                class="w-[60px] h-[60px] md:w-[60px] md:h-[60px] flex-shrink-0 bg-white rounded-[16px] flex items-center justify-center shadow-sm border border-[#F5F5F5]">
-                <img src="assets/cer1.png" class="w-8 h-8 md:w-10 md:h-10 object-contain" alt="icon">
+            <!-- Review 2 -->
+            <div
+              class="w-full md:w-full lg:w-[800px] flex-shrink-0 snap-center bg-[#F9F4E8] p-6 md:p-8 lg:p-10 rounded-[24px] relative flex flex-col h-auto min-h-[320px] justify-between group transition-all hover:shadow-md">
+              <div class="flex items-start gap-4">
+                <img src="assets/ReviewQuote.png" class="w-10 h-8 md:w-12 md:h-10 object-contain opacity-40 md:opacity-100"
+                  alt="quote">
+                <p class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg leading-relaxed mt-2">
+                  "The craftsmanship is outstanding. I bought a ring for my engagement and it looks
+                  absolutely stunning. The packaging was premium and delivery was super fast. Highly
+                  recommended!"
+                </p>
               </div>
-              <div class="text-left">
-                <h4 style="font-family: 'Outfit', sans-serif;"
-                  class="font-Outfit text-[18px] md:text-[20px] font-semibold text-[#0D0D0E] leading-tight mb-1">
-                  Certified Pure Gold</h4>
-                <p style="font-family: 'Outfit', sans-serif;"
-                  class="font-Outfit font-light text-[14px] md:text-[15px] text-[#5C5C5C] leading-snug">
-                  Hallmarked Jewellery You Can Wear With Confidence</p>
+
+              <div class="flex items-center gap-4 mt-6 pl-0 md:pl-6 lg:pl-16">
+                <img src="assets/client1.png" class="w-12 h-12 rounded-[10px] object-cover" alt="User">
+                <div>
+                  <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-lg"> Ananya R.</h4>
+                  <div class="flex gap-1 text-[#CBA65A] text-xs">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                      class="fas fa-star"></i><i class="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review 3 -->
+            <div
+              class="w-full md:w-full lg:w-[800px] flex-shrink-0 snap-center bg-[#F9F4E8] p-6 md:p-8 lg:p-10 rounded-[24px] relative flex flex-col h-auto min-h-[320px] justify-between group transition-all hover:shadow-md">
+              <div class="flex items-start gap-4">
+                <img src="assets/ReviewQuote.png" class="w-10 h-8 md:w-12 md:h-10 object-contain opacity-40 md:opacity-100"
+                  alt="quote">
+                <p class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg leading-relaxed mt-2">
+                  "I love how unique the collections are. It's rare to find such modern yet traditional
+                  designs. Will definitely shop again!"
+                </p>
+              </div>
+
+              <div class="flex items-center gap-4 mt-6 pl-0 md:pl-6 lg:pl-16">
+                <img src="assets/client1.png" class="w-12 h-12 rounded-[10px] object-cover" alt="User">
+                <div>
+                  <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-lg"> Ananya R.</h4>
+                  <div class="flex gap-1 text-[#CBA65A] text-xs">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                      class="fas fa-star"></i><i class="fas fa-star"></i>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="pt-10 text-center w-full flex flex-col items-center">
-            <p style="font-family: 'Outfit', sans-serif;"
-              class="font-Outfit font-medium text-[16px] md:text-[18px] text-[#3D3D3D] mb-6 text-center">
-              Loved Beyond Trends Jewellery that continues to be chosen.</p>
-            <button style="background: #CD9C56;"
-              class="inline-flex items-center justify-center w-auto h-[50px] px-8 rounded-full text-white font-Outfit font-medium text-[16px] shadow-sm hover:bg-[#b38f45] transition-colors leading-tight">
-              View All Bestsellers
+          <!-- Navigation -->
+          <div class="flex justify-center md:justify-end gap-4 mt-8 px-4">
+            <button onclick="scrollSlider('left')"
+              class="w-12 h-12 rounded-full border border-[#D7D7DA] flex items-center justify-center text-[#5C4522] hover:border-[#CBA65A] hover:text-[#CBA65A] transition-all bg-white hover:bg-[#F9F4E8]">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <button onclick="scrollSlider('right')"
+              class="w-12 h-12 rounded-full border border-[#D7D7DA] flex items-center justify-center text-[#5C4522] hover:border-[#CBA65A] hover:text-[#CBA65A] transition-all bg-white hover:bg-[#F9F4E8]">
+              <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Flexible solutions-->
-  <section class="bg-gradient-to-r from-[#FCE4EC] to-[#FFF5F6] py-8 px-4">
-    <div class="max-w-[1440px] mx-auto text-center">
-      <p style="font-family: 'Alexandria', sans-serif;"
-        class="font-Alexandria text-[20px] md:text-[24px] font-normal text-[#5C4522] leading-[29px] text-center my-[-9px] mb-4">
-        Upgrade Your Sparkle, Stress-Free</p>
+    <!--Download The App Noww -->
 
-      <div class="flex items-center justify-center gap-3 md:gap-4 mb-8">
-        <img src="assets/Design_pink_left.png" class="h-4 md:h-5 w-auto object-contain" alt="decoration">
-        <h2
-          class="font-Outfit text-[#B76E79] text-2xl md:text-[36px] font-medium leading-tight whitespace-normal md:whitespace-nowrap">
-          Flexible
-          solutions
-          for your jewellery</h2>
-        <img src="assets/Design_pink_right.png" class="h-4 md:h-5 w-auto object-contain" alt="decoration">
-      </div>
-
-      <!-- Responsive Grid: 2 cols mobile, 3 cols tablet, 6 cols desktop -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-y-10 gap-x-4 md:gap-x-6 justify-items-center">
-
-        <!-- Item 1 -->
-        <div class="flex flex-col items-center group w-full">
-          <div
-            class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
-            <div
-              class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
-              style="background-image: url('assets/Cat 1.png');">
-              <img src="assets/Frame1.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Easy 15 Day Exchange">
-            </div>
-          </div>
-          <span
-            class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
-            Easy 15 Day Exchange
-          </span>
-        </div>
-
-        <!-- Item 2 -->
-        <div class="flex flex-col items-center group w-full">
-          <div
-            class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
-            <div
-              class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
-              style="background-image: url('assets/Cat 1.png');">
-              <img src="assets/Group.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Guaranteed Purity">
-            </div>
-          </div>
-          <span
-            class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
-            Guaranteed Purity
-          </span>
-        </div>
-
-        <!-- Item 3 -->
-        <div class="flex flex-col items-center group w-full">
-          <div
-            class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
-            <div
-              class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
-              style="background-image: url('assets/Cat 1.png');">
-              <img src="assets/tr.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Fast & Secure Shipping">
-            </div>
-          </div>
-          <span
-            class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
-            Fast & Secure Shipping
-          </span>
-        </div>
-
-        <!-- Item 4 -->
-        <div class="flex flex-col items-center group w-full">
-          <div
-            class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
-            <div
-              class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
-              style="background-image: url('assets/Cat 1.png');">
-              <img src="assets/cj.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Certified Jewellery">
-            </div>
-          </div>
-          <span
-            class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
-            Certified Jewellery
-          </span>
-        </div>
-
-        <!-- Item 5 -->
-        <div class="flex flex-col items-center group w-full">
-          <div
-            class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
-            <div
-              class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
-              style="background-image: url('assets/Cat 1.png');">
-              <img src="assets/pc.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Premium Craftsmanship">
-            </div>
-          </div>
-          <span
-            class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
-            Premium Craftsmanship
-          </span>
-        </div>
-
-        <!-- Item 6 -->
-        <div class="flex flex-col items-center group w-full">
-          <div
-            class="w-28 h-28 md:w-[140px] md:h-[140px] bg-white  rounded-full flex items-center justify-center mb-2 shadow-md transition-transform group-hover:scale-110 duration-300">
-            <div
-              class="w-20 h-20 md:w-[140px] md:h-[140px] flex items-center justify-center bg-no-repeat bg-center bg-contain"
-              style="background-image: url('assets/Cat 1.png');">
-              <img src="assets/ee.png" class="h-8 w-8 md:h-12 md:w-12 object-contain" alt="Ethical & Eco-Conscious">
-            </div>
-          </div>
-          <span
-            class="text-xs md:text-[15px] font-['outfit'] tracking-tight text-center px-2 leading-tight text-rose-950">
-            Ethical & Eco-Conscious
-          </span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <section class="py-8 md:py-20 bg-white px-4 md:px-8 w-full max-w-[100vw] overflow-hidden">
-    <div class="max-w-7xl mx-auto">
-      <!-- Header -->
-      <div class="text-center mb-12">
-        <p style="font-family: 'Alexandria', sans-serif;"
-          class="font-Alexandria text-[16px] md:text-[20px] font-normal text-[#5C4522] leading-[29px] text-center my-[-5px] mb-2">
-          Here From
-        </p>
-        <div class="flex items-center justify-center gap-3 md:gap-4">
-          <img src="assets/Design.png" class="h-4 md:h-5 w-auto object-contain" alt="decoration">
+    <section class="py-4 md:py-8 px-4 md:px-8">
+      <div
+        class="max-w-[1440px] mx-auto border-[#F2D7D3] border-[4px] bg-[#FDF2F4] rounded-[40px] overflow-hidden flex flex-col md:flex-row items-center justify-between px-6 py-6 md:px-16 md:py-10 relative">
+        <!-- Left Side: Text and Buttons -->
+        <div class="w-full md:w-1/2 flex flex-col items-start gap-6 z-10">
           <h2 style="font-family: 'Outfit', sans-serif;"
-            class="font-Outfit text-[#CBA65A] text-2xl md:text-[36px] font-medium leading-tight md:leading-[48px] whitespace-nowrap">
-            Our Customers
+            class="font-Outfit text-3xl md:text-[54px] font-bold text-[#0D0D0E] leading-tight">
+            Download the app now!
           </h2>
-          <img src="assets/DesignRight.png" class="h-4 md:h-5 w-auto object-contain" alt="decoration">
+          <p style="font-family: 'Outfit', sans-serif;"
+            class="font-Outfit text-base md:text-[22px] font-normal text-[#5C5C5C] max-w-md">
+            Experience seamless online ordering only on the Tattsvi App
+          </p>
+          <div class="flex flex-wrap gap-4 mt-2">
+            <img src="assets/ioslogo.png"
+              class="h-[45px] md:h-[55px] w-auto object-contain cursor-pointer transition-transform hover:scale-105"
+              alt="Download on App Store">
+            <img src="assets/Androidelogo.png"
+              class="h-[45px] md:h-[55px] w-auto object-contain cursor-pointer transition-transform hover:scale-105"
+              alt="Get it on Google Play">
+          </div>
+        </div>
+
+        <!-- Right Side: Mobile QR Image -->
+        <div class="w-full md:w-1/2 flex justify-center md:justify-end mt-10 md:mt-0 relative">
+          <img src="assets/MobileQr.png" class="w-[80%] md:w-[400px] md:h-[300px] lg:w-[450px] object-contain"
+            alt="Mobile App with QR Code">
         </div>
       </div>
+    </section>
 
-      <div class="relative group w-full max-w-[1440px] mx-auto">
-        <!-- Slider -->
-        <div id="testimonialSlider"
-          class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar pb-8 px-4 w-full">
 
-          <!-- Review 1 -->
-          <div
-            class="w-full md:w-full lg:w-[800px] flex-shrink-0 snap-center bg-[#F9F4E8] p-6 md:p-8 lg:p-10 rounded-[24px] relative flex flex-col h-auto min-h-[320px] justify-between group transition-all hover:shadow-md">
-            <div class="flex items-start gap-4">
-              <img src="assets/ReviewQuote.png" class="w-10 h-8 md:w-12 md:h-10 object-contain opacity-40 md:opacity-100"
-                alt="quote">
-              <p class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg leading-relaxed mt-2">
-                Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
-                subtle yet elegant, making them perfect for everyday styling. You can genuinely feel the
-                attention to detail in every piece."
-              </p>
-            </div>
-
-            <div class="flex items-center gap-4 mt-6 pl-0 md:pl-6 lg:pl-16">
-              <img src="assets/client1.png" class="w-12 h-12 rounded-[10px] object-cover" alt="User">
-              <div>
-                <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-lg">Ananya R.</h4>
-                <div class="flex gap-1 text-[#CBA65A] text-xs">
-                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                    class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review 2 -->
-          <div
-            class="w-full md:w-full lg:w-[800px] flex-shrink-0 snap-center bg-[#F9F4E8] p-6 md:p-8 lg:p-10 rounded-[24px] relative flex flex-col h-auto min-h-[320px] justify-between group transition-all hover:shadow-md">
-            <div class="flex items-start gap-4">
-              <img src="assets/ReviewQuote.png" class="w-10 h-8 md:w-12 md:h-10 object-contain opacity-40 md:opacity-100"
-                alt="quote">
-              <p class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg leading-relaxed mt-2">
-                "The craftsmanship is outstanding. I bought a ring for my engagement and it looks
-                absolutely stunning. The packaging was premium and delivery was super fast. Highly
-                recommended!"
-              </p>
-            </div>
-
-            <div class="flex items-center gap-4 mt-6 pl-0 md:pl-6 lg:pl-16">
-              <img src="assets/client1.png" class="w-12 h-12 rounded-[10px] object-cover" alt="User">
-              <div>
-                <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-lg"> Ananya R.</h4>
-                <div class="flex gap-1 text-[#CBA65A] text-xs">
-                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                    class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review 3 -->
-          <div
-            class="w-full md:w-full lg:w-[800px] flex-shrink-0 snap-center bg-[#F9F4E8] p-6 md:p-8 lg:p-10 rounded-[24px] relative flex flex-col h-auto min-h-[320px] justify-between group transition-all hover:shadow-md">
-            <div class="flex items-start gap-4">
-              <img src="assets/ReviewQuote.png" class="w-10 h-8 md:w-12 md:h-10 object-contain opacity-40 md:opacity-100"
-                alt="quote">
-              <p class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg leading-relaxed mt-2">
-                "I love how unique the collections are. It's rare to find such modern yet traditional
-                designs. Will definitely shop again!"
-              </p>
-            </div>
-
-            <div class="flex items-center gap-4 mt-6 pl-0 md:pl-6 lg:pl-16">
-              <img src="assets/client1.png" class="w-12 h-12 rounded-[10px] object-cover" alt="User">
-              <div>
-                <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-lg"> Ananya R.</h4>
-                <div class="flex gap-1 text-[#CBA65A] text-xs">
-                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                    class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Navigation -->
-        <div class="flex justify-center md:justify-end gap-4 mt-8 px-4">
-          <button onclick="scrollSlider('left')"
-            class="w-12 h-12 rounded-full border border-[#D7D7DA] flex items-center justify-center text-[#5C4522] hover:border-[#CBA65A] hover:text-[#CBA65A] transition-all bg-white hover:bg-[#F9F4E8]">
-            <i class="fa-solid fa-arrow-left"></i>
-          </button>
-          <button onclick="scrollSlider('right')"
-            class="w-12 h-12 rounded-full border border-[#D7D7DA] flex items-center justify-center text-[#5C4522] hover:border-[#CBA65A] hover:text-[#CBA65A] transition-all bg-white hover:bg-[#F9F4E8]">
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-        </div>
-      </div>
+    <!-- Know More Section -->
+    <div class="flex flex-row justify-center items-center py-[14px] px-[8px] gap-[10px] w-full h-[56px] bg-[#E9D3D6]">
+      <span class="font-['Outfit'] text-[16px] text-[#0D0D0E] font-medium">Know More About Tattsvi</span>
     </div>
-  </section>
 
-  <!--Download The App Noww -->
+    <script>
+      // Middle Banner Slider Logic
+      const slides1 = document.getElementById('slides1');
+      const dots1 = document.querySelectorAll('#dots1 button');
+      let currentSlide1 = 0;
+      const totalSlides1 = {{ isset($middleBanners) ? $middleBanners->count() : 0 }};
 
-  <section class="py-4 md:py-8 px-4 md:px-8">
-    <div
-      class="max-w-[1440px] mx-auto border-[#F2D7D3] border-[4px] bg-[#FDF2F4] rounded-[40px] overflow-hidden flex flex-col md:flex-row items-center justify-between px-6 py-6 md:px-16 md:py-10 relative">
-      <!-- Left Side: Text and Buttons -->
-      <div class="w-full md:w-1/2 flex flex-col items-start gap-6 z-10">
-        <h2 style="font-family: 'Outfit', sans-serif;"
-          class="font-Outfit text-3xl md:text-[54px] font-bold text-[#0D0D0E] leading-tight">
-          Download the app now!
-        </h2>
-        <p style="font-family: 'Outfit', sans-serif;"
-          class="font-Outfit text-base md:text-[22px] font-normal text-[#5C5C5C] max-w-md">
-          Experience seamless online ordering only on the Tattsvi App
-        </p>
-        <div class="flex flex-wrap gap-4 mt-2">
-          <img src="assets/ioslogo.png"
-            class="h-[45px] md:h-[55px] w-auto object-contain cursor-pointer transition-transform hover:scale-105"
-            alt="Download on App Store">
-          <img src="assets/Androidelogo.png"
-            class="h-[45px] md:h-[55px] w-auto object-contain cursor-pointer transition-transform hover:scale-105"
-            alt="Get it on Google Play">
-        </div>
-      </div>
+      function goToSlide1(n) {
+        if (totalSlides1 <= 0) return;
+        currentSlide1 = (n + totalSlides1) % totalSlides1;
+        slides1.style.transform = `translateX(-${currentSlide1 * 100}%)`;
 
-      <!-- Right Side: Mobile QR Image -->
-      <div class="w-full md:w-1/2 flex justify-center md:justify-end mt-10 md:mt-0 relative">
-        <img src="assets/MobileQr.png" class="w-[80%] md:w-[400px] md:h-[300px] lg:w-[450px] object-contain"
-          alt="Mobile App with QR Code">
-      </div>
-    </div>
-  </section>
-
-
-  <!-- Know More Section -->
-  <div class="flex flex-row justify-center items-center py-[14px] px-[8px] gap-[10px] w-full h-[56px] bg-[#E9D3D6]">
-    <span class="font-['Outfit'] text-[16px] text-[#0D0D0E] font-medium">Know More About Tattsvi</span>
-  </div>
-
-  <script>
-    // Middle Banner Slider Logic
-    const slides1 = document.getElementById('slides1');
-    const dots1 = document.querySelectorAll('#dots1 button');
-    let currentSlide1 = 0;
-    const totalSlides1 = {{ isset($middleBanners) ? $middleBanners->count() : 0 }};
-
-    function goToSlide1(n) {
-      if (totalSlides1 <= 0) return;
-      currentSlide1 = (n + totalSlides1) % totalSlides1;
-      slides1.style.transform = `translateX(-${currentSlide1 * 100}%)`;
-
-      dots1.forEach((dot, index) => {
-        dot.className = `w-8 h-1 rounded-[1px] transition-all duration-300 ${index === currentSlide1 ? 'bg-white' : 'bg-white/50 hover:bg-white'}`;
-      });
-    }
-
-    // Auto-advance middle slider only if multiple slides exist
-    if (totalSlides1 > 1) {
-      setInterval(() => {
-        goToSlide1(currentSlide1 + 1);
-      }, 5000);
-    }
-
-    // Category Slider Logic
-    const categories = @json($categories);
-    let currentCatIndex = 0;
-    const catImg = document.getElementById('mainCatImg');
-    const catTitle = document.getElementById('mainCatTitle');
-    const catDesc = document.getElementById('catDescription');
-    const exploreCatTitle = document.getElementById('exploreCategoryTitle');
-
-    function changeSlide(direction) {
-      if (!categories || categories.length === 0) return;
-
-      if (direction === 'next') {
-        currentCatIndex = (currentCatIndex + 1) % categories.length;
-      } else {
-        currentCatIndex = (currentCatIndex - 1 + categories.length) % categories.length;
+        dots1.forEach((dot, index) => {
+          dot.className = `w-8 h-1 rounded-[1px] transition-all duration-300 ${index === currentSlide1 ? 'bg-white' : 'bg-white/50 hover:bg-white'}`;
+        });
       }
 
-      const category = categories[currentCatIndex];
+      // Auto-advance middle slider only if multiple slides exist
+      if (totalSlides1 > 1) {
+        setInterval(() => {
+          goToSlide1(currentSlide1 + 1);
+        }, 5000);
+      }
 
-      // Fade out
-      catImg.style.opacity = '0';
+      // Category Slider Logic
+      const categories = @json($categories);
+      let currentCatIndex = 0;
+      const catImg = document.getElementById('mainCatImg');
+      const catTitle = document.getElementById('mainCatTitle');
+      const catDesc = document.getElementById('catDescription');
+      const exploreCatTitle = document.getElementById('exploreCategoryTitle');
 
-      setTimeout(() => {
-        // Update content
-        if (category.image) {
-          catImg.src = "{{ url('storage') }}/" + category.image;
+      function changeSlide(direction) {
+        if (!categories || categories.length === 0) return;
+
+        if (direction === 'next') {
+          currentCatIndex = (currentCatIndex + 1) % categories.length;
         } else {
-          catImg.src = "{{ asset('assets/Rectangle_sidebar.png') }}"; // Fallback
-        }
-        catTitle.textContent = category.name;
-        if (catDesc) {
-          catDesc.textContent = category.description || 'Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are subtle yet elegant.';
-        }
-        if (exploreCatTitle) {
-          exploreCatTitle.textContent = category.name;
+          currentCatIndex = (currentCatIndex - 1 + categories.length) % categories.length;
         }
 
-        // Fade in
-        catImg.style.opacity = '1';
+        const category = categories[currentCatIndex];
 
-        // Sync with product filter
-        console.log('Changing category to:', category.name, 'ID:', category.id);
+        // Fade out
+        catImg.style.opacity = '0';
 
-        if (typeof window.filterProducts === 'function') {
-          window.filterProducts(category.id, null);
-        } else if (typeof filterProducts === 'function') {
-          filterProducts(category.id, null);
-        } else {
-          console.error('filterProducts function not found!');
-        }
-      }, 300); // Wait for transition
-    }
+        setTimeout(() => {
+          // Update content
+          if (category.image) {
+            catImg.src = "{{ url('storage') }}/" + category.image;
+          } else {
+            catImg.src = "{{ asset('assets/Rectangle_sidebar.png') }}"; // Fallback
+          }
+          catTitle.textContent = category.name;
+          if (catDesc) {
+            catDesc.textContent = category.description || 'Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are subtle yet elegant.';
+          }
+          if (exploreCatTitle) {
+            exploreCatTitle.textContent = category.name;
+          }
 
-    // Initialize with first category if exists
-    if (categories.length > 0) {
-      // Optional: Set initial state if not already set by server-side rendering
-      // changeSlide('next'); // Just to trigger update or set manually
-    }
-  </script>
+          // Fade in
+          catImg.style.opacity = '1';
+
+          // Sync with product filter
+          console.log('Changing category to:', category.name, 'ID:', category.id);
+
+          if (typeof window.filterProducts === 'function') {
+            window.filterProducts(category.id, null);
+          } else if (typeof filterProducts === 'function') {
+            filterProducts(category.id, null);
+          } else {
+            console.error('filterProducts function not found!');
+          }
+        }, 300); // Wait for transition
+      }
+
+      // Initialize with first category if exists
+      if (categories.length > 0) {
+        // Optional: Set initial state if not already set by server-side rendering
+        // changeSlide('next'); // Just to trigger update or set manually
+      }
+    </script>
 @endsection

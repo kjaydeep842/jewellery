@@ -1,6 +1,7 @@
 @if(isset($products) && $products->count() > 0)
     @foreach($products as $product)
-        <div class="flex flex-col gap-3">
+        <div
+            class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(25%-12px)] lg:w-[calc(20%-12.8px)] flex-shrink-0 snap-start">
             <div
                 class="bg-[#FDFBF7] box-border relative w-full aspect-square border border-[#D7D7DA] rounded-[14px] group transition-all overflow-hidden shadow-md hover:shadow-xl">
                 <span
@@ -18,8 +19,8 @@
                 </div>
             </div>
             <div class="text-center font-['Outfit']">
-                <h3 class="text-sm font-['outfit'] text-[#1A1A1A] mb-1">{{ $product->name }}</h3>
-                <div class="flex items-center justify-center gap-2 text-xs">
+                <h3 class="text-sm min-[2000px]:text-2xl font-['outfit'] text-[#1A1A1A] mb-1">{{ $product->name }}</h3>
+                <div class="flex items-center justify-center gap-2 text-xs min-[2000px]:text-xl">
                     <span class="font-bold font-['outfit'] text-[#1A1A1A]">₹ {{ number_format($product->price, 2) }}</span>
                     <span class="text-[#999999] line-through">₹ {{ number_format($product->price * 1.2, 2) }}</span>
                 </div>

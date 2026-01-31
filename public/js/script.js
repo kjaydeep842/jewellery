@@ -1,56 +1,146 @@
-//image slidebar
-document.addEventListener("DOMContentLoaded", () => {
-    const slidesWrapper = document.getElementById('slides');
-    const dots = Array.from(document.getElementById('dots').children);
-    const total = slidesWrapper.children.length;
-    let index = 0;
+// Image Slider Logic (Shutter Wipe Effect)
+const initShutterSlider = (sliderId, dotsId, interval = 5000) => {
+    const wrapper = document.getElementById(sliderId);
+    const dotsContainer = document.getElementById(dotsId);
+    if (!wrapper || !dotsContainer) return;
 
-    function goToSlide(i) {
-        index = i;
-        slidesWrapper.style.transform = `translateX(${-index * 100}%)`;
-        updateDots();
-    }
+    const slides = Array.from(wrapper.children);
+    const dots = Array.from(dotsContainer.children);
+    const total = slides.length;
+    let currentIndex = 0;
+    let autoSlideInterval;
+    let touchStartX = 0;
+    let touchEndX = 0;
 
-    function updateDots() {
-        const isExpanding = document.getElementById('dots').classList.contains('dots-expanding');
+    // Initialize Styles
+    // Use Clip-Path for transitions.
+    // Active: Fully visible (inset(0))
+    // Others: Hidden (clipped fully from left, i.e., inset(0 0 0 100%))
+    slides.forEach((slide, i) => {
+        slide.style.zIndex = i === 0 ? '10' : '0';
+        slide.style.transform = 'none'; // Ensure no transform interference
+        // Right-to-Left Wipe: Start with left edge at 100% (hidden on right)
+        slide.style.clipPath = i === 0 ? 'inset(0 0 0 0)' : 'inset(0 0 0 100%)';
+        // Ensure transition property is ready (but not active on init)
+        slide.style.transition = 'clip-path 1.5s ease-in-out';
+    });
 
+    const updateDots = (index) => {
+        const isExpanding = dotsContainer.classList.contains('dots-expanding');
         dots.forEach((dot, i) => {
             if (isExpanding) {
                 if (i === index) {
-                    // Active state for expanding dots
                     dot.classList.remove('w-3', 'bg-[#E8E1D5]');
                     dot.classList.add('w-8', 'bg-[#CBA65A]');
                 } else {
-                    // Inactive state for expanding dots
                     dot.classList.remove('w-8', 'bg-[#CBA65A]');
                     dot.classList.add('w-3', 'bg-[#E8E1D5]');
                 }
-                // Remove strictly opacity based classes if they exist from previous logic
                 dot.classList.remove('bg-black', 'bg-opacity-75', 'bg-opacity-100');
             } else {
-                // Default behavior for other sliders (index.html)
                 if (i === index) {
-                    dot.classList.add('bg-opacity-100');
-                    dot.classList.remove('bg-opacity-75');
+                    dot.classList.add('bg-white');
+                    dot.classList.remove('bg-white/50');
                 } else {
-                    dot.classList.add('bg-opacity-75');
-                    dot.classList.remove('bg-opacity-100');
+                    dot.classList.add('bg-white/50');
+                    dot.classList.remove('bg-white');
                 }
             }
         });
-    }
+    };
 
+    const goToSlide = (nextIndex) => {
+        if (nextIndex === currentIndex) return;
+
+        const currentSlide = slides[currentIndex];
+        const nextSlide = slides[nextIndex];
+
+        // Prepare Next Slide
+        // We want it to wipe in from Right to Left.
+        // Start state: clipped fully from left (inset(0 0 0 100%))
+        nextSlide.style.transition = 'none';
+        nextSlide.style.clipPath = 'inset(0 0 0 100%)';
+        nextSlide.style.zIndex = '20'; // On top
+
+        // Force Reflow
+        void nextSlide.offsetWidth;
+
+        // Animate
+        nextSlide.style.transition = 'clip-path 1.5s ease-in-out';
+        nextSlide.style.clipPath = 'inset(0 0 0 0)'; // Reveal fully
+
+        // Current Slide stays put (behind)
+        currentSlide.style.zIndex = '10';
+
+        // Update Index
+        currentIndex = nextIndex;
+        updateDots(currentIndex);
+
+        // Cleanup after transition
+        setTimeout(() => {
+            currentSlide.style.zIndex = '0';
+            currentSlide.style.clipPath = 'inset(0 0 0 100%)'; // Hide it for next time
+            nextSlide.style.zIndex = '10';
+        }, 1500);
+    };
+
+    const nextSlide = () => {
+        goToSlide((currentIndex + 1) % total);
+    };
+
+    const startAuto = () => {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(nextSlide, interval);
+    };
+
+    const stopAuto = () => {
+        clearInterval(autoSlideInterval);
+    };
+
+    // Dot Events
     dots.forEach((dot, i) => {
-        dot.addEventListener('click', () => goToSlide(i));
+        dot.addEventListener('click', () => {
+            stopAuto();
+            goToSlide(i);
+            startAuto();
+        });
     });
 
-    // Optional: auto‑slide every 5 seconds
-    setInterval(() => {
-        goToSlide((index + 1) % total);
-    }, 5000);
+    // Swipe Events
+    wrapper.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        stopAuto();
+    });
 
-    // Initialize
-    goToSlide(0);
+    wrapper.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        startAuto();
+    });
+
+    const handleSwipe = () => {
+        // Swipe Logic:
+        // User wants "Right to left side swipe".
+        // This implies dragging finger from R to L (Swiping Left).
+        // touchStartX > touchEndX
+        if (touchStartX - touchEndX > 50) {
+            nextSlide();
+        }
+    };
+
+    // Init
+    updateDots(0);
+    startAuto();
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    initShutterSlider('slides', 'dots', 5000);
+
+
+    initAutoScroll('productScroll1', 2000);
+    initAutoScroll('productScroll2', 2000);
+    initAutoScroll('launchScroll', 2000);
+
 });
 //Premium Collectin....
 const slider = document.getElementById('jewellerySlider');
@@ -73,8 +163,7 @@ slider.addEventListener('scroll', () => {
     const index = Math.round(slider.scrollLeft / cardWidth) + 1;
     slideIndexLabel.innerText = index.toString().padStart(2, '0');
 });
-// Category Section - DISABLED (Handled dynamically in home.blade.php)
-/*
+// Category Section
 const categoryData = [
     { title: "Rings", url: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600" },
     { title: "Pendants", url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600" },
@@ -96,12 +185,13 @@ function changeSlide(dir) {
         img.style.opacity = '1';
     }, 300);
 }
-*/
 // Customer Review Section
 function scrollSlider(direction) {
     const slider = document.getElementById('testimonialSlider');
     // Determine scroll amount based on card width
-    const scrollAmount = 600 + 24; // Card width + gap
+    const item = slider.firstElementChild;
+    const gap = 24; // tailwind gap-6
+    const scrollAmount = item ? item.offsetWidth + gap : 624;
 
     if (direction === 'left') {
         slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -109,124 +199,64 @@ function scrollSlider(direction) {
         slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
 }
-//image slidebar second
+// Second Image Slider Logic (Shutter Effect)
 document.addEventListener("DOMContentLoaded", () => {
-    const slidesWrapper = document.getElementById('slides1');
-    const dots = Array.from(document.getElementById('dots1').children);
-    const total = slidesWrapper.children.length;
-    let index = 0;
-
-    function goToSlide(i) {
-        index = i;
-        slidesWrapper.style.transform = `translateX(${-index * 100}%)`;
-        updateDots();
-    }
-
-    function updateDots() {
-        dots.forEach((dot, i) => {
-            if (i === index) {
-                dot.classList.add('bg-opacity-100');
-                dot.classList.remove('bg-opacity-75');
-            } else {
-                dot.classList.add('bg-opacity-75');
-                dot.classList.remove('bg-opacity-100');
-            }
-        });
-    }
-
-    dots.forEach((dot, i) => {
-        dot.addEventListener('click', () => goToSlide(i));
-    });
-
-    // Optional: auto‑slide every 5 seconds
-    setInterval(() => {
-        goToSlide((index + 1) % total);
-    }, 5000);
-
-    // Initialize
-    goToSlide(0);
+    initShutterSlider('slides1', 'dots1', 5000);
 });
 
 
 
 // Unique Style Slider Logic
-// Unique Style Slider Logic
+// Reverting to simpler independent logic for Unique Style (as user reverted unification)
+// But keeping it functional
 document.addEventListener("DOMContentLoaded", () => {
     const slider = document.getElementById('uniqueStyleSlider');
     if (!slider) return;
 
+    const interval = 2000;
     let autoSlideInterval;
-    const slideIntervalTime = 2000; // 2 seconds
-    let isDown = false;
-    let startX;
-    let scrollLeft;
 
-    // Auto Scroll Function
     const startAutoSlide = () => {
-        stopAutoSlide(); // Ensure no duplicate intervals
+        stopAutoSlide();
         autoSlideInterval = setInterval(() => {
-            // Calculate scroll amount (item width + gap)
+            if (slider.scrollWidth <= slider.clientWidth) return;
+
+            // Simple continuous scroll feel or step
+            // User reverted to step logic usually
             const item = slider.firstElementChild;
             if (!item) return;
 
             const isMd = window.matchMedia('(min-width: 768px)').matches;
             const gap = isMd ? 20 : 4;
-            const itemWidth = item.getBoundingClientRect().width;
-            const scrollAmount = itemWidth + gap;
+            const width = item.getBoundingClientRect().width;
+            const step = width + gap;
 
-            // Check if we are at the end to loop back (optional, or just infinite scroll feel)
-            // For simple "next" slide:
-            if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
-                slider.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back to start
-            } else {
-                slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            // Seamless Infinite Scroll Logic
+            // Assuming 4 items duplicated -> 8 items total.
+            // Loop point is after 4th item.
+            const loopThreshold = 4 * step;
+
+            // If we have scrolled past the first set (4 items)
+            if (slider.scrollLeft >= loopThreshold) {
+                // Instantly jump back to start of first set (which looks identical)
+                slider.scrollLeft -= loopThreshold;
             }
-        }, slideIntervalTime);
+
+            // Now scroll forward
+            slider.scrollBy({ left: step, behavior: 'smooth' });
+        }, interval);
     };
 
     const stopAutoSlide = () => {
         clearInterval(autoSlideInterval);
     };
 
-    // Mouse Drag / Swipe Logic
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        slider.classList.add('active'); // Optional: for changing cursor style
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-        stopAutoSlide(); // Pause on interaction
-    });
+    // Basic Interaction
+    slider.addEventListener('mousedown', () => stopAutoSlide());
+    slider.addEventListener('touchstart', () => stopAutoSlide());
+    slider.addEventListener('mouseup', () => startAutoSlide());
+    slider.addEventListener('touchend', () => startAutoSlide());
 
-    slider.addEventListener('mouseleave', () => {
-        isDown = false;
-        slider.classList.remove('active');
-        startAutoSlide(); // Resume on leave
-    });
-
-    slider.addEventListener('mouseup', () => {
-        isDown = false;
-        slider.classList.remove('active');
-        startAutoSlide(); // Resume on release
-    });
-
-    slider.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 2; // Scroll-fast 
-        slider.scrollLeft = scrollLeft - walk;
-    });
-
-    // Touch events for mobile (optional explicit handling, though overflow-x usually handles it)
-    slider.addEventListener('touchstart', () => {
-        stopAutoSlide();
-    });
-
-    slider.addEventListener('touchend', () => {
-        startAutoSlide();
-    });
-
-    // Initialize
     startAutoSlide();
 });
 
@@ -288,3 +318,63 @@ window.toggleMobileDropdown = function (menuId, btn) {
         }
     }
 };
+
+/**
+ * Automatically scrolls a horizontal container.
+ * @param {string} containerId - ID of the scroll container.
+ * @param {number} interval - Scrolling speed in ms.
+ */
+function initAutoScroll(containerId, interval = 2000) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Clone items to create an infinite loop effect
+    const originalChildren = Array.from(container.children);
+    originalChildren.forEach(item => {
+        const clone = item.cloneNode(true);
+        container.appendChild(clone);
+    });
+
+    let isPaused = false;
+
+    const scroll = () => {
+        if (isPaused) return;
+
+        const firstItem = container.firstElementChild;
+        if (!firstItem) return;
+
+        const scrollAmount = firstItem.offsetWidth + parseFloat(getComputedStyle(container).gap || 0);
+
+        // If we've scrolled past the original set, reset instantly to start
+        if (container.scrollLeft >= container.scrollWidth / 2) {
+            container.scrollLeft = 0;
+        }
+
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    };
+
+    let scrollInterval = setInterval(scroll, interval);
+
+    const pause = () => {
+        isPaused = true;
+        clearInterval(scrollInterval);
+    };
+    const resume = () => {
+        isPaused = false;
+        scrollInterval = setInterval(scroll, interval);
+    };
+
+    container.addEventListener('mouseenter', pause);
+    container.addEventListener('mouseleave', resume);
+    container.addEventListener('touchstart', pause, { passive: true });
+    container.addEventListener('touchend', resume, { passive: true });
+
+    // Safety: reset position if user scrolls manually past halfway
+    container.addEventListener('scroll', () => {
+        if (container.scrollLeft >= (container.scrollWidth / 2) + 10) {
+            // Only reset instantly if not currently animating or to keep flow
+            // But usually instant reset is better
+            // container.scrollLeft = 0; // This can be jarring if done during manual scroll
+        }
+    });
+}

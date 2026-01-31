@@ -378,3 +378,104 @@ function initAutoScroll(containerId, interval = 2000) {
         }
     });
 }
+
+
+
+
+
+
+
+
+// Middle Banner & Category Slider Logic Wrapper
+function initHomeInteractive(middleBannersCount, categoriesData, storageBaseUrl, assetBaseUrl) {
+    // Middle Banner Slider Logic
+    const slides1 = document.getElementById('slides1');
+    const dots1 = document.querySelectorAll('#dots1 button');
+    let currentSlide1 = 0;
+    const totalSlides1 = middleBannersCount || 0;
+
+    function goToSlide1(n) {
+        if (!slides1 || totalSlides1 <= 0) return;
+        currentSlide1 = (n + totalSlides1) % totalSlides1;
+        slides1.style.transform = `translateX(-${currentSlide1 * 100}%)`;
+
+        if (dots1) {
+            dots1.forEach((dot, index) => {
+                dot.className = `w-8 h-1 rounded-[1px] transition-all duration-300 ${index === currentSlide1 ? 'bg-white' : 'bg-white/50 hover:bg-white'}`;
+            });
+        }
+    }
+
+    // Auto-advance middle slider only if multiple slides exist
+    if (totalSlides1 > 1) {
+        setInterval(() => {
+            goToSlide1(currentSlide1 + 1);
+        }, 5000);
+    }
+
+    // Category Slider Logic
+    const categories = categoriesData || [];
+    let currentCatIndex = 0;
+    const catImg = document.getElementById('mainCatImg');
+    const catTitle = document.getElementById('mainCatTitle');
+    const catDesc = document.getElementById('catDescription');
+    const exploreCatTitle = document.getElementById('exploreCategoryTitle');
+
+    // Make changeSlide globally available as it might be called from onclick handlers in HTML
+    window.changeSlide = function (direction) {
+        if (!categories || categories.length === 0) return;
+
+        if (direction === 'next') {
+            currentCatIndex = (currentCatIndex + 1) % categories.length;
+        } else {
+            currentCatIndex = (currentCatIndex - 1 + categories.length) % categories.length;
+        }
+
+        const category = categories[currentCatIndex];
+
+        // Fade out
+        if (catImg) catImg.style.opacity = '0';
+
+        setTimeout(() => {
+            // Update content
+            if (catImg) {
+                if (category.image) {
+                    // Ensure storageBaseUrl doesn't have double slash if user passed one
+                    const baseUrl = storageBaseUrl.endsWith('/') ? storageBaseUrl : storageBaseUrl + '/';
+                    catImg.src = baseUrl + category.image;
+                } else {
+                    // Fallback to asset logic if needed, or valid placeholder
+                    const baseUrl = assetBaseUrl.endsWith('/') ? assetBaseUrl : assetBaseUrl + '/';
+                    catImg.src = baseUrl + 'assets/Rectangle_sidebar.png';
+                }
+            }
+
+            if (catTitle) catTitle.textContent = category.name;
+            if (catDesc) {
+                catDesc.textContent = category.description || 'Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are subtle yet elegant.';
+            }
+            if (exploreCatTitle) {
+                exploreCatTitle.textContent = category.name;
+            }
+
+            // Fade in
+            if (catImg) catImg.style.opacity = '1';
+
+            // Sync with product filter
+            // console.log('Changing category to:', category.name, 'ID:', category.id);
+
+            if (typeof window.filterProducts === 'function') {
+                window.filterProducts(category.id, null);
+            } else if (typeof filterProducts === 'function') {
+                filterProducts(category.id, null);
+            } else {
+                // console.warn('filterProducts function not found!');
+            }
+        }, 300); // Wait for transition
+    };
+
+    // Initialize logic if needed
+    if (categories.length > 0) {
+        // Optional init
+    }
+}

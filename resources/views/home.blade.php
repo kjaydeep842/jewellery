@@ -714,9 +714,9 @@
     <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
       <div class="flex flex-col md:flex-row items-start justify-between">
         <!-- 
-                    <div
-                        class="relative w-[910px] h-[700px] flex flex-col items-start py-[120px] px-0 gap-[10px] self-stretch grow flex-none order-0">
-                        -->
+                      <div
+                          class="relative w-[910px] h-[700px] flex flex-col items-start py-[120px] px-0 gap-[10px] self-stretch grow flex-none order-0">
+                          -->
         <div
           class="relative w-full md:w-1/2 lg:w-[50%] flex flex-col items-center lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-4 order-0">
 
@@ -737,9 +737,9 @@
                 Category</h2>
             </div>
             <!--     <div
-                                class="md:hidden flex flex-none md:flex-1 flex-row justify-end items-center gap-[4px] w-[250px] md:w-[250px] h-8 md:h-10">
-                                <img src="assets/Design (1).png" alt="design" class="h-full object-contain">
-                            </div> -->
+                                  class="md:hidden flex flex-none md:flex-1 flex-row justify-end items-center gap-[4px] w-[250px] md:w-[250px] h-8 md:h-10">
+                                  <img src="assets/Design (1).png" alt="design" class="h-full object-contain">
+                              </div> -->
 
           </div>
 
@@ -2110,87 +2110,20 @@
   </div>
 
 
+
+
   <script>
-    // Middle Banner Slider Logic
-    const slides1 = document.getElementById('slides1');
-    const dots1 = document.querySelectorAll('#dots1 button');
-    let currentSlide1 = 0;
-    const totalSlides1 = {{ isset($middleBanners) ? $middleBanners->count() : 0 }};
-
-    function goToSlide1(n) {
-      if (totalSlides1 <= 0) return;
-      currentSlide1 = (n + totalSlides1) % totalSlides1;
-      slides1.style.transform = `translateX(-${currentSlide1 * 100}%)`;
-
-      dots1.forEach((dot, index) => {
-        dot.className = `w-8 h-1 rounded-[1px] transition-all duration-300 ${index === currentSlide1 ? 'bg-white' : 'bg-white/50 hover:bg-white'}`;
-      });
-    }
-
-    // Auto-advance middle slider only if multiple slides exist
-    if (totalSlides1 > 1) {
-      setInterval(() => {
-        goToSlide1(currentSlide1 + 1);
-      }, 5000);
-    }
-
-    // Category Slider Logic
-    const categories = @json($categories);
-    let currentCatIndex = 0;
-    const catImg = document.getElementById('mainCatImg');
-    const catTitle = document.getElementById('mainCatTitle');
-    const catDesc = document.getElementById('catDescription');
-    const exploreCatTitle = document.getElementById('exploreCategoryTitle');
-
-    function changeSlide(direction) {
-      if (!categories || categories.length === 0) return;
-
-      if (direction === 'next') {
-        currentCatIndex = (currentCatIndex + 1) % categories.length;
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof initHomeInteractive === 'function') {
+        initHomeInteractive(
+            {{ isset($middleBanners) ? $middleBanners->count() : 0 }},
+          @json($categories),
+          "{{ url('storage') }}",
+          "{{ asset('') }}"
+        );
       } else {
-        currentCatIndex = (currentCatIndex - 1 + categories.length) % categories.length;
+        console.warn('initHomeInteractive function not found. Ensure script.js is loaded.');
       }
-
-      const category = categories[currentCatIndex];
-
-      // Fade out
-      catImg.style.opacity = '0';
-
-      setTimeout(() => {
-        // Update content
-        if (category.image) {
-          catImg.src = "{{ url('storage') }}/" + category.image;
-        } else {
-          catImg.src = "{{ asset('assets/Rectangle_sidebar.png') }}"; // Fallback
-        }
-        catTitle.textContent = category.name;
-        if (catDesc) {
-          catDesc.textContent = category.description || 'Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are subtle yet elegant.';
-        }
-        if (exploreCatTitle) {
-          exploreCatTitle.textContent = category.name;
-        }
-
-        // Fade in
-        catImg.style.opacity = '1';
-
-        // Sync with product filter
-        console.log('Changing category to:', category.name, 'ID:', category.id);
-
-        if (typeof window.filterProducts === 'function') {
-          window.filterProducts(category.id, null);
-        } else if (typeof filterProducts === 'function') {
-          filterProducts(category.id, null);
-        } else {
-          console.error('filterProducts function not found!');
-        }
-      }, 300); // Wait for transition
-    }
-
-    // Initialize with first category if exists
-    if (categories.length > 0) {
-      // Optional: Set initial state if not already set by server-side rendering
-      // changeSlide('next'); // Just to trigger update or set manually
-    }
+    });
   </script>
 @endsection

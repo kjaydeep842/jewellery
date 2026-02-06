@@ -26,32 +26,32 @@ class AuthController extends Controller
 
         return back()->withErrors(['email' => 'Invalid admin credentials']);
     }
-// public function login(Request $request)
-// {
-//     $credentials = $request->only('email', 'password');
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->only('email', 'password');
 
-//     // Step 1: Get user
-//     $user = \App\Models\User::where('email', $credentials['email'])->first();
+    //     // Step 1: Get user
+    //     $user = \App\Models\User::where('email', $credentials['email'])->first();
 
-//     if (!$user) {
-//         return back()->withErrors(['email' => 'User not found']);
-//     }
+    //     if (!$user) {
+    //         return back()->withErrors(['email' => 'User not found']);
+    //     }
 
-//     // Step 2: Check if admin
-//     if ($user->is_admin != 1) {
-//         return back()->withErrors(['email' => 'Not an admin']);
-//     }
+    //     // Step 2: Check if admin
+    //     if ($user->is_admin != 1) {
+    //         return back()->withErrors(['email' => 'Not an admin']);
+    //     }
 
-//     // Step 3: Check password manually
-//     if (!\Hash::check($credentials['password'], $user->password)) {
-//         return back()->withErrors(['email' => 'Invalid password']);
-//     }
+    //     // Step 3: Check password manually
+    //     if (!\Hash::check($credentials['password'], $user->password)) {
+    //         return back()->withErrors(['email' => 'Invalid password']);
+    //     }
 
-//     // Step 4: Login with ADMIN guard
-//     Auth::guard('admin')->login($user);
+    //     // Step 4: Login with ADMIN guard
+    //     Auth::guard('admin')->login($user);
 
-//     return redirect()->route('admin.dashboard');
-// }
+    //     return redirect()->route('admin.dashboard');
+    // }
 
 
 

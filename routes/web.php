@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\AuthController;
 | PUBLIC ROUTES
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/filter-products', [\App\Http\Controllers\HomeController::class, 'filterProducts'])->name('home.filter');
 
@@ -55,6 +56,7 @@ Route::get('/product/{slug}', [\App\Http\Controllers\Frontend\ProductController:
 
 // Cart Routes
 use App\Http\Controllers\Frontend\CartController;
+
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
@@ -62,6 +64,7 @@ Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.dest
 
 // Checkout Routes
 use App\Http\Controllers\Frontend\CheckoutController;
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout/address', [CheckoutController::class, 'address'])->name('checkout.address');
     Route::post('/checkout/address', [CheckoutController::class, 'storeAddress'])->name('checkout.address.store');
@@ -72,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Wishlist Routes
 use App\Http\Controllers\Frontend\WishlistController;
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
@@ -109,7 +113,7 @@ require __DIR__ . '/auth.php';
 | USER ROUTES
 |--------------------------------------------------------------------------
 */
-Route::get('/productsss', [ProductController::class, 'index'])->name('home');
+// Route::get('/productsss', [ProductController::class, 'index'])->name('home');
 Route::resource('products', ProductController::class);
 
 Route::get('/orders', function () {

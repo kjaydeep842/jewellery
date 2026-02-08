@@ -164,11 +164,11 @@ slider.addEventListener('scroll', () => {
     slideIndexLabel.innerText = index.toString().padStart(2, '0');
 });
 // Category Section
-const categoryData = [
-    { title: "Rings", url: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600" },
-    { title: "Pendants", url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600" },
-    { title: "Bracelets", url: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=600" }
-];
+// const categoryData = [
+//     { title: "Rings", url: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600" },
+//     { title: "Pendants", url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600" },
+//     { title: "Bracelets", url: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=600" }
+// ];
 
 let currentIdx = 0;
 
@@ -464,12 +464,12 @@ function initHomeInteractive(middleBannersCount, categoriesData, storageBaseUrl,
             // Sync with product filter
             // console.log('Changing category to:', category.name, 'ID:', category.id);
 
-            if (typeof window.filterProducts === 'function') {
-                window.filterProducts(category.id, null);
-            } else if (typeof filterProducts === 'function') {
-                filterProducts(category.id, null);
+            if (typeof window.updateProductSlider === 'function') {
+                window.updateProductSlider(category.id);
+            } else if (typeof updateProductSlider === 'function') {
+                updateProductSlider(category.id);
             } else {
-                // console.warn('filterProducts function not found!');
+                console.warn('updateProductSlider function not found!');
             }
         }, 300); // Wait for transition
     };

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
+use App\Models\Banner;
+
 class ProductController extends Controller
 {
     /**
@@ -38,7 +40,14 @@ class ProductController extends Controller
             ->take(4)
             ->get();
 
-        return view('products.show', compact('product', 'relatedProducts'));
+        // Fetch active middle banners for the slider that are marked as product banners
+        $banners = Banner::where('status', 1)
+            ->where('type', 'middle')
+            ->where('is_product_banner', 1)
+            ->latest()
+            ->get();
+
+        return view('products.show', compact('product', 'relatedProducts', 'banners'));
     }
     /**
      * Fetch products by category for AJAX calls.
@@ -64,7 +73,12 @@ class ProductController extends Controller
                 ->get();
         }
 
-        $html = view('partials.home_products', compact('products'))->render();
+        // Check if the request is for the slider
+        if ($request->get('type') === 'slider') {
+            $html = view('partials.home_product_slider', compact('products'))->render();
+        } else {
+            $html = view('partials.home_products', compact('products'))->render();
+        }
 
         return response()->json([
             'success' => true,

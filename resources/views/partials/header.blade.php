@@ -18,7 +18,7 @@
                 <i class="fa-solid fa-bars text-xl"></i>
             </button>
             <div class="w-[212px] h-[46.6px]  flex items-center justify-center">
-                <img src="assets/logo_black.png" alt="logo">
+                <img src="{{ asset('assets/logo_black.png') }}" alt="logo">
             </div>
 
         </div>
@@ -29,22 +29,25 @@
                     class="w-full h-[50px] bg-gray-100 border border-transparent focus:border-[#B39359]/30 focus:bg-white rounded-full py-2 pl-5 pr-12 text-sm transition-all outline-none"
                     placeholder="Search for products">
                 <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#B39359]">
-                    <img src="assets/ic_search.png" alt="search" class="w-5 h-5">
+                    <img src="{{ asset('assets/ic_search.png') }}" alt="search" class="w-5 h-5">
                 </div>
             </div>
         </div>
 
         <div class="flex items-center space-x-5 text-gray-600 order-2 lg:order-3">
 
-            <button class="hover:text-gold"><img src="assets/ic_User.png" alt="user" class="w-5 h-5"></button>
-            <button class="relative hover:text-gold">
-                <img src="assets/ic_wishlist.png" alt="wishlist" class="w-5 h-5"> <span
-                    class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center">4</span>
-            </button>
-            <button class="relative hover:text-gold">
-                <img src="assets/ic_bag_black.png" alt="bag" class="w-5 h-5"><span
-                    class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center">1</span>
-            </button>
+            <button class="hover:text-gold"><img src="{{ asset('assets/ic_User.png') }}" alt="user"
+                    class="w-5 h-5"></button>
+            <a href="{{ route('wishlist.index') }}" class="relative hover:text-gold">
+                <img src="{{ asset('assets/ic_wishlist.png') }}" alt="wishlist" class="w-5 h-5">
+                <span
+                    class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center">{{ $wishlistCount ?? 0 }}</span>
+            </a>
+            <a href="{{ route('cart.index') }}" class="relative hover:text-gold">
+                <img src="{{ asset('assets/ic_bag_black.png') }}" alt="bag" class="w-5 h-5">
+                <span
+                    class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center">{{ $cartCount ?? 0 }}</span>
+            </a>
         </div>
     </div>
     <!-- Navigation Bar -->
@@ -53,134 +56,43 @@
     <nav class="hidden lg:flex items-center justify-center space-x-8 text-[15px] font-medium uppercase tracking-wider">
 
         <div class="relative group text-center">
-            <button class="flex items-center gap-1 hover:text-gold py-4 focus:outline-none">
-                New Arrivals <span class="text-[10px] transition-transform group-hover:rotate-180"><i
-                        class="fa-solid fa-chevron-down"></i></span>
-            </button>
-
-            <div
-                class="absolute left-0 top-full w-48 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
-                <div class="py-2">
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Diamond
-                        Rings</a>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Gold
-                        Necklaces</a>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Wedding
-                        Collection</a>
-                    <div class="border-t border-gray-50 my-1"></div>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">View
-                        All New</a>
-                </div>
-            </div>
+            <a href="{{ route('products.index') }}"
+                class="flex items-center gap-1 hover:text-gold py-4 focus:outline-none">
+                New Arrivals
+            </a>
         </div>
 
         <div class="relative group">
-            <button class="flex items-center gap-1 hover:text-gold py-4">
-                Best Seller <span class="text-[10px] transition-transform group-hover:rotate-180"><i
-                        class="fa-solid fa-chevron-down"></i></span>
-            </button>
-            <div
-                class="absolute left-0 top-full w-48 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <div class="py-2">
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Top
-                        Rated</a>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Most
-                        Gifted</a>
-                </div>
-            </div>
+            <a href="{{ route('page.best-seller') }}" class="flex items-center gap-1 hover:text-gold py-4">
+                Best Seller
+            </a>
         </div>
 
         <div class="relative group">
-            <button class="flex items-center gap-1 hover:text-gold py-4">
-                Ready To Stock <span class="text-[10px] transition-transform group-hover:rotate-180"><i
-                        class="fa-solid fa-chevron-down"></i></span>
-            </button>
-            <div
-                class="absolute left-0 top-full w-48 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <div class="py-2">
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Top
-                        Rated</a>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Most
-                        Gifted</a>
-                </div>
-            </div>
+            <a href="{{ route('page.ready-to-stock') }}" class="flex items-center gap-1 hover:text-gold py-4">
+                Ready To Stock
+            </a>
         </div>
 
         <div class="relative group">
-            <button class="flex items-center gap-1 hover:text-gold py-4">
-                Buy It Again <span class="text-[10px] transition-transform group-hover:rotate-180"><i
-                        class="fa-solid fa-chevron-down"></i></span>
-            </button>
-            <div
-                class="absolute left-0 top-full w-48 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <div class="py-2">
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Top
-                        Rated</a>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Most
-                        Gifted</a>
-                </div>
-            </div>
+            <a href="{{ route('page.buy-it-again') }}" class="flex items-center gap-1 hover:text-gold py-4">
+                Buy It Again
+            </a>
         </div>
         <div class="relative group">
-            <button class="flex items-center gap-1 hover:text-gold py-4">
-                Contact Us <span class="text-[10px] transition-transform group-hover:rotate-180"><i
-                        class="fa-solid fa-chevron-down"></i></span>
-            </button>
-            <div
-                class="absolute left-0 top-full w-48 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <div class="py-2">
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Top
-                        Rated</a>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Most
-                        Gifted</a>
-                </div>
-            </div>
+            <a href="{{ route('page.contact') }}" class="flex items-center gap-1 hover:text-gold py-4">
+                Contact Us
+            </a>
         </div>
         <div class="relative group">
-            <button class="flex items-center gap-1 hover:text-gold py-4">
-                Exhibition <span class="text-[10px] transition-transform group-hover:rotate-180"><i
-                        class="fa-solid fa-chevron-down"></i></span>
-            </button>
-            <div
-                class="absolute left-0 top-full w-48 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <div class="py-2">
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Top
-                        Rated</a>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Most
-                        Gifted</a>
-                </div>
-            </div>
+            <a href="{{ route('page.exhibition') }}" class="flex items-center gap-1 hover:text-gold py-4">
+                Exhibition
+            </a>
         </div>
         <div class="relative group">
-            <button class="flex items-center gap-1 hover:text-gold py-4">
-                About Us <span class="text-[8px] transition-transform group-hover:rotate-180"><i
-                        class="fa-solid fa-chevron-down"></i></span>
-            </button>
-            <div
-                class="absolute left-0 top-full w-48 bg-white border border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <div class="py-2">
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Top
-                        Rated</a>
-                    <a href="#"
-                        class="block px-6 py-2 text-gray-600 hover:bg-cream hover:text-gold normal-case font-normal">Most
-                        Gifted</a>
-                </div>
-            </div>
+            <a href="{{ route('page.about') }}" class="flex items-center gap-1 hover:text-gold py-4">
+                About Us
+            </a>
         </div>
     </nav>
 </header>

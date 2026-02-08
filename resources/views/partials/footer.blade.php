@@ -6,7 +6,7 @@
     <!-- Logo Row -->
 
     <div class="w-[130px] h-[30px]  flex items-center justify-center mb-10 gap-2">
-      <img src="assets/logo_black.png" alt="logo">
+      <img src="{{ asset('assets/logo_black.png') }}" alt="logo">
     </div>
 
 
@@ -14,74 +14,36 @@
     <!-- Columns Row -->
     <div class="flex flex-col lg:flex-row justify-between items-start mt-12 w-full gap-10 relative z-10">
 
-      <!-- Left: Link Columns Group -->
       <div class="flex flex-wrap gap-x-12 md:gap-x-[88px] gap-y-10">
-        <!-- About Us -->
-        <div class="flex flex-col items-start gap-[22px] w-[160px] md:w-auto">
-          <h4 style="font-family: 'Outfit', sans-serif;" class="font-['Outfit'] font-semibold text-[#0D0D0E] text-lg">
-            About us</h4>
-          <ul class="flex flex-col gap-[16px]">
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Our
-                Story</a></li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Careers</a>
-            </li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Blogs</a>
-            </li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Contact
-                Us</a></li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Store
-                & Services</a></li>
-          </ul>
-        </div>
-
         <!-- Categories -->
         <div class="flex flex-col items-start gap-[22px] w-[160px] md:w-auto">
-          <h4 style="font-family: 'Outfit', sans-serif;" class="font-Outfit font-semibold text-[#0D0D0E] text-lg">
-            Categories</h4>
-          <ul class="flex flex-col gap-[16px]">
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Rings</a>
-            </li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Earrings</a>
-            </li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Bracelets</a>
-            </li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Necklaces</a>
-            </li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Bangles</a>
-            </li>
+          <h4 class="font-['Outfit'] font-bold text-[16px] mb-4 text-[#0D0D0E]">Categories</h4>
+          <ul class="space-y-3 font-['Outfit'] text-[#6E6E6E] text-[14px]">
+            <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Rings</a></li>
+            <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Earrings</a></li>
+            <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Bracelets</a></li>
+            <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Necklaces</a></li>
+            <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Bangles</a></li>
           </ul>
         </div>
 
         <!-- Customer Service -->
         <div class="flex flex-col items-start gap-[22px] w-[160px] md:w-auto">
-          <h4 style="font-family: 'Outfit', sans-serif;" class="font-Outfit font-semibold text-[#0D0D0E] text-lg">
-            Customer Service</h4>
-          <ul class="flex flex-col gap-[16px]">
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Contact
-                Us</a></li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">FAQs</a>
-            </li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Jewellery
-                Care</a></li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Lifetime
-                Warranty</a></li>
-            <li><a href="#"
-                class="font-['Outfit'] font-normal text-base text-[#6E6E6E] hover:text-[#CBA65A] transition-colors">Book
-                an Appointment</a></li>
+          <h4 class="font-['Outfit'] font-bold text-[16px] mb-4 text-[#0D0D0E]">Customer Service</h4>
+          <ul class="space-y-3 font-['Outfit'] text-[#6E6E6E] text-[14px]">
+            <li><a href="{{ route('page.faq') }}" class="hover:text-[#CBA65A] transition-colors">FAQs</a></li>
+            <li><a href="{{ route('page.return-exchange') }}" class="hover:text-[#CBA65A] transition-colors">Return &
+                Exchange</a></li>
+            <li><a href="{{ route('page.contact') }}" class="hover:text-[#CBA65A] transition-colors">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <!-- About Us -->
+        <div class="flex flex-col items-start gap-[22px] w-[160px] md:w-auto">
+          <h4 class="font-['Outfit'] font-bold text-[16px] mb-4 text-[#0D0D0E]">About Us</h4>
+          <ul class="space-y-3 font-['Outfit'] text-[#6E6E6E] text-[14px]">
+            <li><a href="{{ route('page.about') }}" class="hover:text-[#CBA65A] transition-colors">Our Story</a></li>
+            <li><a href="{{ route('page.blog') }}" class="hover:text-[#CBA65A] transition-colors">Blogs</a></li>
           </ul>
         </div>
       </div>
@@ -111,10 +73,12 @@
       <div class="flex flex-col md:flex-row justify-between items-center md:items-end gap-8">
         <!-- Left: QR and Apps -->
         <div class="flex items-center gap-6">
-          <img src="assets/MobileQrNew.png" alt="QR Code" class="w-40 h-40 object-contain">
+          <img src="{{ asset('assets/MobileQrNew.png') }}" alt="QR Code" class="w-40 h-40 object-contain">
           <div class="flex flex-col gap-2">
-            <a href="#"><img src="assets/ioslogo.png" alt="App Store" class="h-[45px] md:h-[65px] w-auto"></a>
-            <a href="#"><img src="assets/Androidelogo.png" alt="Google Play" class="h-[45px] md:h-[65px] w-auto"></a>
+            <a href="#"><img src="{{ asset('assets/ioslogo.png') }}" alt="App Store"
+                class="h-[45px] md:h-[65px] w-auto"></a>
+            <a href="#"><img src="{{ asset('assets/Androidelogo.png') }}" alt="Google Play"
+                class="h-[45px] md:h-[65px] w-auto"></a>
           </div>
         </div>
 
@@ -147,10 +111,10 @@
 
             <!-- Payments -->
             <div class="flex items-center gap-3">
-              <img src="assets/google_pay.png" alt="GPay" class="h-6">
-              <img src="assets/visa.png" alt="Visa" class="h-4">
-              <img src="assets/paypal.png" alt="PayPal" class="h-6">
-              <img src="assets/master-card.png" alt="Mastercard" class="h-8">
+              <img src="{{ asset('assets/google_pay.png') }}" alt="GPay" class="h-6">
+              <img src="{{ asset('assets/visa.png') }}" alt="Visa" class="h-4">
+              <img src="{{ asset('assets/paypal.png') }}" alt="PayPal" class="h-6">
+              <img src="{{ asset('assets/master-card.png') }}" alt="Mastercard" class="h-8">
             </div>
           </div>
         </div>

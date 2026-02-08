@@ -1,104 +1,369 @@
-<x-layouts.frontend>
-    <div class="bg-gray-50 py-12">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+@extends('frontend.checkout.layouts.app', ['activeStep' => 'payment'])
 
-            <!-- Progress Steps -->
-            <div class="flex items-center justify-center mb-12 space-x-4 text-sm font-bold uppercase tracking-wider">
-                <span class="text-gray-400">Bag</span>
-                <span class="text-gray-300">----------</span>
-                <span class="text-gray-400">Address</span>
-                <span class="text-gray-300">----------</span>
-                <span class="text-[#D4AF37] border-b-2 border-[#D4AF37]">Payment</span>
-            </div>
+@section('content')
+    <!-- Main Content -->
+    <main class="max-w-[1920px] mx-auto px-4 lg:px-6 py-12">
+        <form id="payment-form" action="{{ route('checkout.process') }}" method="POST" class="w-full flex flex-col gap-12">
+            @csrf
+            <input type="hidden" name="payment_method" id="selected_payment_method" value="upi">
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Payment Options -->
-                <div class="md:col-span-2 space-y-6">
-                    <h2 class="font-serif text-2xl font-bold text-gray-900">Choose Payment Mode</h2>
+            <div class="flex flex-col xl:flex-row justify-center items-start gap-12 xl:gap-5">
+                <!-- Left Column: Payment Modes -->
+                <div class="w-full flex-1 flex flex-col gap-6">
 
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-                        <!-- Option 1: COD -->
-                        <div class="border-b border-gray-100 last:border-0">
-                            <label class="flex items-center p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                                <input type="radio" name="payment_method" value="cod" checked
-                                    class="w-5 h-5 text-[#D4AF37] focus:ring-[#D4AF37]">
-                                <div class="ml-4">
-                                    <span class="block font-bold text-gray-900">Cash On Delivery (Cash/UPI)</span>
-                                    <span class="block text-sm text-gray-500 mt-1">Pay comfortably at your
-                                        doorstep.</span>
-                                </div>
-                            </label>
+                    <!-- Header -->
+                    <h2 class="font-medium text-[#1A1A1A] text-lg">Choose Payment Mode</h2>
+
+                    <!-- Payment Container -->
+                    <div
+                        class="bg-white border text-sm border-gray-200 rounded-[8px] flex flex-col md:flex-row overflow-hidden min-h-[350px] shadow-sm">
+                        <!-- Sidebar Options -->
+                        <div class="w-full md:w-[280px] bg-[#F8F8F8] flex flex-col border-r border-gray-200">
+                            <div onclick="selectPaymentMode('upi')" id="mode-upi"
+                                class="payment-option p-4 cursor-pointer bg-white border-l-4 border-[#CBA65A] text-[#CBA65A] font-medium flex items-center gap-3 transition-colors">
+                                <span class="text-xs font-bold border border-[#CBA65A] px-1 rounded-[2px]">UPI</span>
+                                <span class="text-sm font-semibold">UPI (Pay via any App)</span>
+                            </div>
+                            <div onclick="selectPaymentMode('card')" id="mode-card"
+                                class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-[#EBEBEB] flex items-center gap-4 transition-colors border-l-4 border-transparent">
+                                <img src="{{ asset('assets/card.png') }}" alt="Credit/Debit Card"
+                                    class="w-5 h-5 object-contain">
+                                <span class="font-medium">Credit/Debit Card</span>
+                            </div>
+                            <div onclick="selectPaymentMode('netbanking')" id="mode-netbanking"
+                                class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-[#EBEBEB] flex items-center gap-4 transition-colors border-l-4 border-transparent">
+                                <img src="{{ asset('assets/ic_bank.png') }}" alt="Net Banking"
+                                    class="w-5 h-5 object-contain">
+                                <span class="font-medium">Net Banking</span>
+                            </div>
+                            <div onclick="selectPaymentMode('wallet')" id="mode-wallet"
+                                class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-[#EBEBEB] flex items-center gap-4 transition-colors border-l-4 border-transparent">
+                                <img src="{{ asset('assets/Ic_Wallet.png') }}" alt="Wallets" class="w-5 h-5 object-contain">
+                                <span class="font-medium">Wallets</span>
+                            </div>
+                            <div onclick="selectPaymentMode('emi')" id="mode-emi"
+                                class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-[#EBEBEB] flex items-center gap-4 transition-colors border-l-4 border-transparent">
+                                <img src="{{ asset('assets/ic_emi.png') }}" alt="EMI" class="w-5 h-5 object-contain">
+                                <span class="font-medium">EMI</span>
+                            </div>
+                            <div onclick="selectPaymentMode('cod')" id="mode-cod"
+                                class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-[#EBEBEB] flex items-center gap-4 transition-colors border-l-4 border-transparent">
+                                <img src="{{ asset('assets/ic_cash.png') }}" alt="COD" class="w-5 h-5 object-contain">
+                                <span class="font-medium">Cash On Delivery(Cash/UPI)</span>
+                            </div>
                         </div>
 
-                        <!-- Option 2: Online (Mock) -->
-                        <div class="border-b border-gray-100 last:border-0">
-                            <label
-                                class="flex items-center p-6 cursor-pointer hover:bg-gray-50 transition-colors opacity-50">
-                                <input type="radio" name="payment_method" value="online" disabled
-                                    class="w-5 h-5 text-[#D4AF37] focus:ring-[#D4AF37]">
-                                <div class="ml-4">
-                                    <span class="block font-bold text-gray-900">Credit/Debit Card / Net Banking</span>
-                                    <span class="block text-sm text-gray-500 mt-1">Coming Soon</span>
+                        <!-- Content Area -->
+                        <div class="flex-1 p-8 bg-white" id="payment-content">
+                            <!-- UPI Content (Default) -->
+                            <div id="content-upi" class="payment-content-section">
+                                <h3 class="font-bold text-[#1A1A1A] text-sm mb-6">Pay using UPI</h3>
+                                <div class="flex flex-col gap-6">
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="upi_method" value="scan" class="custom-radio" checked>
+                                        <div class="flex items-center gap-3">
+                                            <img src="{{ asset('assets/scaneandpay.png') }}" alt="Scan & Pay"
+                                                class="w-[30px] h-[30px] object-contain">
+                                            <span class="text-gray-900 font-medium text-sm">Scan & Pay</span>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="upi_method" value="id" class="custom-radio">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-300">
+                                                <div class="w-5 h-5 rounded-full border-2 border-dashed border-gray-400">
+                                                </div>
+                                            </div>
+
+
+                                            <span class="text-gray-900 font-medium text-sm">Enter UPI ID</span>
+                                        </div>
+                                    </label>
                                 </div>
-                            </label>
+                            </div>
+
+                            <!-- Credit/Debit Card Content -->
+                            <div id="content-card" class="payment-content-section hidden">
+                                <h3 class="font-bold text-[#1A1A1A] text-sm mb-6">Credit/Debit Card</h3>
+                                <div class="space-y-6 max-w-[400px]">
+                                    <!-- Card Number -->
+                                    <div>
+                                        <input type="text" name="card_number" placeholder="Card Number"
+                                            class="custom-input">
+                                    </div>
+
+                                    <!-- Name On Card -->
+                                    <div>
+                                        <input type="text" name="card_name" placeholder="Name On Card" class="custom-input">
+                                    </div>
+
+                                    <!-- Expiry and CVV -->
+                                    <div class="flex gap-4">
+                                        <div class="flex-1">
+                                            <input type="text" name="card_expiry" placeholder="Valid Thru (MM/YY)"
+                                                class="custom-input">
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" name="card_cvv" placeholder="CVV" class="custom-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Net Banking Content -->
+                            <div id="content-netbanking" class="payment-content-section hidden">
+                                <h3 class="font-bold text-[#1A1A1A] text-sm mb-6">Net Banking</h3>
+                                <div class="flex flex-col gap-6">
+
+                                    <!-- Axis Bank -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="bank_name" value="Axis Bank" class="custom-radio">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                                <!-- Placeholder or actual logo if available -->
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">Axis Bank</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- HDFC Bank -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="bank_name" value="HDFC Bank" class="custom-radio">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">HDFC Bank</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- ICICI Bank -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="bank_name" value="ICICI Bank" class="custom-radio">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">ICICI Bank</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- Other Banks Dropdown -->
+                                    <div class="mt-2 w-full max-w-[300px]">
+                                        <select name="other_bank_name"
+                                            class="w-full p-2.5 text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm outline-none focus:border-[#CBA65A] text-sm">
+                                            <option value="" selected>Other Banks</option>
+                                            <option value="State Bank of India">State Bank of India</option>
+                                            <option value="Punjab National Bank">Punjab National Bank</option>
+                                            <option value="Bank of Baroda">Bank of Baroda</option>
+                                            <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                            <!-- Wallet Content -->
+                            <div id="content-wallet" class="payment-content-section hidden">
+                                <h3 class="font-bold text-[#1A1A1A] text-sm mb-6">Select Wallet</h3>
+                                <div class="flex flex-col gap-6">
+
+                                    <!-- Paytm -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="wallet_name" value="Paytm" class="custom-radio">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                                <!-- Placeholder -->
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">Paytm</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- PhonePe -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="wallet_name" value="PhonePe" class="custom-radio">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">PhonePe</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- Amazon Pay -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="wallet_name" value="Amazon Pay" class="custom-radio">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">Amazon Pay</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- MobiKwik -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="radio" name="wallet_name" value="MobiKwik" class="custom-radio">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">MobiKwik</span>
+                                        </div>
+                                    </label>
+
+                                </div>
+                            </div>
+
+
+                            <!-- EMI Content -->
+                            <div id="content-emi" class="payment-content-section hidden">
+                                <h3 class="font-bold text-[#1A1A1A] text-sm mb-6">Select EMI Option</h3>
+
+                                <div class="flex flex-col gap-6">
+
+                                    <!-- Axis Bank -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="checkbox" name="emi_bank" value="Axis Bank" class="custom-checkbox">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                                <!-- Logo placeholder -->
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">Axis Bank</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- HDFC Bank -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="checkbox" name="emi_bank" value="HDFC Bank" class="custom-checkbox">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">HDFC Bank</span>
+                                        </div>
+                                    </label>
+
+                                    <!-- ICICI Bank -->
+                                    <label class="flex items-center gap-4 cursor-pointer group">
+                                        <input type="checkbox" name="emi_bank" value="ICICI Bank" class="custom-checkbox">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bank-logo-circle">
+                                            </div>
+                                            <span class="text-gray-900 font-medium text-sm">ICICI Bank</span>
+                                        </div>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            <!-- COD Content -->
+                            <div id="content-cod" class="payment-content-section hidden">
+                                <h3 class="font-bold text-[#1A1A1A] text-sm mb-6">Cash On Delivery(Cash/UPI)</h3>
+
+                                <div class="flex items-start gap-4">
+                                    <input type="checkbox" id="cod_option_final" name="cod_payment" value="1"
+                                        class="custom-checkbox mt-1">
+                                    <div>
+                                        <label for="cod_option_final"
+                                            class="text-gray-900 font-medium text-sm cursor-pointer">Cash on Delivery
+                                            (Cash/UPI)</label>
+                                        <p class="text-gray-400 text-xs mt-1 leading-relaxed">For This Option, There Is A
+                                            Fee Of 10. You Can Pay <br> Online To Avoid This.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Other Content (Generic) -->
+                            <div id="content-generic" class="payment-content-section hidden">
+                                <h3 class="font-bold text-[#1A1A1A] text-sm mb-6">Payment Method</h3>
+                                <p class="text-sm text-gray-500">This payment method is currently unavailable. Please try
+                                    UPI or
+                                    COD.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="flex justify-end mt-8">
-                        <form action="{{ route('checkout.process') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="payment_method" value="cod"> <!-- Hardcoded for now -->
-                            <button type="submit"
-                                class="bg-[#D4AF37] text-white font-bold uppercase tracking-widest py-4 px-12 hover:bg-gray-900 transition-colors shadow-lg">
-                                Place Order
-                            </button>
-                        </form>
-                    </div>
                 </div>
 
-                <!-- Order Summary -->
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <h3 class="font-serif font-bold text-lg text-gray-900 mb-4 pb-2 border-b border-gray-100">
-                            Delivery To</h3>
-                        <h4 class="font-bold text-gray-900">{{ $address->name }}</h4>
-                        <p class="text-sm text-gray-600 mt-1">
-                            {{ $address->address_line_1 }}<br>
-                            @if($address->address_line_2) {{ $address->address_line_2 }}<br> @endif
-                            {{ $address->city }}, {{ $address->state }} - {{ $address->zip }}<br>
-                            {{ $address->country }}
-                        </p>
-                        <p class="text-sm text-gray-900 font-bold mt-2">Mobile: {{ $address->phone }}</p>
-                        <a href="{{ route('checkout.address') }}"
-                            class="block text-xs text-[#D4AF37] font-bold mt-4 uppercase hover:underline">Change
-                            Address</a>
-                    </div>
+                <!-- Right Column: Price Details -->
+                <div class="w-full xl:w-[400px] flex-shrink-0">
+                    <div class="p-6 sticky top-28 bg-white border border-gray-100 rounded-[8px]">
+                        <h3 class="font-bold text-gray-900 text-lg mb-6">Price Details ({{ $cartItems->count() }} Item)</h3>
 
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <h3 class="font-serif font-bold text-lg text-gray-900 mb-4 pb-2 border-b border-gray-100">Price
-                            Details</h3>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between text-gray-600">
+                        <div class="space-y-4 pb-6 border-b border-gray-200 text-sm font-medium">
+                            <div class="flex justify-between text-gray-900">
                                 <span>Total MRP</span>
-                                <span>${{ number_format($total, 2) }}</span>
+                                <span>₹{{ number_format($totalMrp, 2) }}</span>
                             </div>
-                            <div class="flex justify-between text-gray-600">
-                                <span>Discount</span>
-                                <span class="text-green-600">-$0.00</span>
+                            <div class="flex justify-between text-gray-900">
+                                <span>Discount on MRP</span>
+                                <span>₹{{ number_format($discount, 2) }}</span>
                             </div>
-                            <div class="flex justify-between text-gray-600">
-                                <span>Delivery Fee</span>
-                                <span class="text-green-600">Free</span>
+                            <div class="flex justify-between text-gray-900">
+                                <span>Platform Fee</span>
+                                <span>₹{{ number_format($platformFee, 2) }}</span>
                             </div>
-                            <div
-                                class="pt-4 border-t border-gray-100 flex justify-between font-bold text-lg text-gray-900">
+                        </div>
+
+                        <div class="pt-4 mb-2">
+                            <div class="flex justify-between items-center font-bold text-gray-900 text-lg">
                                 <span>Total Amount</span>
-                                <span>${{ number_format($total, 2) }}</span>
+                                <span>₹{{ number_format($totalAmount, 2) }}</span>
                             </div>
+                        </div>
+
+                        <div class="mt-6 text-sm text-gray-600">
+                            <p class="font-bold mb-1">Delivering To:</p>
+                            <p>{{ $address->name }}</p>
+                            <p>{{ $address->address_line_1 }}</p>
+                            <p>{{ $address->city }}, {{ $address->state }} - {{ $address->zip }}</p>
+                            <p>Mobile: {{ $address->phone }}</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</x-layouts.frontend>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col md:flex-row gap-4 w-full mt-10">
+                <a href="{{ route('cart.index') }}"
+                    class="w-full md:w-[30%] py-4 rounded-[5px] border border-[#CBA65A] text-[#CBA65A] font-medium hover:bg-gray-50 transition-colors uppercase tracking-wide text-center">
+                    Cancel
+                </a>
+                <button type="submit"
+                    class="w-full md:flex-1 py-4 rounded-[5px] bg-[linear-gradient(90deg,#D9BE87_0%,#BE933C_100%)] text-white font-medium shadow-md hover:opacity-90 transition-opacity uppercase tracking-wide">
+                    Pay Now
+                </button>
+            </div>
+
+        </form>
+    </main>
+
+    <script>
+        function selectPaymentMode(mode) {
+            // Update hidden input
+            document.getElementById('selected_payment_method').value = mode;
+
+            // Iterate all options to set active/inactive styling
+            document.querySelectorAll('.payment-option').forEach(el => {
+                // Check if this element corresponds to the selected mode
+                if (el.id === 'mode-' + mode) {
+                    // Active Styling
+                    el.classList.remove('text-gray-700', 'hover:bg-[#EBEBEB]', 'border-transparent');
+                    el.classList.add('bg-white', 'border-[#CBA65A]', 'text-[#CBA65A]');
+                } else {
+                    // Inactive Styling
+                    el.classList.remove('bg-white', 'border-[#CBA65A]', 'text-[#CBA65A]');
+                    el.classList.add('text-gray-700', 'hover:bg-[#EBEBEB]', 'border-transparent');
+                }
+            });
+
+            // Show Content
+            document.querySelectorAll('.payment-content-section').forEach(el => el.classList.add('hidden'));
+            
+            const contentEl = document.getElementById('content-' + mode);
+            if (contentEl) {
+                contentEl.classList.remove('hidden');
+            } else {
+                document.getElementById('content-generic').classList.remove('hidden');
+            }
+        }
+    </script>
+@endsection

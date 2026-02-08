@@ -539,7 +539,6 @@
 
   <section class="bg-[#FAF9F6] pt-12 pb-8 md:pt-28 md:pb-16 px-4 md:px-20">
     <div class="max-w-[1800px] min-[2000px]:max-w-full mx-auto">
-
       <div class="flex items-center justify-center mb-6 md:mb-8 gap-2 md:gap-6">
         <img src="assets/Design.png" alt="design left" class="h-5 md:h-8 w-auto object-contain">
         <div class="text-center">
@@ -617,17 +616,50 @@
           }
         }
         window.filterProducts = filterProducts;
+
+        function updateProductSlider(categoryId) {
+          console.log('Fetching slider products for category:', categoryId);
+
+          const productSlider = document.getElementById('productsliderGrid');
+          if (productSlider) {
+            productSlider.style.opacity = '0.5';
+
+            // AJAX Request
+            const baseUrl = "{{ route('ajax.products.category', [':id']) }}";
+            const url = baseUrl.replace(':id', categoryId) + `?type=slider&t=${new Date().getTime()}`;
+
+            fetch(url, {
+              headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+              }
+            })
+              .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+              })
+              .then(data => {
+                console.log('Slider data received');
+                productSlider.innerHTML = data.html;
+                productSlider.style.opacity = '1';
+              })
+              .catch(error => {
+                console.error('Error fetching slider products:', error);
+                productSlider.style.opacity = '1';
+              });
+          }
+        }
+        window.updateProductSlider = updateProductSlider;
       </script>
 
       <!---category image 1-->
-      <div id="product-grid"
-        class="flex overflow-x-auto no-scrollbar gap-4 mb-10 pr-4 -mr-4 md:pr-14 md:-mr-14 transition-opacity duration-300">
+      <div id="product-grid" class="flex overflow-x-auto no-scrollbar gap-5 mb-10 transition-opacity duration-300">
         @include('partials.home_products')
       </div>
 
-      <div class="flex justify-center">
+      <div class="flex justify-center w-full">
         <a href="{{ route('products.index') }}"
-          class="border border-[#A87E3E] font-['outfit']  text-[#A87E3E] py-2 p-3 rounded-full text-[11px] tracking-widest flex items-center gap-3 hover:bg-gray-50 transition-colors group">
+          class="w-[194px] h-[60px] border border-[#A87E3E] font-['outfit'] text-[#A87E3E] rounded-full text-sm md:text-base tracking-widest flex items-center justify-center gap-[10px] hover:bg-[#A87E3E] hover:text-white transition-all duration-300 group">
           Explore All
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-x-1 transition-transform"
             fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -635,6 +667,7 @@
           </svg>
         </a>
       </div>
+    </div>
     </div>
   </section>
   <!--Banner Section-->
@@ -712,47 +745,40 @@
     <div class="absolute bottom-0 left-0 w-full h-[35%] bg-[#F3E5E5] pointer-events-none z-0"></div>
     <div class="absolute bottom-0 left-0 w-full h-[40%] bg-[#F3E5E5]"></div>
     <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
-      <div class="flex flex-col md:flex-row items-start justify-between">
-        <!-- 
-                      <div
-                          class="relative w-[910px] h-[700px] flex flex-col items-start py-[120px] px-0 gap-[10px] self-stretch grow flex-none order-0">
-                          -->
+      <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 md:gap-8 lg:gap-0">
+        <!-- Text Content -->
         <div
-          class="relative w-full md:w-1/2 lg:w-[50%] flex flex-col items-center lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-4 order-0">
+          class="relative w-full md:w-1/2 lg:w-[50%] flex flex-col items-center md:items-start lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-4 order-0 px-4 md:px-0">
 
           <!-- Heading Group -->
-          <div class="flex items-center justify-center lg:justify-start gap-4 w-full">
+          <div class="flex items-center justify-center md:justify-start lg:justify-start gap-4 w-full">
             <!-- Decorative Line (Responsive) -->
-            <div class="flex-none hidden sm:flex items-center w-[100px] md:w-[180px] lg:w-[280px]">
+            <div class="flex-none hidden sm:flex items-center w-[100px] md:w-[140px] lg:w-[280px]">
               <img src="assets/Design_new.png" alt="" class="w-full h-auto object-contain">
             </div>
 
             <!-- Main Title -->
-            <div class="top-5 flex flex-col items-center min-w-max">
+            <div class="top-5 flex flex-col items-center md:items-start min-w-max">
               <p style="font-family: 'Alexandria'"
                 class="font-normal text-lg md:text-xl lg:text-2xl text-[#5C4522] leading-tight mb-1">
                 Explore by</p>
-              <h2 style="font-family: 'Outfit'"
+              <h2 id="exploreCategoryTitle" style="font-family: 'Outfit'"
                 class="font-medium text-4xl md:text-5xl lg:text-6xl text-[#CBA65A] leading-tight">
                 Category</h2>
             </div>
-            <!--     <div
-                                  class="md:hidden flex flex-none md:flex-1 flex-row justify-end items-center gap-[4px] w-[250px] md:w-[250px] h-8 md:h-10">
-                                  <img src="assets/Design (1).png" alt="design" class="h-full object-contain">
-                              </div> -->
-
           </div>
 
           <!-- Description -->
-          <div class="pl-0 lg:pl-[310px] w-full text-center lg:text-left mt-2 lg:mt-0">
-            <p style="font-family: 'Outfit'"
-              class="font-normal text-base md:text-[18px] min-[2000px]:text-2xl leading-relaxed md:leading-[35px] text-[#3D3D42] max-w-lg mx-auto lg:mx-0">
+          <div class="pl-0 md:pl-0 lg:pl-[310px] w-full text-center md:text-left mt-2 lg:mt-0">
+            <p id="catDescription" style="font-family: 'Outfit'"
+              class="font-normal text-base md:text-[18px] min-[2000px]:text-2xl leading-relaxed md:leading-[35px] text-[#3D3D42] max-w-lg md:max-w-xl mx-auto md:mx-0 lg:mx-0">
               Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
               subtle yet elegant.
             </p>
           </div>
         </div>
 
+        <!-- Slider Image -->
         <div
           class="relative w-full md:w-1/2 lg:w-[50%] h-auto lg:h-[600px] flex flex-col justify-start items-center lg:items-end pt-10 lg:pt-0 px-0 lg:pl-[20px] gap-[1px] grow flex-none order-1">
           <div class="relative group translate-x-0 lg:translate-x-0">
@@ -787,36 +813,47 @@
 
   <!-- Product Images-->
   <!---category image 1-->
-  <div id="productsliderGrid" class="flex overflow-x-auto no-scrollbar gap-4 mb-20">
+  <div id="productsliderGrid" class="flex overflow-x-auto no-scrollbar gap-5 mb-10 px-4 md:px-[100px]">
     @if(isset($products) && $products->count() > 0)
       @foreach($products as $product)
         <!-- Dynamic Product Item -->
-        <div class="flex flex-col gap-3 w-[calc(50%-2px)] md:w-[calc(25%-3px)] lg:w-[calc(20%-4px)] flex-shrink-0">
+        <div
+          class="flex flex-col gap-3 w-[calc(50%-10px)] md:w-[calc(25%-15px)] lg:w-[calc(20%-16px)] flex-shrink-0 snap-start">
           <div
             class="bg-[#FDFBF7] box-border relative w-full aspect-square border border-[#D7D7DA] rounded-[14px] group transition-all overflow-hidden">
             <span
               class="absolute font-['Alexandria'] font-light top-2 right-0 w-[75px] h-[25px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[12px] z-10">Best
               Seller</span>
-            <button
-              class="absolute flex bottom-3 left-2 bg-white h-[27px] w-[27px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors z-20 shadow-sm">
-              <img src="assets/ic_wishlist1.png" class="w-4 h-4" alt="">
-            </button>
-            <div class="w-full h-full flex items-center justify-center">
+            <form action="{{ route('wishlist.toggle') }}" method="POST" class="absolute bottom-3 left-2 z-20">
+              @csrf
+              <input type="hidden" name="product_id" value="{{ $product->id }}">
+              <button type="submit"
+                class="flex bg-white h-[27px] w-[27px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm">
+                <img src="{{ asset('assets/ic_wishlist1.png') }}" class="w-4 h-4" alt="Wishlist">
+              </button>
+            </form>
+            <a href="{{ route('product.details', $product->slug) }}"
+              class="w-full h-full flex items-center justify-center block">
               <!-- Dynamic Image with Fallback -->
               <img src="{{ $product->images->first()->url ?? 'assets/ring.png' }}" alt="{{ $product->name }}"
                 class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
               <img src="{{ $product->images->skip(1)->first()->url ?? 'assets/hover_image_p.png' }}"
                 class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
-            </div>
+            </a>
           </div>
-          <div class="text-center font-['Outfit']">
+          <div class="text-center font-['Outfit'] px-2">
             <!-- Dynamic Name -->
-            <h3 class="text-sm min-[2000px]:text-2xl font-['outfit'] text-[#1A1A1A] mb-1">{{ $product->name }}</h3>
-            <div class="flex items-center justify-center gap-2 text-xs min-[2000px]:text-xl">
+            <h3 class="text-sm md:text-base lg:text-lg font-['outfit'] text-[#1A1A1A] mb-1 truncate w-full"
+              title="{{ $product->name }}">
+              <a href="{{ route('product.details', $product->slug) }}">{{ $product->name }}</a>
+            </h3>
+            <div class="flex flex-wrap items-center justify-center gap-2 text-xs md:text-sm lg:text-base">
               <!-- Dynamic Price -->
-              <span class="font-bold font-['outfit'] text-[#1A1A1A]">₹ {{ number_format($product->price, 2) }}</span>
+              <span class="font-bold font-['outfit'] text-[#1A1A1A] whitespace-nowrap">₹
+                {{ number_format($product->price, 2) }}</span>
               <!-- Dummy Original Price Logic -->
-              <span class="text-[#999999] line-through">₹ {{ number_format($product->price * 1.2, 2) }}</span>
+              <span class="text-[#999999] line-through whitespace-nowrap">₹
+                {{ number_format($product->price * 1.2, 2) }}</span>
             </div>
           </div>
         </div>
@@ -2116,7 +2153,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-            {{ isset($middleBanners) ? $middleBanners->count() : 0 }},
+                                {{   isset($middleBanners) ? $middleBanners->count() : 0 }},
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

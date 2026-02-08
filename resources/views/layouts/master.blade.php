@@ -167,7 +167,36 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
-    <script src="js/script.js" defer></script>
+    <script src="{{ asset('js/all_collection_first.js') }}" defer></script>
+    <script src="{{ asset('js/all_collection_four.js') }}" defer></script>
+    <script src="{{ asset('js/all_collection_secound.js') }}" defer></script>
+    <script src="{{ asset('js/all_collection_third.js') }}" defer></script>
+    <script src="{{ asset('js/blog.js') }}" defer></script>
+    <script src="{{ asset('js/contact_us.js') }}" defer></script>
+    <script src="{{ asset('js/enter_mobile_no.js') }}" defer></script>
+    <script src="{{ asset('js/faq.js') }}" defer></script>
+    <script src="{{ asset('js/our_story.js') }}" defer></script>
+    <script src="{{ asset('js/payment_address_1.js') }}" defer></script>
+    <script src="{{ asset('js/payment_address_2.js') }}" defer></script>
+    <script src="{{ asset('js/payment_bag.js') }}" defer></script>
+    <script src="{{ asset('js/payment_cash.js') }}" defer></script>
+    <script src="{{ asset('js/payment_credit_card.js') }}" defer></script>
+    <script src="{{ asset('js/payment_emi.js') }}" defer></script>
+    <script src="{{ asset('js/payment_netbaking.js') }}" defer></script>
+    <script src="{{ asset('js/payment_upi.js') }}" defer></script>
+    <script src="{{ asset('js/payment_wallet.js') }}" defer></script>
+    <script src="{{ asset('js/return_exchange.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
+    <script src="{{ asset('js/script_p.js') }}" defer></script>
+    <script src="{{ asset('js/script_p_2.js') }}" defer></script>
+    <script src="{{ asset('js/script_p_3.js') }}" defer></script>
+    <script src="{{ asset('js/script_p_5.js') }}" defer></script>
+    <script src="{{ asset('js/search_view_1.js') }}" defer></script>
+    <script src="{{ asset('js/search_view_2.js') }}" defer></script>
+    <script src="{{ asset('js/search_view_3.js') }}" defer></script>
+    <script src="{{ asset('js/wishlist1.js') }}" defer></script>
+    <script src="{{ asset('js/wishlist2.js') }}" defer></script>
+
 
 </head>
 
@@ -245,51 +274,34 @@
 
             <!-- Buy It Again -->
             <div class="mobile-dropdown">
-                <button
-                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50"
-                    onclick="toggleMobileDropdown('menu-buy-again', this)">
-                    Buy It Again <i
-                        class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div id="menu-buy-again" class="hidden pl-4 mt-3 space-y-3 border-l-2 border-[#E9D3D6]">
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Previously Ordered</a>
-                </div>
+                <a href="{{ route('page.buy-it-again') }}"
+                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
+                    Buy It Again
+                </a>
             </div>
-            <!--conact us-->
+
+            <!-- Contact Us -->
             <div class="mobile-dropdown">
-                <button
-                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50"
-                    onclick="toggleMobileDropdown('menu-buy-again', this)">
-                    Contact Us <i
-                        class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div id="menu-buy-again" class="hidden pl-4 mt-3 space-y-3 border-l-2 border-[#E9D3D6]">
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Previously Ordered</a>
-                </div>
+                <a href="{{ route('page.contact') }}"
+                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
+                    Contact Us
+                </a>
             </div>
-            <!--exibition -->
+
+            <!-- Exhibition -->
             <div class="mobile-dropdown">
-                <button
-                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50"
-                    onclick="toggleMobileDropdown('menu-buy-again', this)">
-                    Exhibition <i
-                        class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div id="menu-buy-again" class="hidden pl-4 mt-3 space-y-3 border-l-2 border-[#E9D3D6]">
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Previously Ordered</a>
-                </div>
-                <!--about us-->
-                <div class="mobile-dropdown">
-                    <button
-                        class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50"
-                        onclick="toggleMobileDropdown('menu-buy-again', this)">
-                        About Us <i
-                            class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-300"></i>
-                    </button>
-                    <div id="menu-buy-again" class="hidden pl-4 mt-3 space-y-3 border-l-2 border-[#E9D3D6]">
-                        <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Previously Ordered</a>
-                    </div>
-                </div>
+                <a href="{{ route('page.exhibition') }}"
+                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
+                    Exhibition
+                </a>
+            </div>
+
+            <!-- About Us -->
+            <div class="mobile-dropdown">
+                <a href="{{ route('page.about') }}"
+                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
+                    About Us
+                </a>
             </div>
         </div>
         <!-- Footer Info -->

@@ -50,13 +50,21 @@
                     class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
             </div>
 
-            <div class="mb-4">
+            <div class="mb-4 flex items-center gap-8">
                 <label class="inline-flex items-center cursor-pointer">
                     <input type="checkbox" name="status" value="1" class="sr-only peer">
                     <div
                         class="w-11 h-6 bg-zinc-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500">
                     </div>
                     <span class="ml-3 font-medium text-zinc-700">Active Status</span>
+                </label>
+
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="is_product_banner" value="1" class="sr-only peer">
+                    <div
+                        class="w-11 h-6 bg-zinc-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                    </div>
+                    <span class="ml-3 font-medium text-zinc-700">Is Product Banner?</span>
                 </label>
             </div>
 

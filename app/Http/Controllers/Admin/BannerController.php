@@ -33,12 +33,14 @@ class BannerController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp',
             'status' => 'nullable|boolean', // accepts 0,1,true,false
             'type' => 'required|in:top,middle',
+            'is_product_banner' => 'nullable|boolean'
         ]);
 
         $data = $request->only(['title', 'desc', 'type']);
 
         // Always convert checkbox to boolean 1/0
         $data['status'] = $request->boolean('status') ? 1 : 0;
+        $data['is_product_banner'] = $request->boolean('is_product_banner') ? 1 : 0;
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('banners', 'public');
@@ -67,12 +69,14 @@ class BannerController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp',
             'status' => 'nullable|boolean',
             'type' => 'required|in:top,middle',
+            'is_product_banner' => 'nullable|boolean'
         ]);
 
         $data = $request->only(['title', 'desc', 'type']);
 
         // Convert checkbox
         $data['status'] = $request->boolean('status') ? 1 : 0;
+        $data['is_product_banner'] = $request->boolean('is_product_banner') ? 1 : 0;
 
         if ($request->hasFile('image')) {
 

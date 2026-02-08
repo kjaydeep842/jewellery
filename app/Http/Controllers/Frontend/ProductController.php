@@ -17,7 +17,17 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('status', 1)->latest()->paginate(12);
+        $query = Product::where('status', 1);
+
+        if (request()->has('search') && request()->input('search')) {
+            $search = request()->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $products = $query->latest()->paginate(12);
         return view('products.index', compact('products'));
     }
 
@@ -85,5 +95,31 @@ class ProductController extends Controller
             'html' => $html,
             'count' => $products->count()
         ]);
+    }
+    /**
+     * Fetch search suggestions.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function searchSuggestions(Request $request)
+    {
+        $query = $request->get('query');
+
+        if (!$query) {
+            return response()->json([]);
+        }
+
+        $suggestions = Product::where('status', 1)
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                    ->orWhere('tags', 'like', "%{$query}%"); // Assuming tags exist or just name
+            })
+            ->select('name', 'slug')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return response()->json($suggestions);
     }
 }

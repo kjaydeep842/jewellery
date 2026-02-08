@@ -38,6 +38,8 @@ Route::resource('products', ProductController::class); // Fallback resource if n
 // AJAX Helpers
 Route::get('/ajax/products/category/{id}', [ProductController::class, 'fetchByCategory'])
     ->name('ajax.products.category');
+Route::get('/ajax/search-suggestions', [ProductController::class, 'searchSuggestions'])
+    ->name('ajax.search.suggestions');
 
 /*
 |--------------------------------------------------------------------------

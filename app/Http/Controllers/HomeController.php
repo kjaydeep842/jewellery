@@ -22,8 +22,15 @@ class HomeController extends Controller
         // Fetch active top banners
         $banners = Banner::where('status', 1)->where('type', 'top')->latest()->get();
 
-        // Fetch active middle banners
-        $middleBanners = Banner::where('status', 1)->where('type', 'middle')->latest()->get();
+        // Fetch active middle banners (excluding product banners)
+        $middleBanners = Banner::where('status', 1)
+            ->where('type', 'middle')
+            ->where(function ($query) {
+                $query->where('is_product_banner', 0)
+                    ->orWhereNull('is_product_banner');
+            })
+            ->latest()
+            ->get();
 
         // Fetch active shapes
         $shapes = Shape::where('status', 1)->get();

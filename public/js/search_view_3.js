@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchInput && searchDropdown && searchContainer) {
 
         // Show dropdown on page load
-        searchDropdown.classList.remove('hidden');
+        // searchDropdown.classList.remove('hidden');
 
         // Show dropdown on focus
         searchInput.addEventListener('focus', () => {

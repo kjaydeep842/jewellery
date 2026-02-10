@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
-@section('title', 'Products')
+@section('title', 'Brands')
 
 @section('content')
 
 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-    <h1 class="text-2xl sm:text-3xl font-premium font-bold text-zinc-900 tracking-wide">Products</h1>
+    <h1 class="text-2xl sm:text-3xl font-premium font-bold text-zinc-900 tracking-wide">Brands</h1>
 
-    <a href="{{ route('admin.products.create') }}"
+    <a href="{{ route('admin.brands.create') }}"
         class="flex items-center space-x-2 px-6 py-2.5 btn-gold rounded-lg shadow-lg hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5">
         <span class="text-xl">+</span>
-        <span>Add Product</span>
+        <span>Add Brand</span>
     </a>
 </div>
 
@@ -24,65 +24,46 @@
 </div>
 @endif
 
-
-
 <div class="bg-white border border-zinc-100 rounded-xl shadow-lg shadow-zinc-200/50 overflow-x-auto animate-enter p-4">
-    <table id="productsTable" class="w-full text-left border-collapse stripe hover">
+    <table id="brandsTable" class="w-full text-left border-collapse stripe hover">
         <thead class="bg-zinc-50 text-zinc-900 border-b border-zinc-200">
             <tr>
+                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">ID</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Image</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Name</th>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">SKU</th>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Category</th>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Brand</th>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Stock</th>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Price</th>
+                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Slug</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Status</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-zinc-100 text-sm">
-            @foreach($products as $product)
+            @foreach($brands as $brand)
             <tr class="group hover:bg-amber-50/50 transition-colors">
+                <td class="p-4 text-zinc-500">#{{ $brand->id }}</td>
                 <td class="p-4">
-                    @if($product->image)
-                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}"
-                        class="w-12 h-12 rounded-lg object-cover border border-zinc-200">
+                    @if($brand->image)
+                    <img src="{{ Storage::url($brand->image) }}" alt="{{ $brand->name }}" class="w-12 h-12 rounded object-cover border border-zinc-200">
                     @else
-                    <div
-                        class="w-12 h-12 bg-zinc-100 rounded-lg flex items-center justify-center text-zinc-400 text-xs">
-                        No Img</div>
+                    <div class="w-12 h-12 bg-zinc-100 rounded flex items-center justify-center text-zinc-400 text-xs text-center border border-zinc-200">
+                        No Img
+                    </div>
                     @endif
                 </td>
-                <td class="p-4 font-bold text-zinc-800">
-                    {{ $product->name }}
-                    @if($product->is_featured)
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800 ml-1">
-                        Featured
-                    </span>
-                    @endif
-                </td>
-                <td class="p-4 text-zinc-600">{{ $product->sku }}</td>
-                <td class="p-4 text-zinc-600">{{ $product->category?->name ?? 'No Category' }}</td>
-                <td class="p-4 text-zinc-600">{{ $product->brand?->name ?? '-' }}</td>
-                <td class="p-4 text-zinc-600">
-                    {{ $product->variants->count() > 0 ? $product->variants->sum('stock_quantity') : $product->stock }}
-                </td>
-                <td class="p-4 font-bold text-zinc-900">₹{{ number_format($product->price, 2) }}</td>
+                <td class="p-4 font-bold text-zinc-800">{{ $brand->name }}</td>
+                <td class="p-4 text-zinc-600">{{ $brand->slug }}</td>
                 <td class="p-4">
-                    @if($product->status == 'active')
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        Active
-                    </span>
-                    @else
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                        Inactive
-                    </span>
-                    @endif
+                    <form action="{{ route('admin.brands.toggle', $brand->id) }}" method="POST" class="inline-block">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" {{ $brand->status ? 'checked' : '' }} disabled>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-amber-500"></div>
+                        </button>
+                    </form>
                 </td>
                 <td class="p-4">
                     <div class="flex items-center space-x-2">
-                        <a href="{{ route('admin.products.edit', $product->id) }}"
+                        <a href="{{ route('admin.brands.edit', $brand->id) }}"
                             class="p-2 bg-white border border-zinc-200 rounded-lg text-amber-600 hover:bg-amber-50 hover:border-amber-200 transition-all shadow-sm"
                             title="Edit">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,8 +72,8 @@
                                 </path>
                             </svg>
                         </a>
-                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
-                            class="inline-block" onsubmit="return confirm('Are you sure?');">
+                        <form action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST"
+                            class="inline-block" onsubmit="return confirm('Are you sure you want to delete this brand?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit"
@@ -113,26 +94,25 @@
     </table>
 </div>
 
-<div class="p-4 border-t border-zinc-100 bg-zinc-50">
-    {{ $products->links() }}
+<div class="mt-4">
+    {{ $brands->links() }}
 </div>
 
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('#productsTable').DataTable({
-            responsive: false,
+        $('#brandsTable').DataTable({
+            responsive: true,
             autoWidth: false,
             language: {
                 search: "_INPUT_",
-                searchPlaceholder: "Search products...",
+                searchPlaceholder: "Search brands...",
                 lengthMenu: "Show _MENU_ entries"
             },
             columnDefs: [{
-                    orderable: false,
-                    targets: [0, 5]
-                } // Disable sorting on Image and Actions
-            ]
+                orderable: false,
+                targets: [1, 5] // Image and Actions columns
+            }]
         });
     });
 </script>

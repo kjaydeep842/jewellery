@@ -21,6 +21,8 @@ use App\Http\Controllers\Admin\OurStoryController;
 use App\Http\Controllers\Admin\StyleController;
 use App\Http\Controllers\Admin\FeatureController;
 
+use App\Http\Controllers\Admin\BrandController;
+
 /*
 |--------------------------------------------------------------------------
 | ADMIN AUTH ROUTES
@@ -60,6 +62,7 @@ Route::middleware(['auth', 'admin'])
         Route::resource('subcategories', SubcategoryController::class);
         Route::resource('tags', TagController::class);
         Route::resource('products', AdminProductController::class);
+        Route::resource('brands', BrandController::class);
         Route::resource('orders', AdminOrderController::class);
         Route::resource('users', AdminUserController::class);
         Route::resource('banners', BannerController::class);
@@ -88,6 +91,7 @@ Route::middleware(['auth', 'admin'])
         Route::patch('our_stories/{our_story}/toggle', [\App\Http\Controllers\Admin\OurStoryController::class, 'toggleStatus'])->name('our_stories.toggle');
         Route::patch('faqs/{faq}/toggle', [FaqController::class, 'toggleStatus'])->name('faqs.toggle');
         Route::patch('returns/{return}/toggle', [ReturnExchangeController::class, 'toggleStatus'])->name('returns.toggle');
+        Route::patch('brands/{brand}/toggle', [BrandController::class, 'toggleStatus'])->name('brands.toggle');
 
         Route::patch('diamond_qualities/{diamond_quality}/toggle', [\App\Http\Controllers\Admin\DiamondQualityController::class, 'toggleStatus'])->name('diamond_qualities.toggle');
         Route::patch('metal_colors/{metal_color}/toggle', [\App\Http\Controllers\Admin\MetalColorController::class, 'toggleStatus'])->name('metal_colors.toggle');

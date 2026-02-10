@@ -16,19 +16,22 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('tags')->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        try {
+            $products = Product::with('tags')->latest()->paginate(10);
+            return view('admin.products.index', compact('products'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load products. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
     {
-        $categories = Category::all();
-        $tags = Tag::all();
-        $subcategories = Subcategory::all();
-
-        return view('admin.products.create', compact('categories', 'tags', 'subcategories'));
+        return view('admin.products.create', [
+            'categories' => Category::all(),
+            'tags' => Tag::all(),
+            'subcategories' => Subcategory::all()
+        ]);
     }
-
 
     public function store(Request $request)
     {
@@ -38,10 +41,10 @@ class ProductController extends Controller
             'subcategory_id' => 'nullable|exists:subcategories,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:5120',
             'tags' => 'array',
             'tags.*' => 'exists:tags,id',
-            'images.*' => 'image|max:4096',
+            'images.*' => 'image|max:5120',
             'making_charges' => 'nullable|numeric|min:0',
             'tax_rate' => 'nullable|numeric|min:0',
             'metal_type' => 'nullable|string',
@@ -109,10 +112,9 @@ class ProductController extends Controller
 
             return redirect()->route('admin.products.index')
                 ->with('success', 'Product created successfully.');
-
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\DB::rollBack();
-            return redirect()->back()->withInput()->with('error', 'Error creating product: ' . $e->getMessage());
+            return redirect()->back()->withInput()->withErrors(['error' => 'Error creating product: ' . $e->getMessage()]);
         }
     }
 
@@ -120,10 +122,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $tags = Tag::all();
-
-        // Load subcategories for the current category
-        $subcategories = Subcategory::all(); // Load ALL for JS filtering, or fetch specific? 
-        // Better: Load all subcategories so JS can filter cleanly on Edit too without AJAX call
+        $subcategories = Subcategory::all();
 
         $product->load('tags', 'images', 'variants', 'stones');
 
@@ -135,7 +134,6 @@ class ProductController extends Controller
         ));
     }
 
-
     public function update(Request $request, Product $product)
     {
         $request->validate([
@@ -144,10 +142,10 @@ class ProductController extends Controller
             'subcategory_id' => 'nullable|exists:subcategories,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:5120',
             'tags' => 'array',
             'tags.*' => 'exists:tags,id',
-            'images.*' => 'image|max:4096',
+            'images.*' => 'image|max:5120',
             'making_charges' => 'nullable|numeric|min:0',
             'tax_rate' => 'nullable|numeric|min:0',
             'metal_type' => 'nullable|string',
@@ -222,24 +220,25 @@ class ProductController extends Controller
 
             return redirect()->route('admin.products.index')
                 ->with('success', 'Product updated successfully.');
-
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\DB::rollBack();
-            return redirect()->back()->withInput()->with('error', 'Error updating product: ' . $e->getMessage());
+            return redirect()->back()->withInput()->withErrors(['error' => 'Error updating product: ' . $e->getMessage()]);
         }
     }
 
-
-
     public function destroy(Product $product)
     {
-        if ($product->image && file_exists(public_path('storage/' . $product->image))) {
-            unlink(public_path('storage/' . $product->image));
+        try {
+            if ($product->image && file_exists(public_path('storage/' . $product->image))) {
+                unlink(public_path('storage/' . $product->image));
+            }
+
+            $product->delete();
+
+            return redirect()->route('admin.products.index')
+                ->with('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete product. ' . $e->getMessage()]);
         }
-
-        $product->delete();
-
-        return redirect()->route('admin.products.index')
-            ->with('success', 'Product deleted successfully.');
     }
 }

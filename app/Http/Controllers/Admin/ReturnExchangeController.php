@@ -13,8 +13,12 @@ class ReturnExchangeController extends Controller
      */
     public function index()
     {
-        $returns = ReturnExchange::latest()->get();
-        return view('admin.returns.index', compact('returns'));
+        try {
+            $returns = ReturnExchange::latest()->get();
+            return view('admin.returns.index', compact('returns'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load policies. ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -36,13 +40,17 @@ class ReturnExchangeController extends Controller
             'status' => 'boolean',
         ]);
 
-        ReturnExchange::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'status' => $request->has('status'),
-        ]);
+        try {
+            ReturnExchange::create([
+                'title' => $request->title,
+                'content' => $request->content,
+                'status' => $request->has('status'),
+            ]);
 
-        return redirect()->route('admin.returns.index')->with('success', 'Return & Exchange policy created successfully.');
+            return redirect()->route('admin.returns.index')->with('success', 'Return & Exchange policy created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create policy. ' . $e->getMessage()])->withInput();
+        }
     }
 
     /**
@@ -50,8 +58,12 @@ class ReturnExchangeController extends Controller
      */
     public function edit(string $id)
     {
-        $return = ReturnExchange::findOrFail($id);
-        return view('admin.returns.edit', compact('return'));
+        try {
+            $return = ReturnExchange::findOrFail($id);
+            return view('admin.returns.edit', compact('return'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load policy. ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -65,14 +77,18 @@ class ReturnExchangeController extends Controller
             'status' => 'boolean',
         ]);
 
-        $return = ReturnExchange::findOrFail($id);
-        $return->update([
-            'title' => $request->title,
-            'content' => $request->content,
-            'status' => $request->has('status'),
-        ]);
+        try {
+            $return = ReturnExchange::findOrFail($id);
+            $return->update([
+                'title' => $request->title,
+                'content' => $request->content,
+                'status' => $request->has('status'),
+            ]);
 
-        return redirect()->route('admin.returns.index')->with('success', 'Return & Exchange policy updated successfully.');
+            return redirect()->route('admin.returns.index')->with('success', 'Return & Exchange policy updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update policy. ' . $e->getMessage()])->withInput();
+        }
     }
 
     /**
@@ -80,10 +96,14 @@ class ReturnExchangeController extends Controller
      */
     public function destroy(string $id)
     {
-        $return = ReturnExchange::findOrFail($id);
-        $return->delete();
+        try {
+            $return = ReturnExchange::findOrFail($id);
+            $return->delete();
 
-        return redirect()->route('admin.returns.index')->with('success', 'Return & Exchange policy deleted successfully.');
+            return redirect()->route('admin.returns.index')->with('success', 'Return & Exchange policy deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete policy. ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -91,10 +111,14 @@ class ReturnExchangeController extends Controller
      */
     public function toggleStatus($id)
     {
-        $return = ReturnExchange::findOrFail($id);
-        $return->status = !$return->status;
-        $return->save();
+        try {
+            $return = ReturnExchange::findOrFail($id);
+            $return->status = !$return->status;
+            $return->save();
 
-        return response()->json(['success' => true, 'status' => $return->status, 'message' => 'Status updated successfully.']);
+            return response()->json(['success' => true, 'status' => $return->status, 'message' => 'Status updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

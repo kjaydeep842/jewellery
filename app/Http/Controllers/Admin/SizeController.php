@@ -10,8 +10,12 @@ class SizeController extends Controller
 {
     public function index()
     {
-        $sizes = Size::orderBy('sort_order')->latest()->get();
-        return view('admin.sizes.index', compact('sizes'));
+        try {
+            $sizes = Size::orderBy('sort_order')->latest()->get();
+            return view('admin.sizes.index', compact('sizes'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load sizes. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -27,10 +31,14 @@ class SizeController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        Size::create($request->all());
+        try {
+            Size::create($request->all());
 
-        return redirect()->route('admin.sizes.index')
-            ->with('success', 'Size created successfully.');
+            return redirect()->route('admin.sizes.index')
+                ->with('success', 'Size created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create size. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(Size $size)
@@ -46,25 +54,37 @@ class SizeController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        $size->update($request->all());
+        try {
+            $size->update($request->all());
 
-        return redirect()->route('admin.sizes.index')
-            ->with('success', 'Size updated successfully.');
+            return redirect()->route('admin.sizes.index')
+                ->with('success', 'Size updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update size. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function destroy(Size $size)
     {
-        $size->delete();
+        try {
+            $size->delete();
 
-        return redirect()->route('admin.sizes.index')
-            ->with('success', 'Size deleted successfully.');
+            return redirect()->route('admin.sizes.index')
+                ->with('success', 'Size deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete size. ' . $e->getMessage()]);
+        }
     }
 
     public function toggleStatus(Size $size)
     {
-        $size->status = !$size->status;
-        $size->save();
+        try {
+            $size->status = !$size->status;
+            $size->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+            return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

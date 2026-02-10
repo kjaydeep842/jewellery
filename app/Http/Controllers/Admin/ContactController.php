@@ -13,8 +13,12 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contacts = Contact::latest()->get();
-        return view('admin.contacts.index', compact('contacts'));
+        try {
+            $contacts = Contact::latest()->get();
+            return view('admin.contacts.index', compact('contacts'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load contacts. ' . $e->getMessage()]);
+        }
     }
 
     // Other methods are purposely left empty or return an error/redirect as per requirement

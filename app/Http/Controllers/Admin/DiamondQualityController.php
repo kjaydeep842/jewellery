@@ -10,8 +10,12 @@ class DiamondQualityController extends Controller
 {
     public function index()
     {
-        $diamond_qualities = DiamondQuality::orderBy('sort_order')->latest()->get();
-        return view('admin.diamond_qualities.index', compact('diamond_qualities'));
+        try {
+            $diamond_qualities = DiamondQuality::orderBy('sort_order')->latest()->get();
+            return view('admin.diamond_qualities.index', compact('diamond_qualities'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load diamond qualities. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -27,10 +31,14 @@ class DiamondQualityController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        DiamondQuality::create($request->all());
+        try {
+            DiamondQuality::create($request->all());
 
-        return redirect()->route('admin.diamond_qualities.index')
-            ->with('success', 'Diamond Quality created successfully.');
+            return redirect()->route('admin.diamond_qualities.index')
+                ->with('success', 'Diamond Quality created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create diamond quality. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(DiamondQuality $diamond_quality)
@@ -46,25 +54,37 @@ class DiamondQualityController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        $diamond_quality->update($request->all());
+        try {
+            $diamond_quality->update($request->all());
 
-        return redirect()->route('admin.diamond_qualities.index')
-            ->with('success', 'Diamond Quality updated successfully.');
+            return redirect()->route('admin.diamond_qualities.index')
+                ->with('success', 'Diamond Quality updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update diamond quality. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function destroy(DiamondQuality $diamond_quality)
     {
-        $diamond_quality->delete();
+        try {
+            $diamond_quality->delete();
 
-        return redirect()->route('admin.diamond_qualities.index')
-            ->with('success', 'Diamond Quality deleted successfully.');
+            return redirect()->route('admin.diamond_qualities.index')
+                ->with('success', 'Diamond Quality deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete diamond quality. ' . $e->getMessage()]);
+        }
     }
 
     public function toggleStatus(DiamondQuality $diamond_quality)
     {
-        $diamond_quality->status = !$diamond_quality->status;
-        $diamond_quality->save();
+        try {
+            $diamond_quality->status = !$diamond_quality->status;
+            $diamond_quality->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+            return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

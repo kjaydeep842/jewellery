@@ -11,8 +11,12 @@ class BannerController extends Controller
 {
     public function index()
     {
-        $banners = Banner::latest()->get();
-        return view('admin.banners.index', compact('banners'));
+        try {
+            $banners = Banner::latest()->get();
+            return view('admin.banners.index', compact('banners'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load banners. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -22,33 +26,56 @@ class BannerController extends Controller
 
     public function store(Request $request)
     {
-        // Normalize "on" to 1
-        if ($request->status === 'on') {
-            $request->merge(['status' => 1]);
+
+        try {
+            // Normalize checkbox values before validation
+            if ($request->status === 'on') {
+                $request->merge(['status' => 1]);
+            }
+            if ($request->is_product_banner === 'on') {
+                $request->merge(['is_product_banner' => 1]);
+            }
+
+            // Check if request is empty but content-length is not (Implies post_max_size exceeded)
+            if (empty($request->all()) && empty($request->files->all()) && $request->header('Content-Length') > 0) {
+                return back()->withErrors(['error' => 'The uploaded file exceeds the server maximum limit.'])->withInput();
+            }
+
+            // Check for file upload errors (e.g. exceeding php.ini limits)
+            if ($request->hasFile('image') && !$request->file('image')->isValid()) {
+                return back()->withErrors(['image' => 'The uploaded file exceeds the server limit or is corrupted.'])->withInput();
+            }
+
+            $request->validate([
+                'title' => 'required|string',
+                'desc' => 'nullable|string',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+                'status' => 'nullable|boolean',
+                'type' => 'required|in:top,middle',
+                'is_product_banner' => 'nullable|boolean'
+            ], [
+                'image.image' => 'The file must be an image.',
+                'image.mimes' => 'The image must be a file of type: jpg, jpeg, png, webp.',
+                'image.max' => 'The image size must not exceed 5MB.',
+            ]);
+
+
+            $data = $request->only(['title', 'desc', 'type']);
+
+            // Explicitly cast to boolean integer (0 or 1)
+            $data['status'] = $request->boolean('status') ? 1 : 0;
+            $data['is_product_banner'] = $request->boolean('is_product_banner') ? 1 : 0;
+
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('banners', 'public');
+            }
+
+            Banner::create($data);
+
+            return redirect()->route('admin.banners.index')->with('success', 'Banner created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create banner. ' . $e->getMessage()])->withInput();
         }
-
-        $request->validate([
-            'title' => 'required|string',
-            'desc' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp',
-            'status' => 'nullable|boolean', // accepts 0,1,true,false
-            'type' => 'required|in:top,middle',
-            'is_product_banner' => 'nullable|boolean'
-        ]);
-
-        $data = $request->only(['title', 'desc', 'type']);
-
-        // Always convert checkbox to boolean 1/0
-        $data['status'] = $request->boolean('status') ? 1 : 0;
-        $data['is_product_banner'] = $request->boolean('is_product_banner') ? 1 : 0;
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('banners', 'public');
-        }
-
-        Banner::create($data);
-
-        return redirect()->route('admin.banners.index')->with('success', 'Banner created successfully.');
     }
 
     public function edit(Banner $banner)
@@ -58,58 +85,74 @@ class BannerController extends Controller
 
     public function update(Request $request, Banner $banner)
     {
-        // Normalize "on" to 1
+        // Normalize checkbox values before validation
         if ($request->status === 'on') {
             $request->merge(['status' => 1]);
+        }
+        if ($request->is_product_banner === 'on') {
+            $request->merge(['is_product_banner' => 1]);
         }
 
         $request->validate([
             'title' => 'required|string',
             'desc' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'status' => 'nullable|boolean',
             'type' => 'required|in:top,middle',
             'is_product_banner' => 'nullable|boolean'
         ]);
 
-        $data = $request->only(['title', 'desc', 'type']);
+        try {
+            $data = $request->only(['title', 'desc', 'type']);
 
-        // Convert checkbox
-        $data['status'] = $request->boolean('status') ? 1 : 0;
-        $data['is_product_banner'] = $request->boolean('is_product_banner') ? 1 : 0;
+            // Explicitly cast to boolean integer (0 or 1)
+            $data['status'] = $request->boolean('status') ? 1 : 0;
+            $data['is_product_banner'] = $request->boolean('is_product_banner') ? 1 : 0;
 
-        if ($request->hasFile('image')) {
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($banner->image && Storage::disk('public')->exists($banner->image)) {
+                    Storage::disk('public')->delete($banner->image);
+                }
 
-            if ($banner->image) {
-                Storage::disk('public')->delete($banner->image);
+                $data['image'] = $request->file('image')->store('banners', 'public');
             }
 
-            $data['image'] = $request->file('image')->store('banners', 'public');
+            $banner->update($data);
+
+            return redirect()->route('admin.banners.index')->with('success', 'Banner updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update banner. ' . $e->getMessage()])->withInput();
         }
-
-        $banner->update($data);
-
-        return redirect()->route('admin.banners.index')->with('success', 'Banner updated successfully.');
     }
 
     public function destroy(Banner $banner)
     {
-        if ($banner->image) {
-            Storage::disk('public')->delete($banner->image);
+        try {
+            if ($banner->image && Storage::disk('public')->exists($banner->image)) {
+                Storage::disk('public')->delete($banner->image);
+            }
+
+            $banner->delete();
+
+            return redirect()->route('admin.banners.index')->with('success', 'Banner deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete banner. ' . $e->getMessage()]);
         }
-
-        $banner->delete();
-
-        return redirect()->route('admin.banners.index')->with('success', 'Banner deleted successfully.');
     }
 
     public function toggleStatus(Banner $banner)
     {
-        $banner->status = !$banner->status;
-        $banner->save();
+        try {
+            $banner->status = !$banner->status;
+            $banner->save();
 
-        return response()->json([
-            'status' => $banner->status
-        ]);
+            return response()->json([
+                'status' => $banner->status,
+                'message' => 'Status updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

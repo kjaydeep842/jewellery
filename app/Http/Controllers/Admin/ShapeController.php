@@ -11,8 +11,12 @@ class ShapeController extends Controller
 {
     public function index()
     {
-        $shapes = Shape::latest()->get();
-        return view('admin.shapes.index', compact('shapes'));
+        try {
+            $shapes = Shape::latest()->get();
+            return view('admin.shapes.index', compact('shapes'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load shapes. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -24,20 +28,24 @@ class ShapeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'status' => 'nullable|boolean',
         ]);
 
-        $data = $request->only(['name']);
-        $data['status'] = $request->boolean('status');
+        try {
+            $data = $request->only(['name']);
+            $data['status'] = $request->boolean('status');
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('shapes', 'public');
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('shapes', 'public');
+            }
+
+            Shape::create($data);
+
+            return redirect()->route('admin.shapes.index')->with('success', 'Shape created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create shape. ' . $e->getMessage()])->withInput();
         }
-
-        Shape::create($data);
-
-        return redirect()->route('admin.shapes.index')->with('success', 'Shape created successfully.');
     }
 
     public function edit(Shape $shape)
@@ -49,32 +57,40 @@ class ShapeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'status' => 'nullable|boolean',
         ]);
 
-        $data = $request->only(['name']);
-        $data['status'] = $request->boolean('status');
+        try {
+            $data = $request->only(['name']);
+            $data['status'] = $request->boolean('status');
 
-        if ($request->hasFile('image')) {
-            if ($shape->image) {
-                Storage::disk('public')->delete($shape->image);
+            if ($request->hasFile('image')) {
+                if ($shape->image && Storage::disk('public')->exists($shape->image)) {
+                    Storage::disk('public')->delete($shape->image);
+                }
+                $data['image'] = $request->file('image')->store('shapes', 'public');
             }
-            $data['image'] = $request->file('image')->store('shapes', 'public');
+
+            $shape->update($data);
+
+            return redirect()->route('admin.shapes.index')->with('success', 'Shape updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update shape. ' . $e->getMessage()])->withInput();
         }
-
-        $shape->update($data);
-
-        return redirect()->route('admin.shapes.index')->with('success', 'Shape updated successfully.');
     }
 
     public function destroy(Shape $shape)
     {
-        if ($shape->image) {
-            Storage::disk('public')->delete($shape->image);
-        }
-        $shape->delete();
+        try {
+            if ($shape->image) {
+                Storage::disk('public')->delete($shape->image);
+            }
+            $shape->delete();
 
-        return redirect()->route('admin.shapes.index')->with('success', 'Shape deleted successfully.');
+            return redirect()->route('admin.shapes.index')->with('success', 'Shape deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete shape. ' . $e->getMessage()]);
+        }
     }
 }

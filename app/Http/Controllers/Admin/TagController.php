@@ -11,8 +11,12 @@ class TagController extends Controller
 {
     public function index()
     {
-        $tags = Tag::latest()->paginate(10);
-        return view('admin.tags.index', compact('tags'));
+        try {
+            $tags = Tag::latest()->paginate(10);
+            return view('admin.tags.index', compact('tags'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load tags. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -29,14 +33,18 @@ class TagController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
 
-        Tag::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'status' => $request->status
-        ]);
+        try {
+            Tag::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'status' => $request->status
+            ]);
 
-        return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag created successfully.');
+            return redirect()->route('admin.tags.index')
+                ->with('success', 'Tag created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create tag. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(Tag $tag)
@@ -53,21 +61,29 @@ class TagController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
 
-        $tag->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'status' => $request->status
-        ]);
+        try {
+            $tag->update([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'status' => $request->status
+            ]);
 
-        return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag updated successfully.');
+            return redirect()->route('admin.tags.index')
+                ->with('success', 'Tag updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update tag. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function destroy(Tag $tag)
     {
-        $tag->delete();
+        try {
+            $tag->delete();
 
-        return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag deleted successfully.');
+            return redirect()->route('admin.tags.index')
+                ->with('success', 'Tag deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete tag. ' . $e->getMessage()]);
+        }
     }
 }

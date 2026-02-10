@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 
 class OurStoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $stories = \App\Models\OurStory::latest()->get();
-        return view('admin.our_stories.index', compact('stories'));
+        try {
+            $stories = \App\Models\OurStory::latest()->get();
+            return view('admin.our_stories.index', compact('stories'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load stories. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -29,20 +30,24 @@ class OurStoryController extends Controller
             'type' => 'required|in:content,feature',
             'title' => 'nullable|string|max:255',
             'description' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'status' => 'boolean'
         ]);
 
-        $data = $request->except('image');
+        try {
+            $data = $request->except('image');
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('our_stories', 'public');
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('our_stories', 'public');
+            }
+
+            \App\Models\OurStory::create($data);
+
+            return redirect()->route('admin.our_stories.index')
+                ->with('success', 'Story content added successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to add story content. ' . $e->getMessage()])->withInput();
         }
-
-        \App\Models\OurStory::create($data);
-
-        return redirect()->route('admin.our_stories.index')
-            ->with('success', 'Story content added successfully.');
     }
 
     public function show(string $id)
@@ -63,41 +68,53 @@ class OurStoryController extends Controller
             'type' => 'required|in:content,feature',
             'title' => 'nullable|string|max:255',
             'description' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'status' => 'boolean'
         ]);
 
-        $data = $request->except('image');
+        try {
+            $data = $request->except('image');
 
-        if ($request->hasFile('image')) {
-            if ($our_story->image) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($our_story->image);
+            if ($request->hasFile('image')) {
+                if ($our_story->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($our_story->image)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($our_story->image);
+                }
+                $data['image'] = $request->file('image')->store('our_stories', 'public');
             }
-            $data['image'] = $request->file('image')->store('our_stories', 'public');
+
+            $our_story->update($data);
+
+            return redirect()->route('admin.our_stories.index')
+                ->with('success', 'Story content updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update story content. ' . $e->getMessage()])->withInput();
         }
-
-        $our_story->update($data);
-
-        return redirect()->route('admin.our_stories.index')
-            ->with('success', 'Story content updated successfully.');
     }
 
     public function destroy(\App\Models\OurStory $our_story)
     {
-        if ($our_story->image) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($our_story->image);
-        }
-        $our_story->delete();
+        try {
+            if ($our_story->image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($our_story->image);
+            }
+            $our_story->delete();
 
-        return redirect()->route('admin.our_stories.index')
-            ->with('success', 'Story content deleted successfully.');
+            return redirect()->route('admin.our_stories.index')
+                ->with('success', 'Story content deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete story content. ' . $e->getMessage()]);
+        }
     }
 
     public function toggleStatus(\App\Models\OurStory $our_story)
     {
-        $our_story->status = !$our_story->status;
-        $our_story->save();
+        try {
+            $our_story->status = !$our_story->status;
+            $our_story->save();
 
-        return response()->json(['message' => 'Status updated successfully', 'status' => $our_story->status]);
+            return response()->json(['message' => 'Status updated successfully', 'status' => $our_story->status]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

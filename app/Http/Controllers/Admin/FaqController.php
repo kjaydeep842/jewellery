@@ -12,8 +12,12 @@ class FaqController extends Controller
      */
     public function index()
     {
-        $faqs = \App\Models\Faq::latest()->paginate(10);
-        return view('admin.faqs.index', compact('faqs'));
+        try {
+            $faqs = \App\Models\Faq::latest()->paginate(10);
+            return view('admin.faqs.index', compact('faqs'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load FAQs. ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -35,14 +39,18 @@ class FaqController extends Controller
             'status'   => 'nullable|boolean',
         ]);
 
-        \App\Models\Faq::create([
-            'question' => $request->question,
-            'answer'   => $request->answer,
-            'status'   => $request->has('status'),
-        ]);
+        try {
+            \App\Models\Faq::create([
+                'question' => $request->question,
+                'answer'   => $request->answer,
+                'status'   => $request->has('status'),
+            ]);
 
-        return redirect()->route('admin.faqs.index')
-            ->with('success', 'FAQ created successfully.');
+            return redirect()->route('admin.faqs.index')
+                ->with('success', 'FAQ created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create FAQ. ' . $e->getMessage()])->withInput();
+        }
     }
 
     /**
@@ -50,8 +58,12 @@ class FaqController extends Controller
      */
     public function edit($id)
     {
-        $faq = \App\Models\Faq::findOrFail($id);
-        return view('admin.faqs.edit', compact('faq'));
+        try {
+            $faq = \App\Models\Faq::findOrFail($id);
+            return view('admin.faqs.edit', compact('faq'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load FAQ. ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -59,22 +71,26 @@ class FaqController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $faq = \App\Models\Faq::findOrFail($id);
-
         $request->validate([
             'question' => 'required|string|max:255',
             'answer'   => 'required|string',
             'status'   => 'nullable|boolean',
         ]);
 
-        $faq->update([
-            'question' => $request->question,
-            'answer'   => $request->answer,
-            'status'   => $request->has('status'),
-        ]);
+        try {
+            $faq = \App\Models\Faq::findOrFail($id);
 
-        return redirect()->route('admin.faqs.index')
-            ->with('success', 'FAQ updated successfully.');
+            $faq->update([
+                'question' => $request->question,
+                'answer'   => $request->answer,
+                'status'   => $request->has('status'),
+            ]);
+
+            return redirect()->route('admin.faqs.index')
+                ->with('success', 'FAQ updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update FAQ. ' . $e->getMessage()])->withInput();
+        }
     }
 
     /**
@@ -82,19 +98,27 @@ class FaqController extends Controller
      */
     public function destroy($id)
     {
-        $faq = \App\Models\Faq::findOrFail($id);
-        $faq->delete();
+        try {
+            $faq = \App\Models\Faq::findOrFail($id);
+            $faq->delete();
 
-        return redirect()->route('admin.faqs.index')
-            ->with('success', 'FAQ deleted successfully.');
+            return redirect()->route('admin.faqs.index')
+                ->with('success', 'FAQ deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete FAQ. ' . $e->getMessage()]);
+        }
     }
 
     public function toggleStatus($id)
     {
-        $faq = \App\Models\Faq::findOrFail($id);
-        $faq->status = !$faq->status;
-        $faq->save();
+        try {
+            $faq = \App\Models\Faq::findOrFail($id);
+            $faq->status = !$faq->status;
+            $faq->save();
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

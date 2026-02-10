@@ -10,8 +10,12 @@ class MetalColorController extends Controller
 {
     public function index()
     {
-        $metal_colors = MetalColor::orderBy('sort_order')->latest()->get();
-        return view('admin.metal_colors.index', compact('metal_colors'));
+        try {
+            $metal_colors = MetalColor::orderBy('sort_order')->latest()->get();
+            return view('admin.metal_colors.index', compact('metal_colors'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load metal colors. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -28,10 +32,14 @@ class MetalColorController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        MetalColor::create($request->all());
+        try {
+            MetalColor::create($request->all());
 
-        return redirect()->route('admin.metal_colors.index')
-            ->with('success', 'Metal Color created successfully.');
+            return redirect()->route('admin.metal_colors.index')
+                ->with('success', 'Metal Color created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create metal color. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(MetalColor $metal_color)
@@ -48,25 +56,37 @@ class MetalColorController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        $metal_color->update($request->all());
+        try {
+            $metal_color->update($request->all());
 
-        return redirect()->route('admin.metal_colors.index')
-            ->with('success', 'Metal Color updated successfully.');
+            return redirect()->route('admin.metal_colors.index')
+                ->with('success', 'Metal Color updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update metal color. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function destroy(MetalColor $metal_color)
     {
-        $metal_color->delete();
+        try {
+            $metal_color->delete();
 
-        return redirect()->route('admin.metal_colors.index')
-            ->with('success', 'Metal Color deleted successfully.');
+            return redirect()->route('admin.metal_colors.index')
+                ->with('success', 'Metal Color deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete metal color. ' . $e->getMessage()]);
+        }
     }
 
     public function toggleStatus(MetalColor $metal_color)
     {
-        $metal_color->status = !$metal_color->status;
-        $metal_color->save();
+        try {
+            $metal_color->status = !$metal_color->status;
+            $metal_color->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+            return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

@@ -14,8 +14,12 @@ class StyleController extends Controller
      */
     public function index()
     {
-        $styles = Style::latest()->get();
-        return view('admin.styles.index', compact('styles'));
+        try {
+            $styles = Style::latest()->get();
+            return view('admin.styles.index', compact('styles'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load styles. ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -37,23 +41,27 @@ class StyleController extends Controller
         }
 
         $request->validate([
-            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
             'status' => 'nullable|boolean',
         ]);
 
-        $data = [
-            'status' => $request->boolean('status') ? 1 : 0
-        ];
+        try {
+            $data = [
+                'status' => $request->boolean('status') ? 1 : 0
+            ];
 
-        if ($request->hasFile('image')) {
-            // Save to 'styles' directory in storage/app/public/styles
-            $data['image'] = $request->file('image')->store('styles', 'public');
+            if ($request->hasFile('image')) {
+                // Save to 'styles' directory in storage/app/public/styles
+                $data['image'] = $request->file('image')->store('styles', 'public');
+            }
+
+            Style::create($data);
+
+            return redirect()->route('admin.styles.index')
+                ->with('success', 'Style created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create style. ' . $e->getMessage()])->withInput();
         }
-
-        Style::create($data);
-
-        return redirect()->route('admin.styles.index')
-            ->with('success', 'Style created successfully.');
     }
 
     /**
@@ -75,26 +83,30 @@ class StyleController extends Controller
         }
 
         $request->validate([
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'status' => 'nullable|boolean',
         ]);
 
-        $data = [
-            'status' => $request->boolean('status') ? 1 : 0
-        ];
+        try {
+            $data = [
+                'status' => $request->boolean('status') ? 1 : 0
+            ];
 
-        if ($request->hasFile('image')) {
-            // Delete old image
-            if ($style->image) {
-                Storage::disk('public')->delete($style->image);
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($style->image && Storage::disk('public')->exists($style->image)) {
+                    Storage::disk('public')->delete($style->image);
+                }
+                $data['image'] = $request->file('image')->store('styles', 'public');
             }
-            $data['image'] = $request->file('image')->store('styles', 'public');
+
+            $style->update($data);
+
+            return redirect()->route('admin.styles.index')
+                ->with('success', 'Style updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update style. ' . $e->getMessage()])->withInput();
         }
-
-        $style->update($data);
-
-        return redirect()->route('admin.styles.index')
-            ->with('success', 'Style updated successfully.');
     }
 
     /**
@@ -102,14 +114,18 @@ class StyleController extends Controller
      */
     public function destroy(Style $style)
     {
-        if ($style->image) {
-            Storage::disk('public')->delete($style->image);
+        try {
+            if ($style->image) {
+                Storage::disk('public')->delete($style->image);
+            }
+
+            $style->delete();
+
+            return redirect()->route('admin.styles.index')
+                ->with('success', 'Style deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete style. ' . $e->getMessage()]);
         }
-
-        $style->delete();
-
-        return redirect()->route('admin.styles.index')
-            ->with('success', 'Style deleted successfully.');
     }
 
     /**
@@ -117,12 +133,16 @@ class StyleController extends Controller
      */
     public function toggleStatus(Style $style)
     {
-        $style->status = !$style->status;
-        $style->save();
+        try {
+            $style->status = !$style->status;
+            $style->save();
 
-        return response()->json([
-            'status' => $style->status,
-            'message' => 'Status updated successfully.'
-        ]);
+            return response()->json([
+                'status' => $style->status,
+                'message' => 'Status updated successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

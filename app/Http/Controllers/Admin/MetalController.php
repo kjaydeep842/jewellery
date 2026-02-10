@@ -10,8 +10,12 @@ class MetalController extends Controller
 {
     public function index()
     {
-        $metals = Metal::orderBy('sort_order')->latest()->get();
-        return view('admin.metals.index', compact('metals'));
+        try {
+            $metals = Metal::orderBy('sort_order')->latest()->get();
+            return view('admin.metals.index', compact('metals'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load metals. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -27,10 +31,14 @@ class MetalController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        Metal::create($request->all());
+        try {
+            Metal::create($request->all());
 
-        return redirect()->route('admin.metals.index')
-            ->with('success', 'Metal created successfully.');
+            return redirect()->route('admin.metals.index')
+                ->with('success', 'Metal created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create metal. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(Metal $metal)
@@ -46,25 +54,37 @@ class MetalController extends Controller
             'sort_order' => 'nullable|integer',
         ]);
 
-        $metal->update($request->all());
+        try {
+            $metal->update($request->all());
 
-        return redirect()->route('admin.metals.index')
-            ->with('success', 'Metal updated successfully.');
+            return redirect()->route('admin.metals.index')
+                ->with('success', 'Metal updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update metal. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function destroy(Metal $metal)
     {
-        $metal->delete();
+        try {
+            $metal->delete();
 
-        return redirect()->route('admin.metals.index')
-            ->with('success', 'Metal deleted successfully.');
+            return redirect()->route('admin.metals.index')
+                ->with('success', 'Metal deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete metal. ' . $e->getMessage()]);
+        }
     }
 
     public function toggleStatus(Metal $metal)
     {
-        $metal->status = !$metal->status;
-        $metal->save();
+        try {
+            $metal->status = !$metal->status;
+            $metal->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+            return response()->json(['success' => true, 'message' => 'Status updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

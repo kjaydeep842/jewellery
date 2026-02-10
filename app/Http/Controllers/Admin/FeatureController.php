@@ -14,8 +14,12 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        $features = Feature::latest()->get();
-        return view('admin.features.index', compact('features'));
+        try {
+            $features = Feature::latest()->get();
+            return view('admin.features.index', compact('features'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load features. ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -39,24 +43,28 @@ class FeatureController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'required|image|mimes:jpg,jpeg,png,webp,svg|max:2048',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp,svg|max:5120',
             'status' => 'nullable|boolean',
         ]);
 
-        $data = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'status' => $request->boolean('status') ? 1 : 0
-        ];
+        try {
+            $data = [
+                'title' => $request->title,
+                'description' => $request->description,
+                'status' => $request->boolean('status') ? 1 : 0
+            ];
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('features', 'public');
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('features', 'public');
+            }
+
+            Feature::create($data);
+
+            return redirect()->route('admin.features.index')
+                ->with('success', 'Feature created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create feature. ' . $e->getMessage()])->withInput();
         }
-
-        Feature::create($data);
-
-        return redirect()->route('admin.features.index')
-            ->with('success', 'Feature created successfully.');
     }
 
     /**
@@ -80,28 +88,32 @@ class FeatureController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:5120',
             'status' => 'nullable|boolean',
         ]);
 
-        $data = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'status' => $request->boolean('status') ? 1 : 0
-        ];
+        try {
+            $data = [
+                'title' => $request->title,
+                'description' => $request->description,
+                'status' => $request->boolean('status') ? 1 : 0
+            ];
 
-        if ($request->hasFile('image')) {
-            // Delete old image
-            if ($feature->image) {
-                Storage::disk('public')->delete($feature->image);
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($feature->image && Storage::disk('public')->exists($feature->image)) {
+                    Storage::disk('public')->delete($feature->image);
+                }
+                $data['image'] = $request->file('image')->store('features', 'public');
             }
-            $data['image'] = $request->file('image')->store('features', 'public');
+
+            $feature->update($data);
+
+            return redirect()->route('admin.features.index')
+                ->with('success', 'Feature updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update feature. ' . $e->getMessage()])->withInput();
         }
-
-        $feature->update($data);
-
-        return redirect()->route('admin.features.index')
-            ->with('success', 'Feature updated successfully.');
     }
 
     /**
@@ -109,14 +121,18 @@ class FeatureController extends Controller
      */
     public function destroy(Feature $feature)
     {
-        if ($feature->image) {
-            Storage::disk('public')->delete($feature->image);
+        try {
+            if ($feature->image) {
+                Storage::disk('public')->delete($feature->image);
+            }
+
+            $feature->delete();
+
+            return redirect()->route('admin.features.index')
+                ->with('success', 'Feature deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete feature. ' . $e->getMessage()]);
         }
-
-        $feature->delete();
-
-        return redirect()->route('admin.features.index')
-            ->with('success', 'Feature deleted successfully.');
     }
 
     /**
@@ -124,12 +140,16 @@ class FeatureController extends Controller
      */
     public function toggleStatus(Feature $feature)
     {
-        $feature->status = !$feature->status;
-        $feature->save();
+        try {
+            $feature->status = !$feature->status;
+            $feature->save();
 
-        return response()->json([
-            'status' => $feature->status,
-            'message' => 'Status updated successfully.'
-        ]);
+            return response()->json([
+                'status' => $feature->status,
+                'message' => 'Status updated successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status'], 500);
+        }
     }
 }

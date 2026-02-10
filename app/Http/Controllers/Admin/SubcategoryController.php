@@ -27,13 +27,20 @@ class SubcategoryController extends Controller
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name'        => 'required|string|max:255',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        Subcategory::create([
+        $data = [
             'category_id' => $request->category_id,
             'name'        => $request->name,
             'slug'        => Str::slug($request->name),
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('subcategories', 'public');
+        }
+
+        Subcategory::create($data);
 
         return redirect()->route('admin.subcategories.index')
             ->with('success', 'Subcategory created successfully.');
@@ -50,13 +57,20 @@ class SubcategoryController extends Controller
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name'        => 'required|string|max:255',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        $subcategory->update([
+        $data = [
             'category_id' => $request->category_id,
             'name'        => $request->name,
             'slug'        => Str::slug($request->name),
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('subcategories', 'public');
+        }
+
+        $subcategory->update($data);
 
         return redirect()->route('admin.subcategories.index')
             ->with('success', 'Subcategory updated successfully.');

@@ -53,4 +53,43 @@ class HomeController extends Controller
 
         return response()->json(['html' => $html]);
     }
+
+    public function faqs()
+    {
+        $faqs = \App\Models\Faq::where('status', true)->get();
+        return view('faqs', compact('faqs'));
+    }
+
+    public function returnExchange()
+    {
+        $returns = \App\Models\ReturnExchange::where('status', true)->get();
+        return view('return_exchange', compact('returns'));
+    }
+
+    public function showContactForm()
+    {
+        return view('contact');
+    }
+
+    public function submitContactForm(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone_number' => 'required|string|max:20',
+            'message' => 'required|string',
+        ]);
+
+        \App\Models\Contact::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone_code' => $request->phone_code ?? '+91',
+            'phone_number' => $request->phone_number,
+            'message' => $request->message,
+        ]);
+
+        return redirect()->back()->with('success', 'Thank you for contacting us! We will get back to you soon.');
+    }
 }

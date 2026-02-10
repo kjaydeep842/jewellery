@@ -25,16 +25,23 @@ class CategoryController extends Controller
         $request->validate([
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        Category::create([
+        $data = [
             'name'        => $request->name,
             'slug'        => Str::slug($request->name),
             'description' => $request->description,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('categories', 'public');
+        }
+
+        Category::create($data);
 
         return redirect()->route('admin.categories.index')
-                         ->with('success', 'Category created successfully.');
+            ->with('success', 'Category created successfully.');
     }
 
     public function edit(Category $category)
@@ -47,16 +54,23 @@ class CategoryController extends Controller
         $request->validate([
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        $category->update([
+        $data = [
             'name'        => $request->name,
             'slug'        => Str::slug($request->name),
             'description' => $request->description,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('categories', 'public');
+        }
+
+        $category->update($data);
 
         return redirect()->route('admin.categories.index')
-                         ->with('success', 'Category updated successfully.');
+            ->with('success', 'Category updated successfully.');
     }
 
     public function destroy(Category $category)
@@ -64,6 +78,6 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('admin.categories.index')
-                         ->with('success', 'Category deleted successfully.');
+            ->with('success', 'Category deleted successfully.');
     }
 }

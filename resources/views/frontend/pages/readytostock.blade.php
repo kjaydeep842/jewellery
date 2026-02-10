@@ -1,12 +1,12 @@
 @extends('frontend.layouts.master')
 
 @section('content')
-<!-- Best Seller Banner -->
+<!-- Ready to Stock Banner -->
 <section class="w-full bg-[#EFE4D6] py-8 md:py-10">
     <div class="max-w-[1440px] mx-auto px-6 lg:px-12 text-center">
-        <h1 class="text-3xl md:text-5xl font-['Outfit'] font-medium text-[#5C4522] mb-4">Best Seller</h1>
+        <h1 class="text-3xl md:text-5xl font-['Outfit'] font-medium text-[#5C4522] mb-4">Ready to Stock</h1>
         <p class="max-w-2xl mx-auto text-sm md:text-base text-gray-700 font-['Inter'] leading-relaxed">
-            Discover our most loved and sought-after pieces, curated based on popularity and timeless appeal.
+            Discover our collection of ready-to-ship jewellery, crafted with precision and available for immediate delivery.
         </p>
     </div>
 </section>
@@ -18,7 +18,7 @@
     <div class="w-full flex flex-col gap-1 self-start">
         <div class="text-sm text-gray-500">
             <a href="{{ route('home') }}" class="hover:text-amber-600 cursor-pointer">Home</a> / <span
-                class="text-gray-800 font-medium">Best Seller</span>
+                class="text-gray-800 font-medium">Ready to Stock</span>
         </div>
         <div class="text-sm text-gray-500 mt-2">
             Showing : {{ $products->total() }} Products
@@ -29,7 +29,7 @@
     <div class="w-full flex flex-col lg:flex-row gap-8 mt-4">
 
         <aside class="w-full lg:w-[280px] flex-shrink-0 space-y-6">
-            <form id="filterForm" action="{{ route('page.best-seller') }}" method="GET">
+            <form id="filterForm" action="{{ route('page.readytostock') }}" method="GET">
                 <!-- Preserve Sort -->
                 @if(request('sort'))
                     <input type="hidden" name="sort" value="{{ request('sort') }}">
@@ -40,7 +40,7 @@
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-sliders text-gray-600"></i> Filters
                     </div>
-                    <a href="{{ route('page.best-seller') }}" class="text-xs text-amber-600 hover:underline">Clear All</a>
+                    <a href="{{ route('page.readytostock') }}" class="text-xs text-amber-600 hover:underline">Clear All</a>
                 </div>
 
                 <!-- Filter Item: Category -->
@@ -169,7 +169,7 @@
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Price Range</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180"></i>
                     </div>
                     <div class="mt-4 space-y-3 filter-content">
                         @php
@@ -241,7 +241,7 @@
 
             <!-- Grid Container -->
             <div id="products-container">
-                @include('frontend.pages.partials.best-seller-grid')
+                @include('frontend.pages.partials.readytostock-grid')
             </div>
         </div>
 
@@ -295,6 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
     // Sort Selection
     document.querySelectorAll('.sort-item').forEach(item => {
         item.addEventListener('click', function(e) {
@@ -316,7 +317,6 @@ document.addEventListener('DOMContentLoaded', function() {
             updateProducts();
         });
     });
-
 
     // Checkbox Changes
     filterForm.addEventListener('change', function(e) {

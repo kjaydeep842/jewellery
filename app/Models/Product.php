@@ -62,6 +62,7 @@ class Product extends Model
         'price_subtotal',
         'price_grand_total',
         'selling_price',
+        'views',
     ];
 
     public function category()
@@ -125,7 +126,7 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
-    
+
     // Scopes
     public function scopeActive($query)
     {
@@ -135,5 +136,9 @@ class Product extends Model
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
+    }
+    public function getSellingPriceAttribute($value)
+    {
+        return $value ?: ($this->discount_price ?: $this->price);
     }
 }

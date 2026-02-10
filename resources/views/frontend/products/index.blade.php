@@ -1,12 +1,12 @@
 @extends('frontend.layouts.master')
 
 @section('content')
-<!-- Best Seller Banner -->
+<!-- Discover Collection Banner -->
 <section class="w-full bg-[#EFE4D6] py-8 md:py-10">
-    <div class="max-w-[1440px] mx-auto px-6 lg:px-12 text-center">
-        <h1 class="text-3xl md:text-5xl font-['Outfit'] font-medium text-[#5C4522] mb-4">Best Seller</h1>
+    <div class="max-w-[1920px] mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-5xl font-['Outfit'] font-medium text-[#5C4522] mb-4">Discover our Collection</h1>
         <p class="max-w-2xl mx-auto text-sm md:text-base text-gray-700 font-['Inter'] leading-relaxed">
-            Discover our most loved and sought-after pieces, curated based on popularity and timeless appeal.
+            Find a new reason to shine with our Solitaires. Explore our wide range of jewelry collections designed to make every moment special.
         </p>
     </div>
 </section>
@@ -18,7 +18,7 @@
     <div class="w-full flex flex-col gap-1 self-start">
         <div class="text-sm text-gray-500">
             <a href="{{ route('home') }}" class="hover:text-amber-600 cursor-pointer">Home</a> / <span
-                class="text-gray-800 font-medium">Best Seller</span>
+                class="text-gray-800 font-medium">Discover our Collection</span>
         </div>
         <div class="text-sm text-gray-500 mt-2">
             Showing : {{ $products->total() }} Products
@@ -29,7 +29,11 @@
     <div class="w-full flex flex-col lg:flex-row gap-8 mt-4">
 
         <aside class="w-full lg:w-[280px] flex-shrink-0 space-y-6">
-            <form id="filterForm" action="{{ route('page.best-seller') }}" method="GET">
+            <form id="filterForm" action="{{ route('products.index') }}" method="GET">
+                <!-- Preserve Search -->
+                @if(request('search'))
+                    <input type="hidden" name="search" value="{{ request('search') }}">
+                @endif
                 <!-- Preserve Sort -->
                 @if(request('sort'))
                     <input type="hidden" name="sort" value="{{ request('sort') }}">
@@ -40,11 +44,11 @@
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-sliders text-gray-600"></i> Filters
                     </div>
-                    <a href="{{ route('page.best-seller') }}" class="text-xs text-amber-600 hover:underline">Clear All</a>
+                    <a href="{{ route('products.index') }}" class="text-xs text-amber-600 hover:underline">Clear All</a>
                 </div>
 
                 <!-- Filter Item: Category -->
-                @if(count($categories) > 0)
+                @if($categories->count() > 0)
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Category</span>
@@ -52,19 +56,19 @@
                     </div>
                     <div class="mt-4 space-y-3 filter-content">
                         @foreach($categories as $category)
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" name="category[]" value="{{ $category }}"
-                                    {{ in_array($category, request('category', [])) ? 'checked' : '' }}
-                                    class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $category }}</span>
-                            </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="category[]" value="{{ $category }}"
+                                {{ is_array(request('category')) && in_array($category, request('category')) ? 'checked' : '' }}
+                                class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $category }}</span>
+                        </label>
                         @endforeach
                     </div>
                 </div>
                 @endif
 
-                <!-- Gender -->
-                @if(count($genders) > 0)
+                <!-- Filter Item: Gender -->
+                @if($genders->count() > 0)
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Gender</span>
@@ -72,19 +76,19 @@
                     </div>
                     <div class="mt-4 space-y-3 filter-content">
                         @foreach($genders as $gender)
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" name="gender[]" value="{{ $gender }}"
-                                    {{ in_array($gender, request('gender', [])) ? 'checked' : '' }}
-                                    class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ ucfirst($gender) }}</span>
-                            </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="gender[]" value="{{ $gender }}"
+                                {{ is_array(request('gender')) && in_array($gender, request('gender')) ? 'checked' : '' }}
+                                class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $gender }}</span>
+                        </label>
                         @endforeach
                     </div>
                 </div>
                 @endif
 
-                <!-- Metal Color -->
-                @if(count($metalColors) > 0)
+                <!-- Filter Item: Metal Color -->
+                @if($metalColors->count() > 0)
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Metal Color</span>
@@ -92,19 +96,19 @@
                     </div>
                     <div class="mt-4 space-y-3 filter-content">
                         @foreach($metalColors as $color)
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" name="metal_color[]" value="{{ $color }}"
-                                    {{ in_array($color, request('metal_color', [])) ? 'checked' : '' }}
-                                    class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $color }}</span>
-                            </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="metal_color[]" value="{{ $color }}"
+                                {{ is_array(request('metal_color')) && in_array($color, request('metal_color')) ? 'checked' : '' }}
+                                class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $color }}</span>
+                        </label>
                         @endforeach
                     </div>
                 </div>
                 @endif
 
-                <!-- Metal Purity -->
-                @if(count($metalPurities) > 0)
+                <!-- Filter Item: Metal Purity -->
+                @if($metalPurities->count() > 0)
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Metal Purity</span>
@@ -112,18 +116,18 @@
                     </div>
                     <div class="mt-4 space-y-3 filter-content">
                         @foreach($metalPurities as $purity)
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" name="metal_purity[]" value="{{ $purity }}"
-                                    {{ in_array($purity, request('metal_purity', [])) ? 'checked' : '' }}
-                                    class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $purity }}</span>
-                            </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="metal_purity[]" value="{{ $purity }}"
+                                {{ is_array(request('metal_purity')) && in_array($purity, request('metal_purity')) ? 'checked' : '' }}
+                                class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $purity }}</span>
+                        </label>
                         @endforeach
                     </div>
                 </div>
                 @endif
 
-                <!-- Size -->
+                <!-- Filter Item: Size -->
                 @if(count($sizes) > 0)
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
@@ -135,7 +139,7 @@
                             @foreach($sizes as $size)
                                 <label class="relative flex items-center justify-center">
                                     <input type="checkbox" name="size[]" value="{{ $size }}"
-                                        {{ in_array($size, request('size', [])) ? 'checked' : '' }}
+                                        {{ is_array(request('size')) && in_array($size, request('size')) ? 'checked' : '' }}
                                         class="filter-checkbox sr-only peer">
                                     <span class="w-full text-center py-2 text-xs border border-gray-200 rounded-md cursor-pointer hover:border-amber-600 peer-checked:bg-amber-600 peer-checked:text-white peer-checked:border-amber-600 transition-all select-none">{{ $size }}</span>
                                 </label>
@@ -145,27 +149,27 @@
                 </div>
                 @endif
 
-                <!-- Weight Range -->
+                <!-- Filter Item: Weight Range -->
                 @if(count($weightRanges) > 0)
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                        <span class="font-medium text-gray-800">Weight Range</span>
+                        <span class="font-medium text-gray-800">Weight Ranges</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
                     </div>
                     <div class="mt-4 space-y-3 filter-content">
                         @foreach($weightRanges as $value => $label)
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" name="weight[]" value="{{ $value }}"
-                                    {{ in_array($value, request('weight', [])) ? 'checked' : '' }}
-                                    class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $label }}</span>
-                            </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="weight[]" value="{{ $value }}"
+                                {{ is_array(request('weight')) && in_array($value, request('weight')) ? 'checked' : '' }}
+                                class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $label }}</span>
+                        </label>
                         @endforeach
                     </div>
                 </div>
                 @endif
 
-                <!-- Price Range -->
+                <!-- Filter Item: Price Range -->
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Price Range</span>
@@ -183,12 +187,12 @@
                             ];
                         @endphp
                         @foreach($priceRanges as $range)
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" name="price[]" value="{{ $range }}"
-                                    {{ is_array(request('price')) && in_array($range, request('price')) ? 'checked' : '' }}
-                                    class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
-                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $range }}</span>
-                            </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="price[]" value="{{ $range }}"
+                                {{ is_array(request('price')) && in_array($range, request('price')) ? 'checked' : '' }}
+                                class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $range }}</span>
+                        </label>
                         @endforeach
                     </div>
                 </div>
@@ -241,17 +245,12 @@
 
             <!-- Grid Container -->
             <div id="products-container">
-                @include('frontend.pages.partials.best-seller-grid')
+                @include('frontend.products.partials.grid')
             </div>
         </div>
 
     </div>
 </main>
-
-<!-- Know More Section -->
-<div class="flex flex-row justify-center items-center py-[14px] px-[8px] gap-[10px] w-full h-[56px] bg-[#E9D3D6]">
-    <span class="font-['Outfit'] text-[16px] text-[#0D0D0E] font-medium">Know More About Tattsvi</span>
-</div>
 
 <!-- Loader Overlay -->
 <div id="page-loader" class="fixed inset-0 bg-white/80 z-[9999] flex items-center justify-center hidden backdrop-blur-sm">
@@ -276,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(filterForm);
         const params = new URLSearchParams(formData);
 
-        fetch(`${filterForm.action}?${params.toString()}`, {
+        fetch(`{{ route('products.index') }}?${params.toString()}`, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
@@ -292,7 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (loader) loader.classList.add('hidden');
         });
     }
-
 
 
     // Sort Selection

@@ -24,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\View::share('settings', $settings);
         }
 
-        \Illuminate\Support\Facades\View::composer(['components.layouts.frontend', 'partials.header'], function ($view) {
+        \Illuminate\Support\Facades\View::composer(['components.layouts.frontend', 'frontend.partials.header'], function ($view) {
+
             $cartCount = 0;
             $wishlistCount = 0;
 

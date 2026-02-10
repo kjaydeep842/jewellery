@@ -8,6 +8,12 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\NewArrivalsController;
+use App\Http\Controllers\Frontend\BestSellerController;
+use App\Http\Controllers\Frontend\EighteenKTController;
+use App\Http\Controllers\Frontend\TattsvisFavouriteController;
+use App\Http\Controllers\Frontend\ReadyToStockController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +30,8 @@ Route::get('/contact', [HomeController::class, 'showContactForm'])->name('contac
 Route::post('/contact', [HomeController::class, 'submitContactForm'])->name('contact.submit');
 
 // Static Pages
-use App\Http\Controllers\Frontend\PageController;
-Route::get('/best-seller', [PageController::class, 'bestSeller'])->name('page.best-seller');
-Route::get('/ready-to-stock', [PageController::class, 'readyToStock'])->name('page.ready-to-stock');
+Route::get('/best-seller', [BestSellerController::class, 'index'])->name('page.best-seller');
+Route::get('/readytostock', [ReadyToStockController::class, 'index'])->name('page.readytostock');
 Route::get('/buy-it-again', [PageController::class, 'buyItAgain'])->name('page.buy-it-again');
 Route::get('/contact-us', [PageController::class, 'contact'])->name('page.contact');
 Route::get('/exhibition', [PageController::class, 'exhibition'])->name('page.exhibition');
@@ -34,6 +39,9 @@ Route::get('/about-us', [PageController::class, 'about'])->name('page.about');
 Route::get('/faq', [PageController::class, 'faq'])->name('page.faq');
 Route::get('/return-exchange', [PageController::class, 'returnExchange'])->name('page.return-exchange');
 Route::get('/blog', [PageController::class, 'blog'])->name('page.blog');
+Route::get('/new-arrivals', [NewArrivalsController::class, 'index'])->name('page.new-arrivals');
+Route::get('/18kt', [EighteenKTController::class, 'index'])->name('page.18kt');
+Route::get('/tattsvisfavourite', [TattsvisFavouriteController::class, 'index'])->name('page.tattsvisfavourite');
 
 // Product Details
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.details');
@@ -90,11 +98,13 @@ require __DIR__ . '/auth.php';
 // Authenticated User Dashboard
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('frontend.dashboard');
+
     })->name('dashboard');
 
     Route::get('/orders', function () {
-        return view('orders.index');
+        return view('frontend.orders.index');
+
     })->name('orders.index');
 
     // Wishlist

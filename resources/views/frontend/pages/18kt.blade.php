@@ -1,12 +1,12 @@
 @extends('frontend.layouts.master')
 
 @section('content')
-<!-- Best Seller Banner -->
+<!-- 18KT Jewellery Banner -->
 <section class="w-full bg-[#EFE4D6] py-8 md:py-10">
     <div class="max-w-[1440px] mx-auto px-6 lg:px-12 text-center">
-        <h1 class="text-3xl md:text-5xl font-['Outfit'] font-medium text-[#5C4522] mb-4">Best Seller</h1>
+        <h1 class="text-3xl md:text-5xl font-['Outfit'] font-medium text-[#5C4522] mb-4">18KT Jewellery</h1>
         <p class="max-w-2xl mx-auto text-sm md:text-base text-gray-700 font-['Inter'] leading-relaxed">
-            Discover our most loved and sought-after pieces, curated based on popularity and timeless appeal.
+            Experience the warmth and richness of 18KT gold, meticulously crafted into timeless designs.
         </p>
     </div>
 </section>
@@ -18,7 +18,7 @@
     <div class="w-full flex flex-col gap-1 self-start">
         <div class="text-sm text-gray-500">
             <a href="{{ route('home') }}" class="hover:text-amber-600 cursor-pointer">Home</a> / <span
-                class="text-gray-800 font-medium">Best Seller</span>
+                class="text-gray-800 font-medium">18KT Jewellery</span>
         </div>
         <div class="text-sm text-gray-500 mt-2">
             Showing : {{ $products->total() }} Products
@@ -29,7 +29,7 @@
     <div class="w-full flex flex-col lg:flex-row gap-8 mt-4">
 
         <aside class="w-full lg:w-[280px] flex-shrink-0 space-y-6">
-            <form id="filterForm" action="{{ route('page.best-seller') }}" method="GET">
+            <form id="filterForm" action="{{ route('page.18kt') }}" method="GET">
                 <!-- Preserve Sort -->
                 @if(request('sort'))
                     <input type="hidden" name="sort" value="{{ request('sort') }}">
@@ -40,7 +40,7 @@
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-sliders text-gray-600"></i> Filters
                     </div>
-                    <a href="{{ route('page.best-seller') }}" class="text-xs text-amber-600 hover:underline">Clear All</a>
+                    <a href="{{ route('page.18kt') }}" class="text-xs text-amber-600 hover:underline">Clear All</a>
                 </div>
 
                 <!-- Filter Item: Category -->
@@ -241,7 +241,7 @@
 
             <!-- Grid Container -->
             <div id="products-container">
-                @include('frontend.pages.partials.best-seller-grid')
+                @include('frontend.pages.partials.18kt-grid')
             </div>
         </div>
 
@@ -316,7 +316,6 @@ document.addEventListener('DOMContentLoaded', function() {
             updateProducts();
         });
     });
-
 
     // Checkbox Changes
     filterForm.addEventListener('change', function(e) {

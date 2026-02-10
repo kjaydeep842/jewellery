@@ -10,7 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="{{ asset('js/payment_bag.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
     <style>
         body {
             font-family: 'Outfit', sans-serif;
@@ -191,10 +191,27 @@
 
     @yield('content')
 
-    @include('partials.footer')
+    @include('frontend.partials.footer')
 
     <!-- Mobile Menu Sidebar -->
-    @include('frontend.checkout.partials.mobile-menu')
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity opacity-0"></div>
+    <div id="mobile-menu-sidebar"
+        class="fixed top-0 left-0 w-[85%] max-w-[320px] h-full bg-white z-[70] transform -translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
+        <!-- Header -->
+        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-cream">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <img src="{{ asset('assets/logo.png') }}" alt="logo">
+                </div>
+                <span class="serif text-xl tracking-tighter">TATTSVI</span>
+            </div>
+            <button id="close-menu-btn"
+                class="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500 hover:text-red-500 shadow-sm transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        @include('frontend.checkout.partials.mobile-menu')
+    </div>
 
 </body>
 

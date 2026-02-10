@@ -35,7 +35,8 @@ class HomeController extends Controller
         // Fetch active shapes
         $shapes = Shape::where('status', 1)->get();
 
-        return view('home', compact('categories', 'products', 'banners', 'middleBanners', 'shapes'));
+        return view('frontend.home', compact('categories', 'products', 'banners', 'middleBanners', 'shapes'));
+
     }
 
     public function filterProducts(Request $request)
@@ -56,7 +57,8 @@ class HomeController extends Controller
 
         \Illuminate\Support\Facades\Log::info("Found " . $products->count() . " products.");
 
-        $html = view('partials.home_products', compact('products'))->render();
+        $html = view('frontend.partials.home_products', compact('products'))->render();
+
 
         return response()->json(['html' => $html]);
     }
@@ -64,18 +66,21 @@ class HomeController extends Controller
     public function faqs()
     {
         $faqs = \App\Models\Faq::where('status', true)->get();
-        return view('faqs', compact('faqs'));
+        return view('frontend.faqs', compact('faqs'));
+
     }
 
     public function returnExchange()
     {
         $returns = \App\Models\ReturnExchange::where('status', true)->get();
-        return view('return_exchange', compact('returns'));
+        return view('frontend.return_exchange', compact('returns'));
+
     }
 
     public function showContactForm()
     {
-        return view('contact');
+        return view('frontend.contact');
+
     }
 
     public function submitContactForm(Request $request)

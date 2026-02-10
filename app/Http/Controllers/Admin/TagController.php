@@ -22,6 +22,8 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge(['status' => $request->has('status') ? 'active' : 'inactive']);
+
         $request->validate([
             'name' => 'required|string|max:255|unique:tags,name',
             'status' => 'required|in:active,inactive'
@@ -34,7 +36,7 @@ class TagController extends Controller
         ]);
 
         return redirect()->route('admin.tags.index')
-                         ->with('success', 'Tag created successfully.');
+            ->with('success', 'Tag created successfully.');
     }
 
     public function edit(Tag $tag)
@@ -44,6 +46,8 @@ class TagController extends Controller
 
     public function update(Request $request, Tag $tag)
     {
+        $request->merge(['status' => $request->has('status') ? 'active' : 'inactive']);
+
         $request->validate([
             'name' => 'required|string|max:255|unique:tags,name,' . $tag->id,
             'status' => 'required|in:active,inactive'
@@ -56,7 +60,7 @@ class TagController extends Controller
         ]);
 
         return redirect()->route('admin.tags.index')
-                         ->with('success', 'Tag updated successfully.');
+            ->with('success', 'Tag updated successfully.');
     }
 
     public function destroy(Tag $tag)
@@ -64,6 +68,6 @@ class TagController extends Controller
         $tag->delete();
 
         return redirect()->route('admin.tags.index')
-                         ->with('success', 'Tag deleted successfully.');
+            ->with('success', 'Tag deleted successfully.');
     }
 }

@@ -18,6 +18,10 @@ use App\Http\Controllers\ProfileController;
 // Home & Static Pages
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/filter-products', [HomeController::class, 'filterProducts'])->name('home.filter');
+Route::get('/faqs', [HomeController::class, 'faqs'])->name('faqs');
+Route::get('/return-exchange', [HomeController::class, 'returnExchange'])->name('return_exchange');
+Route::get('/contact', [HomeController::class, 'showContactForm'])->name('contact.show');
+Route::post('/contact', [HomeController::class, 'submitContactForm'])->name('contact.submit');
 
 // Static Pages
 use App\Http\Controllers\Frontend\PageController;

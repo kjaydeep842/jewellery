@@ -42,6 +42,10 @@
             class="px-8 py-3 btn-gold rounded-lg font-bold text-lg tracking-wide transform hover:-translate-y-1 transition-all shadow-lg">
             Save Style
         </button>
+        <a href="{{ route('admin.styles.index') }}"
+            class="px-8 py-3 ml-4 bg-zinc-200 text-zinc-700 rounded-lg font-bold text-lg tracking-wide transform hover:-translate-y-1 transition-all shadow-lg hover:bg-zinc-300">
+            Cancel
+        </a>
 
     </form>
 </div>

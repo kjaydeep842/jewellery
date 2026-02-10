@@ -13,6 +13,14 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ShapeController;
 use App\Http\Controllers\Admin\SettingController;
 
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\ReturnExchangeController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\OurStoryController;
+use App\Http\Controllers\Admin\StyleController;
+use App\Http\Controllers\Admin\FeatureController;
+
 /*
 |--------------------------------------------------------------------------
 | ADMIN AUTH ROUTES
@@ -55,13 +63,36 @@ Route::middleware(['auth', 'admin'])
         Route::resource('orders', AdminOrderController::class);
         Route::resource('users', AdminUserController::class);
         Route::resource('banners', BannerController::class);
-        Route::resource('styles', \App\Http\Controllers\Admin\StyleController::class);
+        Route::resource('styles', StyleController::class);
         Route::resource('shapes', ShapeController::class);
+        Route::resource('features', FeatureController::class);
+        Route::resource('diamond_qualities', \App\Http\Controllers\Admin\DiamondQualityController::class);
+        Route::resource('metal_colors', \App\Http\Controllers\Admin\MetalColorController::class);
+        Route::resource('sizes', \App\Http\Controllers\Admin\SizeController::class);
+        Route::resource('metals', \App\Http\Controllers\Admin\MetalController::class);
+
+        // Customer Service
+        Route::resource('faqs', FaqController::class);
+        Route::resource('returns', ReturnExchangeController::class);
+        Route::resource('contacts', ContactController::class);
+
+        // About Us
+        Route::resource('our_stories', OurStoryController::class);
+        Route::resource('blogs', BlogController::class);
 
         // AJAX / Custom Operations
         Route::get('categories/{category}/subcategories', [SubcategoryController::class, 'byCategory'])->name('categories.subcategories');
         Route::patch('banners/{banner}/toggle', [BannerController::class, 'toggleStatus'])->name('banners.toggle');
         Route::patch('styles/{style}/toggle', [\App\Http\Controllers\Admin\StyleController::class, 'toggleStatus'])->name('styles.toggle');
+        Route::patch('features/{feature}/toggle', [\App\Http\Controllers\Admin\FeatureController::class, 'toggleStatus'])->name('features.toggle');
+        Route::patch('our_stories/{our_story}/toggle', [\App\Http\Controllers\Admin\OurStoryController::class, 'toggleStatus'])->name('our_stories.toggle');
+        Route::patch('faqs/{faq}/toggle', [FaqController::class, 'toggleStatus'])->name('faqs.toggle');
+        Route::patch('returns/{return}/toggle', [ReturnExchangeController::class, 'toggleStatus'])->name('returns.toggle');
+
+        Route::patch('diamond_qualities/{diamond_quality}/toggle', [\App\Http\Controllers\Admin\DiamondQualityController::class, 'toggleStatus'])->name('diamond_qualities.toggle');
+        Route::patch('metal_colors/{metal_color}/toggle', [\App\Http\Controllers\Admin\MetalColorController::class, 'toggleStatus'])->name('metal_colors.toggle');
+        Route::patch('sizes/{size}/toggle', [\App\Http\Controllers\Admin\SizeController::class, 'toggleStatus'])->name('sizes.toggle');
+        Route::patch('metals/{metal}/toggle', [\App\Http\Controllers\Admin\MetalController::class, 'toggleStatus'])->name('metals.toggle');
 
         // Settings
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');

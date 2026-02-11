@@ -22,14 +22,27 @@ class ProductController extends Controller
         $query = Product::with(['category', 'images', 'variants', 'metalColor'])
             ->where('status', 'active');
 
-        // Search logic
+        // Search logic - Check if search term matches a category first
         if ($request->has('search') && $request->input('search')) {
             $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('tags', 'like', "%{$search}%");
-            });
+
+            // Check if search term matches a category name (case-insensitive)
+            $matchingCategory = Category::whereRaw('LOWER(name) = ?', [strtolower($search)])->first();
+
+            if ($matchingCategory) {
+                // If search matches a category, convert to category filter
+                // This ensures the category filter UI shows correctly
+                // Use the actual category name from database (proper case)
+                $request->merge(['category' => [$matchingCategory->name]]);
+                // Remove search parameter to avoid confusion
+                $request->request->remove('search');
+            } else {
+                // Otherwise, do regular text search
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            }
         }
 
         // Filter by Category

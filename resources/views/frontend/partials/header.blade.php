@@ -51,16 +51,16 @@
 
                         <!-- Trending Chips -->
                         <div class="px-4 pb-4 flex flex-wrap gap-4 flex-shrink-0">
-                            <button
-                                class="flex flex-row justify-center items-center p-[12px_20px_12px_12px] gap-[4px] w-[91px] h-[44px] bg-[#F2F2F3] rounded-[12px] hover:bg-[#E5E5E5] transition-colors group">
+                            <button data-search="Gold"
+                                class="search-trending-btn flex flex-row justify-center items-center p-[12px_20px_12px_12px] gap-[4px] w-[91px] h-[44px] bg-[#F2F2F3] rounded-[12px] hover:bg-[#E5E5E5] transition-colors group">
                                 <div class="w-[11.25px] h-[6.25px] flex items-center justify-center">
                                     <i class="fa-solid fa-arrow-trend-up text-[10px] text-[#B39359]"></i>
                                 </div>
                                 <span
                                     class="text-[#1A1A1A] font-['Outfit'] text-[15px] font-medium whitespace-nowrap">Gold</span>
                             </button>
-                            <button
-                                class="flex flex-row justify-center items-center p-[12px_20px_12px_12px] gap-[4px] h-[44px] bg-[#F2F2F3] rounded-[12px] hover:bg-[#E5E5E5] transition-colors group">
+                            <button data-search="Rose Gold"
+                                class="search-trending-btn flex flex-row justify-center items-center p-[12px_20px_12px_12px] gap-[4px] h-[44px] bg-[#F2F2F3] rounded-[12px] hover:bg-[#E5E5E5] transition-colors group">
                                 <div class="w-[11.25px] h-[6.25px] flex items-center justify-center">
                                     <i class="fa-solid fa-arrow-trend-up text-[10px] text-[#B39359]"></i>
                                 </div>
@@ -68,8 +68,8 @@
                                     class="text-[#1A1A1A] font-['Outfit'] text-[15px] font-medium whitespace-nowrap">Rose
                                     Gold</span>
                             </button>
-                            <button
-                                class="flex flex-row justify-center items-center p-[12px_20px_12px_12px] gap-[4px] h-[44px] bg-[#F2F2F3] rounded-[12px] hover:bg-[#E5E5E5] transition-colors group">
+                            <button data-search="Silver"
+                                class="search-trending-btn flex flex-row justify-center items-center p-[12px_20px_12px_12px] gap-[4px] h-[44px] bg-[#F2F2F3] rounded-[12px] hover:bg-[#E5E5E5] transition-colors group">
                                 <div class="w-[11.25px] h-[6.25px] flex items-center justify-center">
                                     <i class="fa-solid fa-arrow-trend-up text-[10px] text-[#B39359]"></i>
                                 </div>
@@ -87,8 +87,8 @@
                         <div
                             class="flex flex-row flex-wrap items-center content-start p-[14px_16px] gap-[12px] w-[600px] min-h-[152px] box-border flex-shrink-0">
                             <!-- Item 1 -->
-                            <button
-                                class="flex items-center gap-2.5  border border-[#E6E6E6]  hover:border-[#D4AF37] rounded-2xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
+                            <button data-search="Mangalsutra"
+                                class="search-top-btn flex items-center gap-2.5  border border-[#E6E6E6]  hover:border-[#D4AF37] rounded-2xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                 <div
                                     class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
                                     <img src="{{ asset('assets/ring.png') }}" alt="Ring"
@@ -99,8 +99,8 @@
                             </button>
 
                             <!-- Item 2 -->
-                            <button
-                                class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
+                            <button data-search="Rings"
+                                class="search-top-btn flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                 <div
                                     class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
                                     <img src="{{ asset('assets/ring.png') }}" alt="Ring"
@@ -184,32 +184,56 @@
 
                 </div>
             </div>
+
+            <!-- Hidden Search Form for POST submission -->
+            <form id="searchForm" action="{{ route('products.index.post') }}" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="search" id="searchFormInput" value="">
+            </form>
         </div>
 
         <div class="flex items-center space-x-5 min-[2000px]:space-x-8 text-gray-600 order-2 lg:order-3">
+            @auth
+                <div class="relative inline-block text-left" id="user-menu-container">
+                    <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
+                        <img src="{{ asset('assets/ic_User.png') }}" alt="user"
+                            class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
+                    </button>
 
-            <div class="relative inline-block text-left" id="user-menu-container">
-                <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
-                    <img src="{{ asset('assets/ic_User.png') }}" alt="user"
-                        class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
-                </button>
-
-                <!-- Dropdown menu -->
-                <div id="user-dropdown-menu"
-                    class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
-                    <div class="py-1">
-                        <a href="{{ route('profile.edit') }}"
-                            class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">Edit
-                            Profile</a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <a href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); this.closest('form').submit();"
-                                class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">Logout</a>
-                        </form>
+                    <!-- Dropdown menu for authenticated users -->
+                    <div id="user-dropdown-menu"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
+                        <div class="py-1">
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <p class="text-sm font-['Outfit'] font-semibold text-[#1A1A1A]">{{ Auth::user()->name }}</p>
+                                @if(Auth::user()->phone)
+                                    <p class="text-xs font-['Outfit'] text-gray-500">{{ Auth::user()->phone }}</p>
+                                @endif
+                            </div>
+                          
+                            <a href="{{ route('profile.edit') }}"
+                                class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">
+                                Profile
+                            </a>
+                       
+                            <form method="POST" action="{{ route('frontend.auth.logout') }}">
+                                @csrf
+                                <a href="{{ route('frontend.auth.logout') }}"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                                    class="block px-4 py-3 text-sm text-red-600 hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium border-t border-gray-100">
+                                    Logout
+                                </a>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <a href="{{ route('frontend.auth.mobile') }}" class="hover:text-gold flex items-center">
+                    <img src="{{ asset('assets/ic_User.png') }}" alt="user"
+                        class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
+                </a>
+            @endauth
+
             <a href="{{ route('wishlist.index') }}" class="relative hover:text-gold">
                 <img src="{{ asset('assets/ic_wishlist.png') }}" alt="wishlist"
                     class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">

@@ -44,11 +44,7 @@
                         </button>
                     </div>
 
-                    <!-- Side Actions Tags -->
-                    <div
-                        class="absolute bottom-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm cursor-pointer lg:group-hover:opacity-0 transition-opacity">
-                        <img src="{{ asset('assets/ic_wishlist1.png') }}" alt="wishlist" class="w-4 h-4 object-contain">
-                    </div>
+
                     <div
                         class="absolute bottom-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm cursor-pointer lg:group-hover:opacity-0 transition-opacity">
                         <img src="{{ asset('assets/maximize.png') }}" alt="expand" class="w-4 h-4 object-contain">
@@ -63,9 +59,19 @@
                         <a href="{{ route('product.details', $product->slug) }}"
                             title="{{ $product->name }}">{{ $product->name }}</a>
                     </p>
-                    <div class="mt-auto">
+                    <div class="mt-auto flex justify-between items-center">
                         <p class="text-[16px] font-bold text-[#1A1A1A] font-['Outfit']">
                             ₹{{ number_format($product->selling_price, 2) }}</p>
+                        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm cursor-pointer border border-gray-100 hover:bg-gray-50 wishlist-btn"
+                            data-product-id="{{ $product->id }}">
+                            @if(Auth::check() && Auth::user()->wishlists->contains('product_id', $product->id))
+                                <i class="fa-solid fa-heart text-[#CBA65A] text-lg"></i>
+                                <img src="{{ asset('assets/ic_wishlist1.png') }}" alt="wishlist"
+                                    class="w-4 h-4 object-contain hidden">
+                            @else
+                                <img src="{{ asset('assets/ic_wishlist1.png') }}" alt="wishlist" class="w-4 h-4 object-contain">
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

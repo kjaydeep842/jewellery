@@ -14,6 +14,28 @@ use App\Http\Controllers\Frontend\BestSellerController;
 use App\Http\Controllers\Frontend\EighteenKTController;
 use App\Http\Controllers\Frontend\TattsvisFavouriteController;
 use App\Http\Controllers\Frontend\ReadyToStockController;
+use App\Http\Controllers\Frontend\AuthController;
+
+/*
+|--------------------------------------------------------------------------
+| FRONTEND AUTHENTICATION ROUTES
+|--------------------------------------------------------------------------
+*/
+
+// Frontend OTP Authentication Routes
+Route::prefix('auth')->name('frontend.auth.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/mobile', [AuthController::class, 'showMobileForm'])->name('mobile');
+        Route::post('/send-otp', [AuthController::class, 'sendOtp'])->name('send-otp');
+        Route::get('/verify-otp', [AuthController::class, 'showOtpForm'])->name('verify-otp');
+        Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verify-otp.submit');
+        Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('resend-otp');
+    });
+
+    Route::middleware('auth')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    });
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -44,8 +66,10 @@ Route::get('/18kt', [EighteenKTController::class, 'index'])->name('page.18kt');
 Route::get('/tattsvisfavourite', [TattsvisFavouriteController::class, 'index'])->name('page.tattsvisfavourite');
 
 // Product Details
+Route::post('/products', [ProductController::class, 'index'])->name('products.index.post');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.details');
-Route::resource('products', ProductController::class); // Fallback resource if needed
+Route::resource('products', ProductController::class)->except(['store']); // Exclude store to avoid conflict
+Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
 // AJAX Helpers
 Route::get('/ajax/products/category/{id}', [ProductController::class, 'fetchByCategory'])
@@ -58,8 +82,7 @@ Route::get('/ajax/search-suggestions', [ProductController::class, 'searchSuggest
 | CART & CHECKOUT
 |--------------------------------------------------------------------------
 */
-// Cart
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+// Cart (Publicly accessible actions)
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
@@ -80,9 +103,11 @@ Route::middleware(['auth'])->group(function () {
     // The original `processOrder` route is replaced by the new `process` route above.
     // Route::post('/checkout/process', [CheckoutController::class, 'processOrder'])->name('checkout.process');
 
+    // Cart Index (Protected)
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 });
 
@@ -96,21 +121,18 @@ Route::middleware(['auth'])->group(function () {
 require __DIR__ . '/auth.php';
 
 // Authenticated User Dashboard
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('frontend.dashboard');
+Route::middleware(['auth'])->group(function () {
+    // Route::get('/dashboard', function () {
+    //     return view('frontend.dashboard');
 
-    })->name('dashboard');
+    // })->name('dashboard');
 
     Route::get('/orders', function () {
-        return view('frontend.orders.index');
-
+        $orders = Auth::user()->orders()->latest()->get();
+        return view('frontend.orders.index', compact('orders'));
     })->name('orders.index');
 
-    // Wishlist
-    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
-    Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
 
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

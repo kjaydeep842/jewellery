@@ -169,11 +169,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
-
-
-
-
+    @stack('styles')
 </head>
 
 <body class="bg-[#FDFBF7]  antialiased overflow-x-hidden w-full">
@@ -287,11 +285,27 @@
             <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
                 <span><i class="fa-solid fa-flag-usa mr-2"></i> USA (USD)</span>
             </div>
-            <a href="#"
-                class="block w-full bg-black text-white text-center py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#5C4522] transition-colors">Sign
-                In / Register</a>
+            @auth
+                <div class="space-y-3">
+                    <a href="{{ route('profile.edit') }}"
+                        class="block w-full bg-[#B39359] text-white text-center py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#5C4522] transition-colors">
+                        My Profile</a>
+                    <form method="POST" action="{{ route('frontend.auth.logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="block w-full border border-red-500 text-red-500 text-center py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-red-50 transition-colors">
+                            Logout</button>
+                    </form>
+                </div>
+            @else
+                <a href="{{ route('frontend.auth.mobile') }}"
+                    class="block w-full bg-black text-white text-center py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#5C4522] transition-colors">Sign
+                    In / Register</a>
+            @endauth
         </div>
     </div>
+
+    @stack('scripts')
 </body>
 
 </html>

@@ -1,186 +1,140 @@
-@extends('frontend.checkout.layouts.app', ['activeStep' => 'cart'])
+@extends('frontend.layouts.master')
 
 @section('content')
-    <!-- Main Content -->
-    <main class="max-w-[1920px] mx-auto px-4 lg:px-6 py-8 flex flex-col lg:flex-row gap-8">
+    <main class="w-full flex-grow pt-8 pb-16 min-[2000px]:pt-20 min-[2000px]:pb-32 bg-[#FDFBF7] flex justify-center">
+        <div class="flex flex-col lg:flex-row justify-center items-start p-[20px] md:p-[40px] gap-[20px] max-w-[1920px] w-full self-stretch">
 
-        @if($cartItems->isEmpty())
-            <div class="w-full text-center py-20 bg-white shadow-sm rounded-lg flex flex-col items-center justify-center">
-                <p class="text-gray-500 text-lg mb-6">Your bag is currently empty.</p>
-                <a href="{{ route('home') }}"
-                    class="inline-block bg-[#CBA65A] text-white font-bold uppercase tracking-widest py-3 px-8 hover:bg-[#b08d45] transition-colors rounded">
-                    Continue Shopping
-                </a>
-            </div>
-        @else
+            <!-- Sidebar -->
+            @include('frontend.profile.partials.sidebar')
 
-            <!-- Left Column: Bag Items -->
-            <div class="w-full lg:w-2/3 flex flex-col gap-6">
-
-                <!-- Address Banner -->
-                <div
-                    class="box-border flex flex-row justify-between items-center p-[20px] gap-[20px] w-full lg:w-[910px] h-auto lg:h-[106px] bg-[rgba(219,179,88,0.1)] border border-[#EFE4CD] rounded-[10px] flex-none order-0 self-stretch grow-0">
-                    <div>
-                        <p class="text-gray-500 text-sm">Deliver To : <span class="font-semibold text-gray-900">Guest</span></p>
-                        <p class="text-gray-500 text-xs mt-1">Login to see saved addresses</p>
+            <!-- Main Content -->
+            <div class="flex-grow min-h-[600px] flex flex-col">
+                @if($cartItems->isEmpty())
+                    <!-- Empty State Section -->
+                    <div class="flex-grow flex flex-col items-center justify-center p-[40px] gap-6 rounded-[10px]"
+                        style="background: linear-gradient(90deg, rgba(219, 179, 88, 0.042) 0%, rgba(151, 102, 0, 0.14) 100%);">
+                        <div class="relative">
+                            <img src="{{ asset('assets/IC -pagenot found.png') }}" alt="Empty Bag Icon"
+                                class="object-contain h-[80px] w-auto opacity-80">
+                        </div>
+                        <div class="text-center space-y-2">
+                            <h2 class="text-2xl font-['Outfit'] font-bold text-[#1A1A1A]">Your Bag is Currently Empty</h2>
+                            <p class="text-base text-[#6E6E77] max-w-md mx-auto font-['Outfit']">
+                                Looks like you haven't added anything to your bag yet. Start exploring our collection and find something beautiful today.
+                            </p>
+                        </div>
+                        <a href="{{ route('home') }}"
+                            style="background: linear-gradient(90deg, #D9BE87 0%, #BE933C 100%);"
+                            class="px-10 py-4 rounded-full text-white font-['Outfit'] font-medium text-lg shadow-md hover:opacity-90 transition-all">
+                            Continue Shopping
+                        </a>
                     </div>
-                    <a href="{{ route('checkout.address') }}"
-                        class="text-[#CBA65A] border border-[#CBA65A] px-4 py-1.5 rounded text-sm font-medium hover:bg-[#CBA65A] hover:text-white transition-colors whitespace-nowrap bg-white">
-                        Change Address
-                    </a>
-                </div>
+                @else
+                    <!-- Bag Content -->
+                    <div class="flex flex-col xl:flex-row gap-8 w-full">
+                        <!-- Items List -->
+                        <div class="flex-grow flex flex-col gap-6">
+                            <div class="p-4 md:p-8 bg-white rounded-[10px] shadow-sm">
+                                <h2 class="font-['Outfit'] font-semibold text-[#1A1A1A] text-xl min-[2000px]:text-3xl mb-8">My Bag ({{ $cartItems->count() }} items)</h2>
+                                
+                                <div class="space-y-6">
+                                    @foreach($cartItems as $item)
+                                        <div class="flex flex-col md:flex-row gap-6 p-4 border border-gray-100 rounded-xl relative group hover:shadow-md transition-shadow">
+                                            <!-- Remove Button -->
+                                            <form action="{{ route('cart.destroy', $item->id) }}" method="POST" class="absolute top-4 right-4 z-10">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-gray-400 hover:text-red-500 transition-colors">
+                                                    <i class="fa-solid fa-xmark text-lg"></i>
+                                                </button>
+                                            </form>
 
-                <!-- Product Selection Container -->
-                <div
-                    class="flex flex-col items-start p-0 gap-[10px] w-full lg:w-[910px] h-auto flex-none order-1 self-stretch grow-0">
+                                            <!-- Image -->
+                                            <div class="w-full md:w-48 aspect-square bg-[#FDFBF7] rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
+                                                @if($item->product->images->isNotEmpty())
+                                                    <img src="{{ Str::startsWith($item->product->images->first()->image_path, 'http') ? $item->product->images->first()->image_path : asset('storage/' . $item->product->images->first()->image_path) }}"
+                                                        alt="{{ $item->product->name }}" class="w-[90%] h-[90%] object-contain mix-blend-multiply">
+                                                @else
+                                                    <img src="{{ asset('assets/ring.png') }}" alt="Product" class="w-[90%] h-[90%] object-contain mix-blend-multiply">
+                                                @endif
+                                            </div>
 
-                    <!-- Selection Header -->
-                    <div
-                        class="flex flex-row justify-between items-center p-[20px] gap-[20px] w-full h-[88px] rounded-[10px] flex-none order-0 self-stretch grow-0">
-                        <label class="flex items-center gap-2 cursor-pointer select-none">
-                            <input type="checkbox" class="custom-checkbox" checked>
-                            <span class="font-bold text-[#1A1A1A] font-Outfit text-[18px]">{{ $cartItems->count() }} items
-                                selected</span>
-                        </label>
-                        <button
-                            class="text-[#7D8FAB] hover:text-red-500 text-[16px] font-medium transition-colors font-Outfit">Remove
-                            Selected</button>
-                    </div>
-
-                    <!-- Cart Items Loop -->
-                    @foreach($cartItems as $item)
-                        <!-- Product Card Container -->
-                        <div
-                            class="box-border flex flex-row items-center p-0 gap-[10px] w-full lg:w-[910px]  border border-[#CFD5E3] rounded-[4px] flex-none order-1 self-stretch grow-0 relative group transition-colors overflow-hidden mb-4">
-
-                            <!-- Close Button -->
-                            <form action="{{ route('cart.destroy', $item->id) }}" method="POST"
-                                class="absolute top-[10px] right-[10px] lg:top-[30px] lg:right-[30px] z-20">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-gray-400 hover:text-red-500 transition-colors">
-                                    <i class="fa-solid fa-xmark text-xl"></i>
-                                </button>
-                            </form>
-
-                            <!-- Image Section (Left Side) -->
-                            <div
-                                class="relative w-[120px] md:w-[324px] h-[120px] md:h-[324px] bg-[#FDFBF7] flex-shrink-0 flex items-center justify-center">
-                                <!-- Checkbox anchored top-left -->
-                                <div class="absolute top-[10px] left-[10px] md:top-[24px] md:left-[24px] z-10">
-                                    <input type="checkbox" class="custom-checkbox" checked>
-                                </div>
-                                @if($item->product->images->isNotEmpty())
-                                    <img src="{{ Str::startsWith($item->product->images->first()->image_path, 'http') ? $item->product->images->first()->image_path : asset('storage/' . $item->product->images->first()->image_path) }}"
-                                        alt="{{ $item->product->name }}" class="w-[95%] h-[95%] object-contain mix-blend-multiply">
-                                @else
-                                    <img src="{{ asset('assets/ring.png') }}" alt="Product"
-                                        class="w-[95%] h-[95%] object-contain mix-blend-multiply">
-                                @endif
-                            </div>
-
-                            <!-- Product Info (Right Side) -->
-                            <div
-                                class="flex-grow flex flex-col gap-[8px] h-full p-[10px] md:pt-[30px] md:pr-[30px] md:pb-[30px] md:pl-[10px]">
-                                <h3
-                                    class="font-medium text-[#1A1A1A] text-[16px] md:text-[20px] leading-[24px] md:leading-[28px] pr-8 font-Outfit w-[90%]">
-                                    <a href="{{ route('product.details', $item->product->slug) }}">{{ $item->product->name }}</a>
-                                </h3>
-
-                                <div class="text-[18px] md:text-[24px] font-bold text-[#1A1A1A] font-Outfit mt-1">
-                                    ₹{{ number_format($item->price, 2) }}</div>
-
-                                <div class="flex flex-wrap items-center gap-[12px] text-sm mt-3">
-                                    @if($item->variant)
-                                        <div
-                                            class="bg-[#d2d2d2] px-[16px] py-[8px] rounded-[4px] text-[#1A1A1A] font-Outfit text-[15px] font-medium min-w-[100px] text-center">
-                                            Variant: {{ $item->variant->name }}</div>
-                                    @endif
-                                    <!-- Quantity Dropdown -->
-                                    <form action="{{ route('cart.update', $item->id) }}" method="POST"
-                                        class="relative quantity-dropdown-container">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="quantity" value="{{ $item->quantity }}">
-                                        <button type="button" onclick="toggleQuantityMenu(this)"
-                                            class="bg-[#d2d2d2] px-[16px] py-[8px] rounded-[4px] text-[#1A1A1A] font-Outfit text-[15px] font-medium flex items-center gap-2 cursor-pointer min-w-[90px] justify-between z-20 relative">
-                                            <span class="qty-display">Qty: {{ $item->quantity }}</span> <i
-                                                class="fa-solid fa-chevron-down text-xs text-[#1A1A1A] transition-transform duration-200"></i>
-                                        </button>
-                                        <!-- Dropdown Menu -->
-                                        <div
-                                            class="absolute top-[100%] left-0 w-full bg-white border border-[#d2d2d2] rounded-[4px] shadow-lg mt-1 hidden z-30 overflow-hidden text-center">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                <div class="cursor-pointer hover:bg-[#FDFBF7] py-2 text-sm text-[#1A1A1A] font-medium"
-                                                    onclick="selectQuantity(this, {{ $i }})">{{ $i }}</div>
-                                            @endfor
+                                            <!-- Details -->
+                                            <div class="flex-grow flex flex-col py-2">
+                                                <h3 class="font-['Outfit'] font-medium text-[#1A1A1A] text-lg mb-2 pr-8">
+                                                    <a href="{{ route('product.details', $item->product->slug) }}" class="hover:text-[#CBA65A]">{{ $item->product->name }}</a>
+                                                </h3>
+                                                <p class="font-['Outfit'] font-bold text-[#CBA65A] text-xl mb-4">₹{{ number_format($item->price, 2) }}</p>
+                                                
+                                                <div class="flex flex-wrap items-center gap-4 mt-auto">
+                                                    @if($item->variant)
+                                                        <span class="px-4 py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 font-['Outfit']">
+                                                            Variant: {{ $item->variant->name }}
+                                                        </span>
+                                                    @endif
+                                                    
+                                                    <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-1">
+                                                        <form action="{{ route('cart.update', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <input type="hidden" name="quantity" value="{{ max(1, $item->quantity - 1) }}">
+                                                            <button type="submit" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#CBA65A]" {{ $item->quantity <= 1 ? 'disabled' : '' }}>-</button>
+                                                        </form>
+                                                        <span class="w-8 text-center font-bold text-gray-800">{{ $item->quantity }}</span>
+                                                        <form action="{{ route('cart.update', $item->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <input type="hidden" name="quantity" value="{{ $item->quantity + 1 }}">
+                                                            <button type="submit" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#CBA65A]">+</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </form>
-                                </div>
-
-                                <div
-                                    class="flex flex-wrap gap-x-[24px] gap-y-1 text-[16px] text-[#1A1A1A] mt-4 font-Outfit hidden md:flex">
-                                    <p class="flex items-center gap-2"><span class="text-[#1A1A1A] font-bold">Metal:</span>
-                                        <span class="text-[#7D8FAB] font-medium">14KT</span>
-                                    </p>
-                                    <p class="flex items-center gap-2"><span class="text-[#1A1A1A] font-bold">Metal
-                                            Color:</span>
-                                        <span class="w-5 h-5 rounded-full bg-[#E6C6B6] block border border-gray-200"></span>
-                                        <span class="text-[#1A1A1A] font-medium">Rose</span>
-                                    </p>
-                                </div>
-                                <div class="flex flex-wrap gap-x-[24px] text-[16px] text-[#1A1A1A] font-Outfit mb-2 hidden md:flex">
-                                    <p class="flex items-center gap-2"><span class="text-[#1A1A1A] font-bold">Weight:</span>
-                                        <span class="text-[#7D8FAB] font-medium">0.786 gm</span>
-                                    </p>
-                                </div>
-
-                                <div class="flex items-center gap-2 text-[#008F5D] text-[16px] font-bold mt-auto font-Outfit">
-                                    <img src="{{ asset('assets/true_sign.png') }}" alt="Express" class="w-5 h-5 object-contain">
-                                    Express
-                                    Delivery in 2 Days
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                </div>
 
-            </div>
+                        <!-- Price Summary -->
+                        <div class="w-full xl:w-[400px] flex-shrink-0">
+                            <div class="p-6 md:p-8 bg-white rounded-[10px] shadow-sm sticky top-28 border border-gray-100">
+                                <h3 class="font-['Outfit'] font-semibold text-[#1A1A1A] text-lg mb-6 border-bottom pb-4 border-gray-50">Price Details</h3>
+                                
+                                <div class="space-y-4 mb-8">
+                                    <div class="flex justify-between text-gray-600 font-['Outfit']">
+                                        <span>Bag Total</span>
+                                        <span>₹{{ number_format($cartItems->sum(fn($i) => $i->price * $i->quantity), 2) }}</span>
+                                    </div>
+                                    <div class="flex justify-between text-gray-600 font-['Outfit']">
+                                        <span>Delivery Fee</span>
+                                        <span class="text-green-600">FREE</span>
+                                    </div>
+                                    <div class="flex justify-between text-gray-600 font-['Outfit']">
+                                        <span>Platform Fee</span>
+                                        <span>₹20.00</span>
+                                    </div>
+                                    <div class="pt-4 border-t border-gray-50 flex justify-between items-center">
+                                        <span class="font-['Outfit'] font-bold text-lg text-[#1A1A1A]">Total Amount</span>
+                                        <span class="font-['Outfit'] font-bold text-xl text-[#CBA65A]">₹{{ number_format($cartItems->sum(fn($i) => $i->price * $i->quantity) + 20, 2) }}</span>
+                                    </div>
+                                </div>
 
-            <!-- Right Column: Price Details -->
-            <div class="w-full lg:w-1/3 flex-shrink-0">
-                <div class="rounded-lg p-6 sticky top-28 bg-white border border-gray-100">
-                    <h3 class="font-medium text-gray-900 text-lg mb-4">Price Details ({{ $cartItems->count() }} Item)</h3>
-
-                    <div class="space-y-3 pb-4 mb-4 text-sm">
-                        <div class="flex justify-between text-gray-600">
-                            <span>Total MRP</span>
-                            <span>₹{{ number_format($cartItems->sum(fn($i) => $i->price * $i->quantity), 2) }}</span>
-                        </div>
-                        <div class="flex justify-between text-gray-600">
-                            <span>Discount on MRP</span>
-                            <span>₹0.00</span>
-                        </div>
-                        <div class="flex justify-between text-gray-600">
-                            <span>Platform Fee</span>
-                            <span>₹20</span>
+                                <a href="{{ route('checkout.address') }}"
+                                    style="background: linear-gradient(90deg, #D9BE87 0%, #BE933C 100%);"
+                                    class="flex justify-center items-center w-full py-4 rounded-full text-white font-['Outfit'] font-bold text-lg shadow-md hover:opacity-90 transition-all">
+                                    Place Order
+                                </a>
+                                
+                                <p class="text-center text-xs text-gray-400 mt-4 font-['Outfit']">Secure payment options available</p>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="flex justify-between items-center font-bold text-gray-900 text-lg mb-6">
-                        <span>Total Amount</span>
-                        <span>₹{{ number_format($cartItems->sum(fn($i) => $i->price * $i->quantity) + 20, 2) }}</span>
-                    </div>
-
-                    <a href="{{ route('checkout.address') }}"
-                        class="flex flex-row justify-center items-center px-4 py-[18px] gap-[10px] w-full h-[74px] bg-[linear-gradient(90deg,#D9BE87_0%,#BE933C_100%)] rounded-[100px] flex-none order-1 self-stretch grow-0 text-white font-medium text-lg shadow-md hover:opacity-90 transition-opacity">
-                        Place Order
-                    </a>
-                </div>
+                @endif
             </div>
-        @endif
-
+        </div>
     </main>
+
 
     <!-- Similar Jewellery Product Section -->
     <section class="max-w-[1920px] mx-auto px-4 py-12 font-Outfit">

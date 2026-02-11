@@ -22,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => AdminMiddleware::class, // <--- your custom admin middleware
         ]);
+
+        $middleware->redirectTo(
+            guests: '/auth/mobile',
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (\Illuminate\Http\Exceptions\PostTooLargeException $e, $request) {

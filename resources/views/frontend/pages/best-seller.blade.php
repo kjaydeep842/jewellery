@@ -3,7 +3,7 @@
 @section('content')
 <!-- Best Seller Banner -->
 <section class="w-full bg-[#EFE4D6] py-8 md:py-10">
-    <div class="max-w-[1440px] mx-auto px-6 lg:px-12 text-center">
+    <div class="max-w-[1600px] mx-auto px-6 text-center">
         <h1 class="text-3xl md:text-5xl font-['Outfit'] font-medium text-[#5C4522] mb-4">Best Seller</h1>
         <p class="max-w-2xl mx-auto text-sm md:text-base text-gray-700 font-['Inter'] leading-relaxed">
             Discover our most loved and sought-after pieces, curated based on popularity and timeless appeal.
@@ -12,7 +12,7 @@
 </section>
 
 <!-- Main Content : All Collection -->
-<main class="w-full max-w-[1440px] mx-auto px-6 lg:px-12 py-8 font-['Outfit'] flex flex-col gap-2.5">
+<main class="w-full max-w-[1600px] mx-auto px-5 py-8 font-['Outfit'] flex flex-col gap-2.5">
 
     <!-- Breadcrumb & Title -->
     <div class="w-full flex flex-col gap-1 self-start">
@@ -26,7 +26,7 @@
     </div>
 
     <!-- Layout: Sidebar + Grid -->
-    <div class="w-full flex flex-col lg:flex-row gap-8 mt-4">
+    <div class="w-full flex flex-col lg:flex-row gap-5 mt-4">
 
         <aside class="w-full lg:w-[280px] flex-shrink-0 space-y-6">
             <form id="filterForm" action="{{ route('page.best-seller') }}" method="GET">
@@ -48,9 +48,9 @@
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Category</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
                     </div>
-                    <div class="mt-4 space-y-3 filter-content">
+                    <div class="mt-4 space-y-3 filter-content hidden">
                         @foreach($categories as $category)
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" name="category[]" value="{{ $category }}"
@@ -68,9 +68,9 @@
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Gender</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
                     </div>
-                    <div class="mt-4 space-y-3 filter-content">
+                    <div class="mt-4 space-y-3 filter-content hidden">
                         @foreach($genders as $gender)
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" name="gender[]" value="{{ $gender }}"
@@ -88,9 +88,9 @@
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Metal Color</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
                     </div>
-                    <div class="mt-4 space-y-3 filter-content">
+                    <div class="mt-4 space-y-3 filter-content hidden">
                         @foreach($metalColors as $color)
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" name="metal_color[]" value="{{ $color }}"
@@ -108,9 +108,9 @@
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Metal Purity</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
                     </div>
-                    <div class="mt-4 space-y-3 filter-content">
+                    <div class="mt-4 space-y-3 filter-content hidden">
                         @foreach($metalPurities as $purity)
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" name="metal_purity[]" value="{{ $purity }}"
@@ -128,9 +128,9 @@
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Size</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
                     </div>
-                    <div class="mt-4 filter-content">
+                    <div class="mt-4 filter-content hidden">
                         <div class="grid grid-cols-4 gap-2">
                             @foreach($sizes as $size)
                                 <label class="relative flex items-center justify-center">
@@ -150,9 +150,9 @@
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Weight Range</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
                     </div>
-                    <div class="mt-4 space-y-3 filter-content">
+                    <div class="mt-4 space-y-3 filter-content hidden">
                         @foreach($weightRanges as $value => $label)
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" name="weight[]" value="{{ $value }}"
@@ -169,9 +169,9 @@
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Price Range</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180" style="transform: rotate(180deg)"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
                     </div>
-                    <div class="mt-4 space-y-3 filter-content">
+                    <div class="mt-4 space-y-3 filter-content hidden">
                         @php
                             $priceRanges = [
                                 '₹ 0 - ₹ 10,000',

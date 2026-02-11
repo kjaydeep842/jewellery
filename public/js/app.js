@@ -477,8 +477,37 @@ window.initHomeInteractive = function (middleBannersCount, categoriesData, stora
             if (typeof window.updateProductSlider === 'function') {
                 window.updateProductSlider(category.id);
             }
+
+            // Sync category buttons and hidden input for Explore All button
+            if (typeof window.filterProducts === 'function') {
+                window.filterProducts(category.id, null);
+            }
+
+            // Update slider Explore All button's hidden input
+            const sliderCategoryInput = document.getElementById('sliderCategoryInput');
+            if (sliderCategoryInput) {
+                if (category.name && category.name !== 'all') {
+                    sliderCategoryInput.setAttribute('name', 'category[]');
+                    sliderCategoryInput.value = category.name;
+                } else {
+                    sliderCategoryInput.removeAttribute('name');
+                    sliderCategoryInput.value = '';
+                }
+            }
         }, 300);
     };
+
+    // Initialize slider category input on page load
+    if (categoriesData && categoriesData.length > 0) {
+        const initialCategory = categoriesData[0];
+        const sliderCategoryInput = document.getElementById('sliderCategoryInput');
+        if (sliderCategoryInput && initialCategory) {
+            if (initialCategory.name && initialCategory.name !== 'all') {
+                sliderCategoryInput.setAttribute('name', 'category[]');
+                sliderCategoryInput.value = initialCategory.name;
+            }
+        }
+    }
 };
 
 /* =========================================
@@ -547,7 +576,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                         </div>
                                     `;
                                     div.addEventListener('click', () => {
-                                        window.location.href = `/products?search=${encodeURIComponent(item.name || item)}`;
+                                        const searchForm = document.getElementById('searchForm');
+                                        const searchFormInput = document.getElementById('searchFormInput');
+                                        if (searchForm && searchFormInput) {
+                                            searchFormInput.value = item.name || item;
+                                            searchForm.submit();
+                                        }
                                     });
                                     suggestionsList.appendChild(div);
                                 });
@@ -567,32 +601,179 @@ document.addEventListener('DOMContentLoaded', () => {
     const performSearch = () => {
         const query = searchInput.value.trim();
         if (query) {
-            window.location.href = `/products?search=${encodeURIComponent(query)}`;
+            const searchForm = document.getElementById('searchForm');
+            const searchFormInput = document.getElementById('searchFormInput');
+            if (searchForm && searchFormInput) {
+                searchFormInput.value = query;
+                searchForm.submit();
+            }
         }
     };
 
+    // Search button
     if (searchBtn) {
         searchBtn.addEventListener('click', performSearch);
     }
 
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') performSearch();
-    });
+    // Enter key
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+    }
 
+    // Search For button
     if (searchForBtn) {
         searchForBtn.addEventListener('click', performSearch);
     }
 
-    // Handle "Trending" and "Top Searches" Clicks
-    // Assuming buttons inside default-view are filters/keywords
-    if (defaultView) {
-        defaultView.querySelectorAll('button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const text = btn.querySelector('span')?.textContent.trim();
-                if (text) {
-                    window.location.href = `/products?search=${encodeURIComponent(text)}`;
+    // Trending and Top Search Buttons - Use POST form
+    const trendingButtons = document.querySelectorAll('.search-trending-btn, .search-top-btn');
+    trendingButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const searchTerm = button.getAttribute('data-search');
+            if (searchTerm) {
+                const searchForm = document.getElementById('searchForm');
+                const searchFormInput = document.getElementById('searchFormInput');
+                if (searchForm && searchFormInput) {
+                    searchFormInput.value = searchTerm;
+                    searchForm.submit();
                 }
-            });
+            }
         });
+    });
+
+    // User Menu Dropdown Toggle
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdownMenu = document.getElementById('user-dropdown-menu');
+    const userMenuContainer = document.getElementById('user-menu-container');
+
+    if (userMenuBtn && userDropdownMenu) {
+        userMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdownMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (userMenuContainer && !userMenuContainer.contains(e.target)) {
+                userDropdownMenu.classList.add('hidden');
+            }
+        });
+    }
+});
+
+/* =========================================
+   Wishlist Logic
+   ========================================= */
+
+document.addEventListener('DOMContentLoaded', function () {
+    const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+
+    wishlistButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent triggering card click if inside a link
+
+            const productId = this.dataset.productId;
+
+            fetch('/wishlist/toggle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ product_id: productId })
+            })
+                .then(response => {
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const img = this.querySelector('img');
+                    let faIcon = this.querySelector('.fa-heart');
+
+                    if (data.status === 'added') {
+                        if (img) img.classList.add('hidden');
+
+                        if (!faIcon) {
+                            faIcon = document.createElement('i');
+                            faIcon.className = 'fa-solid fa-heart text-[#CBA65A] text-lg'; // Gold color matching theme
+                            this.appendChild(faIcon);
+                        } else {
+                            faIcon.classList.remove('hidden');
+                        }
+
+                        showToast(data.message, 'success');
+                    } else if (data.status === 'removed') {
+                        if (img) img.classList.remove('hidden');
+                        if (faIcon) faIcon.classList.add('hidden');
+                        showToast(data.message, 'success');
+                    }
+
+                    // Update counter if it exists
+                    const headerWishlistLink = document.querySelector('a[href*="wishlist"]');
+                    if (headerWishlistLink) {
+                        const countSpan = headerWishlistLink.querySelector('span');
+                        if (countSpan) {
+                            countSpan.textContent = data.count;
+                            if (data.count > 0) {
+                                countSpan.classList.remove('hidden');
+                                countSpan.style.display = 'flex'; // Ensure flex for centering
+                            } else {
+                                countSpan.classList.add('hidden');
+                                countSpan.style.display = 'none';
+                            }
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+
+                });
+        });
+    });
+
+    // Simple Toast Notification
+    function showToast(message, type = 'success') {
+        // Check if toast container exists
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'fixed bottom-5 right-5 z-[9999] flex flex-col gap-2';
+            document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `px-6 py-4 rounded-lg shadow-[0px_4px_20px_0px_rgba(0,0,0,0.15)] text-white font-['Outfit'] font-medium transform transition-all duration-500 translate-y-full ${type === 'success' ? 'bg-[#CBA65A]' : 'bg-red-600'} border border-[#B39359]`;
+        toast.innerHTML = `<div class="flex items-center gap-2">
+            <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i>
+            <span>${message}</span>
+        </div>`;
+        container.appendChild(toast);
+
+        // Animate in
+        requestAnimationFrame(() => {
+            toast.classList.remove('translate-y-full');
+        });
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.classList.add('translate-y-full');
+            setTimeout(() => {
+                toast.remove();
+                if (container.children.length === 0) {
+                    container.remove();
+                }
+            }, 500);
+        }, 3000);
     }
 });

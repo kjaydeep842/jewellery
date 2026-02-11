@@ -66,7 +66,7 @@
   </section>
 
   <!-- Premium Collecions-->
-  <section class="pt-8 pb-2 md:pt-20 md:pb-4 w-full mx-auto px-4 md:px-8">
+  <section class="pt-8 pb-2 md:pt-20 md:pb-4 w-full max-w-[1600px] mx-auto px-6">
     <div class="flex items-center justify-center gap-2 md:gap-6 mb-6 md:mb-10 w-full">
       <!-- Left Arrow -->
       <img src="assets/Design.png" alt="Decoration" class="h-5 md:h-8 object-contain">
@@ -413,8 +413,8 @@
     </div>
   </section>
 
-  <section class="bg-white pt-4 pb-8 md:pt-4 md:pb-16 px-14">
-    <div class="max-w-7xl min-[2000px]:max-w-full mx-auto">
+  <section class="bg-white pt-4 pb-8 md:pt-4 md:pb-16 px-6">
+    <div class="max-w-[1600px] min-[2000px]:max-w-full mx-auto">
 
       <div class="flex items-center justify-center mb-6 md:mb-10 gap-2 md:gap-6">
         <img src="assets/Design.png" alt="design left" class="h-5 md:h-8 w-auto object-contain">
@@ -539,8 +539,8 @@
     </div>
   </section>
 
-  <section class="bg-[#FAF9F6] pt-12 pb-8 md:pt-28 md:pb-16 px-4 md:px-20">
-    <div class="max-w-[1800px] min-[2000px]:max-w-full mx-auto">
+  <section class="bg-[#FAF9F6] pt-12 pb-8 md:pt-28 md:pb-16 px-6">
+    <div class="max-w-[1600px] min-[2000px]:max-w-full mx-auto">
       <div class="flex items-center justify-center mb-6 md:mb-8 gap-2 md:gap-6">
         <img src="assets/Design.png" alt="design left" class="h-5 md:h-8 w-auto object-contain">
         <div class="text-center">
@@ -558,12 +558,12 @@
       <div class="flex flex-nowrap justify-start overflow-x-auto no-scrollbar gap-3 mb-8 w-full md:mb-12 snap-x">
         <button onclick="filterProducts('all', this)"
           class="category-btn active flex-shrink-0 px-6 py-2 md:px-10 md:py-2 min-[2000px]:px-12 min-[2000px]:py-4 font-['Outfit'] md:gap-0 bg-black text-white border border-gray-200 text-xs md:text-sm min-[2000px]:text-xl tracking-widest rounded-full hover:bg-black hover:text-white snap-center transition-colors whitespace-nowrap"
-          data-id="all">All</button>
+          data-id="all" data-name="all">All</button>
 
         @foreach($categories as $category)
           <button onclick="filterProducts('{{ $category->id }}', this)"
             class="category-btn flex-shrink-0 px-6 py-2 md:px-8 md:py-2 min-[2000px]:px-12 min-[2000px]:py-4 font-['Outfit'] md:gap-0 bg-gray-100 border border-gray-200 hover:text-white text-xs md:text-sm min-[2000px]:text-xl tracking-widest rounded-full hover:bg-black snap-center transition-colors whitespace-nowrap"
-            data-id="{{ $category->id }}">{{ $category->name }}</button>
+            data-id="{{ $category->id }}" data-name="{{ $category->name }}">{{ $category->name }}</button>
         @endforeach
       </div>
 
@@ -580,9 +580,26 @@
             b.classList.add('bg-gray-100', 'text-black');
           });
 
+          let categoryName = '';
+
           if (btn) {
             btn.classList.remove('bg-gray-100', 'text-black');
             btn.classList.add('bg-black', 'text-white');
+            categoryName = btn.getAttribute('data-name');
+          }
+
+          // Update Hidden Form Input for Explore All Button
+          const hiddenInput = document.getElementById('hiddenCategoryInput');
+          if (hiddenInput) {
+            if (categoryName === 'all' || categoryName === '') {
+              // Remove the input name for 'All' to show all products
+              hiddenInput.removeAttribute('name');
+              hiddenInput.value = '';
+            } else {
+              // Add name attribute back and set value for specific category
+              hiddenInput.setAttribute('name', 'category[]');
+              hiddenInput.value = categoryName;
+            }
           }
 
           console.log('Fetching products for category:', categoryId);
@@ -661,15 +678,19 @@
       </div>
 
       <div class="flex justify-center w-full">
-        <a href="{{ route('products.index') }}"
-          class="group/btn relative inline-flex items-center gap-3 px-8 py-4 bg-[#CBA65A] text-white rounded-full transition-all duration-300 hover:bg-[#B69550] overflow-hidden shadow-md">
-          <span class="relative z-10 font-medium font-['Outfit']">Explore All</span>
-          <i
-            class="fa-solid fa-arrow-right relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1"></i>
-          <div
-            class="absolute inset-0 bg-white/10 translate-y-full transition-transform duration-300 group-hover/btn:translate-y-0">
-          </div>
-        </a>
+        <form id="exploreAllForm" action="{{ route('products.index.post') }}" method="POST">
+          @csrf
+          <input type="hidden" id="hiddenCategoryInput" value="">
+          <button type="submit"
+            class="group/btn relative inline-flex items-center gap-3 px-8 py-4 bg-[#CBA65A] text-white rounded-full transition-all duration-300 hover:bg-[#B69550] overflow-hidden shadow-md cursor-pointer border-0">
+            <span class="relative z-10 font-medium font-['Outfit']">Explore All</span>
+            <i
+              class="fa-solid fa-arrow-right relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1"></i>
+            <div
+              class="absolute inset-0 bg-white/10 translate-y-full transition-transform duration-300 group-hover/btn:translate-y-0">
+            </div>
+          </button>
+        </form>
       </div>
     </div>
     </div>
@@ -748,7 +769,7 @@
     <!-- Background Color Block -->
     <div class="absolute bottom-0 left-0 w-full h-[35%] bg-[#F3E5E5] pointer-events-none z-0"></div>
     <div class="absolute bottom-0 left-0 w-full h-[40%] bg-[#F3E5E5]"></div>
-    <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
+    <div class="relative z-10 max-w-[1600px] mx-auto px-6">
       <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 md:gap-8 lg:gap-0">
         <!-- Text Content -->
         <div
@@ -1004,12 +1025,16 @@
   </div>
 
   <div class="flex justify-center">
-    <a href="{{ route('products.index') }}"
-      class="flex flex-row justify-center items-center px-4 py-2 md:px-[26px] gap-2 md:gap-[10px] w-auto md:w-[194px] h-[45px] md:h-[60px] bg-white border-[1.8px] border-[#A87E3E] rounded-[200px] text-[#A87E3E] font-['Outfit'] font-normal text-[16px] md:text-[22px] leading-tight hover:bg-gray-50 transition-colors group">
-      Explore All
-      <img src="assets/ic_back_2.png" alt="arrow"
-        class="w-3 h-3 md:w-4 md:h-4 object-contain group-hover:translate-x-1 transition-transform">
-    </a>
+    <form id="sliderExploreAllForm" action="{{ route('products.index.post') }}" method="POST">
+      @csrf
+      <input type="hidden" id="sliderCategoryInput" value="">
+      <button type="submit"
+        class="flex flex-row justify-center items-center px-4 py-2 md:px-[26px] gap-2 md:gap-[10px] w-auto md:w-[194px] h-[45px] md:h-[60px] bg-white border-[1.8px] border-[#A87E3E] rounded-[200px] text-[#A87E3E] font-['Outfit'] font-normal text-[16px] md:text-[22px] leading-tight hover:bg-gray-50 transition-colors group cursor-pointer">
+        Explore All
+        <img src="assets/ic_back_2.png" alt="arrow"
+          class="w-3 h-3 md:w-4 md:h-4 object-contain group-hover:translate-x-1 transition-transform">
+      </button>
+    </form>
   </div>
   </div>
   </section>
@@ -1039,7 +1064,7 @@
       </div>
     </div>
 
-    <div class="relative w-full max-w-7xl min-[2000px]:max-w-full mx-auto px-4 md:px-8 mb-0 md:mb-0 group-container">
+    <div class="relative w-full max-w-[1600px] min-[2000px]:max-w-full mx-auto px-6 mb-0 md:mb-0 group-container">
       <!-- Background Ellipse -->
       <div
         class="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1800px] h-[10px] max-w-none bg-[#FDFBF7] rounded-[50%] -z-10 blur-xl pointer-events-none">
@@ -2157,7 +2182,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-            {{ isset($middleBanners) ? $middleBanners->count() : 0 }},
+                            {{ isset($middleBanners) ? $middleBanners->count() : 0 }},
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

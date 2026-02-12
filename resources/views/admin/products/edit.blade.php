@@ -93,13 +93,31 @@
                         @endforeach
                     </select>
                 </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Tags</label>
-                    <select name="tags[]" multiple class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500 h-11">
-                        @foreach($tags as $tag)
-                        <option value="{{ $tag->id }}" {{ (collect(old('tags', $product->tags->pluck('id')))->contains($tag->id)) ? 'selected' : '' }}>{{ $tag->name }}</option>
-                        @endforeach
-                    </select>
+                <div class="md:col-span-2 lg:col-span-3">
+                    <label class="block font-semibold text-zinc-700 mb-3">Tags</label>
+                    <div class="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                            @foreach($tags as $tag)
+                            <label class="relative flex items-center cursor-pointer group">
+                                <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
+                                    {{ (collect(old('tags', $product->tags->pluck('id')))->contains($tag->id)) ? 'checked' : '' }}
+                                    class="peer sr-only">
+                                <div class="w-full px-4 py-2.5 bg-white border-2 border-zinc-200 rounded-lg text-center text-sm font-medium text-zinc-700 transition-all
+                                    peer-checked:bg-amber-50 peer-checked:border-amber-500 peer-checked:text-amber-700 peer-checked:shadow-md
+                                    hover:border-amber-300 hover:shadow-sm
+                                    flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4 opacity-0 peer-checked:opacity-100 transition-opacity text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>{{ $tag->name }}</span>
+                                </div>
+                            </label>
+                            @endforeach
+                        </div>
+                        @if($tags->isEmpty())
+                        <p class="text-zinc-500 text-sm text-center py-4">No tags available. <a href="{{ route('admin.tags.create') }}" class="text-amber-600 hover:underline">Create one</a></p>
+                        @endif
+                    </div>
                 </div>
 
                 <div>

@@ -73,6 +73,8 @@ Route::middleware(['auth', 'admin'])
         Route::resource('metal_colors', \App\Http\Controllers\Admin\MetalColorController::class);
         Route::resource('sizes', \App\Http\Controllers\Admin\SizeController::class);
         Route::resource('metals', \App\Http\Controllers\Admin\MetalController::class);
+        Route::resource('units', \App\Http\Controllers\Admin\UnitController::class);
+        Route::resource('colors', \App\Http\Controllers\Admin\ColorController::class);
 
         // Customer Service
         Route::resource('faqs', FaqController::class);
@@ -97,6 +99,8 @@ Route::middleware(['auth', 'admin'])
         Route::patch('metal_colors/{metal_color}/toggle', [\App\Http\Controllers\Admin\MetalColorController::class, 'toggleStatus'])->name('metal_colors.toggle');
         Route::patch('sizes/{size}/toggle', [\App\Http\Controllers\Admin\SizeController::class, 'toggleStatus'])->name('sizes.toggle');
         Route::patch('metals/{metal}/toggle', [\App\Http\Controllers\Admin\MetalController::class, 'toggleStatus'])->name('metals.toggle');
+        Route::patch('units/{unit}/toggle', [\App\Http\Controllers\Admin\UnitController::class, 'toggleStatus'])->name('units.toggle');
+        Route::patch('colors/{color}/toggle', [\App\Http\Controllers\Admin\ColorController::class, 'toggleStatus'])->name('colors.toggle');
 
         // Settings
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');

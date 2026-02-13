@@ -194,44 +194,50 @@
 
         <div class="flex items-center space-x-5 min-[2000px]:space-x-8 text-gray-600 order-2 lg:order-3">
             @auth
-                <div class="relative inline-block text-left" id="user-menu-container">
-                    <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
-                        <img src="{{ asset('assets/ic_User.png') }}" alt="user"
-                            class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
-                    </button>
+            <div class="relative inline-block text-left" id="user-menu-container">
+                <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
+                    @if(Auth::user()->profile_picture)
+                    <img src="{{ Auth::user()->profile_picture_url }}" alt="user"
+                        class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full object-cover">
+                    @else
+                    <div class="w-8 h-8 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[8px] min-[2000px]:text-[12px] font-bold text-[#000000] uppercase border border-[#EADDCC]">
+                        {{ Auth::user()->initials }}
+                    </div>
+                    @endif
+                </button>
 
-                    <!-- Dropdown menu for authenticated users -->
-                    <div id="user-dropdown-menu"
-                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
-                        <div class="py-1">
-                            <div class="px-4 py-3 border-b border-gray-100">
-                                <p class="text-sm font-['Outfit'] font-semibold text-[#1A1A1A]">{{ Auth::user()->name }}</p>
-                                @if(Auth::user()->phone)
-                                    <p class="text-xs font-['Outfit'] text-gray-500">{{ Auth::user()->phone }}</p>
-                                @endif
-                            </div>
-                          
-                            <a href="{{ route('profile.edit') }}"
-                                class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">
-                                Profile
-                            </a>
-                       
-                            <form method="POST" action="{{ route('frontend.auth.logout') }}">
-                                @csrf
-                                <a href="{{ route('frontend.auth.logout') }}"
-                                    onclick="event.preventDefault(); this.closest('form').submit();"
-                                    class="block px-4 py-3 text-sm text-red-600 hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium border-t border-gray-100">
-                                    Logout
-                                </a>
-                            </form>
+                <!-- Dropdown menu for authenticated users -->
+                <div id="user-dropdown-menu"
+                    class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
+                    <div class="py-1">
+                        <div class="px-4 py-3 border-b border-gray-100">
+                            <p class="text-sm font-['Outfit'] font-semibold text-[#1A1A1A]">{{ Auth::user()->name }}</p>
+                            @if(Auth::user()->phone)
+                            <p class="text-xs font-['Outfit'] text-gray-500">{{ Auth::user()->phone }}</p>
+                            @endif
                         </div>
+
+                        <a href="{{ route('profile.edit') }}"
+                            class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">
+                            Profile
+                        </a>
+
+                        <form method="POST" action="{{ route('frontend.auth.logout') }}">
+                            @csrf
+                            <a href="{{ route('frontend.auth.logout') }}"
+                                onclick="event.preventDefault(); this.closest('form').submit();"
+                                class="block px-4 py-3 text-sm text-red-600 hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium border-t border-gray-100">
+                                Logout
+                            </a>
+                        </form>
                     </div>
                 </div>
+            </div>
             @else
-                <a href="{{ route('frontend.auth.mobile') }}" class="hover:text-gold flex items-center">
-                    <img src="{{ asset('assets/ic_User.png') }}" alt="user"
-                        class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
-                </a>
+            <a href="{{ route('frontend.auth.mobile') }}" class="hover:text-gold flex items-center">
+                <img src="{{ asset('assets/ic_User.png') }}" alt="user"
+                    class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
+            </a>
             @endauth
 
             <a href="{{ route('wishlist.index') }}" class="relative hover:text-gold">

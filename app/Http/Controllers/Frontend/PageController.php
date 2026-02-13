@@ -3,11 +3,29 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
+use App\Models\OurStory;
 use Illuminate\Http\Request;
 use App\Models\Product;
 
 class PageController extends Controller
 {
+    public function storeContact(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone_code' => 'required|string|max:10',
+            'phone_number' => 'required|string|max:15',
+            'message' => 'required|string',
+        ]);
+
+        Contact::create($validated);
+
+        return back()->with('success', 'Your message has been sent successfully!');
+    }
+
     public function bestSeller()
     {
         return view('frontend.pages.best-seller');
@@ -35,7 +53,15 @@ class PageController extends Controller
 
     public function about()
     {
-        return view('frontend.pages.about');
+        $ourStories = OurStory::where('status', 1)
+            ->where('type', 'content')
+            ->get();
+
+        $features = OurStory::where('status', 1)
+            ->where('type', 'feature')
+            ->get();
+
+        return view('frontend.pages.about', compact('ourStories', 'features'));
     }
 
     public function faq()
@@ -52,6 +78,4 @@ class PageController extends Controller
     {
         return view('frontend.pages.blog');
     }
-
-
 }

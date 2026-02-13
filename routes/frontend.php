@@ -48,14 +48,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/filter-products', [HomeController::class, 'filterProducts'])->name('home.filter');
 Route::get('/faqs', [HomeController::class, 'faqs'])->name('faqs');
 Route::get('/return-exchange', [HomeController::class, 'returnExchange'])->name('return_exchange');
-Route::get('/contact', [HomeController::class, 'showContactForm'])->name('contact.show');
-Route::post('/contact', [HomeController::class, 'submitContactForm'])->name('contact.submit');
 
 // Static Pages
 Route::get('/best-seller', [BestSellerController::class, 'index'])->name('page.best-seller');
 Route::get('/readytostock', [ReadyToStockController::class, 'index'])->name('page.readytostock');
 Route::get('/buy-it-again', [PageController::class, 'buyItAgain'])->name('page.buy-it-again');
 Route::get('/contact-us', [PageController::class, 'contact'])->name('page.contact');
+Route::post('/contact-us', [PageController::class, 'storeContact'])->name('contact.store');
 Route::get('/exhibition', [PageController::class, 'exhibition'])->name('page.exhibition');
 Route::get('/about-us', [PageController::class, 'about'])->name('page.about');
 Route::get('/faq', [PageController::class, 'faq'])->name('page.faq');

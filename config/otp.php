@@ -10,10 +10,10 @@ return [
     |
     */
 
-    'length' => env('OTP_LENGTH', 6),
-    'expiry_minutes' => env('OTP_EXPIRY_MINUTES', 5),
-    'max_attempts' => env('OTP_MAX_ATTEMPTS', 3),
-    'rate_limit_minutes' => env('OTP_RATE_LIMIT_MINUTES', 10),
+    'length' => (int) env('OTP_LENGTH', 6),
+    'expiry_minutes' => (int) env('OTP_EXPIRY_MINUTES', 5),
+    'max_attempts' => (int) env('OTP_MAX_ATTEMPTS', 3),
+    'rate_limit_minutes' => (int) env('OTP_RATE_LIMIT_MINUTES', 10),
 
     /*
     |--------------------------------------------------------------------------

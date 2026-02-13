@@ -33,6 +33,8 @@ class ProfileUpdateRequest extends FormRequest
             'city' => ['nullable', 'string', 'max:255'],
             'state' => ['nullable', 'string', 'max:255'],
             'address_type' => ['nullable', 'string', 'in:Home,Office'],
+            'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'otp_notify' => ['nullable', 'boolean'],
         ];
     }
 }

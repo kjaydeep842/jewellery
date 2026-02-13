@@ -33,13 +33,14 @@ class AuthController extends Controller
      */
     public function sendOtp(Request $request)
     {
+
         Log::info('OTP Send Request', [
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
 
         $validator = Validator::make($request->all(), [
-            'phone' => 'required|regex:/^[0-9]{10}$/',
+            'full_phone' => 'required|string',
             'otp_notify' => 'nullable|boolean',
         ]);
 
@@ -49,12 +50,12 @@ class AuthController extends Controller
             ]);
             return response()->json([
                 'success' => false,
-                'message' => 'Please enter a valid 10-digit mobile number.',
+                'message' => 'Please enter a valid mobile number.',
                 'errors' => $validator->errors()
             ], 422);
         }
 
-        $phone = '+91' . $request->phone;
+        $phone = $request->full_phone;
 
         // Check rate limit
         if (Otp::hasReachedRateLimit($phone)) {
@@ -68,6 +69,7 @@ class AuthController extends Controller
         try {
             // Generate OTP
             $otpCode = Otp::generate($phone);
+
             Log::info('OTP Generated', ['phone' => $phone]);
 
             // Send OTP via Twilio
@@ -94,7 +96,6 @@ class AuthController extends Controller
                 'message' => 'OTP sent successfully!',
                 'redirect' => route('frontend.auth.verify-otp')
             ]);
-
         } catch (\Exception $e) {
             Log::error('OTP Send Exception', [
                 'phone' => $phone,
@@ -231,7 +232,6 @@ class AuthController extends Controller
                 'message' => 'Login successful!',
                 'redirect' => $redirectUrl
             ]);
-
         } catch (\Exception $e) {
             Log::error('OTP Verify Exception', [
                 'phone' => $phone,
@@ -297,7 +297,6 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'OTP resent successfully!'
             ]);
-
         } catch (\Exception $e) {
             Log::error('OTP Resend Exception', [
                 'phone' => $phone,

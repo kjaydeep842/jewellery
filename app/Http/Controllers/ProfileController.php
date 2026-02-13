@@ -27,36 +27,60 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        // Combine names
-        $user->name = trim($request->first_name . ' ' . $request->last_name);
-        $user->email = $request->email;
-        $user->gender = $request->gender;
+            // Handle Profile Picture Upload
+            if ($request->hasFile('profile_picture')) {
+                // Delete old picture if exists
+                if ($user->profile_picture) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_picture);
+                }
 
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
+                $path = $request->file('profile_picture')->store('profile-pictures', 'public');
+                $user->profile_picture = $path;
+            }
 
-        $user->save();
+            // Update user details
+            $user->name = trim($request->first_name . ' ' . $request->last_name);
+            $user->email = $request->email;
+            $user->gender = $request->gender;
+            $user->otp_notify = $request->boolean('otp_notify');
 
-        // Handle Address
-        $user->addresses()->updateOrCreate(
-            ['is_default' => true],
-            [
+            if ($user->isDirty('email')) {
+                $user->email_verified_at = null;
+            }
+
+            $user->save();
+
+            // Handle Address
+            $addressData = [
                 'name' => $user->name,
-                'address_line_1' => $request->address_line_1,
-                'address_line_2' => $request->address_line_2,
-                'city' => $request->city,
-                'state' => $request->state,
-                'zip' => $request->zip,
-                'country' => 'India', // Default for now
                 'phone' => $user->phone,
+                'country' => 'India', // Default for now
                 'type' => $request->address_type ?? 'Home',
-            ]
-        );
+            ];
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+            // Only update fields that are actually filled to avoid SQL errors
+            foreach (['address_line_1', 'address_line_2', 'city', 'state', 'zip'] as $field) {
+                if ($request->filled($field)) {
+                    $addressData[$field] = $request->input($field);
+                }
+            }
+
+            // Only attempt update if we have at least address_line_1 or zip or other partial data
+            if ($request->anyFilled(['address_line_1', 'address_line_2', 'city', 'state', 'zip'])) {
+                $user->addresses()->updateOrCreate(
+                    ['is_default' => true],
+                    $addressData
+                );
+            }
+
+            return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Profile Update Failed: ' . $e->getMessage());
+            return Redirect::route('profile.edit')->withErrors(['error' => 'An error occurred while updating your profile. Please try again.']);
+        }
     }
 
     /**

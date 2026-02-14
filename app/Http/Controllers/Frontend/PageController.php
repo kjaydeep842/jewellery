@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
+use App\Models\Blog;
 use App\Models\OurStory;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -76,6 +77,14 @@ class PageController extends Controller
 
     public function blog()
     {
-        return view('frontend.pages.blog');
+        $blogs = Blog::where('status', 1)->latest()->paginate(9);
+        return view('frontend.pages.blog', compact('blogs'));
+    }
+
+    public function blogDetails($slug)
+    {
+        $blog = Blog::where('slug', $slug)->where('status', true)->firstOrFail();
+        $recentBlogs = Blog::where('id', '!=', $blog->id)->where('status', true)->latest()->take(3)->get();
+        return view('frontend.pages.blog_details', compact('blog', 'recentBlogs'));
     }
 }

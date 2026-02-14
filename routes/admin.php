@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\StyleController;
 use App\Http\Controllers\Admin\FeatureController;
 
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\LegalPageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,6 +95,11 @@ Route::middleware(['auth', 'admin'])
         Route::patch('faqs/{faq}/toggle', [FaqController::class, 'toggleStatus'])->name('faqs.toggle');
         Route::patch('returns/{return}/toggle', [ReturnExchangeController::class, 'toggleStatus'])->name('returns.toggle');
         Route::patch('brands/{brand}/toggle', [BrandController::class, 'toggleStatus'])->name('brands.toggle');
+        Route::patch('blogs/{blog}/toggle', [BlogController::class, 'toggleStatus'])->name('blogs.toggle');
+
+        // Legal Pages (Terms & Privacy)
+        Route::resource('legal-pages', LegalPageController::class);
+        Route::patch('legal-pages/{legal_page}/toggle', [LegalPageController::class, 'toggleStatus'])->name('legal-pages.toggle');
 
         Route::patch('diamond_qualities/{diamond_quality}/toggle', [\App\Http\Controllers\Admin\DiamondQualityController::class, 'toggleStatus'])->name('diamond_qualities.toggle');
         Route::patch('metal_colors/{metal_color}/toggle', [\App\Http\Controllers\Admin\MetalColorController::class, 'toggleStatus'])->name('metal_colors.toggle');

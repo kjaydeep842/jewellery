@@ -216,7 +216,7 @@ class ProductController extends Controller
     public function show($slug)
     {
         $product = Product::where('slug', $slug)
-            ->with(['category', 'subcategory', 'images', 'variants', 'stones', 'reviews.user'])
+            ->with(['category', 'subcategory', 'images', 'variants', 'stones', 'reviews.user', 'metalColor', 'diamondShape'])
             ->firstOrFail();
 
         // Fetch related products (same category, excluding current)

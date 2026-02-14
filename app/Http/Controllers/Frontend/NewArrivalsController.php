@@ -157,7 +157,7 @@ class NewArrivalsController extends Controller
         $shapes = Shape::where('status', 1)->pluck('name');
 
         if ($request->ajax()) {
-            return view('frontend.pages.partials.new-arrivals-grid', compact('products'))->render();
+            return view('frontend.pages.partials.products-grid', compact('products'))->render();
         }
 
         return view('frontend.pages.new-arrivals', compact(

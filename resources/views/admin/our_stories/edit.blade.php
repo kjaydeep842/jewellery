@@ -152,14 +152,38 @@
             toolbar: {
                 items: [
                     'undo', 'redo', '|',
-                    'sourceEditing', '|',
                     'heading', '|',
-                    'bold', 'italic', '|',
+                    'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', '|',
+                    'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'code', '|',
                     'link', 'imageInsert', 'insertTable', 'mediaEmbed', '|',
                     'bulletedList', 'numberedList', 'outdent', 'indent', '|',
-                    'blockQuote'
+                    'blockQuote', 'horizontalLine', 'specialCharacters', '|',
+                    'sourceEditing', '|',
+                    'alignment'
                 ],
                 shouldNotGroupWhenFull: true
+            },
+            fontFamily: {
+                options: [
+                    'default',
+                    'Arial, Helvetica, sans-serif',
+                    'Courier New, Courier, monospace',
+                    'Georgia, serif',
+                    'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                    'Tahoma, Geneva, sans-serif',
+                    'Times New Roman, Times, serif',
+                    'Trebuchet MS, Helvetica, sans-serif',
+                    'Verdana, Geneva, sans-serif',
+                    'Outfit, sans-serif',
+                    'Playfair Display, serif'
+                ],
+                supportAllValues: true
+            },
+            fontSize: {
+                options: [
+                    9, 11, 13, 'default', 17, 19, 21, 24, 28, 32, 36
+                ],
+                supportAllValues: true
             },
             heading: {
                 options: [{

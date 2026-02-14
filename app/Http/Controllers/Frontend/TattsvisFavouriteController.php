@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\MetalColor;
+use App\Models\Shape;
 use Illuminate\Http\Request;
 
 class TattsvisFavouriteController extends Controller
@@ -76,14 +77,41 @@ class TattsvisFavouriteController extends Controller
         }
 
         // Filter by Price
-        if ($request->has('price')) {
-            $priceRanges = $request->input('price');
-            if (is_array($priceRanges)) {
-                $query->where(function ($q) use ($priceRanges) {
-                    foreach ($priceRanges as $range) {
-                        [$min, $max] = explode('-', $range);
-                        $q->orWhereBetween('price', [(float) $min, (float) $max]);
+        if ($request->filled('price')) {
+            // Checkbox logic takes precedence
+            $priceRanges = is_array($request->price) ? $request->price : [$request->price];
+
+            $query->where(function ($q) use ($priceRanges) {
+                foreach ($priceRanges as $range) {
+                    // Clean string: "₹ 0 - ₹ 10,000" -> "0-10000"
+                    $rangeClean = str_replace(['₹', ',', ' '], '', $range);
+                    $parts = explode('-', $rangeClean);
+                    if (count($parts) == 2) {
+                        $min = (int) $parts[0];
+                        $max = (int) $parts[1];
+                        $q->orWhereBetween('selling_price', [$min, $max]);
                     }
+                }
+            });
+        } elseif ($request->filled('min_price') && $request->filled('max_price')) {
+            // Slider logic (Effective only if no specific ranges checked)
+            $minPrice = (int) $request->min_price;
+            $maxPrice = (int) $request->max_price;
+
+            // If max price is at the slider limit (100000), treat it as open-ended or just high
+            if ($maxPrice >= 100000) {
+                $query->where('selling_price', '>=', $minPrice);
+            } else {
+                $query->whereBetween('selling_price', [$minPrice, $maxPrice]);
+            }
+        }
+
+        // Filter by Diamond Shape
+        if ($request->has('diamond_shape')) {
+            $shapes = $request->input('diamond_shape');
+            if (is_array($shapes)) {
+                $query->whereHas('diamondShape', function ($q) use ($shapes) {
+                    $q->whereIn('name', $shapes);
                 });
             }
         }
@@ -122,6 +150,7 @@ class TattsvisFavouriteController extends Controller
             '10-20' => '10-20 g',
             '20-30' => '20-30 g'
         ];
+        $shapes = Shape::where('status', 1)->pluck('name');
 
         if ($request->ajax()) {
             return view('frontend.pages.partials.tattsvisfavourite-grid', compact('products'))->render();
@@ -134,7 +163,8 @@ class TattsvisFavouriteController extends Controller
             'metalColors',
             'metalPurities',
             'sizes',
-            'weightRanges'
+            'weightRanges',
+            'shapes'
         ));
     }
 }

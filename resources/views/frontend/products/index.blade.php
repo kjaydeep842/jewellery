@@ -127,6 +127,32 @@
                 </div>
                 @endif
 
+                <!-- Filter Item: Diamond Shape -->
+                @if($shapes->count() > 0)
+                <div class="border-b border-gray-100 py-4 filter-container">
+                    <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
+                        <span class="font-medium text-gray-800">Diamond Shape</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
+                    </div>
+                    <div class="mt-4 space-y-3 filter-content hidden">
+                        @foreach($shapes as $index => $shape)
+                        <label class="flex items-center gap-3 cursor-pointer group {{ $index >= 5 ? 'hidden extra-shape' : '' }}">
+                            <input type="checkbox" name="diamond_shape[]" value="{{ $shape }}"
+                                {{ is_array(request('diamond_shape')) && in_array($shape, request('diamond_shape')) ? 'checked' : '' }}
+                                class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
+                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $shape }}</span>
+                        </label>
+                        @endforeach
+                        
+                        @if($shapes->count() > 5)
+                            <button type="button" class="text-xs text-amber-600 hover:underline mt-2 ml-7 view-more-shapes">
+                                + View More
+                            </button>
+                        @endif
+                    </div>
+                </div>
+                @endif
+
                 <!-- Filter Item: Size -->
                 @if(count($sizes) > 0)
                 <div class="border-b border-gray-100 py-4 filter-container">
@@ -169,13 +195,14 @@
                 </div>
                 @endif
 
-                <!-- Filter Item: Price Range -->
+                <!-- Filter Item: Price -->
                 <div class="border-b border-gray-100 py-4 filter-container">
                     <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
                         <span class="font-medium text-gray-800">Price Range</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon rotate-180"></i>
                     </div>
                     <div class="mt-4 space-y-3 filter-content hidden">
+                        <!-- Price Checkboxes -->
                         @php
                             $priceRanges = [
                                 '₹ 0 - ₹ 10,000',
@@ -187,13 +214,34 @@
                             ];
                         @endphp
                         @foreach($priceRanges as $range)
-                        <label class="flex items-center gap-3 cursor-pointer group">
-                            <input type="checkbox" name="price[]" value="{{ $range }}"
-                                {{ is_array(request('price')) && in_array($range, request('price')) ? 'checked' : '' }}
-                                class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer">
-                            <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $range }}</span>
-                        </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="checkbox" name="price[]" value="{{ $range }}"
+                                    {{ is_array(request('price')) && in_array($range, request('price')) ? 'checked' : '' }}
+                                    class="filter-checkbox w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500 cursor-pointer price-checkbox">
+                                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{{ $range }}</span>
+                            </label>
                         @endforeach
+
+                        <!-- Custom Price Slider -->
+                        <div class="px-2 mt-4">
+                            <label class="text-sm font-medium text-gray-800 mb-2 block">Custom Price</label>
+                            <div class="price-slider-container w-full pt-4 pb-2">
+                                    <div class="relative w-full h-1 bg-gray-200 rounded-full">
+                                        <div id="price-track" class="absolute h-full bg-[#CBA65A] rounded-full"></div>
+                                        <input type="range" id="min-price-input" min="0" max="100000" value="{{ request('min_price', 0) }}" step="1000"
+                                            class="absolute w-full h-1 bg-transparent appearance-none pointer-events-none z-20 cursor-pointer [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[1.5px] [&::-webkit-slider-thumb]:border-[#CBA65A] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-md">
+                                        <input type="range" id="max-price-input" min="0" max="100000" value="{{ request('max_price', 100000) }}" step="1000"
+                                            class="absolute w-full h-1 bg-transparent appearance-none pointer-events-none z-20 cursor-pointer [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[1.5px] [&::-webkit-slider-thumb]:border-[#CBA65A] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-md">
+                                    </div>
+                                    <div class="flex justify-between items-center mt-4">
+                                        <span id="min-price-display" class="font-medium text-sm text-gray-700">₹ 0</span>
+                                        <span id="max-price-display" class="font-medium text-sm text-gray-700">₹ 100,000+</span>
+                                    </div>
+                                    <!-- Hidden Inputs for Form Submission -->
+                                    <input type="hidden" name="min_price" id="hidden-min-price" value="{{ request('min_price', 0) }}">
+                                    <input type="hidden" name="max_price" id="hidden-max-price" value="{{ request('max_price', 100000) }}">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -319,10 +367,73 @@ document.addEventListener('DOMContentLoaded', function() {
     // Checkbox Changes
     filterForm.addEventListener('change', function(e) {
         if (e.target.classList.contains('filter-checkbox')) {
-            updateProducts();
+             if (window.innerWidth >= 1024) {
+                updateProducts();
+            }
         }
     });
 
+    // Price Slider Logic
+    const minPriceInput = document.getElementById('min-price-input');
+    const maxPriceInput = document.getElementById('max-price-input');
+    const minPriceDisplay = document.getElementById('min-price-display');
+    const maxPriceDisplay = document.getElementById('max-price-display');
+    const priceTrack = document.getElementById('price-track');
+    const hiddenMinPrice = document.getElementById('hidden-min-price');
+    const hiddenMaxPrice = document.getElementById('hidden-max-price');
+
+    if (minPriceInput && maxPriceInput) {
+        function updatePriceSlider() {
+            const min = parseInt(minPriceInput.value);
+            const max = parseInt(maxPriceInput.value);
+            const range = maxPriceInput.max - maxPriceInput.min;
+            
+            // Prevent crossing
+            if (min > max - 1000) {
+                const tmp = min;
+                minPriceInput.value = max - 1000;
+            }
+
+            const percent1 = ((minPriceInput.value - minPriceInput.min) / range) * 100;
+            const percent2 = ((maxPriceInput.value - maxPriceInput.min) / range) * 100;
+
+            priceTrack.style.left = percent1 + '%';
+            priceTrack.style.width = (percent2 - percent1) + '%';
+
+            minPriceDisplay.textContent = '₹ ' + parseInt(minPriceInput.value).toLocaleString();
+            maxPriceDisplay.textContent = '₹ ' + parseInt(maxPriceInput.value).toLocaleString() + (maxPriceInput.value == maxPriceInput.max ? '+' : '');
+
+            // Update hidden inputs
+            hiddenMinPrice.value = minPriceInput.value;
+            hiddenMaxPrice.value = maxPriceInput.value;
+        }
+
+        // Initialize
+        updatePriceSlider();
+
+        // Event Listeners
+        minPriceInput.addEventListener('input', updatePriceSlider);
+        maxPriceInput.addEventListener('input', updatePriceSlider);
+
+        // Trigger filter on change (mouse up / touch end)
+        const triggerFilter = () => {
+             // If slider triggered this, uncheck all price checkboxes to avoid conflict
+             document.querySelectorAll('.price-checkbox').forEach(cb => cb.checked = false);
+             if (window.innerWidth >= 1024) {
+                 updateProducts();
+             }
+        };
+
+        minPriceInput.addEventListener('change', triggerFilter);
+        maxPriceInput.addEventListener('change', triggerFilter);
+        
+         // If a price checkbox is clicked
+        document.querySelectorAll('.price-checkbox').forEach(cb => {
+            cb.addEventListener('change', () => {
+                // If checking a box, functionality is handled by generic checkbox change listener above
+            });
+        });
+    }
     // Pagination AJAX
     document.addEventListener('click', function(e) {
         if (e.target.closest('.pagination a')) {
@@ -341,6 +452,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 if (loader) loader.classList.add('hidden');
             });
+        }
+    });
+    // View More Shapes Toggle
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('view-more-shapes')) {
+            const btn = e.target;
+            const container = btn.closest('.filter-content');
+            const extraShapes = container.querySelectorAll('.extra-shape');
+            
+            extraShapes.forEach(shape => {
+                shape.classList.toggle('hidden');
+            });
+
+            if (btn.textContent.trim() === '+ View More') {
+                btn.textContent = '- View Less';
+            } else {
+                btn.textContent = '+ View More';
+            }
         }
     });
 });

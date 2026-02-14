@@ -306,6 +306,68 @@
     </div>
 
     @stack('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Auto-expand accordions with checked inputs
+            setTimeout(() => {
+                document.querySelectorAll('.filter-container .filter-content input[type="checkbox"]:checked').forEach(checkbox => {
+                    const content = checkbox.closest('.filter-content');
+                    if (content && content.classList.contains('hidden')) {
+                        content.classList.remove('hidden');
+                        const container = content.closest('.filter-container');
+                        if (container) {
+                            const icon = container.querySelector('.accordion-icon');
+                            if (icon) icon.classList.add('rotate-180');
+                        }
+                    }
+                });
+            }, 100); // Small delay to ensure DOM is fully ready if other scripts are manipulating it
+
+            // Global Filter Accordion Logic
+            // Using capture phase (true) to ensure we handle the click before other scripts might stop propagation
+            document.addEventListener('click', function (e) {
+                // Filter Accordion - Toggle Visibility
+                const header = e.target.closest('.filter-accordion-header');
+                if (header) {
+                    const container = header.closest('.filter-container');
+                    if (container) {
+                        // Prevent potential interference from other scripts
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const content = container.querySelector('.filter-content');
+                        const icon = header.querySelector('.accordion-icon');
+
+                        if (content) {
+                            content.classList.toggle('hidden');
+                            if (icon) icon.classList.toggle('rotate-180');
+                        }
+                    }
+                    return;
+                }
+
+                // View More Shapes (Global)
+                if (e.target.classList.contains('view-more-shapes')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const container = e.target.closest('.filter-content');
+                    if (container) {
+                        const hiddenShapes = container.querySelectorAll('.extra-shape');
+                        hiddenShapes.forEach(shape => {
+                            shape.classList.toggle('hidden');
+                        });
+
+                        if (e.target.textContent.includes('View More')) {
+                            e.target.textContent = '- View Less';
+                        } else {
+                            e.target.textContent = '+ View More';
+                        }
+                    }
+                }
+            }, true); // Enable capture phase
+        });
+    </script>
 </body>
 
 </html>

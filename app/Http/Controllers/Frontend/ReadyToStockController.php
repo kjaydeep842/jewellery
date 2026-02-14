@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\MetalColor;
+use App\Models\Shape;
 use Illuminate\Http\Request;
 
 class ReadyToStockController extends Controller
@@ -14,7 +15,7 @@ class ReadyToStockController extends Controller
     {
         $query = Product::with(['category', 'images', 'variants', 'metalColor'])
             ->where('status', 'active');
-            // ->where('is_ready_to_stock', true);
+        // ->where('is_ready_to_stock', true);
 
         // Filter by Category
         if ($request->filled('category')) {
@@ -79,28 +80,56 @@ class ReadyToStockController extends Controller
             });
         }
 
-        // Filter by Price Range
-        if ($request->filled('price_range')) {
-            $priceRanges = is_array($request->price_range) ? $request->price_range : [$request->price_range];
+        // Filter by Price
+        if ($request->filled('price')) {
+            // Checkbox logic takes precedence
+            $priceRanges = is_array($request->price) ? $request->price : [$request->price];
 
             $query->where(function ($q) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
                     switch ($range) {
-                        case '10000-20000':
+                        case '₹ 0 - ₹ 10,000':
+                            $q->orWhereBetween('price', [0, 10000]);
+                            break;
+                        case '₹ 10,000 - ₹ 20,000':
                             $q->orWhereBetween('price', [10000, 20000]);
                             break;
-                        case '20000-40000':
-                            $q->orWhereBetween('price', [20000, 40000]);
+                        case '₹ 20,000 - ₹ 30,000':
+                            $q->orWhereBetween('price', [20000, 30000]);
                             break;
-                        case '40000-60000':
-                            $q->orWhereBetween('price', [40000, 60000]);
+                        case '₹ 30,000 - ₹ 40,000':
+                            $q->orWhereBetween('price', [30000, 40000]);
                             break;
-                        case '60000-80000':
-                            $q->orWhereBetween('price', [60000, 80000]);
+                        case '₹ 40,000 - ₹ 50,000':
+                            $q->orWhereBetween('price', [40000, 50000]);
+                            break;
+                        case '₹ 50,000 - ₹ 100,000':
+                            $q->orWhereBetween('price', [50000, 100000]);
                             break;
                     }
                 }
             });
+        } elseif ($request->filled('min_price') && $request->filled('max_price')) {
+            // Slider logic (Effective only if no specific ranges checked)
+            $minPrice = (int) $request->min_price;
+            $maxPrice = (int) $request->max_price;
+
+            // If max price is at the slider limit (100000), treat it as open-ended or just high
+            if ($maxPrice >= 100000) {
+                $query->where('price', '>=', $minPrice);
+            } else {
+                $query->whereBetween('price', [$minPrice, $maxPrice]);
+            }
+        }
+
+        // Filter by Diamond Shape
+        if ($request->has('diamond_shape')) {
+            $shapes = $request->input('diamond_shape');
+            if (is_array($shapes)) {
+                $query->whereHas('diamondShape', function ($q) use ($shapes) {
+                    $q->whereIn('name', $shapes);
+                });
+            }
         }
 
         // Sorting
@@ -134,6 +163,7 @@ class ReadyToStockController extends Controller
             '10-20' => '10-20 g',
             '20-30' => '20-30 g'
         ];
+        $shapes = Shape::where('status', 1)->pluck('name');
 
         if ($request->ajax()) {
             return view('frontend.pages.partials.readytostock-grid', compact('products'))->render();
@@ -146,7 +176,8 @@ class ReadyToStockController extends Controller
             'metalColors',
             'metalPurities',
             'sizes',
-            'weightRanges'
+            'weightRanges',
+            'shapes'
         ));
     }
 }

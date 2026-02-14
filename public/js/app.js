@@ -224,12 +224,27 @@ document.addEventListener("DOMContentLoaded", () => {
     // Jewellery Slider (Premium Collection)
     const jewellerySlider = document.getElementById('jewellerySlider');
     const slideIndexLabel = document.getElementById('slideIndex');
+
     if (jewellerySlider && slideIndexLabel) {
         jewellerySlider.addEventListener('scroll', () => {
-            const cardWidth = 300; // approximation
+            const firstCard = jewellerySlider.querySelector('.snap-start');
+            const gap = 24; // flx gap-6 is 1.5rem = 24px
+            const cardWidth = firstCard ? firstCard.offsetWidth + gap : 300;
             const index = Math.round(jewellerySlider.scrollLeft / cardWidth) + 1;
             slideIndexLabel.innerText = index.toString().padStart(2, '0');
         });
+
+        window.slide = function (direction) {
+            const firstCard = jewellerySlider.querySelector('.snap-start');
+            const gap = 24; // flex gap-6
+            const cardWidth = firstCard ? firstCard.offsetWidth + gap : 300;
+
+            if (direction === 'left') {
+                jewellerySlider.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+            } else {
+                jewellerySlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            }
+        };
     }
 });
 
@@ -421,6 +436,9 @@ document.addEventListener('click', function (event) {
 
 window.initHomeInteractive = function (middleBannersCount, categoriesData, storageBaseUrl, assetBaseUrl) {
     // Banner Slider
+    // Banner Slider Logic for slides1 is handled by initShutterSlider globally
+    // Removing conflicting translateX logic that causes the container to move off-screen
+    /*
     const slides1 = document.getElementById('slides1');
     const dots1 = document.querySelectorAll('#dots1 button');
     let currentSlide1 = 0;
@@ -440,6 +458,7 @@ window.initHomeInteractive = function (middleBannersCount, categoriesData, stora
     if (totalSlides1 > 1) {
         setInterval(() => goToSlide1(currentSlide1 + 1), 5000);
     }
+    */
 
     // Category Slider
     let currentCatIndex = 0;

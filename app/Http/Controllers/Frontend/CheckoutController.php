@@ -131,7 +131,7 @@ class CheckoutController extends Controller
         return view('frontend.checkout.payment', array_merge(compact('address'), $cartData));
     }
 
-    public function processOrder(Request $request)
+    public function process(Request $request)
     {
         $cart = Cart::where('user_id', Auth::id())->where('status', 'active')->first();
         if (!$cart) {

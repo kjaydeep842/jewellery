@@ -1,153 +1,231 @@
-@extends('frontend.checkout.layouts.app', ['activeStep' => 'address'])
+@extends('frontend.layouts.master')
 
 @section('content')
-    <!-- Main Content -->
-    <main
-        class="w-full max-w-[1920px] mx-auto flex flex-col xl:flex-row justify-center items-start gap-12 xl:gap-5 px-4 py-8 lg:px-20 xl:px-[100px] xl:pt-[40px] xl:pb-[120px]">
-        <!-- Left Column: Address Selection -->
-        <div class="w-full flex-1 flex flex-col gap-6">
+    <style>
+        /* Hide Default Header/Ticker */
+        #header-placeholder, .ticker-wrapper {
+            display: none !important;
+        }
+    </style>
 
-            <!-- Header Row -->
-            <div class="flex justify-between items-center">
-                <h2 class="font-medium text-[#1A1A1A] text-lg">Select Delivery Address</h2>
-                <a href="{{ route('checkout.address.create') }}"
-                    class="px-6 py-2 border border-[#CBA65A] text-[#CBA65A] text-sm font-medium rounded-[5px] hover:bg-[#FDFBF7] transition-colors">
-                    Add New Address
-                </a>
+    <!-- Custom Ticker -->
+    <div class="ticker-wrapper" style="display: block !important;">
+        <div class="ticker">
+            <span>✦ Find a new reason to shine with our Solitaires ✦</span>
+            <span>✦ Find a new reason to shine with our Solitaires ✦</span>
+            <span>✦ Find a new reason to shine with our Solitaires ✦</span>
+            <span>✦ Find a new reason to shine with our Solitaires ✦</span>
+            <span>✦ Find a new reason to shine with our Solitaires ✦</span>
+        </div>
+    </div>
+
+    <!-- Custom Header with Stepper -->
+    <header class="bg-white sticky top-0 z-50 shadow-sm border-b border-gray-100">
+        <div class="max-w-[1920px] mx-auto px-6 py-4 flex flex-wrap lg:flex-nowrap justify-between items-center gap-4">
+
+            <!-- Logo -->
+            <div class="flex items-center gap-2">
+                <button id="mobile-menu-btn" class="lg:hidden p-2 text-gray-800 hover:text-[#CBA65A] transition-colors">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <div class="w-[120px]">
+                     <a href="{{ route('home') }}">
+                        <img src="{{ asset('assets/logo_black.png') }}" alt="Tattsvi" class="w-full h-auto">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stepper (Active: ADDRESS) -->
+            <div class="hidden md:flex items-center gap-4 text-sm font-medium tracking-wide">
+                <div class="text-[#CBA65A]">BAG</div>
+                <div class="text-[#CBA65A]">----------</div>
+                <div class="text-[#CBA65A] border-b-2 border-[#CBA65A] pb-1">ADDRESS</div>
+                <div class="text-gray-300">----------</div>
+                <div class="text-gray-400">PAYMENT</div>
+            </div>
+
+            <!-- Secure Badge -->
+            <div class="flex items-center gap-2 text-green-600 font-medium text-sm">
+                <img src="{{ asset('assets/L- Brand Logo.png') }}" alt="Secure" class="h-6 w-auto object-contain"> 100% SECURE
+            </div>
+        </div>
+
+        <!-- Gradient Navigation Bar -->
+        <nav
+            class="hidden lg:flex items-center justify-center space-x-6 min-[2000px]:space-x-12 text-[15px] min-[2000px]:text-2xl font-['Outfit'] font-medium tracking-wide bg-[linear-gradient(90deg,#D9BE87_0%,#BE933C_100%)] w-full py-[14px] text-white">
+            <div class="relative group">
+                <a href="{{ route('page.new-arrivals') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">New Arrivals</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.best-seller') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Best Seller</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.18kt') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">18KT Jewellery</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.tattsvisfavourite') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Tattsvi's Favourite</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.exhibition') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Exhibition</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.readytostock') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Ready To Stock</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.contact') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Contact Us</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.about') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">About Us</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-[1920px] mx-auto px-4 lg:px-6 py-8 flex flex-col lg:flex-row gap-8 min-h-[600px]">
+
+        <!-- Left Column: Address Selection -->
+        <div class="w-full lg:w-2/3 flex flex-col gap-6">
+
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-[#1A1A1A] font-Outfit">Select Delivery Address</h2>
+                <a href="{{ route('checkout.address.create') }}" class="text-[#CBA65A] border border-[#CBA65A] px-4 py-2 rounded text-sm font-medium hover:bg-[#FDFBF7] transition-colors"> Add New Address </a>
             </div>
 
             @if($addresses->isEmpty())
-                <div class="text-center py-10 bg-white border border-gray-200 rounded-[8px]">
-                    <p class="text-gray-500 mb-4">No saved addresses found.</p>
+                <div class="text-center py-10 bg-white rounded-lg border border-gray-100">
+                    <p class="text-gray-500 mb-4">No addresses found.</p>
+                    <a href="{{ route('checkout.address.create') }}" class="bg-[#CBA65A] text-white px-6 py-2 rounded-full font-medium hover:opacity-90">Add Address</a>
                 </div>
             @else
-                <!-- Addresses Loop -->
-                @foreach($addresses as $address)
-                    <div class="address-card border border-gray-200 rounded-[8px] p-6 shadow-sm relative cursor-pointer hover:border-[#CBA65A] transition-colors {{ $loop->first ? 'border-[#CBA65A] bg-[#FDFBF7]' : '' }}"
-                        onclick="selectAddressCard(this, {{ $address->id }})">
+                <div class="grid gap-4">
+                    <!-- Hidden input to track selected address -->
+                    <input type="hidden" id="selected-address-id" value="{{ session('selected_address_id', $addresses->firstWhere('is_default', 1)->id ?? $addresses->first()->id) }}">
 
-                        <!-- Radio Button (Hidden but functional) -->
-                        <input type="radio" name="selected_address" value="{{ $address->id }}"
-                            class="absolute top-6 left-6 accent-[#CBA65A]" {{ $loop->first ? 'checked' : '' }}>
-
-                        <!-- Edit Button -->
-                        <a href="{{ route('checkout.address.edit', $address->id) }}"
-                            class="absolute top-6 right-6 flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-[4px] text-xs font-medium text-gray-600 hover:border-[#CBA65A] hover:text-[#CBA65A] transition-colors z-10">
-                            <i class="fa-regular fa-pen-to-square"></i> Edit
-                        </a>
-
-                        <!-- Content -->
-                        <div class="flex flex-col gap-2 pr-20 pl-8">
-                            <h3 class="font-bold text-[#1A1A1A] text-base">{{ $address->name }} <span
-                                    class="text-xs font-normal text-gray-500 ml-2">({{ ucfirst($address->type) }})</span></h3>
-                            <p class="text-gray-600 text-sm leading-relaxed">
-                                {{ $address->address_line_1 }}<br>
-                                {{ $address->city }}, {{ $address->state }} - {{ $address->zip }}
-                            </p>
-                            <p class="text-gray-900 text-sm font-medium mt-1">
-                                Mobile: <span class="font-bold">{{ $address->phone }}</span>
-                            </p>
+                    @foreach($addresses as $address)
+                    @php
+                        // Determine initial state
+                        $isSelected = (session('selected_address_id') == $address->id) || (!session()->has('selected_address_id') && ($address->is_default || $loop->first));
+                    @endphp
+                    <div id="address-card-{{ $address->id }}" 
+                         onclick="selectAddress({{ $address->id }})"
+                         class="address-card border {{ $isSelected ? 'border-[#CBA65A] bg-[#FFFBF2]' : 'border-gray-200' }} rounded-lg p-6 relative group transition-all hover:shadow-md cursor-pointer">
+                        
+                        <!-- Actions -->
+                        <div class="absolute top-4 right-4 flex gap-2">
+                            <a href="{{ route('checkout.address.edit', $address->id) }}" class="text-gray-400 hover:text-[#CBA65A] px-2 py-1 border border-gray-200 rounded text-xs flex items-center gap-1 transition-colors z-10">
+                                <i class="fa-solid fa-pen"></i> Edit
+                            </a>
                         </div>
 
-                        <!-- Remove Button -->
-                        <button
-                            class="flex items-center gap-2 mt-6 ml-8 px-4 py-2 border border-blue-50 bg-gray-100 rounded-[4px] text-sm font-medium text-gray-600 hover:border-red-500 hover:text-red-500 transition-colors z-10">
-                            <i class="fa-regular fa-trash-can"></i> Remove Address
-                        </button>
-                    </div>
-                @endforeach
-            @endif
+                        <!-- Selection Indicator -->
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1">
+                                <div id="radio-indicator-{{ $address->id }}"
+                                   class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors {{ $isSelected ? 'border-[#CBA65A]' : 'border-gray-300' }}">
+                                    <div class="w-2.5 h-2.5 bg-[#CBA65A] rounded-full transition-transform {{ $isSelected ? 'scale-100' : 'scale-0' }}"></div>
+                                </div>
+                            </div>
 
-            <!-- Payment Icons -->
-            <div class="flex flex-row justify-between items-center gap-2 w-full h-[70.74px] mt-3">
-                <div
-                    class="h-full flex-1 min-w-[80px] rounded-[4px] flex items-center justify-center shadow-sm hover:border-[#CBA65A] transition-colors cursor-pointer">
-                    <img src="{{ asset('assets/google_pay.png') }}" alt="GPay" class="w-full h-full object-contain-cover">
+                            <div class="flex-grow">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3 class="font-bold text-gray-900 text-lg font-Outfit">{{ $address->name }}</h3>
+                                    <span class="bg-gray-100 text-gray-500 text-[10px] px-2 py-0.5 rounded uppercase tracking-wider">{{ $address->type }}</span>
+                                </div>
+                                
+                                <p class="text-gray-600 text-sm leading-relaxed mb-2 font-Outfit">
+                                    {{ $address->address_line_1 }}<br>
+                                    {{ $address->area ? $address->area . ',' : '' }} {{ $address->city }}, {{ $address->state }} - {{ $address->zip }}
+                                </p>
+                                
+                                <p class="text-gray-800 text-sm font-medium font-Outfit">Mobile: <span class="text-gray-600">{{ $address->phone }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
-                <!-- ... other icons ... -->
-                <div
-                    class="h-full flex-1 min-w-[80px] rounded-[4px] flex items-center justify-center shadow-sm hover:border-[#CBA65A] transition-colors cursor-pointer">
-                    <img src="{{ asset('assets/visa.png') }}" alt="Visa" class="w-full h-full object-contain-cover">
-                </div>
-                <div
-                    class="h-full flex-1 min-w-[80px] rounded-[4px] flex items-center justify-center shadow-sm hover:border-[#CBA65A] transition-colors cursor-pointer">
-                    <img src="{{ asset('assets/paypal.png') }}" alt="PayPal" class="w-full h-full object-contain-cover">
-                </div>
-                <div
-                    class="h-full flex-1 min-w-[80px] rounded-[4px] flex items-center justify-center shadow-sm hover:border-[#CBA65A] transition-colors cursor-pointer">
-                    <img src="{{ asset('assets/master-card.png') }}" alt="MasterCard"
-                        class="w-full h-full object-contain-cover">
-                </div>
-            </div>
+            @endif
 
         </div>
 
         <!-- Right Column: Price Details -->
-        <div class="w-full xl:w-[400px] flex-shrink-0">
-            <div class="sticky top-28 bg-[#FDFBF7] rounded border border-gray-100 p-6">
-                <h3 class="font-bold text-gray-900 text-lg mb-6">Price Details ({{ $cartItems->count() }} Item)</h3>
+        <div class="w-full lg:w-1/3 flex-shrink-0">
+            <div class="bg-white border border-gray-100 rounded-lg p-6 sticky top-28 shadow-sm">
+                <h3 class="font-bold text-gray-900 text-lg mb-6 font-Outfit border-b border-gray-100 pb-3">Price Details ({{ $cartItems->count() }} Item)</h3>
 
-                <div class="space-y-4 pb-6 border-b border-gray-200 text-sm font-medium">
-                    <div class="flex justify-between text-gray-900">
+                <div class="space-y-4 pb-6 mb-4 border-b border-gray-100 text-sm font-Outfit">
+                    <div class="flex justify-between text-gray-600">
                         <span>Total MRP</span>
-                        <span>₹{{ number_format($totalMrp, 2) }}</span>
+                        <span class="font-medium">₹{{ number_format($totalMrp, 2) }}</span>
                     </div>
-                    <div class="flex justify-between text-gray-900">
+                    <div class="flex justify-between text-green-600">
                         <span>Discount on MRP</span>
-                        <span>₹{{ number_format($discount, 2) }}</span>
+                        <span>-₹{{ number_format($discount, 2) }}</span>
                     </div>
-                    <div class="flex justify-between text-gray-900">
+                    <div class="flex justify-between text-gray-600">
                         <span>Platform Fee</span>
-                        <span>₹{{ number_format($platformFee, 2) }}</span>
+                        <span class="font-medium">₹{{ number_format($platformFee, 2) }}</span>
                     </div>
                 </div>
 
-                <div class="pt-4 mb-8">
-                    <div class="flex justify-between items-center font-bold text-gray-900 text-lg">
-                        <span>Total Amount</span>
-                        <span>₹{{ number_format($totalAmount, 2) }}</span>
-                    </div>
+                <div class="flex justify-between items-center font-bold text-gray-900 text-xl mb-8 font-Outfit">
+                    <span>Total Amount</span>
+                    <span>₹{{ number_format($totalAmount, 2) }}</span>
                 </div>
 
-                <button id="place-order-btn" onclick="proceedToPayment()"
-                    class="w-full py-3.5 rounded-full bg-[linear-gradient(90deg,#D9BE87_0%,#BE933C_100%)] text-white text-xl font-medium shadow-md hover:opacity-90 transition-opacity mb-4">
-                    Place Order
+                <button onclick="proceedToPayment()"
+                    class="flex flex-row justify-center items-center px-4 py-[18px] gap-[10px] w-full h-[60px] bg-[linear-gradient(90deg,#D9BE87_0%,#BE933C_100%)] rounded-[100px] flex-none order-1 self-stretch grow-0 text-white font-medium text-lg shadow-lg hover:shadow-xl hover:opacity-95 transition-all transform active:scale-[0.98]">
+                    Continue to Payment
                 </button>
-
-                <div class="text-center">
-                    <a href="{{ route('page.contact') }}"
-                        class="text-sm text-gray-500 hover:text-[#CBA65A] transition-colors">Need Help? Contact
-                        Us</a>
+                
+                <div class="mt-4 text-center">
+                     <p class="text-xs text-gray-400">Need Help? <a href="{{ route('page.contact') }}" class="text-[#CBA65A] hover:underline">Contact Us</a></p>
                 </div>
             </div>
         </div>
+
     </main>
 
     <script>
-        function selectAddressCard(card, id) {
-            // Reset all cards
-            document.querySelectorAll('.address-card').forEach(c => {
-                c.classList.remove('border-[#CBA65A]', 'bg-[#FDFBF7]');
-                c.querySelector('input[type="radio"]').checked = false;
+        function selectAddress(id) {
+            // Update hidden input
+            document.getElementById('selected-address-id').value = id;
+
+            // Reset Styles
+            document.querySelectorAll('.address-card').forEach(card => {
+                card.classList.remove('border-[#CBA65A]', 'bg-[#FFFBF2]');
+                card.classList.add('border-gray-200');
+            });
+            document.querySelectorAll('[id^="radio-indicator-"]').forEach(indicator => {
+                indicator.classList.remove('border-[#CBA65A]');
+                indicator.classList.add('border-gray-300');
+                indicator.querySelector('div').classList.remove('scale-100');
+                indicator.querySelector('div').classList.add('scale-0');
             });
 
-            // Select clicked card
-            card.classList.add('border-[#CBA65A]', 'bg-[#FDFBF7]');
-            card.querySelector('input[type="radio"]').checked = true;
+            // Set Active Style
+            const activeCard = document.getElementById('address-card-' + id);
+            if(activeCard) {
+                activeCard.classList.remove('border-gray-200');
+                activeCard.classList.add('border-[#CBA65A]', 'bg-[#FFFBF2]');
+                
+                const indicator = activeCard.querySelector('[id^="radio-indicator-"]');
+                indicator.classList.remove('border-gray-300');
+                indicator.classList.add('border-[#CBA65A]');
+                indicator.querySelector('div').classList.remove('scale-0');
+                indicator.querySelector('div').classList.add('scale-100');
+            }
         }
 
         function proceedToPayment() {
-            const selected = document.querySelector('input[name="selected_address"]:checked');
-            if (selected) {
-                // Redirect to the select-address route which sets session and redirects to payment
-                window.location.href = "{{ url('/checkout/select-address') }}/" + selected.value;
-            } else {
-                @if($addresses->isEmpty())
-                    alert('Please add an address first.');
-                @else
-                    alert('Please select an address.');
-                @endif
-                        }
+            const id = document.getElementById('selected-address-id').value;
+            if (!id) {
+                alert('Please select an address to continue.');
+                return;
+            }
+            // Use standard JS concatenation for URL to avoid Blade issues in external JS files (though this is inline)
+            // Redirect to select-address route which sets session and moves to payment
+            window.location.href = "{{ url('/checkout/select-address') }}/" + id;
         }
     </script>
+
 @endsection

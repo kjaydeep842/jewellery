@@ -37,6 +37,15 @@
             overflow-x: hidden;
             width: 100%;
             max-width: 100%;
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
         }
 
         *,
@@ -202,112 +211,157 @@
             </button>
         </div>
         <!-- Links -->
-        <div class="flex-1 overflow-y-auto p-5 space-y-6">
-            <!-- New Arrivals -->
-            <div class="mobile-dropdown group">
-                <button
-                    class="flex items-center justify-between w-full text-[15px] font-medium  tracking-wider text-gray-800 pb-2 border-b border-gray-50"
-                    onclick="toggleMobileDropdown('menu-new-arrivals', this)">
-                    New Arrivals <i
-                        class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div id="menu-new-arrivals" class="hidden pl-4 mt-3 space-y-3 border-l-2 border-[#E9D3D6]">
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Diamond Rings</a>
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Gold Necklaces</a>
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Wedding Collection</a>
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] font-medium py-1">View All
-                        New</a>
+        @include('frontend.partials.mobile-menu')
+    </div>
+
+    <!-- Global Loader Overlay -->
+    <div id="page-loader"
+        class="fixed inset-0 z-[9999] flex items-center justify-center hidden transition-opacity duration-500"
+        style="background: linear-gradient(180deg, #F2D7D3 0%, #EAD8A6 100%);">
+
+        <style>
+            @keyframes shimmer {
+                0% {
+                    transform: translateX(-150%) skewX(-15deg);
+                }
+
+                50% {
+                    transform: translateX(150%) skewX(-15deg);
+                }
+
+                100% {
+                    transform: translateX(150%) skewX(-15deg);
+                }
+            }
+
+            @keyframes breathe {
+
+                0%,
+                100% {
+                    transform: scale(1);
+                    opacity: 0.9;
+                }
+
+                50% {
+                    transform: scale(1.05);
+                    opacity: 1;
+                }
+            }
+
+            .loader-logo-container {
+                position: relative;
+                overflow: hidden;
+                display: inline-block;
+                animation: breathe 3s ease-in-out infinite;
+            }
+
+            .loader-shimmer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to right,
+                        rgba(255, 255, 255, 0) 0%,
+                        rgba(255, 255, 255, 0.4) 50%,
+                        rgba(255, 255, 255, 0) 100%);
+                transform: translateX(-150%);
+                animation: shimmer 2.5s infinite;
+            }
+        </style>
+
+        <div class="flex flex-col items-center">
+            <!-- Logo with Shimmer Effect -->
+            <div class="loader-logo-container">
+                <!-- Base Logo -->
+                <img src="{{ asset('assets/loadinglogo.png') }}" alt="Loading..."
+                    class="w-48 md:w-56 h-auto object-contain block">
+
+                <!-- Shimmer Overlay (Masked to Logo) -->
+                <div class="loader-shimmer"
+                    style="-webkit-mask-image: url('{{ asset('assets/loadinglogo.png') }}'); mask-image: url('{{ asset('assets/loadinglogo.png') }}'); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;">
                 </div>
             </div>
 
-            <!-- Best Seller -->
-            <div class="mobile-dropdown">
-                <button
-                    class="flex items-center justify-between w-full text-[15px] font-medium  tracking-wider text-gray-800 pb-2 border-b border-gray-50"
-                    onclick="toggleMobileDropdown('menu-best-seller', this)">
-                    Best Seller <i
-                        class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div id="menu-best-seller" class="hidden pl-4 mt-3 space-y-3 border-l-2 border-[#E9D3D6]">
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Top Rated</a>
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Most Gifted</a>
-                </div>
+            <!-- Optional: Elegant Text below -->
+            <div class="mt-4 text-[#5C4522] font-['Outfit'] text-sm tracking-[0.2em] uppercase animate-pulse">
+                Loading Elegance...
             </div>
-
-            <!-- Ready To Stock -->
-            <div class="mobile-dropdown">
-                <button
-                    class="flex items-center justify-between w-full text-[15px] font-medium  tracking-wider text-gray-800 pb-2 border-b border-gray-50"
-                    onclick="toggleMobileDropdown('menu-ready-stock', this)">
-                    Ready To Stock <i
-                        class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div id="menu-ready-stock" class="hidden pl-4 mt-3 space-y-3 border-l-2 border-[#E9D3D6]">
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Necklaces</a>
-                    <a href="#" class="block text-sm text-gray-600 hover:text-[#B39359] py-1">Earrings</a>
-                </div>
-            </div>
-
-            <!-- Buy It Again -->
-            <div class="mobile-dropdown">
-                <a href="{{ route('page.buy-it-again') }}"
-                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
-                    Buy It Again
-                </a>
-            </div>
-
-            <!-- Contact Us -->
-            <div class="mobile-dropdown">
-                <a href="{{ route('page.contact') }}"
-                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
-                    Contact Us
-                </a>
-            </div>
-
-            <!-- Exhibition -->
-            <div class="mobile-dropdown">
-                <a href="{{ route('page.exhibition') }}"
-                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
-                    Exhibition
-                </a>
-            </div>
-
-            <!-- About Us -->
-            <div class="mobile-dropdown">
-                <a href="{{ route('page.about') }}"
-                    class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
-                    About Us
-                </a>
-            </div>
-        </div>
-        <!-- Footer Info -->
-        <div class="bg-gray-50 p-5 border-t border-gray-100">
-            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                <span><i class="fa-solid fa-flag-usa mr-2"></i> USA (USD)</span>
-            </div>
-            @auth
-                <div class="space-y-3">
-                    <a href="{{ route('profile.edit') }}"
-                        class="block w-full bg-[#B39359] text-white text-center py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#5C4522] transition-colors">
-                        My Profile</a>
-                    <form method="POST" action="{{ route('frontend.auth.logout') }}">
-                        @csrf
-                        <button type="submit"
-                            class="block w-full border border-red-500 text-red-500 text-center py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-red-50 transition-colors">
-                            Logout</button>
-                    </form>
-                </div>
-            @else
-                <a href="{{ route('frontend.auth.mobile') }}"
-                    class="block w-full bg-black text-white text-center py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#5C4522] transition-colors">Sign
-                    In / Register</a>
-            @endauth
         </div>
     </div>
 
     @stack('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const globalLoader = document.getElementById('page-loader');
+
+            // --- Global Loader Logic for Links, Forms & Programmatic Actions ---
+            if (globalLoader) {
+
+                // 1. Monkey-patch form.submit() to catch programmatic submissions
+                // (Fixes "View More" buttons and Shape filters that call submit() via JS)
+                const originalSubmit = HTMLFormElement.prototype.submit;
+                HTMLFormElement.prototype.submit = function () {
+                    // Check for opt-out
+                    if (!this.dataset.noLoader) {
+                        globalLoader.classList.remove('hidden');
+                    }
+                    originalSubmit.apply(this, arguments);
+                };
+
+                // 2. Handle Link Clicks & Heuristic OnClick Navigation
+                document.addEventListener('click', function (e) {
+                    const link = e.target.closest('a');
+                    const elementWithOnclick = e.target.closest('[onclick]');
+
+                    // A) Handle Standard Links
+                    if (link) {
+                        const href = link.getAttribute('href');
+                        const target = link.getAttribute('target');
+
+                        if (href &&
+                            !href.startsWith('#') &&
+                            !href.startsWith('javascript:') &&
+                            target !== '_blank' &&
+                            !e.ctrlKey && !e.metaKey &&
+                            !link.hasAttribute('download') &&
+                            !link.dataset.noLoader
+                        ) {
+                            globalLoader.classList.remove('hidden');
+                        }
+                    }
+
+                    // B) Handle Elements with onclick="window.location..." or "submit()"
+                    // (Fixes "Add to Cart" buttons and other JS-based navigation)
+                    if (elementWithOnclick) {
+                        const code = elementWithOnclick.getAttribute('onclick');
+                        if (code && (
+                            code.includes('window.location') ||
+                            code.includes('location.href') ||
+                            code.includes('.submit()')
+                        )) {
+                            // Double check it's not a new tab action (harder to detect in raw string, but usually location.href is current tab)
+                            globalLoader.classList.remove('hidden');
+                        }
+                    }
+                });
+
+                // 3. Handle Standard Form Submissions (for type="submit" buttons)
+                document.addEventListener('submit', function (e) {
+                    const form = e.target;
+                    if (!form.dataset.noLoader && !e.defaultPrevented) {
+                        globalLoader.classList.remove('hidden');
+                    }
+                });
+
+                // 4. Handle Browser Back Button (Hide Loader from Cache)
+                window.addEventListener('pageshow', function (event) {
+                    if (event.persisted) {
+                        globalLoader.classList.add('hidden');
+                    }
+                });
+            }
+
             // Auto-expand accordions with checked inputs
             setTimeout(() => {
                 document.querySelectorAll('.filter-container .filter-content input[type="checkbox"]:checked').forEach(checkbox => {

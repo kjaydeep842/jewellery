@@ -210,7 +210,7 @@
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
-        @include('frontend.checkout.partials.mobile-menu')
+        @include('frontend.partials.mobile-menu')
     </div>
 
 </body>

@@ -300,13 +300,7 @@
     </div>
 </main>
 
-<!-- Loader Overlay -->
-<div id="page-loader" class="fixed inset-0 bg-white/80 z-[9999] flex items-center justify-center hidden backdrop-blur-sm">
-    <div class="flex flex-col items-center">
-        <img src="{{ asset('assets/logo_black.png') }}" alt="Tattsvi" class="w-32 h-auto animate-pulse grayscale opacity-20">
-        <div class="mt-4 border-t-2 border-b-2 border-[#CBA65A] rounded-full w-8 h-8 animate-spin"></div>
-    </div>
-</div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

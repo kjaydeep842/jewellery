@@ -72,6 +72,7 @@ Route::post('/products', [ProductController::class, 'index'])->name('products.in
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.details');
 Route::resource('products', ProductController::class)->except(['store']); // Exclude store to avoid conflict
 Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+Route::post('/reviews', [App\Http\Controllers\Frontend\ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 
 // AJAX Helpers
 Route::get('/ajax/products/category/{id}', [ProductController::class, 'fetchByCategory'])
@@ -107,9 +108,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Cart Index (Protected)
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/my-cart', [CartController::class, 'headerIndex'])->name('cart.header');
 
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::get('/my-wishlist', [WishlistController::class, 'headerIndex'])->name('wishlist.header');
     Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 });
 

@@ -15,6 +15,12 @@ class WishlistController extends Controller
         return view('frontend.wishlist.index', compact('wishlists'));
     }
 
+    public function headerIndex()
+    {
+        $wishlists = Auth::user()->wishlists()->with('product')->get();
+        return view('frontend.wishlist.header-index', compact('wishlists'));
+    }
+
     public function toggle(Request $request)
     {
         $request->validate([

@@ -65,6 +65,47 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileMenuOverlay) {
         mobileMenuOverlay.addEventListener('click', closeMenu);
     }
+
+    // Mobile Filter Sidebar Logic
+    const filterBtn = document.getElementById('mobile-filter-btn');
+    const closeFilterBtn = document.getElementById('close-filter-btn');
+    const filterSidebar = document.getElementById('filter-sidebar');
+    const filterOverlay = document.getElementById('filter-overlay');
+
+    window.openFilter = function () {
+        if (filterSidebar && filterOverlay) {
+            filterOverlay.classList.remove('hidden');
+            // small delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                filterOverlay.classList.remove('opacity-0');
+                filterSidebar.classList.remove('-translate-x-full');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+    }
+
+    window.closeFilter = function () {
+        if (filterSidebar && filterOverlay) {
+            filterSidebar.classList.add('-translate-x-full');
+            filterOverlay.classList.add('opacity-0');
+            setTimeout(() => {
+                filterOverlay.classList.add('hidden');
+                document.body.style.overflow = ''; // Restore scrolling
+            }, 300);
+        }
+    }
+
+    if (filterBtn) {
+        filterBtn.addEventListener('click', window.openFilter);
+    }
+
+    if (closeFilterBtn) {
+        closeFilterBtn.addEventListener('click', closeFilter);
+    }
+
+    if (filterOverlay) {
+        filterOverlay.addEventListener('click', closeFilter);
+    }
 });
 
 
@@ -796,3 +837,238 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000);
     }
 });
+
+/* =========================================
+   Global AJAX Filter Logic
+   ========================================= */
+
+window.updateProducts = function (formId = 'filterForm', containerId = 'products-container') {
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData);
+    const url = `${form.action}?${params.toString()}`;
+    const loader = document.getElementById('page-loader');
+    const productsContainer = document.getElementById(containerId);
+
+    if (loader) loader.classList.remove('hidden');
+
+    fetch(url, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+        .then(response => response.text())
+        .then(html => {
+            if (productsContainer) {
+                productsContainer.innerHTML = html;
+
+                // Re-initialize pagination listeners for the new content
+                initPaginationListeners(containerId);
+            }
+            if (loader) loader.classList.add('hidden');
+        })
+        .catch(error => {
+            console.error('Error fetching products:', error);
+            if (loader) loader.classList.add('hidden');
+        });
+};
+
+function initPaginationListeners(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.querySelectorAll('.pagination a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const url = this.href;
+            const loader = document.getElementById('page-loader');
+
+            if (loader) loader.classList.remove('hidden');
+
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.text())
+                .then(html => {
+                    container.innerHTML = html;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    initPaginationListeners(containerId); // Recursive bind
+                    if (loader) loader.classList.add('hidden');
+                })
+                .catch(error => {
+                    console.error('Error fetching page:', error);
+                    if (loader) loader.classList.add('hidden');
+                });
+        });
+    });
+}
+
+// Initialize on load for existing pagination, sliders, etc.
+document.addEventListener('DOMContentLoaded', () => {
+    initPaginationListeners('products-container');
+    initPriceSlider();
+    initSortDropdown();
+    initViewMoreShapes();
+});
+
+/* =========================================
+   Price Slider Logic
+   ========================================= */
+function initPriceSlider() {
+    const minPriceInput = document.getElementById('min-price-input');
+    const maxPriceInput = document.getElementById('max-price-input');
+    const minPriceDisplay = document.getElementById('min-price-display');
+    const maxPriceDisplay = document.getElementById('max-price-display');
+    const priceTrack = document.getElementById('price-track');
+    const hiddenMinPrice = document.getElementById('hidden-min-price');
+    const hiddenMaxPrice = document.getElementById('hidden-max-price');
+
+    if (minPriceInput && maxPriceInput) {
+        function updatePriceSlider() {
+            const min = parseInt(minPriceInput.value);
+            const max = parseInt(maxPriceInput.value);
+            const range = parseInt(maxPriceInput.max) - parseInt(maxPriceInput.min);
+
+            // Prevent crossing
+            if (min > max - 1000) {
+                minPriceInput.value = max - 1000;
+            }
+
+            const percent1 = ((minPriceInput.value - minPriceInput.min) / range) * 100;
+            const percent2 = ((maxPriceInput.value - maxPriceInput.min) / range) * 100;
+
+            if (priceTrack) {
+                priceTrack.style.left = percent1 + '%';
+                priceTrack.style.width = (percent2 - percent1) + '%';
+            }
+
+            if (minPriceDisplay) minPriceDisplay.textContent = '₹ ' + parseInt(minPriceInput.value).toLocaleString();
+            if (maxPriceDisplay) maxPriceDisplay.textContent = '₹ ' + parseInt(maxPriceInput.value).toLocaleString() + (maxPriceInput.value == maxPriceInput.max ? '+' : '');
+
+            // Update hidden inputs if they exist
+            if (hiddenMinPrice) hiddenMinPrice.value = minPriceInput.value;
+            if (hiddenMaxPrice) hiddenMaxPrice.value = maxPriceInput.value;
+        }
+
+        // Initialize
+        updatePriceSlider();
+
+        // Event Listeners
+        minPriceInput.addEventListener('input', updatePriceSlider);
+        maxPriceInput.addEventListener('input', updatePriceSlider);
+
+        // Trigger filter on change (mouse up / touch end)
+        const triggerSliderFilter = () => {
+            // Uncheck checkboxes when slider is used
+            document.querySelectorAll('.price-checkbox').forEach(cb => cb.checked = false);
+            if (window.innerWidth >= 1024) {
+                window.updateProducts();
+            }
+        };
+
+        minPriceInput.addEventListener('change', triggerSliderFilter);
+        maxPriceInput.addEventListener('change', triggerSliderFilter);
+    }
+}
+
+/* =========================================
+   Sort Dropdown Logic
+   ========================================= */
+function initSortDropdown() {
+    const filterForm = document.getElementById('filterForm');
+
+    // Helper to update all sort texts to keep them in sync
+    const updateAllSortTexts = (text) => {
+        document.querySelectorAll('.selected-sort-text').forEach(el => el.textContent = text);
+    };
+
+    // Iterate over all dropdown containers (Mobile & Desktop)
+    document.querySelectorAll('.sort-dropdown-container').forEach(container => {
+        const sortButton = container.querySelector('.sort-button');
+        const sortMenu = container.querySelector('.sort-menu');
+        const sortIcon = container.querySelector('.sort-icon');
+
+        if (sortButton && sortMenu) {
+            // Toggle Menu
+            sortButton.addEventListener('click', function (e) {
+                e.stopPropagation();
+                // Close other open menus first
+                document.querySelectorAll('.sort-menu').forEach(m => {
+                    if (m !== sortMenu) m.classList.add('hidden');
+                });
+                document.querySelectorAll('.sort-icon').forEach(i => {
+                    if (i !== sortIcon) i.classList.remove('rotate-180');
+                });
+
+                sortMenu.classList.toggle('hidden');
+                if (sortIcon) sortIcon.classList.toggle('rotate-180');
+            });
+
+            // Sort Item Click
+            container.querySelectorAll('.sort-item').forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const sort = this.dataset.sort;
+                    const text = this.textContent.trim();
+
+                    // Update UI text in all dropdowns
+                    updateAllSortTexts(text);
+
+                    if (filterForm) {
+                        let sortInput = filterForm.querySelector('input[name="sort"]');
+                        if (!sortInput) {
+                            sortInput = document.createElement('input');
+                            sortInput.type = 'hidden';
+                            sortInput.name = 'sort';
+                            filterForm.appendChild(sortInput);
+                        }
+                        sortInput.value = sort;
+
+                        // Close all menus
+                        document.querySelectorAll('.sort-menu').forEach(m => m.classList.add('hidden'));
+                        document.querySelectorAll('.sort-icon').forEach(i => i.classList.remove('rotate-180'));
+
+                        window.updateProducts();
+                    }
+                });
+            });
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.sort-dropdown-container')) {
+            document.querySelectorAll('.sort-menu').forEach(m => m.classList.add('hidden'));
+            document.querySelectorAll('.sort-icon').forEach(i => i.classList.remove('rotate-180'));
+        }
+    });
+}
+
+/* =========================================
+   View More Shapes Logic
+   ========================================= */
+function initViewMoreShapes() {
+    document.body.addEventListener('click', function (e) {
+        if (e.target.classList.contains('view-more-shapes')) {
+            const btn = e.target;
+            const container = btn.closest('.filter-content');
+            if (container) {
+                const extraShapes = container.querySelectorAll('.extra-shape');
+                extraShapes.forEach(shape => {
+                    shape.classList.toggle('hidden');
+                });
+
+                if (btn.textContent.trim() === '+ View More') {
+                    btn.textContent = '- View Less';
+                } else {
+                    btn.textContent = '+ View More';
+                }
+            }
+        }
+    });
+}
+

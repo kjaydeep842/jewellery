@@ -41,12 +41,12 @@
                     </button>
                     <!-- Search Dropdown (Hidden by default) -->
                     <div id="search-dropdown"
-                        class="absolute top-full left-1/2 -translate-x-1/2 w-[600px] h-[334px] bg-white rounded-[4px] border-[1.5px] border-[#D7D7DA] mt-4 hidden z-[60] overflow-y-auto overflow-x-hidden shadow-sm flex flex-col">
+                        class="absolute top-full left-1/2 -translate-x-1/2 w-[90vw] max-w-[600px] h-[334px] bg-white rounded-[4px] border-[1.5px] border-[#D7D7DA] mt-4 hidden z-[60] overflow-y-auto overflow-x-hidden shadow-sm flex flex-col">
 
                         <div id="search-default-view">
                             <!-- Trending Searches Header -->
                             <div
-                                class="flex flex-row items-center p-4 w-[600px] h-[55px] box-border justify-between flex-shrink-0">
+                                class="flex flex-row items-center p-4 w-full h-[55px] box-border justify-between flex-shrink-0">
                                 <h3
                                     class="text-[#8B7E66] text-xs font-['Outfit'] uppercase tracking-wide whitespace-nowrap">
                                     Trending Searches</h3>
@@ -82,14 +82,14 @@
                             </div>
 
                             <!-- Top Searches Header -->
-                            <div class="flex flex-row items-center px-4 pt-2 w-[600px] box-border flex-shrink-0">
+                            <div class="flex flex-row items-center px-4 pt-2 w-full box-border flex-shrink-0">
                                 <h3 class="text-[#8B7E66] text-xs font-['Outfit'] uppercase tracking-wide">Top Searches
                                 </h3>
                             </div>
 
                             <!-- Top Searches Items Container -->
                             <div
-                                class="flex flex-row flex-wrap items-center content-start p-[14px_16px] gap-[12px] w-[600px] min-h-[152px] box-border flex-shrink-0">
+                                class="flex flex-row flex-wrap items-center content-start p-[14px_16px] gap-[12px] w-full min-h-[152px] box-border flex-shrink-0">
                                 <!-- Item 1 -->
                                 <button data-search="Mangalsutra"
                                     class="search-top-btn flex items-center gap-2.5  border border-[#E6E6E6]  hover:border-[#D4AF37] rounded-2xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
@@ -248,13 +248,13 @@
                     </a>
                 @endauth
 
-                <a href="{{ route('wishlist.index') }}" class="relative hover:text-gold">
+                <a href="{{ route('wishlist.header') }}" class="relative hover:text-gold">
                     <img src="{{ asset('assets/ic_wishlist.png') }}" alt="wishlist"
                         class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
                     <span
                         class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] min-[2000px]:text-sm min-[2000px]:w-6 min-[2000px]:h-6 rounded-full w-4 h-4 flex items-center justify-center">{{ $wishlistCount ?? 0 }}</span>
                 </a>
-                <a href="{{ route('cart.index') }}" class="relative hover:text-gold block">
+                <a href="{{ route('cart.header') }}" class="relative hover:text-gold block">
                     <img src="{{ asset('assets/ic_bag_black.png') }}" alt="bag"
                         class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8"><span
                         class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] min-[2000px]:text-sm min-[2000px]:w-6 min-[2000px]:h-6 rounded-full w-4 h-4 flex items-center justify-center">{{ $cartCount ?? 0 }}</span>
@@ -264,7 +264,7 @@
         <!-- Navigation Bar -->
 
         <nav id="main-navigation"
-            class="hidden lg:flex items-center justify-center space-x-6 min-[2000px]:space-x-12 text-[15px] min-[2000px]:text-2xl font-['Outfit'] font-medium tracking-wide transition-all duration-300">
+            class="hidden lg:flex items-center justify-center space-x-3 lg:space-x-4 min-[2000px]:space-x-12 text-[12px] lg:text-[13px] xl:text-[15px] min-[2000px]:text-2xl font-['Outfit'] font-medium tracking-wide transition-all duration-300">
             <div class="relative group">
                 <a href="{{ route('page.new-arrivals') }}" class="flex items-center gap-1 hover:text-gold py-4">New
                     Arrivals</a>
@@ -338,60 +338,33 @@
                         header.classList.add('fixed', 'top-0', 'left-0');
                     }
 
-                    if (st > lastScrollTop) {
-                        // SCROLLING DOWN
-                        // Hide Search & Icons
-                        if (searchSection) searchSection.classList.add('hidden');
-                        if (iconsSection) iconsSection.classList.add('hidden');
+                    // ALWAYS COMPACT (Scrolling Down OR Up, as long as not at top)
+                    // Hide Search & Icons
+                    if (searchSection) searchSection.classList.add('hidden');
+                    if (iconsSection) iconsSection.classList.add('hidden');
 
-                        // Shrink Logo (Targeting the container width)
-                        if (logoContainer) {
-                            logoContainer.classList.remove('w-[212px]', 'h-[46.8px]');
-                            logoContainer.classList.add('w-[140px]', 'h-auto');
-                        }
+                    // Shrink Logo (Targeting the container width)
+                    if (logoContainer) {
+                        logoContainer.classList.remove('w-[212px]', 'h-[46.8px]');
+                        logoContainer.classList.add('w-[140px]', 'h-auto');
+                    }
 
-                        // --- NEW: INLINE LAYOUT ---
-                        // Force header to be a flex row container
-                        header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'px-6', 'gap-10');
+                    // --- NEW: INLINE LAYOUT ---
+                    // Force header to be a flex row container, CENTERED
+                    header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
 
-                        if (headerMainContainer) {
-                            // Collapse the main container to just fit the logo
-                            headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                            headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
-                            // Ensure it doesn't take full width
-                            headerMainContainer.style.width = 'auto';
-                        }
+                    if (headerMainContainer) {
+                        // Collapse the main container to just fit the logo
+                        headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
+                        headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
+                        // Ensure it doesn't take full width
+                        headerMainContainer.style.width = 'auto';
+                    }
 
-                        if (mainNav) {
-                            // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
-                            mainNav.classList.remove('justify-center');
-                            // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
-                        }
-
-                    } else {
-                        // SCROLLING UP
-                        // Show Search & Icons
-                        if (searchSection) searchSection.classList.remove('hidden');
-                        if (iconsSection) iconsSection.classList.remove('hidden');
-
-                        // Restore Logo Size
-                        if (logoContainer) {
-                            logoContainer.classList.add('w-[212px]', 'h-[46.8px]');
-                            logoContainer.classList.remove('w-[140px]', 'h-auto');
-                        }
-
-                        // --- RESET LAYOUT ---
-                        header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'px-6', 'gap-10');
-
-                        if (headerMainContainer) {
-                            headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                            headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap');
-                            headerMainContainer.style.width = ''; // Reset inline style
-                        }
-                        if (mainNav) {
-                            mainNav.classList.add('justify-center');
-                            // No need to toggle 'hidden' or 'flex', just alignment.
-                        }
+                    if (mainNav) {
+                        // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
+                        mainNav.classList.remove('justify-center');
+                        // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
                     }
                 } else {
                     // AT TOP
@@ -413,7 +386,7 @@
                     }
 
                     // --- RESET LAYOUT ---
-                    header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'px-6', 'gap-10');
+                    header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
 
                     if (headerMainContainer) {
                         headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');

@@ -380,6 +380,10 @@
 
           console.log('Fetching products for category:', categoryId);
 
+          // Show Global Loader
+          const loader = document.getElementById('page-loader');
+          if (loader) loader.classList.remove('hidden');
+
           // Fade out current products
           const productGrid = document.getElementById('product-grid');
           if (productGrid) {
@@ -403,10 +407,12 @@
                 console.log('Product data received, count:', data.count);
                 productGrid.innerHTML = data.html;
                 productGrid.style.opacity = '1';
+                if (loader) loader.classList.add('hidden');
               })
               .catch(error => {
                 console.error('Error fetching products:', error);
                 productGrid.style.opacity = '1';
+                if (loader) loader.classList.add('hidden');
               });
           }
         }
@@ -414,6 +420,10 @@
 
         function updateProductSlider(categoryId) {
           console.log('Fetching slider products for category:', categoryId);
+
+          // Show Global Loader
+          const loader = document.getElementById('page-loader');
+          if (loader) loader.classList.remove('hidden');
 
           const productSlider = document.getElementById('productsliderGrid');
           if (productSlider) {
@@ -437,10 +447,12 @@
                 console.log('Slider data received');
                 productSlider.innerHTML = data.html;
                 productSlider.style.opacity = '1';
+                if (loader) loader.classList.add('hidden');
               })
               .catch(error => {
                 console.error('Error fetching slider products:', error);
                 productSlider.style.opacity = '1';
+                if (loader) loader.classList.add('hidden');
               });
           }
         }
@@ -678,7 +690,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                      class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -1432,7 +1444,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                            {{isset($middleBanners) ? $middleBanners->count() : 0 }},
+                                                                                              {{isset($middleBanners) ? $middleBanners->count() : 0 }},
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

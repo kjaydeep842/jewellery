@@ -1,4 +1,4 @@
-@extends('layouts.frontend')
+@extends('frontend.layouts.master')
 
 @section('title', 'Privacy Policy - Tattsvi')
 

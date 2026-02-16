@@ -87,4 +87,16 @@ class PageController extends Controller
         $recentBlogs = Blog::where('id', '!=', $blog->id)->where('status', true)->latest()->take(3)->get();
         return view('frontend.pages.blog_details', compact('blog', 'recentBlogs'));
     }
+
+    public function terms()
+    {
+        $content = \App\Models\LegalPage::where('type', 'terms')->where('status', true)->first();
+        return view('frontend.pages.terms', compact('content'));
+    }
+
+    public function privacy()
+    {
+        $content = \App\Models\LegalPage::where('type', 'privacy')->where('status', true)->first();
+        return view('frontend.pages.privacy', compact('content'));
+    }
 }

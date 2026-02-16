@@ -85,26 +85,35 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] gap-6 sm:gap-8 md:gap-10 xl:gap-12">
 
             <!-- Product Images -->
-            <div class="space-y-2">
-                <div
-                    class="w-full h-auto aspect-[4/5] md:h-[500px] lg:h-[700px] xl:h-[800px] 2xl:h-[900px] min-[1920px]:h-[990px] md:aspect-[3/5] overflow-hidden flex justify-center items-center rounded-lg">
-                    @if($product->images->count() > 0)
-                        <img id="main-image" src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                            alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-multiply">
-                    @else
-                        <img id="main-image" src="{{ asset('assets/ring.png') }}" alt="{{ $product->name }}"
-                            class="w-full h-full object-contain mix-blend-multiply">
-                    @endif
+            <div class="space-y-2 sm:space-y-3 md:space-y-4" style="border-radius: 0;">
+                <!-- Main Image Container -->
+                <div class="w-full max-w-full lg:max-w-[1143px] mx-auto" style="border-radius: 0;">
+                    <div class="relative w-full bg-white" style="aspect-ratio: 1143 / 1319; border-radius: 0;">
+                        @if($product->images->count() > 0)
+                            <img id="main-image" src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+                                alt="{{ $product->name }}"
+                                class="absolute inset-0 w-full h-full object-contain p-4 sm:p-6 md:p-8 lg:p-10">
+                        @else
+                            <img id="main-image" src="{{ asset('assets/ring.png') }}" alt="{{ $product->name }}"
+                                class="absolute inset-0 w-full h-full object-contain p-4 sm:p-6 md:p-8 lg:p-10">
+                        @endif
+                    </div>
                 </div>
 
+                <!-- Thumbnail Strip -->
                 @if($product->images->count() > 1)
-                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
-                        @foreach($product->images as $image)
-                            <div class="cursor-pointer border border-gray-200 hover:border-amber-400 rounded-md bg-white overflow-hidden aspect-square flex items-center justify-center transition-all"
-                                onclick="changeImage('{{ asset('storage/' . $image->image_path) }}')">
-                                <img src="{{ asset('storage/' . $image->image_path) }}" class="object-contain h-full w-full p-1">
-                            </div>
-                        @endforeach
+                    <div class="w-full max-w-full lg:max-w-[1143px] mx-auto">
+                        <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-5 gap-[10px]">
+                            @foreach($product->images as $image)
+                                <div class="cursor-pointer bg-white transition-all duration-200" style="aspect-ratio: 1 / 1;"
+                                    onclick="changeImage('{{ asset('storage/' . $image->image_path) }}')">
+                                    <div class="w-full h-full flex items-center justify-center p-2 sm:p-3">
+                                        <img src="{{ asset('storage/' . $image->image_path) }}" class="object-contain w-full h-full"
+                                            alt="Product thumbnail">
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 @endif
             </div>
@@ -371,95 +380,205 @@
         </div>
 
         <!-- Product Details Tabs Section -->
-        <div
-            class="bg-[#FDFBF7] py-8 sm:py-10 md:py-12 xl:py-14 px-3 sm:px-4 md:px-6 lg:px-8 font-sans text-[#4A4A4A] mt-8 sm:mt-10 border-t border-gray-200">
-            <div class="flex items-center justify-center gap-2 md:gap-4 xl:gap-6 mb-6 sm:mb-8 w-full">
+        <div class="bg-[#FDFBF7] py-12 px-4 md:px-15 font-sans text-[#4A4A4A] mt-8 sm:mt-10 border-t border-gray-200">
+            <div class="flex items-center justify-center gap-2 md:gap-6 mb-8 w-full">
                 <img src="{{ asset('assets/Design.png') }}"
-                    class="h-auto w-[50px] sm:w-[60px] md:w-auto md:flex-1 object-cover md:max-w-[350px] xl:max-w-[400px]"
-                    alt="">
+                    class="h-auto w-[60px] md:w-auto md:flex-1 object-cover md:max-w-[400px]" alt="">
                 <div class="text-center flex flex-col items-center">
                     <p style="font-family: 'Alexandria', sans-serif;"
-                        class="text-[10px] sm:text-[12px] xl:text-[14px] tracking-[0.2em] text-[#5C4522] font-bold font-['Alexandria'] mb-[-5px] uppercase">
+                        class="text-[12px] tracking-[0.2em] text-[#5C4522] font-bold font-['Alexandria'] mb-[-5px] uppercase">
                         Detailed Info</p>
                     <h2
-                        class="font-['Outfit'] font-medium text-[24px] sm:text-[28px] md:text-[32px] xl:text-[36px] 2xl:text-[40px] leading-tight md:leading-[50px] xl:leading-[60px] 2xl:leading-[68px] text-[#CBA65A]">
+                        class="font-['Outfit'] font-medium text-[28px] md:text-[40px] leading-tight md:leading-[68px] text-[#CBA65A]">
                         Specification</h2>
                 </div>
                 <img src="{{ asset('assets/Design (1).png') }}"
-                    class="h-auto w-[50px] sm:w-[60px] md:w-auto md:flex-1 object-cover md:max-w-[350px] xl:max-w-[400px]"
-                    alt="">
+                    class="h-auto w-[60px] md:w-auto md:flex-1 object-cover md:max-w-[400px]" alt="">
             </div>
 
-            <!-- Tabs Navigation -->
-            <div class="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8 sm:mb-10 font-['Outfit']">
-                <button onclick="switchTab('price', this)"
-                    class="px-4 sm:px-6 md:px-8 xl:px-10 py-1.5 sm:py-2 xl:py-2.5 border border-black bg-black text-white text-xs sm:text-sm xl:text-base rounded-full font-medium shadow-md transition duration-300">
-                    Price Breakup
+            <div class="flex flex-wrap justify-center gap-2 mb-5 font-['Outfit']">
+                <button onclick="switchTab('about', this)"
+                    class="px-4 md:px-8 py-2 border border-black bg-black text-white text-sm rounded-full font-medium shadow-md transition duration-300">
+                    About
                 </button>
                 <button onclick="switchTab('details', this)"
-                    class="px-4 sm:px-6 md:px-8 xl:px-10 py-1.5 sm:py-2 xl:py-2.5 border border-[#E8E1D5] text-gray-600 text-xs sm:text-sm xl:text-base rounded-full font-medium transition duration-300 hover:bg-black hover:text-white">
+                    class="px-4 md:px-8 py-2 border border-[#E8E1D5] text-gray-600 text-sm rounded-full font-medium transition duration-300 hover:bg-black hover:text-white">
                     Diamond & Metal Details
                 </button>
-                <button onclick="switchTab('about', this)"
-                    class="px-4 sm:px-6 md:px-8 xl:px-10 py-1.5 sm:py-2 xl:py-2.5 border border-[#E8E1D5] text-gray-600 text-xs sm:text-sm xl:text-base rounded-full font-medium transition duration-300 hover:bg-black hover:text-white">
-                    Description
+                <button onclick="switchTab('price', this)"
+                    class="px-4 md:px-8 py-2 border border-[#E8E1D5] text-gray-600 text-sm rounded-full font-medium transition duration-300 hover:bg-black hover:text-white">
+                    Price Breakup
                 </button>
             </div>
 
-            <!-- Price Breakup (Default Active) -->
+            <!-- About Content (Visible by default) -->
+            <div id="content-about" class="bg-[#FAF8F1] w-full max-w-[1120px] mx-auto transition-opacity duration-300">
+                <div
+                    class="bg-[#FAF8F1] flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 p-8 rounded-xl border border-[#F2F4F7]">
+                    <div
+                        class="bg-[#FAF8F1] flex-1 px-4 lg:pl-[20px] flex flex-col justify-center h-full text-center lg:text-left">
+                        <span
+                            class="text-[20px] leading-[20px] font-['Outfit'] text-gray-500 mb-3 min-[2000px]:text-2xl">About
+                            Your</span>
+                        <h3
+                            class="text-[28px] leading-[36px] font-medium font-['Outfit'] text-[#1A1A1A] mb-4 min-[2000px]:text-4xl min-[2000px]:leading-[48px]">
+                            {{ $product->name }}
+                        </h3>
+                        <p
+                            class="text-[14px] leading-[22px] font-['Outfit'] text-[#808080] mb-8 w-full max-w-[500px] mx-auto lg:mx-0 min-[2000px]:text-lg min-[2000px]:max-w-[700px]">
+                            {{ $product->description ?? 'No description available for this product.' }}
+                        </p>
+                        <div
+                            class="w-full max-w-[580px] h-[52px] bg-[#FAF5F5] rounded-[8px] flex justify-between items-center px-6 shadow-sm mx-auto lg:mx-0">
+                            <span
+                                class="text-[14px] font-medium font-['Outfit'] text-[#1A1A1A] min-[2000px]:text-lg">Weight</span>
+                            <span class="text-[14px] font-medium font-['Outfit'] text-[#1A1A1A] min-[2000px]:text-lg">
+                                {{ $product->weight ?? 0 }} gram</span>
+                        </div>
+                    </div>
+                    <div
+                        class="w-full max-w-[300px] aspect-square rounded-[12px] border border-[#F2F4F7] flex items-center justify-center p-4 bg-white">
+                        @if($product->images->count() > 0)
+                            <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+                                alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-multiply">
+                        @else
+                            <img src="{{ asset('assets/ring.png') }}" alt="{{ $product->name }}"
+                                class="w-full h-full object-contain mix-blend-multiply">
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price Breakup Content (Hidden by default) -->
             <div id="content-price"
-                class="w-full max-w-[1000px] xl:max-w-[1100px] 2xl:max-w-[1200px] mx-auto transition-opacity duration-300 font-['Outfit']">
-                <div class="bg-[#FAF8F1] w-full rounded-2xl border border-[#F2F4F7] overflow-hidden shadow-sm">
-                    <div class="bg-white p-4 sm:p-6 xl:p-7 border-b border-[#E8E1D5]">
-                        <h3 class="text-[#5C4522] text-lg sm:text-xl xl:text-2xl font-bold">Price Breakup</h3>
+                class="w-full max-w-[1374px] mx-auto hidden transition-opacity duration-300 font-['Outfit'] flex flex-row gap-[20px]">
+                <div class="bg-[#FAF8F1] w-full rounded-2xl border border-[#F2F4F7] overflow-hidden">
+                    @php
+                        $priceGoldValue = $product->price_gold_value ?? 0;
+                        $priceDiamondValue = $product->price_diamond_value ?? 0;
+                        $makingCharges = $product->making_charges ?? 0;
+                        $gstPercentage = $product->tax_rate ?? 3;
+
+                        // Base total from components
+                        $baseTotal = $priceGoldValue + $priceDiamondValue + $makingCharges;
+
+                        // Discount Amount
+                        $discountAmount = 0;
+                        if ($product->discount_price && $product->discount_price < $product->price) {
+                            $discountAmount = $product->price - $product->discount_price;
+                        }
+
+                        // Sub Total (Taxable Amount)
+                        $subTotal = $baseTotal - $discountAmount;
+                        // Ensure subTotal is not negative
+                        if ($subTotal < 0)
+                            $subTotal = 0;
+
+                        // GST Amount
+                        $gstAmount = $subTotal * ($gstPercentage / 100);
+
+                        // Grand Total
+                        $grandTotal = $subTotal + $gstAmount;
+                    @endphp
+                    <div class="bg-white p-6 border-b border-[#E8E1D5]">
+                        <h3 class="text-[#5C4522] text-xl font-bold">Price Breakup</h3>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[500px]">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead>
-                                <tr
-                                    class="bg-[#FAF8F1] text-[#5C4522] text-xs sm:text-sm md:text-base xl:text-lg border-b border-[#E8E1D5]">
-                                    <th class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 font-bold">Component</th>
-                                    <th class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 font-bold text-center">Weight/Count
-                                    </th>
-                                    <th class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 font-bold text-right">Value</th>
+                                <tr class="bg-[#FAF8F1] text-[#5C4522] text-sm md:text-base border-b border-[#E8E1D5]">
+                                    <th class="py-4 px-6 font-bold">Component</th>
+                                    <th class="py-4 px-6 font-bold text-center">Rate</th>
+                                    <th class="py-4 px-6 font-bold text-center">Weight</th>
+                                    <th class="py-4 px-6 font-bold text-center">Discount</th>
+                                    <th class="py-4 px-6 font-bold text-right">Final Value</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-[#1A1A1A] text-xs sm:text-sm md:text-base xl:text-lg">
+                            <tbody class="text-[#1A1A1A] text-sm md:text-base">
+                                <!-- Row 1 -->
                                 <tr class="bg-white border-b border-[#E8E1D5]">
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8">Gold
-                                        ({{ $product->metal_purity ?? '-' }})</td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-center">
-                                        {{ $product->weight ?? 0 }} g
+                                    <td class="py-4 px-6">{{ $product->metal_type ?? 'Gold' }}
+                                        {{ $product->metal_purity ?? '' }}
                                     </td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-right font-medium">
-                                        ₹{{ number_format($product->price_gold_value ?? 0, 2) }}</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">{{ $product->weight ?? 0 }} gram</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-medium">
+                                        ₹{{ number_format($priceGoldValue, 2) }}</td>
                                 </tr>
+                                <!-- Row 2 -->
                                 <tr class="bg-[#FAF6F0] border-b border-[#E8E1D5]">
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8">Diamonds</td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-center">
-                                        {{ $product->diamond_carat ?? 0 }} ct
-                                    </td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-right font-medium">
-                                        ₹{{ number_format($product->price_diamond_value ?? 0, 2) }}</td>
+                                    <td class="py-4 px-6">Total Gold Value</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-medium">
+                                        ₹{{ number_format($priceGoldValue, 2) }}</td>
                                 </tr>
+                                <!-- Row 3 -->
                                 <tr class="bg-white border-b border-[#E8E1D5]">
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8">Making Charges</td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-center">-</td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-right font-medium">
-                                        ₹{{ number_format($product->making_charges ?? 0, 2) }}</td>
+                                    <td class="py-4 px-6">Diamonds</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">{{ $product->diamond_carat ?? 0 }} ct</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-medium">
+                                        ₹{{ number_format($priceDiamondValue, 2) }}</td>
                                 </tr>
+                                <!-- Row 4 -->
                                 <tr class="bg-[#FAF6F0] border-b border-[#E8E1D5]">
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8">GST
-                                        ({{ $product->tax_rate ?? 3 }}%)</td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-center">-</td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-right font-medium">
-                                        ₹{{ number_format($product->price_gst ?? 0, 2) }}</td>
+                                    <td class="py-4 px-6">Total Diamond Value</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-medium">
+                                        ₹{{ number_format($priceDiamondValue, 2) }}</td>
                                 </tr>
-                                <tr class="bg-white font-bold text-base sm:text-lg xl:text-xl">
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-[#5C4522]">Grand Total</td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-center">-</td>
-                                    <td class="py-3 px-3 sm:py-4 sm:px-4 md:px-6 xl:px-8 text-right text-[#CBA65A]">
-                                        ₹{{ number_format($product->selling_price, 2) }}</td>
+                                <!-- Row 5 -->
+                                <tr class="bg-white border-b border-[#E8E1D5]">
+                                    <td class="py-4 px-6">Making Charges</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-medium">
+                                        ₹{{ number_format($makingCharges, 2) }}</td>
+                                </tr>
+                                <!-- Row 6 -->
+                                <tr class="bg-[#FAF6F0] border-b border-[#E8E1D5]">
+                                    <td class="py-4 px-6">Discount on Selling Price</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-medium">
+                                        {{ $discountAmount > 0 ? '₹' . number_format($discountAmount, 2) : '-' }}
+                                    </td>
+                                </tr>
+                                <!-- Row 7 -->
+                                <tr class="bg-white border-b border-[#E8E1D5]">
+                                    <td class="py-4 px-6">Sub Total</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-medium">
+                                        ₹{{ number_format($subTotal, 2) }}
+                                    </td>
+                                </tr>
+                                <!-- Row 8 -->
+                                <tr class="bg-[#FAF6F0] border-b border-[#E8E1D5]">
+                                    <td class="py-4 px-6">GST ({{ $gstPercentage }}%)</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-medium">
+                                        ₹{{ number_format($gstAmount, 2) }}</td>
+                                </tr>
+                                <!-- Row 9 -->
+                                <tr class="bg-white">
+                                    <td class="py-4 px-6 font-bold">Grand Total</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-center">-</td>
+                                    <td class="py-4 px-6 text-right font-bold text-lg">
+                                        ₹{{ number_format($grandTotal, 2) }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -467,12 +586,13 @@
                 </div>
             </div>
 
-            <!-- Detailed Info (Hidden) -->
+            <!-- Accordion Container -->
             <div id="content-details"
-                class="w-full max-w-[1000px] mx-auto font-['Outfit'] flex flex-col items-center gap-[20px] hidden">
-                <!-- Diamond Details -->
+                class="w-full max-w-[1374px] mx-auto font-['Outfit'] flex flex-col items-center gap-[20px] hidden">
+
+                <!-- Diamond Details Accordion (Collapsed) -->
                 @if($product->diamond_carat)
-                    <div class="w-full border border-[#F2F4F7] rounded-xl overflow-hidden bg-white shadow-sm">
+                    <div class="w-full border-2 border-[#F2F4F7] rounded-xl overflow-hidden bg-white shadow-sm">
                         <button onclick="toggleAccordion(this)"
                             class="w-full h-[70px] px-8 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors cursor-pointer text-left focus:outline-none">
                             <span class="text-[#5C4522] font-bold text-lg min-[2000px]:text-2xl font-['Outfit']">Diamond
@@ -481,23 +601,28 @@
                                 <i class="fa-solid fa-plus text-[#CBA65A]"></i>
                             </div>
                         </button>
-                        <div class="px-0 transition-all duration-300 ease-in-out opacity-0 overflow-hidden"
+                        <div class="px-0 pb-6 transition-all duration-300 ease-in-out opacity-0 overflow-hidden"
                             style="max-height: 0px;">
+                            <!-- Content -->
                             <div class="space-y-0 text-sm min-[2000px]:text-xl font-['Outfit']">
-                                <div class="flex justify-between py-4 border-b border-[#F2F4F7] px-8">
-                                    <span class="text-gray-500">Total Weight In Carat</span>
+                                <div class="flex justify-between py-4 border-b border-[#F2F4F7] px-4">
+                                    <span class="text-[#808080]">Total Weight</span>
                                     <span class="text-[#1A1A1A] font-medium">{{ $product->diamond_carat }} ct</span>
                                 </div>
-                                <div class="bg-gray-50 flex justify-between py-4 border-b border-[#F2F4F7] px-8">
-                                    <span class="text-gray-500">Clarity</span>
+                                <div class="bg-[#FBF9F3] flex justify-between py-4 border-b border-[#F2F4F7] px-4">
+                                    <span class="text-[#808080]">Clarity</span>
                                     <span class="text-[#1A1A1A] font-medium">{{ $product->diamond_clarity ?? '-' }}</span>
                                 </div>
-                                <div class="flex justify-between py-4 border-b border-[#F2F4F7] px-8">
-                                    <span class="text-gray-500">Color</span>
+                                <div class="flex justify-between py-4 border-b border-[#F2F4F7] px-4">
+                                    <span class="text-[#808080]">Color</span>
                                     <span class="text-[#1A1A1A] font-medium">{{ $product->diamond_color ?? '-' }}</span>
                                 </div>
-                                <div class="bg-gray-50 flex justify-between py-4 border-b border-[#F2F4F7] px-8">
-                                    <span class="text-gray-500">Shape</span>
+                                <div class="bg-[#FBF9F3] flex justify-between py-4 border-b border-[#F2F4F7] px-4">
+                                    <span class="text-[#808080]">Count</span>
+                                    <span class="text-[#1A1A1A] font-medium">{{ $product->diamond_count ?? '-' }}</span>
+                                </div>
+                                <div class="flex justify-between py-4 border-b border-[#F2F4F7] px-4">
+                                    <span class="text-[#808080]">Shape</span>
                                     <span
                                         class="text-[#1A1A1A] font-medium">{{ optional($product->diamondShape)->name ?? '-' }}</span>
                                 </div>
@@ -506,8 +631,9 @@
                     </div>
                 @endif
 
-                <!-- Metal Details (Auto Expanded) -->
-                <div class="w-full border border-[#F2F4F7] rounded-xl overflow-hidden bg-white shadow-sm">
+                <!-- Metal Details Accordion (Active/Open) -->
+                <div
+                    class="w-full border border-[#F2F4F7] rounded-xl overflow-hidden bg-white shadow-sm transition-all duration-300">
                     <button onclick="toggleAccordion(this)"
                         class="w-full h-[70px] px-8 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors cursor-pointer text-left focus:outline-none">
                         <span class="text-[#5C4522] font-bold text-lg min-[2000px]:text-2xl font-['Outfit']">Metal
@@ -516,196 +642,155 @@
                             <i class="fa-solid fa-minus text-[#CBA65A]"></i>
                         </div>
                     </button>
-                    <div class="px-0 transition-all duration-300 ease-in-out" style="max-height: 500px; opacity: 1;">
-                        <div class="space-y-0 text-sm min-[2000px]:text-xl font-['Outfit'] pb-4">
-                            <div class="bg-gray-50 flex justify-between py-4 border-b border-[#F2F4F7] px-8">
-                                <span class="text-gray-500">Metal Type</span>
+                    <div class="px-0 transition-all duration-300 ease-in-out mt-4" style="max-height: 1000px;">
+                        <!-- Metal Details Content -->
+                        <div class="space-y-0 text-sm min-[2000px]:text-xl pb-6 font-['Outfit']">
+                            <div class="bg-[#FBF9F3] flex justify-between py-4 border-b border-[#F2F4F7] px-4">
+                                <span class="text-[#808080]"> Type</span>
                                 <span class="text-[#1A1A1A] font-medium">{{ $product->metal_type ?? 'Gold' }}</span>
                             </div>
-                            <div class="flex justify-between py-4 border-b border-[#F2F4F7] px-8">
-                                <span class="text-gray-500">Purity</span>
+                            <div class="flex justify-between py-4 px-4">
+                                <span class="text-[#808080]">Purity</span>
                                 <span class="text-[#1A1A1A] font-medium">{{ $product->metal_purity ?? '-' }}</span>
                             </div>
-                            <div class="bg-gray-50 flex justify-between py-4 px-8">
-                                <span class="text-gray-500">Gross Weight</span>
-                                <span class="text-[#1A1A1A] font-medium">{{ $product->weight ?? 0 }} g</span>
+                            <div class="bg-[#FBF9F3] flex justify-between py-4 px-4">
+                                <span class="text-[#808080]">Weight</span>
+                                <span class="text-[#1A1A1A] font-medium">{{ $product->weight ?? 0 }} gram</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Description (Hidden) -->
-            <div id="content-about" class="w-full max-w-[1000px] mx-auto hidden transition-opacity duration-300">
-                <div
-                    class="bg-white p-8 rounded-xl border border-[#F2F4F7] shadow-sm text-center lg:text-left flex flex-col lg:flex-row items-center gap-8">
-                    <div class="flex-1">
-                        <h3 class="text-[24px] font-medium font-['Outfit'] text-[#1A1A1A] mb-4">About This Product</h3>
-                        <p class="text-[15px] leading-relaxed font-['Outfit'] text-gray-600">
-                            {{ $product->description ?? 'No description available.' }}
-                        </p>
-                    </div>
-                    <div class="w-[200px] aspect-square rounded-lg border border-gray-100 p-4">
-                        @if($product->images->count() > 0)
-                            <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                                alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-multiply">
-                        @else
-                            <img src="{{ asset('assets/ring.png') }}" class="w-full h-full object-contain mix-blend-multiply">
-                        @endif
-                    </div>
-                </div>
             </div>
         </div>
 
 
         <!-- Ratings and reviews section -->
         <section
-            class="h-full w-full max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2000px] min-[2000px]:max-w-[2400px] mx-auto py-10 sm:py-12 md:py-16 xl:py-20 font-sans px-3 sm:px-4 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center gap-2">
+            class="h-full w-full max-w-[1600px] min-[2000px]:max-w-[2400px] mx-auto py-8 sm:py-10 md:py-12 lg:py-16 font-sans px-4 sm:px-6 md:px-8 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-8 md:gap-10 lg:gap-6 xl:gap-8">
                 <!-- Left Side: Summary -->
-                <div class="w-full md:w-1/3 flex flex-col py-8 gap-[20px]">
-                    <div class="flex items-center gap-2 justify-center md:justify-start md:items-center md:gap-4 mb-2">
+                <div class="w-full lg:w-1/3 flex flex-col items-center lg:items-start py-6 md:py-8 gap-5 md:gap-6">
+                    <div class="flex items-center gap-3 md:gap-4 justify-center lg:justify-start w-full">
                         <div
-                            class="flex md:flex flex-row justify-center md:justify-end gap-[9px] w-auto md:w-[200px] h-[25px]">
+                            class="hidden md:flex flex-row justify-end gap-[9px] w-auto lg:w-[180px] xl:w-[200px] h-[22px] md:h-[25px]">
                             <img src="{{ asset('assets/Design_new.png') }}" alt="design" class="h-full object-contain">
                         </div>
-                        <div class="text-center md:text-left flex flex-col justify-center items-center md:items-start">
+                        <div class="text-center lg:text-left flex flex-col justify-center items-center lg:items-start">
                             <span
-                                class="text-[14px] md:text-[17px] min-[2000px]:text-3xl text-[#5C4522] block font-['Alexandria'] leading-none">Ratings
+                                class="text-[14px] md:text-[16px] lg:text-[17px] xl:text-[18px] min-[2000px]:text-3xl text-[#5C4522] block font-['Alexandria'] leading-none">Ratings
                                 &</span>
                             <h2
-                                class="text-[24px] md:text-[32px] min-[2000px]:text-5xl text-[#CBA65A] font-medium font-['Outfit'] leading-tight">
-                                Reviews</h2>
+                                class="text-[28px] md:text-[30px] lg:text-[32px] xl:text-[36px] min-[2000px]:text-5xl text-[#CBA65A] font-medium font-['Outfit'] leading-tight">
+                                Reviews
+                            </h2>
                         </div>
                         <div
-                            class="flex md:hidden flex-row justify-center md:justify-start gap-[9px] w-auto md:w-[200px] h-[25px]">
+                            class="hidden md:flex lg:hidden flex-row justify-start gap-[9px] w-auto lg:w-[180px] xl:w-[200px] h-[22px] md:h-[25px]">
                             <img src="{{ asset('assets/Design_new.png') }}" alt="design" class="h-full object-contain"
                                 style="transform: scaleX(-1);">
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-2 justify-center md:justify-start">
+
+                    <div class="flex items-center gap-3 justify-center lg:justify-start">
                         <div class="flex items-center gap-1 text-[#F5B800]">
                             @php $rating = $product->reviews->avg('rating') ?? 0; @endphp
                             @for($i = 1; $i <= 5; $i++)
                                 @if($i <= floor($rating))
-                                    <i class="fas fa-star text-lg"></i>
+                                    <i class="fas fa-star text-lg md:text-xl lg:text-2xl"></i>
                                 @elseif($i == ceil($rating) && $rating - floor($rating) >= 0.5)
-                                    <i class="fas fa-star-half-alt text-lg"></i>
+                                    <i class="fas fa-star-half-alt text-lg md:text-xl lg:text-2xl"></i>
                                 @else
-                                    <i class="far fa-star text-lg"></i>
+                                    <i class="far fa-star text-lg md:text-xl lg:text-2xl"></i>
                                 @endif
                             @endfor
                         </div>
-                        <span class="font-['Outfit'] text-[32px] text-[#1A1A1A]">{{ number_format($rating, 1) }}</span>
+                        <span
+                            class="font-['Outfit'] text-[30px] md:text-[32px] lg:text-[36px] text-[#1A1A1A]">{{ number_format($rating, 1) }}</span>
                     </div>
 
+
                     <button onclick="openReviewModal()"
-                        class="self-center md:self-start w-auto px-9 py-2 border border-[#CBA65A] text-[#CBA65A] text-sm rounded-full hover:bg-[#CBA65A] hover:text-white transition-all font-['Outfit'] tracking-wide">
+                        class="self-center lg:self-start ml-0 lg:ml-[60px] xl:ml-[100px] w-auto px-8 md:px-9 lg:px-10 py-2 md:py-2.5 border border-[#CBA65A] text-[#CBA65A] text-sm rounded-full hover:bg-[#CBA65A] hover:text-white transition-all font-['Outfit'] tracking-wide">
                         Write Review
                     </button>
                 </div>
 
                 <!-- Right Side: Reviews Card -->
-                <div class="w-full md:w-2/3">
-                    <div class="bg-white rounded-2xl border border-[#F2F4F7] overflow-hidden shadow-sm">
-                        <div class="bg-white border-b border-[#F2F4F7] px-8 py-5">
-                            <h3 class="text-[#5C4522] font-bold font-['Outfit'] text-xl">Customers Review</h3>
+                <div class="w-full lg:w-2/3" x-data="{ 
+                                                                        current: 0, 
+                                                                        total: {{ ceil($product->reviews->count() / 3) }},
+                                                                        next() { this.current = (this.current + 1) % this.total },
+                                                                        prev() { this.current = (this.current - 1 + this.total) % this.total }
+                                                                    }">
+                    <div class="bg-white rounded-xl sm:rounded-2xl border border-[#F2F4F7] overflow-hidden shadow-sm">
+                        <!-- Card Header -->
+                        <div class="bg-white border-b border-[#F2F4F7] px-4 sm:px-6 md:px-8 py-4 sm:py-5">
+                            <h3 class="text-[#5C4522] font-bold font-['Outfit'] text-base sm:text-lg md:text-xl">Customers
+                                Review</h3>
                         </div>
 
-                        @if($product->reviews->count() > 2)
-                            <div x-data="{ 
-                                                                                                                                                                                                                                                    current: 0, 
-                                                                                                                                                                                                                                                    total: {{ $product->reviews->count() }},
-                                                                                                                                                                                                                                                    next() { this.current = (this.current + 1) % this.total },
-                                                                                                                                                                                                                                                    prev() { this.current = (this.current - 1 + this.total) % this.total },
-                                                                                                                                                                                                                                                    touchStartX: 0,
-                                                                                                                                                                                                                                                    touchEndX: 0,
-                                                                                                                                                                                                                                                    handleTouch() {
-                                                                                                                                                                                                                                                        if (this.touchEndX < this.touchStartX - 50) this.next();
-                                                                                                                                                                                                                                                        if (this.touchEndX > this.touchStartX + 50) this.prev();
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                }"
-                                class="bg-[#FAF8F1] px-4 md:px-8 py-6 h-[350px] relative flex flex-col justify-between">
-
-                                <!-- Slider Container -->
-                                <div class="overflow-hidden relative h-full w-full"
-                                    @touchstart="touchStartX = $event.changedTouches[0].screenX"
-                                    @touchend="touchEndX = $event.changedTouches[0].screenX; handleTouch()">
-                                    <div class="flex h-full transition-transform duration-500 will-change-transform"
-                                        :style="'transform: translateX(-' + (current * 100) + '%)'">
-                                        @foreach($product->reviews as $review)
-                                            <div class="w-full flex-shrink-0 h-full overflow-y-auto custom-scrollbar pr-2">
-                                                <div class="h-full flex flex-col justify-center">
-                                                    <p
-                                                        class="text-[#3D3D42] text-[15px] leading-relaxed mb-4 font-['Outfit'] italic text-center px-4">
-                                                        "{{ $review->comment }}"
-                                                    </p>
-                                                    <div class="flex flex-col items-center gap-2 mt-auto">
+                        <!-- Card Body (Reviews List) -->
+                        <div
+                            class="bg-[#FAF8F1] px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 h-[280px] sm:h-[320px] md:h-[350px] lg:h-[380px] overflow-y-auto space-y-4 sm:space-y-5 md:space-y-6 custom-scrollbar relative">
+                            @forelse($product->reviews->chunk(3) as $index => $chunk)
+                                <div x-show="current === {{ $index }}"
+                                    class="space-y-4 sm:space-y-5 md:space-y-6 transition-opacity duration-300"
+                                    x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+                                    x-transition:enter-end="opacity-100">
+                                    @foreach($chunk as $review)
+                                        <div class="border-b border-[#E8E1D5] pb-4 sm:pb-5 md:pb-6 last:border-0 last:pb-0">
+                                            <p
+                                                class="text-[#3D3D42] text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed mb-3 sm:mb-4 font-['Outfit'] italic text-left">
+                                                "{{ $review->comment }}"
+                                            </p>
+                                            <div
+                                                class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
+                                                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                                                    <span
+                                                        class="text-[#1A1A1A] font-['Outfit'] text-xs sm:text-sm font-bold">{{ $review->user->name ?? 'Anonymous' }}</span>
+                                                    <div
+                                                        class="border border-[#D7D7DA] rounded px-2 py-0.5 bg-white text-[10px] sm:text-xs flex items-center gap-1">
+                                                        <span class="font-bold">{{ $review->rating }}</span>
+                                                        <i class="fas fa-star text-yellow-500 text-[8px] sm:text-[10px]"></i>
                                                         <span
-                                                            class="text-[#1A1A1A] font-['Outfit'] font-bold text-lg">{{ $review->user->name ?? 'Anonymous' }}</span>
-                                                        <div class="flex items-center gap-2">
-                                                            <div
-                                                                class="border border-[#D7D7DA] rounded px-2 py-0.5 bg-white text-xs flex items-center gap-1">
-                                                                <span class="font-bold">{{ $review->rating }}</span>
-                                                                <img src="{{ asset('assets/1star.png') }}" class="h-3 w-3" alt="">
-                                                            </div>
-                                                            <span
-                                                                class="text-[#808080] text-xs font-['Outfit']">{{ $review->created_at->format('d M Y') }}</span>
-                                                        </div>
+                                                            class="text-[#808080] border-l-2 pl-1 ml-1 font-['Outfit']">{{ $review->created_at->format('d M Y') }}</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <!-- Navigation Arrows -->
-                                <div class="flex justify-center items-center gap-6 mt-4 pt-4 border-t border-[#E8E1D5]/50">
-                                    <button @click="prev()"
-                                        class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-[#E8E1D5] hover:border-[#CBA65A] text-[#5C4522] hover:text-[#CBA65A] transition-all shadow-sm">
-                                        <i class="fa-solid fa-chevron-left text-xs"></i>
-                                    </button>
-                                    <span class="font-['Outfit'] text-sm text-[#808080]">
-                                        <span x-text="current + 1"></span> / <span x-text="total"></span>
-                                    </span>
-                                    <button @click="next()"
-                                        class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-[#E8E1D5] hover:border-[#CBA65A] text-[#5C4522] hover:text-[#CBA65A] transition-all shadow-sm">
-                                        <i class="fa-solid fa-chevron-right text-xs"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        @else
-                            <!-- Vertical List for <= 2 reviews -->
-                            <div class="bg-[#FAF8F1] px-8 py-6 h-auto min-h-[200px] space-y-6">
-                                @forelse($product->reviews as $review)
-                                    <div class="border-b border-[#E8E1D5] pb-6 last:border-0 last:pb-0">
-                                        <p class="text-[#3D3D42] text-[15px] leading-relaxed mb-4 font-['Outfit'] italic">
-                                            "{{ $review->comment }}"
-                                        </p>
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-3">
-                                                <span
-                                                    class="text-[#1A1A1A] font-['Outfit'] text-sm">{{ $review->user->name ?? 'Anonymous' }}</span>
-                                                <div
-                                                    class="border border-[#D7D7DA] rounded px-2 py-0.5 bg-white text-xs flex items-center gap-1">
-                                                    <span class="font-bold">{{ $review->rating }}</span>
-                                                    <img src="{{ asset('assets/1star.png') }}" class="h-3 w-3" alt="">
-                                                    <span
-                                                        class="text-[#808080] border-l-2 pl-2 ml-2 font-['Outfit']">{{ $review->created_at->format('d M Y') }}</span>
-                                                </div>
-                                            </div>
                                         </div>
-                                    </div>
-                                @empty
-                                    <div class="h-full flex flex-col items-center justify-center text-center py-10">
-                                        <p class="text-gray-500 font-['Outfit']">No reviews yet. Be the first to review!</p>
-                                    </div>
-                                @endforelse
-                            </div>
-                        @endif
+                                    @endforeach
+                                </div>
+                            @empty
+                                <div class="h-full flex flex-col items-center justify-center text-center py-10">
+                                    <p class="text-gray-500 font-['Outfit'] text-sm sm:text-base">No reviews yet. Be the first
+                                        to review!</p>
+                                </div>
+                            @endforelse
+                        </div>
+
                     </div>
+                    <!-- Card Footer (Pagination) -->
+                    @if($product->reviews->count() > 3)
+                        <div
+                            class="py-3 sm:py-4 px-4 sm:px-6 md:px-8 flex justify-center sm:justify-end items-center gap-2 sm:gap-3">
+                            <button @click="prev()"
+                                class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-[#E8E1D5] text-[#5C4522] transition-colors focus:outline-none">
+                                <i class="fa-solid fa-chevron-left text-[10px] sm:text-xs"></i>
+                            </button>
+                            <button
+                                class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-[#CBA65A] text-[#CBA65A] font-medium bg-white shadow-sm text-xs sm:text-sm focus:outline-none">
+                                <span x-text="current + 1"></span>
+                            </button>
+                            <button @click="next()"
+                                class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-[#E8E1D5] text-[#5C4522] transition-colors focus:outline-none">
+                                <i class="fa-solid fa-chevron-right text-[10px] sm:text-xs"></i>
+                            </button>
+                        </div>
+                    @endif
                 </div>
+
             </div>
         </section>
     </main>
@@ -714,21 +799,21 @@
     @if($banners->count() > 0)
         <section class="relative w-full h-auto mt-8 sm:mt-10 mb-8 sm:mb-10"
             x-data="{ 
-                                                                                                                                                                                                    currentSlide: 0, 
-                                                                                                                                                                                                    total: {{ $banners->count() }},
-                                                                                                                                                                                                    interval: null,
-                                                                                                                                                                                                    init() { 
-                                                                                                                                                                                                        this.interval = setInterval(() => { this.next() }, 5000); 
-                                                                                                                                                                                                    },
-                                                                                                                                                                                                    next() { 
-                                                                                                                                                                                                        this.currentSlide = (this.currentSlide + 1) % this.total; 
-                                                                                                                                                                                                    },
-                                                                                                                                                                                                    goTo(index) {
-                                                                                                                                                                                                        this.currentSlide = index;
-                                                                                                                                                                                                        clearInterval(this.interval);
-                                                                                                                                                                                                        this.interval = setInterval(() => { this.next() }, 5000);
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            currentSlide: 0, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                            total: {{ $banners->count() }},
+                                                                                                                                                                                                                                                                                                                                                                                                                                            interval: null,
+                                                                                                                                                                                                                                                                                                                                                                                                                                            init() { 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                this.interval = setInterval(() => { this.next() }, 5000); 
+                                                                                                                                                                                                                                                                                                                                                                                                                                            },
+                                                                                                                                                                                                                                                                                                                                                                                                                                            next() { 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                this.currentSlide = (this.currentSlide + 1) % this.total; 
+                                                                                                                                                                                                                                                                                                                                                                                                                                            },
+                                                                                                                                                                                                                                                                                                                                                                                                                                            goTo(index) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                this.currentSlide = index;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                clearInterval(this.interval);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                this.interval = setInterval(() => { this.next() }, 5000);
+                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                                                        }">
 
             <div class="relative w-full ">
                 @foreach($banners as $index => $banner)

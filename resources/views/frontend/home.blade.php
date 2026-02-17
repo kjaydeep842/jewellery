@@ -662,9 +662,12 @@
               <a href="{{ route('product.details', $product->slug) }}"
                 class="w-full h-full flex items-center justify-center block p-4">
                 <!-- Dynamic Image with Fallback -->
-                <img src="{{ $product->images->first()->url ?? asset('assets/ring.png') }}" alt="{{ $product->name }}"
+                <img
+                  src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->image_path) : asset('assets/ring.png') }}"
+                  alt="{{ $product->name }}"
                   class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-                <img src="{{ $product->images->skip(1)->first()->url ?? asset('assets/hover_image_p.png') }}"
+                <img
+                  src="{{ $product->images->skip(1)->first() ? asset('storage/' . $product->images->skip(1)->first()->image_path) : asset('assets/hover_image_p.png') }}"
                   class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
               </a>
             </div>
@@ -690,7 +693,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                      class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                            class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -1444,7 +1447,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                              {{isset($middleBanners) ? $middleBanners->count() : 0 }},
+                                                                                                {{isset($middleBanners) ? $middleBanners->count() : 0 }},
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

@@ -35,6 +35,9 @@ class BannerController extends Controller
             if ($request->is_product_banner === 'on') {
                 $request->merge(['is_product_banner' => 1]);
             }
+            if ($request->is_prod_vertical === 'on') {
+                $request->merge(['is_prod_vertical' => 1]);
+            }
 
             // Check if request is empty but content-length is not (Implies post_max_size exceeded)
             if (empty($request->all()) && empty($request->files->all()) && $request->header('Content-Length') > 0) {
@@ -51,8 +54,9 @@ class BannerController extends Controller
                 'desc' => 'nullable|string',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
                 'status' => 'nullable|boolean',
-                'type' => 'required|in:top,middle',
-                'is_product_banner' => 'nullable|boolean'
+                'type' => 'required|in:top,middle,prod_vertical',
+                'is_product_banner' => 'nullable|boolean',
+                'is_prod_vertical' => 'nullable|boolean'
             ], [
                 'image.image' => 'The file must be an image.',
                 'image.mimes' => 'The image must be a file of type: jpg, jpeg, png, webp.',
@@ -65,6 +69,7 @@ class BannerController extends Controller
             // Explicitly cast to boolean integer (0 or 1)
             $data['status'] = $request->boolean('status') ? 1 : 0;
             $data['is_product_banner'] = $request->boolean('is_product_banner') ? 1 : 0;
+            $data['is_prod_vertical'] = $request->boolean('is_prod_vertical') ? 1 : 0;
 
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('banners', 'public');
@@ -92,14 +97,18 @@ class BannerController extends Controller
         if ($request->is_product_banner === 'on') {
             $request->merge(['is_product_banner' => 1]);
         }
+        if ($request->is_prod_vertical === 'on') {
+            $request->merge(['is_prod_vertical' => 1]);
+        }
 
         $request->validate([
             'title' => 'required|string',
             'desc' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'status' => 'nullable|boolean',
-            'type' => 'required|in:top,middle',
-            'is_product_banner' => 'nullable|boolean'
+            'type' => 'required|in:top,middle,prod_vertical',
+            'is_product_banner' => 'nullable|boolean',
+            'is_prod_vertical' => 'nullable|boolean'
         ]);
 
         try {
@@ -108,6 +117,7 @@ class BannerController extends Controller
             // Explicitly cast to boolean integer (0 or 1)
             $data['status'] = $request->boolean('status') ? 1 : 0;
             $data['is_product_banner'] = $request->boolean('is_product_banner') ? 1 : 0;
+            $data['is_prod_vertical'] = $request->boolean('is_prod_vertical') ? 1 : 0;
 
             if ($request->hasFile('image')) {
                 // Delete old image if exists

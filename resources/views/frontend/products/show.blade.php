@@ -687,6 +687,53 @@
 
 
         <!-- Ratings and reviews section -->
+        <style>
+            @media (max-width: 1023px) {
+                .responsive-review-rating {
+                    margin-left: 0 !important;
+                    justify-content: center !important;
+                    width: 100% !important;
+                }
+
+                .responsive-review-btn {
+                    margin-left: 0 !important;
+                    align-self: center !important;
+                }
+            }
+
+            /* Tablet / Small Laptop (1024px) */
+            @media (min-width: 1024px) and (max-width: 1279px) {
+                .responsive-review-rating {
+                    margin-left: 4rem !important;
+                }
+
+                .responsive-review-btn {
+                    margin-left: 6rem !important;
+                }
+            }
+
+            /* Standard Laptop/Desktop (1280px - 2559px) */
+            @media (min-width: 1280px) and (max-width: 2559px) {
+                .responsive-review-rating {
+                    margin-left: 10.5rem !important;
+                }
+
+                .responsive-review-btn {
+                    margin-left: 13rem !important;
+                }
+            }
+
+            /* Big Screen / Ultra-wide (2560px+) */
+            @media (min-width: 2560px) {
+                .responsive-review-rating {
+                    margin-left: 12.5rem !important;
+                }
+
+                .responsive-review-btn {
+                    margin-left: 15.5rem !important;
+                }
+            }
+        </style>
         <section
             class="h-full w-full max-w-[1600px] min-[2000px]:max-w-[2400px] mx-auto py-8 sm:py-10 md:py-12 lg:py-16 font-sans px-4 sm:px-6 md:px-8 lg:px-8">
             <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-8 md:gap-10 lg:gap-6 xl:gap-8">
@@ -699,47 +746,49 @@
                         </div>
                         <div class="text-left flex flex-col justify-center items-start">
                             <span
-                                class="text-[14px] md:text-[16px] lg:text-[17px] xl:text-[18px] text-[#5C4522] block font-['Alexandria'] leading-none">Ratings
+                                class="text-[14px] md:text-[16px] lg:text-[17px] xl:text-[18px] min-[2560px]:text-[24px] text-[#5C4522] block font-['Alexandria'] leading-none">Ratings
                                 &</span>
                             <h2
-                                class="text-[28px] md:text-[30px] lg:text-[32px] xl:text-[36px] text-[#CBA65A] font-medium font-['Outfit'] leading-tight">
+                                class="text-[28px] md:text-[30px] lg:text-[32px] xl:text-[36px] min-[2560px]:text-[48px] text-[#CBA65A] font-medium font-['Outfit'] leading-tight">
                                 Reviews
                             </h2>
                         </div>
                     </div>
 
 
-                    <div class="flex items-center gap-3 justify-center lg:justify-start ml-4 md:ml-6 lg:ml-10">
-                        <div class="flex items-center gap-1 text-[#F5B800]">
+                    <div
+                        class="flex items-center justify-center lg:justify-start responsive-review-rating w-auto lg:w-[190px] h-[30px] gap-[10px]">
+                        <div class="flex items-center gap-[10px] text-[#F5B800] h-full">
                             @php $rating = $product->reviews->avg('rating') ?? 0; @endphp
                             @for($i = 1; $i <= 5; $i++)
                                 @if($i <= floor($rating))
-                                    <i class="fas fa-star text-lg md:text-xl lg:text-2xl"></i>
+                                    <i class="fas fa-star text-xl lg:text-[24px] min-[2560px]:text-[32px]"></i>
                                 @elseif($i == ceil($rating) && $rating - floor($rating) >= 0.5)
-                                    <i class="fas fa-star-half-alt text-lg md:text-xl lg:text-2xl"></i>
+                                    <i class="fas fa-star-half-alt text-xl lg:text-[24px] min-[2560px]:text-[32px]"></i>
                                 @else
-                                    <i class="far fa-star text-lg md:text-xl lg:text-2xl"></i>
+                                    <i class="far fa-star text-xl lg:text-[24px] min-[2560px]:text-[32px]"></i>
                                 @endif
                             @endfor
                         </div>
                         <span
-                            class="font-['Outfit'] text-[30px] md:text-[32px] lg:text-[36px] text-[#1A1A1A]">{{ number_format($rating, 1) }}</span>
+                            class="font-['Outfit'] font-medium text-[24px] md:text-[25px] lg:text-[26px] min-[2560px]:text-[36px] leading-none text-[#1A1A1A]">{{ number_format($rating, 1) }}</span>
                     </div>
 
 
                     <button onclick="openReviewModal()"
-                        class="self-start ml-4 md:ml-6 lg:ml-8 w-auto px-8 md:px-9 lg:px-10 py-2 md:py-2.5 border border-[#CBA65A] text-[#CBA65A] bg-transparent text-sm rounded-full hover:bg-[#CBA65A] hover:text-white transition-all font-['Outfit'] tracking-wide">
+                        class="self-center lg:self-start responsive-review-btn w-auto px-8 md:px-9 lg:px-12 h-[50px] md:h-[55px] lg:h-[60px] min-[2560px]:h-[80px] border border-[#CBA65A] text-[#CBA65A] bg-transparent text-[18px] md:text-[20px] lg:text-[22px] min-[2560px]:text-[28px] font-medium leading-none rounded-full hover:bg-[#CBA65A] hover:text-white transition-all font-['Outfit'] tracking-normal flex items-center justify-center whitespace-nowrap">
                         Write Review
                     </button>
                 </div>
 
                 <!-- Right Side: Reviews Card -->
-                <div class="w-full lg:w-2/3" x-data="{ 
-                                                                                                                        current: 0, 
-                                                                                                                        total: {{ ceil($product->reviews->count() / 3) }},
-                                                                                                                        next() { this.current = (this.current + 1) % this.total },
-                                                                                                                        prev() { this.current = (this.current - 1 + this.total) % this.total }
-                                                                                                                    }">
+                <div class="w-full lg:w-2/3"
+                    x-data="{ 
+                                                                                                                                                            current: 0, 
+                                                                                                                                                            total: {{ ceil($product->reviews->count() / 3) }},
+                                                                                                                                                            next() { this.current = (this.current + 1) % this.total },
+                                                                                                                                                            prev() { this.current = (this.current - 1 + this.total) % this.total }
+                                                                                                                                                        }">
                     <div class="bg-white rounded-xl sm:rounded-2xl border border-[#F2F4F7] overflow-hidden shadow-sm">
                         <!-- Card Header -->
                         <div class="bg-white border-b border-[#F2F4F7] px-4 sm:px-6 md:px-8 py-4 sm:py-5">
@@ -815,21 +864,21 @@
     @if($banners->count() > 0)
         <section class="relative w-full h-auto mt-8 sm:mt-10 mb-8 sm:mb-10"
             x-data="{ 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                currentSlide: 0, 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                total: {{ $banners->count() }},
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                interval: null,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                init() { 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.interval = setInterval(() => { this.next() }, 5000); 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                next() { 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.currentSlide = (this.currentSlide + 1) % this.total; 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                goTo(index) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.currentSlide = index;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    clearInterval(this.interval);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.interval = setInterval(() => { this.next() }, 5000);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                currentSlide: 0, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                total: {{ $banners->count() }},
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                interval: null,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                init() { 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.interval = setInterval(() => { this.next() }, 5000); 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                next() { 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.currentSlide = (this.currentSlide + 1) % this.total; 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                goTo(index) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.currentSlide = index;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    clearInterval(this.interval);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.interval = setInterval(() => { this.next() }, 5000);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }">
 
             <div class="relative w-full ">
                 @foreach($banners as $index => $banner)
@@ -880,8 +929,13 @@
                 <!-- Left Banner Card -->
                 <div
                     class="col-span-1 h-auto min-h-[200px] w-full rounded-2xl p-2 flex flex-col items-center justify-between text-center relative overflow-hidden bg-[#111111]">
-                    <img src="{{ asset('assets/neckless.png') }}" alt="Necklace"
-                        class="w-full h-full object-contain object-center">
+                    @if(isset($verticalBanner) && $verticalBanner)
+                        <img src="{{ asset('storage/' . $verticalBanner->image) }}" alt="{{ $verticalBanner->title }}"
+                            class="w-full h-full object-contain object-center">
+                    @else
+                        <img src="{{ asset('assets/neckless.png') }}" alt="Necklace"
+                            class="w-full h-full object-contain object-center">
+                    @endif
                 </div>
 
                 <!-- Right Grid -->
@@ -903,7 +957,7 @@
                                     </button>
                                 </form>
                                 <a href="{{ route('product.details', $related->slug) }}"
-                                    class="w-full h-full flex items-center justify-center block p-4">
+                                    class="w-full h-full flex items-center justify-center block">
                                     @if($related->images->count() > 0)
                                         <!-- Main Image -->
                                         <img src="{{ asset('storage/' . $related->images->first()->image_path) }}"
@@ -912,16 +966,16 @@
                                         <!-- Hover Image -->
                                         @if($related->images->count() > 1)
                                             <img src="{{ asset('storage/' . $related->images->skip(1)->first()->image_path) }}"
-                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
                                         @else
                                             <img src="{{ asset('storage/' . $related->images->first()->image_path) }}"
-                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
                                         @endif
                                     @else
                                         <img src="{{ asset('assets/ring.png') }}" alt="{{ $related->name }}"
                                             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
                                         <img src="{{ asset('assets/hover_image_p.png') }}"
-                                            class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                                            class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
                                     @endif
                                 </a>
                             </div>

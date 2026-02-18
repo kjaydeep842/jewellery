@@ -923,7 +923,7 @@
                     class="h-auto w-[50px] sm:w-[60px] md:w-auto md:flex-1 object-cover md:max-w-[350px] xl:max-w-[400px]"
                     alt="">
             </div>
-
+ 
             <div
                 class="grid grid-cols-[100px_1fr] sm:grid-cols-[130px_1fr] md:grid-cols-[220px_1fr] lg:grid-cols-5 gap-2 sm:gap-3 md:gap-5">
                 <!-- Left Banner Card -->

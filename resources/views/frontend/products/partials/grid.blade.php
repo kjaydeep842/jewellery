@@ -1,26 +1,24 @@
 <div class="flex flex-col gap-6" x-data="{ zoomOpen: false, zoomImage: '' }">
     <!-- Grid Container -->
-    <div id="products-grid"
-        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 min-[1800px]:grid-cols-7 min-[2200px]:grid-cols-8 gap-3 md:gap-4 px-0">
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-0">
         @forelse ($products as $product)
-            <!-- Card -->
             <div x-data="{
-                                    activeImage: 0,
-                                    images: [
-                                        '{{ $product->images->first() ? asset('storage/' . $product->images->first()->image_path) : asset('assets/ring.png') }}',
-                                        @foreach($product->images->skip(1) as $image)
-                                            '{{ asset('storage/' . $image->image_path) }}',
-                                        @endforeach
-                                    ]
-                                }"
-                class="bg-[#FAF8F1] border border-[#E8E1D5] hover:shadow-lg transition-all rounded-sm overflow-hidden p-2 relative group flex flex-col h-full">
+                                            activeImage: 0,
+                                            images: [
+                                                '{{ $product->images->first() ? asset('storage/' . $product->images->first()->image_path) : asset('assets/ring.png') }}',
+                                                @foreach($product->images->skip(1) as $image)
+                                                    '{{ asset('storage/' . $image->image_path) }}',
+                                                @endforeach
+                                            ]
+                                        }"
+                class="bg-[#FAF8F1] border border-[#E8E1D5] hover:shadow-lg transition-shadow rounded-sm overflow-hidden p-2 relative group flex flex-col h-full">
 
                 <!-- Image Area -->
                 <div
                     class="w-full aspect-square flex items-center justify-center mb-3 relative rounded-sm overflow-hidden bg-white/50 group/image">
                     @if($product->is_bestseller)
                         <div
-                            class="absolute top-2 right-0 z-10 bg-[#BC511B] text-white text-[10px] pl-3 pr-2 py-1 rounded-l-full font-medium font-['Outfit']">
+                            class="absolute top-2 right-0 z-10 bg-[#BC511B] text-white text-[12px] pl-3 pr-2 py-1 rounded-l-full font-['Alexandria'] font-normal tracking-wide">
                             Best Seller
                         </div>
                     @endif
@@ -36,73 +34,66 @@
                     <!-- Slider Arrows (Visible on Hover if multiple images) -->
                     <template x-if="images.length > 1">
                         <div
-                            class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 opacity-0 group-hover/image:opacity-100 transition-opacity pointer-events-none">
+                            class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 opacity-0 group-hover/image:opacity-100 transition-opacity pointer-events-none z-10">
                             <button
                                 @click.prevent.stop="activeImage = activeImage === 0 ? images.length - 1 : activeImage - 1"
-                                class="w-6 h-6 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-[#CBA65A] shadow-sm cursor-pointer pointer-events-auto transition-colors">
+                                class="w-7 h-7 bg-white/90 hover:bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm cursor-pointer pointer-events-auto transition-colors border border-gray-100">
                                 <i class="fa-solid fa-chevron-left text-[10px]"></i>
                             </button>
                             <button
                                 @click.prevent.stop="activeImage = activeImage === images.length - 1 ? 0 : activeImage + 1"
-                                class="w-6 h-6 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-[#CBA65A] shadow-sm cursor-pointer pointer-events-auto transition-colors">
+                                class="w-7 h-7 bg-white/90 hover:bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm cursor-pointer pointer-events-auto transition-colors border border-gray-100">
                                 <i class="fa-solid fa-chevron-right text-[10px]"></i>
                             </button>
                         </div>
                     </template>
 
-                    <!-- Actions Overlay (Bottom) -->
-                    <div
-                        class="absolute bottom-2 w-[95%] left-1/2 -translate-x-1/2 flex justify-between items-center px-1 z-20">
-
-                        <!-- Wishlist -->
-                        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer border border-[#E8E1D5] hover:bg-[#FAF8F1] wishlist-btn transition-colors"
+                    <!-- Action Bar (Replaces old strip and static buttons) -->
+                    <div class="absolute bottom-3 inset-x-3 flex items-center justify-between gap-2 z-20">
+                        <!-- Wishlist Button -->
+                        <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer hover:bg-gray-50 transition-colors wishlist-btn"
                             data-product-id="{{ $product->id }}">
                             @if(Auth::check() && Auth::user()->wishlists->contains('product_id', $product->id))
-                                <i class="fa-solid fa-heart text-[#CBA65A] text-xs"></i>
+                                <i class="fa-solid fa-heart text-[#CBA65A] text-sm"></i>
                             @else
-                                <i class="fa-regular fa-heart text-[#CBA65A] text-xs"></i>
+                                <img src="{{ asset('assets/ic_wishlist1.png') }}" alt="wishlist" class="w-4 h-4 object-contain">
                             @endif
                         </div>
 
-                        <!-- Add to Cart (Center) -->
+                        <!-- Add to Cart (Visible on Hover) -->
                         <button onclick="window.location.href='{{ route('product.details', $product->slug) }}'"
-                            class="bg-[#CBA65A] text-white text-[10px] font-bold px-3 h-8 rounded-full shadow-md hover:bg-[#b39359] transition-colors font-['Outfit'] uppercase tracking-wider whitespace-nowrap flex-grow mx-1">
+                            class="flex-grow h-9 text-white text-xs shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-['Outfit'] whitespace-nowrap"
+                            style="background: linear-gradient(90deg, #D9BE87 0%, #BE933C 100%), #D5D9E2; border-radius: 6px;">
                             Add to Cart
                         </button>
 
-                        <!-- Expand / Zoom -->
-                        <button @click.prevent.stop="zoomImage = images[activeImage]; zoomOpen = true"
-                            class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer border border-[#E8E1D5] hover:bg-[#FAF8F1] transition-colors">
-                            <img src="{{ asset('assets/maximize.png') }}" alt="expand" class="w-3 h-3 object-contain">
-                        </button>
-
+                        <!-- Expand Button -->
+                        <div @click.prevent.stop="zoomImage = images[activeImage]; zoomOpen = true"
+                            class="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer hover:bg-gray-50 transition-colors">
+                            <img src="{{ asset('assets/maximize.png') }}" alt="expand" class="w-4 h-4 object-contain">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Content -->
-                <div class="px-1 pb-1 flex flex-col flex-grow">
-                    <p class="text-[10px] text-gray-500 font-['Outfit'] uppercase tracking-tight mb-0.5">
-                        {{ $product->category->name ?? 'Jewellery' }}
-                    </p>
-                    <p class="text-[13px] text-gray-800 font-medium leading-tight font-['Outfit'] mb-1 line-clamp-1">
+                <!-- Product Info -->
+                <div class="space-y-1 flex flex-col flex-grow pt-1">
+                    <p class="text-sm text-gray-800 font-medium leading-tight font-['Outfit'] line-clamp-2 min-h-[2.5rem] mb-0.5">
                         <a href="{{ route('product.details', $product->slug) }}"
                             title="{{ $product->name }}">{{ $product->name }}</a>
                     </p>
-                    <div class="mt-auto flex justify-between items-end">
-                        <div class="flex flex-col">
-                            <p class="text-[15px] font-bold text-[#1A1A1A] font-['Outfit']">
-                                ₹{{ number_format($product->selling_price, 2) }}
-                            </p>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-[#1A1A1A] font-['Outfit']">
+                            ₹{{ number_format($product->selling_price, 2) }}
+                        </p>
 
-                            <!-- Color Swatches -->
-                            <div class="flex gap-1.5 mt-2">
-                                <div class="w-2.5 h-2.5 rounded-full bg-[#E6C200] border border-gray-200 shadow-sm cursor-pointer hover:scale-110 transition-transform"
-                                    title="Yellow Gold"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-[#E0E0E0] border border-gray-200 shadow-sm cursor-pointer hover:scale-110 transition-transform"
-                                    title="White Gold"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-[#E0BFB8] border border-gray-200 shadow-sm cursor-pointer hover:scale-110 transition-transform"
-                                    title="Rose Gold"></div>
-                            </div>
+                        <!-- Color Swatches -->
+                        <div class="flex items-center gap-2 mt-2">
+                            <div class="w-4 h-4 rounded-full bg-[#E5C365] border border-gray-300 cursor-pointer hover:ring-1 hover:ring-offset-1 hover:ring-gray-400"
+                                title="Yellow Gold"></div>
+                            <div class="w-4 h-4 rounded-full bg-[#D4D4D4] border border-gray-300 cursor-pointer hover:ring-1 hover:ring-offset-1 hover:ring-gray-400"
+                                title="White Gold"></div>
+                            <div class="w-4 h-4 rounded-full bg-[#E0A499] border border-gray-300 cursor-pointer hover:ring-1 hover:ring-offset-1 hover:ring-gray-400"
+                                title="Rose Gold"></div>
                         </div>
                     </div>
                 </div>

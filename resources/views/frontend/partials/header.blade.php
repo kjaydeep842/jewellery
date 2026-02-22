@@ -200,52 +200,52 @@
             <div id="header-icons-section"
                 class="flex items-center space-x-5 min-[2000px]:space-x-8 text-gray-600 order-2 lg:order-3 transition-all duration-300">
                 @auth
-                    <div class="relative inline-block text-left" id="user-menu-container">
-                        <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
-                            @if(Auth::user()->profile_picture)
-                                <img src="{{ Auth::user()->profile_picture_url }}" alt="user"
-                                    class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full object-cover">
-                            @else
-                                <div
-                                    class="w-8 h-8 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[8px] min-[2000px]:text-[12px] font-bold text-[#000000] uppercase border border-[#EADDCC]">
-                                    {{ Auth::user()->initials }}
-                                </div>
-                            @endif
-                        </button>
+                <div class="relative inline-block text-left" id="user-menu-container">
+                    <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
+                        @if(Auth::user()->profile_picture)
+                        <img src="{{ Auth::user()->profile_picture_url }}" alt="user"
+                            class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full object-cover">
+                        @else
+                        <div
+                            class="w-8 h-8 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[8px] min-[2000px]:text-[12px] font-bold text-[#000000] uppercase border border-[#EADDCC]">
+                            {{ Auth::user()->initials }}
+                        </div>
+                        @endif
+                    </button>
 
-                        <!-- Dropdown menu for authenticated users -->
-                        <div id="user-dropdown-menu"
-                            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
-                            <div class="py-1">
-                                <div class="px-4 py-3 border-b border-gray-100">
-                                    <p class="text-sm font-['Outfit'] font-semibold text-[#1A1A1A]">{{ Auth::user()->name }}
-                                    </p>
-                                    @if(Auth::user()->phone)
-                                        <p class="text-xs font-['Outfit'] text-gray-500">{{ Auth::user()->phone }}</p>
-                                    @endif
-                                </div>
-
-                                <a href="{{ route('profile.edit') }}"
-                                    class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">
-                                    Profile
-                                </a>
-
-                                <form method="POST" action="{{ route('frontend.auth.logout') }}">
-                                    @csrf
-                                    <a href="{{ route('frontend.auth.logout') }}"
-                                        onclick="event.preventDefault(); this.closest('form').submit();"
-                                        class="block px-4 py-3 text-sm text-red-600 hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium border-t border-gray-100">
-                                        Logout
-                                    </a>
-                                </form>
+                    <!-- Dropdown menu for authenticated users -->
+                    <div id="user-dropdown-menu"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
+                        <div class="py-1">
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <p class="text-sm font-['Outfit'] font-semibold text-[#1A1A1A]">{{ Auth::user()->name }}
+                                </p>
+                                @if(Auth::user()->phone)
+                                <p class="text-xs font-['Outfit'] text-gray-500">{{ Auth::user()->phone }}</p>
+                                @endif
                             </div>
+
+                            <a href="{{ route('profile.edit') }}"
+                                class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">
+                                Profile
+                            </a>
+
+                            <form method="POST" action="{{ route('frontend.auth.logout') }}">
+                                @csrf
+                                <a href="{{ route('frontend.auth.logout') }}"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                                    class="block px-4 py-3 text-sm text-red-600 hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium border-t border-gray-100">
+                                    Logout
+                                </a>
+                            </form>
                         </div>
                     </div>
+                </div>
                 @else
-                    <a href="{{ route('frontend.auth.mobile') }}" class="hover:text-gold flex items-center">
-                        <img src="{{ asset('assets/ic_User.png') }}" alt="user"
-                            class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
-                    </a>
+                <a href="{{ route('frontend.auth.mobile') }}" class="hover:text-gold flex items-center">
+                    <img src="{{ asset('assets/ic_User.png') }}" alt="user"
+                        class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
+                </a>
                 @endauth
 
                 <a href="{{ route('wishlist.header') }}" class="relative hover:text-gold">
@@ -257,7 +257,7 @@
                 <a href="{{ route('cart.header') }}" class="relative hover:text-gold block">
                     <img src="{{ asset('assets/ic_bag_black.png') }}" alt="bag"
                         class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8"><span
-                        class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] min-[2000px]:text-sm min-[2000px]:w-6 min-[2000px]:h-6 rounded-full w-4 h-4 flex items-center justify-center">{{ $cartCount ?? 0 }}</span>
+                        class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] min-[2000px]:text-sm min-[2000px]:w-6 min-[2000px]:h-6 rounded-full w-4 h-4 flex items-center justify-center" id="header-cart-count">{{ $cartCount ?? 0 }}</span>
                 </a>
             </div>
         </div>
@@ -301,109 +301,109 @@
 </div>
 
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const header = document.querySelector('header');
-            const placeholder = document.getElementById('header-placeholder');
-            const headerMainContainer = document.getElementById('header-main-container');
-            const mainNav = document.getElementById('main-navigation');
-            const searchSection = document.getElementById('header-search-section');
-            const iconsSection = document.getElementById('header-icons-section');
-            const logoSection = document.getElementById('header-logo-section');
-            const logoImg = logoSection ? logoSection.querySelector('img') : null;
-            const logoContainer = logoSection ? logoSection.querySelector('div') : null;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const header = document.querySelector('header');
+        const placeholder = document.getElementById('header-placeholder');
+        const headerMainContainer = document.getElementById('header-main-container');
+        const mainNav = document.getElementById('main-navigation');
+        const searchSection = document.getElementById('header-search-section');
+        const iconsSection = document.getElementById('header-icons-section');
+        const logoSection = document.getElementById('header-logo-section');
+        const logoImg = logoSection ? logoSection.querySelector('img') : null;
+        const logoContainer = logoSection ? logoSection.querySelector('div') : null;
 
-            let lastScrollTop = 0;
-            const threshold = 40;
-            const delta = 5;
+        let lastScrollTop = 0;
+        const threshold = 40;
+        const delta = 5;
 
-            // Add transition to logo for smooth resizing
-            if (logoImg) logoImg.classList.add('transition-all', 'duration-300');
-            if (logoContainer) logoContainer.classList.add('transition-all', 'duration-300');
+        // Add transition to logo for smooth resizing
+        if (logoImg) logoImg.classList.add('transition-all', 'duration-300');
+        if (logoContainer) logoContainer.classList.add('transition-all', 'duration-300');
 
-            function updateHeader() {
-                const st = window.scrollY;
+        function updateHeader() {
+            const st = window.scrollY;
 
-                // Make sure they scroll more than delta
-                if (Math.abs(lastScrollTop - st) <= delta)
-                    return;
+            // Make sure they scroll more than delta
+            if (Math.abs(lastScrollTop - st) <= delta)
+                return;
 
-                if (st > threshold) {
-                    // We are scrolled past the top
+            if (st > threshold) {
+                // We are scrolled past the top
 
-                    // Ensure Fixed Positioning
-                    if (!header.classList.contains('fixed')) {
-                        if (placeholder) placeholder.style.height = header.offsetHeight + 'px';
-                        header.classList.remove('relative');
-                        header.classList.add('fixed', 'top-0', 'left-0');
-                    }
-
-                    // ALWAYS COMPACT (Scrolling Down OR Up, as long as not at top)
-                    // Hide Search & Icons
-                    if (searchSection) searchSection.classList.add('hidden');
-                    if (iconsSection) iconsSection.classList.add('hidden');
-
-                    // Shrink Logo (Targeting the container width)
-                    if (logoContainer) {
-                        logoContainer.classList.remove('w-[212px]', 'h-[46.8px]');
-                        logoContainer.classList.add('w-[140px]', 'h-auto');
-                    }
-
-                    // --- NEW: INLINE LAYOUT ---
-                    // Force header to be a flex row container, CENTERED
-                    header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
-
-                    if (headerMainContainer) {
-                        // Collapse the main container to just fit the logo
-                        headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                        headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
-                        // Ensure it doesn't take full width
-                        headerMainContainer.style.width = 'auto';
-                    }
-
-                    if (mainNav) {
-                        // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
-                        mainNav.classList.remove('justify-center');
-                        // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
-                    }
-                } else {
-                    // AT TOP
-                    // Reset Fixed Positioning
-                    if (header.classList.contains('fixed')) {
-                        header.classList.remove('fixed', 'top-0', 'left-0');
-                        header.classList.add('relative');
-                        if (placeholder) placeholder.style.height = 'auto';
-                    }
-
-                    // Show All
-                    if (searchSection) searchSection.classList.remove('hidden');
-                    if (iconsSection) iconsSection.classList.remove('hidden');
-
-                    // Restore Logo
-                    if (logoContainer) {
-                        logoContainer.classList.add('w-[212px]', 'h-[46.8px]');
-                        logoContainer.classList.remove('w-[140px]', 'h-auto');
-                    }
-
-                    // --- RESET LAYOUT ---
-                    header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
-
-                    if (headerMainContainer) {
-                        headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                        headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap');
-                        headerMainContainer.style.width = '';
-                    }
-                    if (mainNav) {
-                        mainNav.classList.add('justify-center');
-                    }
+                // Ensure Fixed Positioning
+                if (!header.classList.contains('fixed')) {
+                    if (placeholder) placeholder.style.height = header.offsetHeight + 'px';
+                    header.classList.remove('relative');
+                    header.classList.add('fixed', 'top-0', 'left-0');
                 }
 
-                lastScrollTop = st;
+                // ALWAYS COMPACT (Scrolling Down OR Up, as long as not at top)
+                // Hide Search & Icons
+                if (searchSection) searchSection.classList.add('hidden');
+                if (iconsSection) iconsSection.classList.add('hidden');
+
+                // Shrink Logo (Targeting the container width)
+                if (logoContainer) {
+                    logoContainer.classList.remove('w-[212px]', 'h-[46.8px]');
+                    logoContainer.classList.add('w-[140px]', 'h-auto');
+                }
+
+                // --- NEW: INLINE LAYOUT ---
+                // Force header to be a flex row container, CENTERED
+                header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
+
+                if (headerMainContainer) {
+                    // Collapse the main container to just fit the logo
+                    headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
+                    headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
+                    // Ensure it doesn't take full width
+                    headerMainContainer.style.width = 'auto';
+                }
+
+                if (mainNav) {
+                    // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
+                    mainNav.classList.remove('justify-center');
+                    // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
+                }
+            } else {
+                // AT TOP
+                // Reset Fixed Positioning
+                if (header.classList.contains('fixed')) {
+                    header.classList.remove('fixed', 'top-0', 'left-0');
+                    header.classList.add('relative');
+                    if (placeholder) placeholder.style.height = 'auto';
+                }
+
+                // Show All
+                if (searchSection) searchSection.classList.remove('hidden');
+                if (iconsSection) iconsSection.classList.remove('hidden');
+
+                // Restore Logo
+                if (logoContainer) {
+                    logoContainer.classList.add('w-[212px]', 'h-[46.8px]');
+                    logoContainer.classList.remove('w-[140px]', 'h-auto');
+                }
+
+                // --- RESET LAYOUT ---
+                header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
+
+                if (headerMainContainer) {
+                    headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
+                    headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap');
+                    headerMainContainer.style.width = '';
+                }
+                if (mainNav) {
+                    mainNav.classList.add('justify-center');
+                }
             }
 
-            window.addEventListener('scroll', function () {
-                updateHeader();
-            });
+            lastScrollTop = st;
+        }
+
+        window.addEventListener('scroll', function() {
+            updateHeader();
         });
-    </script>
+    });
+</script>
 @endpush

@@ -14,8 +14,8 @@ class ReadyToStockController extends Controller
     public function index(Request $request)
     {
         $query = Product::with(['category', 'images', 'variants', 'metalColor'])
-            ->where('status', 'active');
-        // ->where('is_ready_to_stock', true);
+            ->where('status', 'active')
+            ->where('is_ready_to_stock', true);
 
         // Filter by Category
         if ($request->filled('category')) {
@@ -54,58 +54,36 @@ class ReadyToStockController extends Controller
         }
 
         // Filter by Weight Ranges
-        if ($request->filled('weight_range')) {
-            $weightRanges = is_array($request->weight_range) ? $request->weight_range : [$request->weight_range];
-
-            $query->where(function ($q) use ($weightRanges) {
-                foreach ($weightRanges as $range) {
-                    switch ($range) {
-                        case '0-2':
-                            $q->orWhereBetween('weight', [0, 2]);
-                            break;
-                        case '2-5':
-                            $q->orWhereBetween('weight', [2, 5]);
-                            break;
-                        case '5-10':
-                            $q->orWhereBetween('weight', [5, 10]);
-                            break;
-                        case '10-20':
-                            $q->orWhereBetween('weight', [10, 20]);
-                            break;
-                        case '20-30':
-                            $q->orWhereBetween('weight', [20, 30]);
-                            break;
+        if ($request->has('weight')) {
+            $weights = $request->input('weight');
+            if (is_array($weights)) {
+                $query->where(function ($q) use ($weights) {
+                    foreach ($weights as $weightRange) {
+                        // Parse weight range: "0-2", "2-5", etc.
+                        $parts = explode('-', $weightRange);
+                        if (count($parts) == 2) {
+                            $min = (float) $parts[0];
+                            $max = (float) $parts[1];
+                            $q->orWhereBetween('weight', [$min, $max]);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
-        // Filter by Price
         if ($request->filled('price')) {
             // Checkbox logic takes precedence
             $priceRanges = is_array($request->price) ? $request->price : [$request->price];
 
             $query->where(function ($q) use ($priceRanges) {
                 foreach ($priceRanges as $range) {
-                    switch ($range) {
-                        case '₹ 0 - ₹ 10,000':
-                            $q->orWhereBetween('price', [0, 10000]);
-                            break;
-                        case '₹ 10,000 - ₹ 20,000':
-                            $q->orWhereBetween('price', [10000, 20000]);
-                            break;
-                        case '₹ 20,000 - ₹ 30,000':
-                            $q->orWhereBetween('price', [20000, 30000]);
-                            break;
-                        case '₹ 30,000 - ₹ 40,000':
-                            $q->orWhereBetween('price', [30000, 40000]);
-                            break;
-                        case '₹ 40,000 - ₹ 50,000':
-                            $q->orWhereBetween('price', [40000, 50000]);
-                            break;
-                        case '₹ 50,000 - ₹ 100,000':
-                            $q->orWhereBetween('price', [50000, 100000]);
-                            break;
+                    // Clean string: "₹ 0 - ₹ 10,000" -> "0-10000"
+                    $rangeClean = str_replace(['₹', ',', ' '], '', $range);
+                    $parts = explode('-', $rangeClean);
+                    if (count($parts) == 2) {
+                        $min = (int) $parts[0];
+                        $max = (int) $parts[1];
+                        $q->orWhereBetween('selling_price', [$min, $max]);
                     }
                 }
             });
@@ -116,9 +94,9 @@ class ReadyToStockController extends Controller
 
             // If max price is at the slider limit (100000), treat it as open-ended or just high
             if ($maxPrice >= 100000) {
-                $query->where('price', '>=', $minPrice);
+                $query->where('selling_price', '>=', $minPrice);
             } else {
-                $query->whereBetween('price', [$minPrice, $maxPrice]);
+                $query->whereBetween('selling_price', [$minPrice, $maxPrice]);
             }
         }
 
@@ -135,14 +113,14 @@ class ReadyToStockController extends Controller
         // Sorting
         $sort = $request->get('sort', 'newest');
         switch ($sort) {
-            case 'price_low':
-                $query->orderBy('price', 'asc');
+            case 'price_low_high':
+                $query->orderBy('selling_price', 'asc');
                 break;
-            case 'price_high':
-                $query->orderBy('price', 'desc');
+            case 'price_high_low':
+                $query->orderBy('selling_price', 'desc');
                 break;
             case 'popularity':
-                $query->orderBy('popularity', 'desc');
+                $query->orderBy('views', 'desc');
                 break;
             default:
                 $query->orderBy('created_at', 'desc');
@@ -166,7 +144,7 @@ class ReadyToStockController extends Controller
         $shapes = Shape::where('status', 1)->pluck('name');
 
         if ($request->ajax()) {
-            return view('frontend.pages.partials.readytostock-grid', compact('products'))->render();
+            return view('frontend.pages.partials.products_grid', compact('products'))->render();
         }
 
         return view('frontend.pages.readytostock', compact(

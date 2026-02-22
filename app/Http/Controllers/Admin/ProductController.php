@@ -80,6 +80,7 @@ class ProductController extends Controller
             $data['is_featured'] = $request->boolean('is_featured');
             $data['is_new'] = $request->boolean('is_new');
             $data['is_bestseller'] = $request->boolean('is_bestseller');
+            $data['is_ready_to_stock'] = $request->boolean('is_ready_to_stock');
 
             // Slug
             if (empty($data['slug'])) {
@@ -92,6 +93,15 @@ class ProductController extends Controller
                 $slug = $data['slug'] . '-' . $count++;
             }
             $data['slug'] = $slug;
+
+            // SKU
+            if (empty($data['sku'])) {
+                $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
+            }
+            // Ensure unique SKU
+            while (Product::where('sku', $data['sku'])->exists()) {
+                $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
+            }
 
             // Main Image
             if ($request->hasFile('image')) {
@@ -119,8 +129,10 @@ class ProductController extends Controller
 
             // Variants (Sizes)
             if ($request->filled('variants')) {
+                $processedSizes = [];
                 foreach ($request->variants as $variant) {
-                    if (!empty($variant['size'])) {
+                    if (!empty($variant['size']) && !in_array($variant['size'], $processedSizes)) {
+                        $processedSizes[] = $variant['size'];
                         ProductVariant::create([
                             'product_id' => $product->id,
                             'size' => $variant['size'],
@@ -181,6 +193,7 @@ class ProductController extends Controller
             $data['is_featured'] = $request->boolean('is_featured');
             $data['is_new'] = $request->boolean('is_new');
             $data['is_bestseller'] = $request->boolean('is_bestseller');
+            $data['is_ready_to_stock'] = $request->boolean('is_ready_to_stock');
 
             // Slug
             if (empty($data['slug'])) {
@@ -193,6 +206,14 @@ class ProductController extends Controller
                     $slug = $data['slug'] . '-' . $count++;
                 }
                 $data['slug'] = $slug;
+            }
+
+            // SKU Generation if missing
+            if (empty($product->sku) && empty($data['sku'])) {
+                $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
+                while (Product::where('sku', $data['sku'])->where('id', '!=', $product->id)->exists()) {
+                    $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
+                }
             }
 
             // Main Image
@@ -238,8 +259,10 @@ class ProductController extends Controller
             // Variants Sync
             ProductVariant::where('product_id', $product->id)->delete();
             if ($request->filled('variants')) {
+                $processedSizes = [];
                 foreach ($request->variants as $variant) {
-                    if (!empty($variant['size'])) {
+                    if (!empty($variant['size']) && !in_array($variant['size'], $processedSizes)) {
+                        $processedSizes[] = $variant['size'];
                         ProductVariant::create([
                             'product_id' => $product->id,
                             'size' => $variant['size'],

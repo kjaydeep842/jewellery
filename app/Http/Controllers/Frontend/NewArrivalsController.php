@@ -104,7 +104,7 @@ class NewArrivalsController extends Controller
             ];
 
             if ($request->ajax()) {
-                return view('frontend.pages.partials.products-grid', compact('products'))->render();
+                return view('frontend.pages.partials.products_grid', compact('products'))->render();
             }
 
             return view('frontend.pages.new-arrivals', array_merge(['products' => $products], $filterOptions));

@@ -99,15 +99,15 @@
                 style="background: linear-gradient(180deg, #F9E4E4 0%, #FFFFFF 100%);">
                 <div class="flex justify-center mb-6">
                     <!-- <img src="assets/color_truck.png" alt="Free Shipping" class="h-[40px] w-auto"> -->
-                    @if($feature->image)
-                    <img src="{{ asset('storage/' . $feature->image) }}" alt="{{ $feature->title }}" class="h-[40px] w-auto">
+                    @if($feature['image'])
+                    <img src="{{ asset('storage/' . $feature['image']) }}" alt="{{ $feature['title'] }}" class="h-[40px] w-auto">
                     @else
                     <img src="{{ asset('assets/color_truck.png') }}" alt="Feature" class="h-[40px] w-auto opacity-80">
                     @endif
                 </div>
-                <h3 class="font-['Outfit'] font-bold text-[#1A1A1A] text-lg mb-3">{{ $feature->title }}</h3>
+                <h3 class="font-['Outfit'] font-bold text-[#1A1A1A] text-lg mb-3">{{ $feature['title'] }}</h3>
                 <p class="font-['Outfit'] text-[#6E6E6E] text-[13px] leading-relaxed max-w-[280px]">
-                    {{ strip_tags($feature->description) }}
+                    {{ strip_tags($feature['description']) }}
                 </p>
             </div>
             @endforeach

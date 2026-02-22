@@ -102,7 +102,7 @@
     </script>
 
     <main
-        class="max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2000px] min-[2000px]:max-w-[2400px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-12 sm:pt-16 md:pt-20 lg:pt-24">
+        class="max-w-[1600px] xl:max-w-[1800px] 2xl:max-w-[2000px] min-[2000px]:max-w-[2400px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-6 md:pt-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] gap-6 sm:gap-8 md:gap-10 xl:gap-12">
 
             <!-- Product Images -->
@@ -354,15 +354,74 @@
                     </div>
 
                     <div class="relative flex items-center max-w-sm">
-                        <input type="text" placeholder="Enter Pincode" maxlength="6"
+                        <input type="text" id="pincode-input" placeholder="Enter Pincode" maxlength="6"
+                            onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"
                             class="w-full border border-gray-300 text-black rounded-md py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm xl:text-base focus:outline-none focus:ring-1 focus:ring-[#CBA65A] focus:border-[#CBA65A]">
-                        <button
-                            class="absolute right-2 font-Outfit px-3 sm:px-4 py-1 sm:py-1.5 bg-white text-gray-500 font-bold text-[10px] sm:text-xs xl:text-sm border-l border-gray-200 uppercase hover:text-[#CBA65A] transition-colors">
-                            Check
+                        <button id="pincode-check-btn" onclick="checkPincode()"
+                            class="absolute right-2 font-Outfit px-3 sm:px-4 py-1 sm:py-1.5 bg-white text-gray-500 font-bold text-[10px] sm:text-xs xl:text-sm border-l border-gray-200 uppercase hover:text-[#CBA65A] transition-colors flex items-center gap-1">
+                            <span id="pincode-btn-text">Check</span>
+                            <svg id="pincode-spinner" class="hidden animate-spin h-3 w-3 text-[#CBA65A]"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                                </circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
                         </button>
                     </div>
+                    <!-- Pincode Result -->
+                    <div id="pincode-result" class="mt-2 text-xs font-['Outfit'] font-medium hidden"></div>
                 </div>
 
+                <script>
+                    function checkPincode() {
+                        const input = document.getElementById('pincode-input');
+                        const result = document.getElementById('pincode-result');
+                        const spinner = document.getElementById('pincode-spinner');
+                        const btnText = document.getElementById('pincode-btn-text');
+                        const pincode = input.value.trim();
+
+                        // If empty or not exactly 6 digits — do nothing silently, just highlight input
+                        if (!pincode || pincode.length !== 6 || !/^\d{6}$/.test(pincode)) {
+                            // Hide any previous result
+                            result.classList.add('hidden');
+                            result.textContent = '';
+                            // Briefly highlight input border red as visual cue
+                            input.classList.add('border-red-400');
+                            setTimeout(() => input.classList.remove('border-red-400'), 1000);
+                            return;
+                        }
+
+                        // Show loading spinner
+                        spinner.classList.remove('hidden');
+                        btnText.textContent = '';
+                        result.classList.add('hidden');
+                        input.classList.remove('border-red-400');
+
+                        // Simulate delivery check (replace with real API call if needed)
+                        setTimeout(() => {
+                            spinner.classList.add('hidden');
+                            btnText.textContent = 'Check';
+
+                            // Show success
+                            result.className = "mt-2 text-xs font-['Outfit'] font-semibold text-green-600 flex items-center gap-1";
+                            result.innerHTML = '<i class="fa-solid fa-circle-check"></i>&nbsp;Delivery Available for pincode <strong>' + pincode + '</strong>';
+                            result.classList.remove('hidden');
+                        }, 1200);
+                    }
+
+                    // Allow pressing Enter on pincode field
+                    document.getElementById('pincode-input').addEventListener('keydown', function (e) {
+                        if (e.key === 'Enter') checkPincode();
+                    });
+
+                    // Clear result when user types again
+                    document.getElementById('pincode-input').addEventListener('input', function () {
+                        const result = document.getElementById('pincode-result');
+                        result.classList.add('hidden');
+                        result.textContent = '';
+                    });
+                </script>
                 <!-- Trust Badges -->
                 <div
                     class="w-full h-auto mt-6 sm:mt-8 bg-[#FAF5F5] rounded-xl p-4 sm:p-6 xl:p-8 flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6 md:gap-8 xl:gap-0 border border-[#F2F4F7]">
@@ -687,6 +746,53 @@
 
 
         <!-- Ratings and reviews section -->
+        <style>
+            @media (max-width: 1023px) {
+                .responsive-review-rating {
+                    margin-left: 0 !important;
+                    justify-content: center !important;
+                    width: 100% !important;
+                }
+
+                .responsive-review-btn {
+                    margin-left: 0 !important;
+                    align-self: center !important;
+                }
+            }
+
+            /* Tablet / Small Laptop (1024px) */
+            @media (min-width: 1024px) and (max-width: 1279px) {
+                .responsive-review-rating {
+                    margin-left: 4rem !important;
+                }
+
+                .responsive-review-btn {
+                    margin-left: 6rem !important;
+                }
+            }
+
+            /* Standard Laptop/Desktop (1280px - 2559px) */
+            @media (min-width: 1280px) and (max-width: 2559px) {
+                .responsive-review-rating {
+                    margin-left: 10.5rem !important;
+                }
+
+                .responsive-review-btn {
+                    margin-left: 13rem !important;
+                }
+            }
+
+            /* Big Screen / Ultra-wide (2560px+) */
+            @media (min-width: 2560px) {
+                .responsive-review-rating {
+                    margin-left: 12.5rem !important;
+                }
+
+                .responsive-review-btn {
+                    margin-left: 15.5rem !important;
+                }
+            }
+        </style>
         <section
             class="h-full w-full max-w-[1600px] min-[2000px]:max-w-[2400px] mx-auto py-8 sm:py-10 md:py-12 lg:py-16 font-sans px-4 sm:px-6 md:px-8 lg:px-8">
             <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-8 md:gap-10 lg:gap-6 xl:gap-8">
@@ -699,47 +805,49 @@
                         </div>
                         <div class="text-left flex flex-col justify-center items-start">
                             <span
-                                class="text-[14px] md:text-[16px] lg:text-[17px] xl:text-[18px] text-[#5C4522] block font-['Alexandria'] leading-none">Ratings
+                                class="text-[14px] md:text-[16px] lg:text-[17px] xl:text-[18px] min-[2560px]:text-[24px] text-[#5C4522] block font-['Alexandria'] leading-none">Ratings
                                 &</span>
                             <h2
-                                class="text-[28px] md:text-[30px] lg:text-[32px] xl:text-[36px] text-[#CBA65A] font-medium font-['Outfit'] leading-tight">
+                                class="text-[28px] md:text-[30px] lg:text-[32px] xl:text-[36px] min-[2560px]:text-[48px] text-[#CBA65A] font-medium font-['Outfit'] leading-tight">
                                 Reviews
                             </h2>
                         </div>
                     </div>
 
 
-                    <div class="flex items-center gap-3 justify-center lg:justify-start ml-4 md:ml-6 lg:ml-10">
-                        <div class="flex items-center gap-1 text-[#F5B800]">
+                    <div
+                        class="flex items-center justify-center lg:justify-start responsive-review-rating w-auto lg:w-[190px] h-[30px] gap-[10px]">
+                        <div class="flex items-center gap-[10px] text-[#F5B800] h-full">
                             @php $rating = $product->reviews->avg('rating') ?? 0; @endphp
                             @for($i = 1; $i <= 5; $i++)
                                 @if($i <= floor($rating))
-                                    <i class="fas fa-star text-lg md:text-xl lg:text-2xl"></i>
+                                    <i class="fas fa-star text-xl lg:text-[24px] min-[2560px]:text-[32px]"></i>
                                 @elseif($i == ceil($rating) && $rating - floor($rating) >= 0.5)
-                                    <i class="fas fa-star-half-alt text-lg md:text-xl lg:text-2xl"></i>
+                                    <i class="fas fa-star-half-alt text-xl lg:text-[24px] min-[2560px]:text-[32px]"></i>
                                 @else
-                                    <i class="far fa-star text-lg md:text-xl lg:text-2xl"></i>
+                                    <i class="far fa-star text-xl lg:text-[24px] min-[2560px]:text-[32px]"></i>
                                 @endif
                             @endfor
                         </div>
                         <span
-                            class="font-['Outfit'] text-[30px] md:text-[32px] lg:text-[36px] text-[#1A1A1A]">{{ number_format($rating, 1) }}</span>
+                            class="font-['Outfit'] font-medium text-[24px] md:text-[25px] lg:text-[26px] min-[2560px]:text-[36px] leading-none text-[#1A1A1A]">{{ number_format($rating, 1) }}</span>
                     </div>
 
 
                     <button onclick="openReviewModal()"
-                        class="self-start ml-4 md:ml-6 lg:ml-8 w-auto px-8 md:px-9 lg:px-10 py-2 md:py-2.5 border border-[#CBA65A] text-[#CBA65A] bg-transparent text-sm rounded-full hover:bg-[#CBA65A] hover:text-white transition-all font-['Outfit'] tracking-wide">
+                        class="self-center lg:self-start responsive-review-btn w-auto px-8 md:px-9 lg:px-12 h-[50px] md:h-[55px] lg:h-[60px] min-[2560px]:h-[80px] border border-[#CBA65A] text-[#CBA65A] bg-transparent text-[18px] md:text-[20px] lg:text-[22px] min-[2560px]:text-[28px] font-medium leading-none rounded-full hover:bg-[#CBA65A] hover:text-white transition-all font-['Outfit'] tracking-normal flex items-center justify-center whitespace-nowrap">
                         Write Review
                     </button>
                 </div>
 
                 <!-- Right Side: Reviews Card -->
-                <div class="w-full lg:w-2/3" x-data="{ 
-                                                                                                                        current: 0, 
-                                                                                                                        total: {{ ceil($product->reviews->count() / 3) }},
-                                                                                                                        next() { this.current = (this.current + 1) % this.total },
-                                                                                                                        prev() { this.current = (this.current - 1 + this.total) % this.total }
-                                                                                                                    }">
+                <div class="w-full lg:w-2/3"
+                    x-data="{ 
+                                                                                                                                                                                current: 0, 
+                                                                                                                                                                                total: {{ ceil($product->reviews->count() / 3) }},
+                                                                                                                                                                                next() { this.current = (this.current + 1) % this.total },
+                                                                                                                                                                                prev() { this.current = (this.current - 1 + this.total) % this.total }
+                                                                                                                                                                            }">
                     <div class="bg-white rounded-xl sm:rounded-2xl border border-[#F2F4F7] overflow-hidden shadow-sm">
                         <!-- Card Header -->
                         <div class="bg-white border-b border-[#F2F4F7] px-4 sm:px-6 md:px-8 py-4 sm:py-5">
@@ -815,21 +923,21 @@
     @if($banners->count() > 0)
         <section class="relative w-full h-auto mt-8 sm:mt-10 mb-8 sm:mb-10"
             x-data="{ 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                currentSlide: 0, 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                total: {{ $banners->count() }},
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                interval: null,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                init() { 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.interval = setInterval(() => { this.next() }, 5000); 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                next() { 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.currentSlide = (this.currentSlide + 1) % this.total; 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                goTo(index) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.currentSlide = index;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    clearInterval(this.interval);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.interval = setInterval(() => { this.next() }, 5000);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        currentSlide: 0, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        total: {{ $banners->count() }},
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        interval: null,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        init() { 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            this.interval = setInterval(() => { this.next() }, 5000); 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        next() { 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            this.currentSlide = (this.currentSlide + 1) % this.total; 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        goTo(index) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            this.currentSlide = index;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            clearInterval(this.interval);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            this.interval = setInterval(() => { this.next() }, 5000);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }">
 
             <div class="relative w-full ">
                 @foreach($banners as $index => $banner)
@@ -880,8 +988,13 @@
                 <!-- Left Banner Card -->
                 <div
                     class="col-span-1 h-auto min-h-[200px] w-full rounded-2xl p-2 flex flex-col items-center justify-between text-center relative overflow-hidden bg-[#111111]">
-                    <img src="{{ asset('assets/neckless.png') }}" alt="Necklace"
-                        class="w-full h-full object-contain object-center">
+                    @if(isset($verticalBanner) && $verticalBanner)
+                        <img src="{{ asset('storage/' . $verticalBanner->image) }}" alt="{{ $verticalBanner->title }}"
+                            class="w-full h-full object-contain object-center">
+                    @else
+                        <img src="{{ asset('assets/neckless.png') }}" alt="Necklace"
+                            class="w-full h-full object-contain object-center">
+                    @endif
                 </div>
 
                 <!-- Right Grid -->
@@ -903,7 +1016,7 @@
                                     </button>
                                 </form>
                                 <a href="{{ route('product.details', $related->slug) }}"
-                                    class="w-full h-full flex items-center justify-center block p-4">
+                                    class="w-full h-full flex items-center justify-center block">
                                     @if($related->images->count() > 0)
                                         <!-- Main Image -->
                                         <img src="{{ asset('storage/' . $related->images->first()->image_path) }}"
@@ -912,16 +1025,16 @@
                                         <!-- Hover Image -->
                                         @if($related->images->count() > 1)
                                             <img src="{{ asset('storage/' . $related->images->skip(1)->first()->image_path) }}"
-                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
                                         @else
                                             <img src="{{ asset('storage/' . $related->images->first()->image_path) }}"
-                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
                                         @endif
                                     @else
                                         <img src="{{ asset('assets/ring.png') }}" alt="{{ $related->name }}"
                                             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
                                         <img src="{{ asset('assets/hover_image_p.png') }}"
-                                            class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                                            class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
                                     @endif
                                 </a>
                             </div>
@@ -949,107 +1062,119 @@
 
     <!-- Review Modal -->
     <div id="review-modal"
-        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 hidden transition-opacity duration-300 opacity-0 px-3 sm:px-4 md:px-0">
-        <div
-            class="bg-[#FDFBF7] rounded-[16px] sm:rounded-[20px] w-full sm:w-[90%] md:w-full max-w-[600px] xl:max-w-[700px] 2xl:max-w-[750px] min-[2000px]:max-w-[800px] p-4 sm:p-5 md:p-8 xl:p-10 min-[2000px]:p-12 relative shadow-2xl transform scale-95 transition-transform duration-300 max-h-[85vh] sm:max-h-[80vh] overflow-y-auto overscroll-contain">
-            <!-- Close Button -->
-            <button onclick="closeReviewModal()"
-                class="absolute top-4 right-4 sm:top-5 sm:right-5 xl:top-6 xl:right-6 min-[2000px]:top-8 min-[2000px]:right-8 text-gray-400 hover:text-gray-600 transition-colors">
-                <i class="fa-solid fa-xmark text-lg sm:text-xl xl:text-2xl min-[2000px]:text-3xl"></i>
-            </button>
+        class="fixed inset-0 z-[100] bg-black/50 hidden transition-opacity duration-300 opacity-0 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 sm:p-6">
+            <div id="review-modal-inner"
+                class="bg-[#FDFBF7] rounded-2xl w-full max-w-[520px] relative shadow-2xl transform scale-95 transition-transform duration-300">
 
-            <!-- Header -->
-            <h2
-                class="font-['Outfit'] font-bold text-lg sm:text-xl md:text-2xl xl:text-3xl min-[2000px]:text-4xl text-[#1A1A1A] mb-1">
-                Rate This
-                Product</h2>
-            <p class="font-['Outfit'] text-xs sm:text-sm xl:text-base min-[2000px]:text-xl text-[#5C5C5C] mb-4 sm:mb-6">
-                {{ $product->name }}
-            </p>
-
-            <form action="{{ route('reviews.store') }}\" method="POST">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="rating" id="rating-input" value="0">
-
-                <!-- Review Text -->
-                <div class="mb-4 sm:mb-6">
-                    <label
-                        class="block font-['Outfit'] font-bold text-xs sm:text-sm xl:text-base min-[2000px]:text-xl text-[#1A1A1A] mb-2">Review</label>
-                    <textarea name="comment" placeholder="Write product review here" required
-                        class="w-full h-[100px] sm:h-[120px] xl:h-[140px] min-[2000px]:h-[200px] bg-white border border-[#E6E6E6] rounded-xl p-3 sm:p-4 xl:p-5 min-[2000px]:p-6 text-xs sm:text-sm xl:text-base min-[2000px]:text-xl font-['Outfit'] outline-none focus:border-[#CBA65A] resize-none"></textarea>
+                <!-- Modal Header -->
+                <div class="flex items-start justify-between px-6 pt-6 pb-4 border-b border-[#F0EDE5]">
+                    <div>
+                        <h2 class="font-['Outfit'] font-bold text-xl sm:text-2xl text-[#1A1A1A]">Rate This Product</h2>
+                        <p class="font-['Outfit'] text-sm text-[#5C5C5C] mt-0.5">{{ $product->name }}</p>
+                    </div>
+                    <button onclick="closeReviewModal()"
+                        class="ml-4 mt-1 text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
                 </div>
 
-                <!-- Rating Stars -->
-                <div class="flex justify-center gap-3 sm:gap-4 xl:gap-5 min-[2000px]:gap-6 mb-4 sm:mb-6" id="star-rating">
-                    <button type="button"
-                        class="stars text-[#E6E6E6] hover:text-[#CBA65A] transition-colors text-2xl sm:text-3xl xl:text-4xl min-[2000px]:text-5xl focus:outline-none"
-                        onclick="rateProduct(1)"><i class="fas fa-star"></i></button>
-                    <button type="button"
-                        class="stars text-[#E6E6E6] hover:text-[#CBA65A] transition-colors text-2xl sm:text-3xl xl:text-4xl min-[2000px]:text-5xl focus:outline-none"
-                        onclick="rateProduct(2)"><i class="fas fa-star"></i></button>
-                    <button type="button"
-                        class="stars text-[#E6E6E6] hover:text-[#CBA65A] transition-colors text-2xl sm:text-3xl xl:text-4xl min-[2000px]:text-5xl focus:outline-none"
-                        onclick="rateProduct(3)"><i class="fas fa-star"></i></button>
-                    <button type="button"
-                        class="stars text-[#E6E6E6] hover:text-[#CBA65A] transition-colors text-2xl sm:text-3xl xl:text-4xl min-[2000px]:text-5xl focus:outline-none"
-                        onclick="rateProduct(4)"><i class="fas fa-star"></i></button>
-                    <button type="button"
-                        class="stars text-[#E6E6E6] hover:text-[#CBA65A] transition-colors text-2xl sm:text-3xl xl:text-4xl min-[2000px]:text-5xl focus:outline-none"
-                        onclick="rateProduct(5)"><i class="fas fa-star"></i></button>
+                <!-- Modal Body -->
+                <div class="p-6">
+                    <form action="{{ route('reviews.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="rating" id="rating-input" value="0">
+
+                        <!-- Star Rating -->
+                        <div class="mb-5 text-center">
+                            <p class="font-['Outfit'] text-sm font-semibold text-[#1A1A1A] mb-3">Your Rating</p>
+                            <div id="star-rating" class="flex justify-center gap-3">
+                                <button type="button"
+                                    class="stars text-[#E0E0E0] hover:text-[#CBA65A] transition-colors text-3xl focus:outline-none"
+                                    onclick="rateProduct(1)"><i class="fas fa-star"></i></button>
+                                <button type="button"
+                                    class="stars text-[#E0E0E0] hover:text-[#CBA65A] transition-colors text-3xl focus:outline-none"
+                                    onclick="rateProduct(2)"><i class="fas fa-star"></i></button>
+                                <button type="button"
+                                    class="stars text-[#E0E0E0] hover:text-[#CBA65A] transition-colors text-3xl focus:outline-none"
+                                    onclick="rateProduct(3)"><i class="fas fa-star"></i></button>
+                                <button type="button"
+                                    class="stars text-[#E0E0E0] hover:text-[#CBA65A] transition-colors text-3xl focus:outline-none"
+                                    onclick="rateProduct(4)"><i class="fas fa-star"></i></button>
+                                <button type="button"
+                                    class="stars text-[#E0E0E0] hover:text-[#CBA65A] transition-colors text-3xl focus:outline-none"
+                                    onclick="rateProduct(5)"><i class="fas fa-star"></i></button>
+                            </div>
+                            <p id="rating-label" class="font-['Outfit'] text-xs text-[#CBA65A] mt-2 h-4"></p>
+                        </div>
+
+                        <!-- Review Text -->
+                        <div class="mb-4">
+                            <label class="block font-['Outfit'] font-semibold text-sm text-[#1A1A1A] mb-2">Review</label>
+                            <textarea name="comment" placeholder="Share your experience with this product..." required
+                                class="w-full h-[110px] bg-white border border-[#E6E6E6] rounded-xl p-3 text-sm font-['Outfit'] outline-none focus:border-[#CBA65A] resize-none transition-colors"></textarea>
+                        </div>
+
+                        <!-- Consent Text -->
+                        <p class="text-center font-['Outfit'] text-[11px] text-[#808080] mb-5 leading-relaxed">
+                            By submitting this review you consent to publish and process personal data in accordance with
+                            <a href="#" class="underline text-[#5C4522]">Terms of use</a> and
+                            <a href="#" class="underline text-[#5C4522]">Privacy Policy</a>
+                        </p>
+
+                        <!-- Submit Button -->
+                        <button type="submit"
+                            class="w-full bg-gradient-to-r from-[#D9BE87] to-[#BE933C] hover:opacity-90 text-white font-['Outfit'] font-semibold text-base py-3 rounded-full transition-all shadow-md">
+                            Submit Review
+                        </button>
+                    </form>
                 </div>
-
-                <!-- Consent Text -->
-                <p
-                    class="text-center font-['Outfit'] text-[10px] sm:text-[11px] xl:text-sm min-[2000px]:text-lg text-[#808080] mb-4 sm:mb-6 leading-relaxed">
-                    By submitting review you give us consent to publish and process personal information in accordance with
-                    <a href="#" class="underline text-[#5C4522]">Terms of use</a> and <a href="#"
-                        class="underline text-[#5C4522]">Privacy Policy</a>
-                </p>
-
-                <!-- Submit Button -->
-                <button type="submit"
-                    class="w-full bg-[#CBA65A] hover:bg-[#B39359] text-white font-['Outfit'] font-medium text-base sm:text-lg xl:text-xl min-[2000px]:text-2xl py-2.5 sm:py-3 xl:py-4 min-[2000px]:py-5 rounded-full transition-colors shadow-md">
-                    Submit
-                </button>
-            </form>
+            </div>
         </div>
     </div>
 
     <script>
         function openReviewModal() {
             const modal = document.getElementById('review-modal');
-            const content = modal.querySelector('div');
+            const inner = document.getElementById('review-modal-inner');
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
             }, 10);
             document.body.style.overflow = 'hidden';
         }
 
         function closeReviewModal() {
             const modal = document.getElementById('review-modal');
-            const content = modal.querySelector('div');
+            const inner = document.getElementById('review-modal-inner');
             modal.classList.add('opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
             document.body.style.overflow = '';
         }
 
+        // Close on backdrop click
+        document.getElementById('review-modal').addEventListener('click', function (e) {
+            if (e.target === this || e.target.classList.contains('flex') && e.target.parentElement === this) {
+                closeReviewModal();
+            }
+        });
+
+        const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+
         function rateProduct(rating) {
             const stars = document.querySelectorAll('#star-rating .stars');
             document.getElementById('rating-input').value = rating;
+            document.getElementById('rating-label').textContent = ratingLabels[rating];
             stars.forEach((star, index) => {
-                // Clear previous classes
-                star.className = "stars focus:outline-none transition-colors " +
-                    (index < rating ? "text-[#CBA65A]" : "text-[#E6E6E6] hover:text-[#CBA65A]") +
-                    " text-2xl sm:text-3xl xl:text-4xl min-[2000px]:text-5xl";
+                star.className = 'stars focus:outline-none transition-colors text-3xl ' +
+                    (index < rating ? 'text-[#CBA65A]' : 'text-[#E0E0E0] hover:text-[#CBA65A]');
             });
         }
     </script>

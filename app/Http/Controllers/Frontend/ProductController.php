@@ -233,7 +233,16 @@ class ProductController extends Controller
             ->latest()
             ->get();
 
-        return view('frontend.products.show', compact('product', 'relatedProducts', 'banners'));
+        // Fetch active vertical banner for the similar products section
+        $verticalBanner = Banner::where('status', 1)
+            ->where(function ($q) {
+                $q->where('type', 'prod_vertical')
+                    ->orWhere('is_prod_vertical', 1);
+            })
+            ->latest()
+            ->first();
+
+        return view('frontend.products.show', compact('product', 'relatedProducts', 'banners', 'verticalBanner'));
 
     }
     /**

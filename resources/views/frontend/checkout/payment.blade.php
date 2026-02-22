@@ -13,8 +13,14 @@
             transition: all 0.2s ease;
         }
 
-        .payment-option:hover {
+        .payment-option:hover:not(.payment-disabled) {
             background-color: #FDFBF7;
+        }
+
+        .payment-disabled {
+            opacity: 0.5;
+            cursor: not-allowed !important;
+            pointer-events: none;
         }
     </style>
 
@@ -105,7 +111,7 @@
         <form id="payment-form" action="{{ route('checkout.process') }}" method="POST"
             class="w-full flex flex-col lg:flex-row justify-center items-start gap-8">
             @csrf
-            <input type="hidden" name="payment_method" id="selected_payment_method" value="upi"> <!-- Default UPI -->
+            <input type="hidden" name="payment_method" id="selected_payment_method" value="cod"> <!-- Default COD -->
 
             <!-- Left Column: Payment Modes -->
             <div class="w-full flex-1 flex flex-col gap-6">
@@ -121,52 +127,51 @@
                     <div class="w-full md:w-[280px] bg-[#FDFBF7] flex flex-col border-r border-gray-100 p-0">
 
                         <div onclick="selectPaymentMode('upi')" id="mode-upi"
-                            class="payment-option p-4 cursor-pointer bg-white border-l-[4px] border-[#CBA65A] text-[#CBA65A] font-medium flex items-center gap-3 transition-colors border-b border-gray-100 md:border-b-0">
+                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-3 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0 payment-disabled">
                             <span
-                                class="text-[10px] font-bold border border-[#CBA65A] px-1 rounded-[2px] uppercase">UPI</span>
-                            <span class="text-sm font-semibold font-Outfit">UPI (Pay via any App)</span>
+                                class="text-[10px] font-bold border border-gray-400 text-gray-400 px-1 rounded-[2px] uppercase">UPI</span>
+                            <span class="text-sm font-medium font-Outfit tab-text">UPI (Pay via any App)</span>
                         </div>
 
                         <div onclick="selectPaymentMode('card')" id="mode-card"
-                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0">
+                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0 payment-disabled">
                             <img src="{{ asset('assets/card.png') }}" alt="Credit/Debit Card"
                                 class="w-5 h-5 object-contain opacity-70">
-                            <span class="font-medium font-Outfit text-sm">Credit/Debit Card</span>
+                            <span class="font-medium font-Outfit text-sm tab-text">Credit/Debit Card</span>
                         </div>
 
                         <div onclick="selectPaymentMode('netbanking')" id="mode-netbanking"
-                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0">
+                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0 payment-disabled">
                             <img src="{{ asset('assets/ic_bank.png') }}" alt="Net Banking"
                                 class="w-5 h-5 object-contain opacity-70">
-                            <span class="font-medium font-Outfit text-sm">Net Banking</span>
+                            <span class="font-medium font-Outfit text-sm tab-text">Net Banking</span>
                         </div>
 
                         <div onclick="selectPaymentMode('wallet')" id="mode-wallet"
-                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0">
+                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0 payment-disabled">
                             <img src="{{ asset('assets/Ic_Wallet.png') }}" alt="Wallets"
                                 class="w-5 h-5 object-contain opacity-70">
-                            <span class="font-medium font-Outfit text-sm">Wallets</span>
+                            <span class="font-medium font-Outfit text-sm tab-text">Wallets</span>
                         </div>
 
                         <div onclick="selectPaymentMode('emi')" id="mode-emi"
-                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0">
+                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0 payment-disabled">
                             <img src="{{ asset('assets/ic_emi.png') }}" alt="EMI" class="w-5 h-5 object-contain opacity-70">
-                            <span class="font-medium font-Outfit text-sm">EMI</span>
+                            <span class="font-medium font-Outfit text-sm tab-text">EMI</span>
                         </div>
 
                         <div onclick="selectPaymentMode('cod')" id="mode-cod"
-                            class="payment-option p-4 cursor-pointer text-gray-700 hover:bg-white flex items-center gap-4 transition-colors border-l-[4px] border-transparent border-b border-gray-100 md:border-b-0">
-                            <img src="{{ asset('assets/ic_cash.png') }}" alt="COD"
-                                class="w-5 h-5 object-contain opacity-70">
-                            <span class="font-medium font-Outfit text-sm">Cash On Delivery</span>
+                            class="payment-option p-4 cursor-pointer bg-white border-l-[4px] border-[#CBA65A] text-[#CBA65A] flex items-center gap-4 transition-colors border-b border-gray-100 md:border-b-0">
+                            <img src="{{ asset('assets/ic_cash.png') }}" alt="COD" class="w-5 h-5 object-contain">
+                            <span class="font-bold font-Outfit text-sm tab-text">Cash On Delivery</span>
                         </div>
                     </div>
 
                     <!-- Content Area -->
                     <div class="flex-1 p-8 bg-white" id="payment-content">
 
-                        <!-- UPI Content (Default) -->
-                        <div id="content-upi" class="payment-content-section">
+                        <!-- UPI Content -->
+                        <div id="content-upi" class="payment-content-section hidden">
                             <h3 class="font-bold text-[#1A1A1A] text-base mb-6 font-Outfit border-b border-gray-100 pb-2">
                                 Pay using UPI</h3>
                             <div class="flex flex-col gap-6">
@@ -273,7 +278,7 @@
                             <p class="text-sm text-gray-500">No EMI options available for this order.</p>
                         </div>
 
-                        <div id="content-cod" class="payment-content-section hidden">
+                        <div id="content-cod" class="payment-content-section">
                             <h3 class="font-bold text-[#1A1A1A] text-base mb-6 font-Outfit border-b border-gray-100 pb-2">
                                 Cash On Delivery</h3>
                             <div class="flex items-start gap-3 p-4 bg-[#FDFBF7] rounded border border-[#CBA65A]">
@@ -357,12 +362,21 @@
 
             // Update Sidebar Styles
             document.querySelectorAll('.payment-option').forEach(el => {
+                const textSpan = el.querySelector('.tab-text');
                 if (el.id === 'mode-' + mode) {
                     el.classList.remove('text-gray-700', 'hover:bg-white', 'border-transparent');
                     el.classList.add('bg-white', 'border-[#CBA65A]', 'text-[#CBA65A]');
+                    if (textSpan) {
+                        textSpan.classList.remove('font-medium', 'font-semibold');
+                        textSpan.classList.add('font-bold');
+                    }
                 } else {
                     el.classList.remove('bg-white', 'border-[#CBA65A]', 'text-[#CBA65A]');
                     el.classList.add('text-gray-700', 'hover:bg-white', 'border-transparent');
+                    if (textSpan) {
+                        textSpan.classList.remove('font-bold');
+                        textSpan.classList.add('font-medium');
+                    }
                 }
             });
 

@@ -11,7 +11,11 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Alexandria:wght@300;400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
@@ -421,6 +425,43 @@
                     }
                 }
             }, true); // Enable capture phase
+
+            // --- SweetAlert2 Session Message Handler ---
+            @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#CBA65A',
+                fontFamily: 'Outfit',
+                iconColor: '#CBA65A',
+            });
+            @endif
+
+            @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#CBA65A',
+            });
+            @endif
+
+            @if(session('info'))
+            Swal.fire({
+                icon: 'info',
+                text: "{{ session('info') }}",
+                confirmButtonColor: '#CBA65A',
+            });
+            @endif
+
+            @if(session('warning'))
+            Swal.fire({
+                icon: 'warning',
+                text: "{{ session('warning') }}",
+                confirmButtonColor: '#CBA65A',
+            });
+            @endif
         });
     </script>
 </body>

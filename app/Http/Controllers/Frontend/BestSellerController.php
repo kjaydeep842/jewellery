@@ -157,7 +157,7 @@ class BestSellerController extends Controller
         $shapes = Shape::where('status', 1)->pluck('name');
 
         if ($request->ajax()) {
-            return view('frontend.pages.partials.best-seller-grid', compact('products'))->render();
+            return view('frontend.pages.partials.products_grid', compact('products'))->render();
         }
 
         return view('frontend.pages.best-seller', compact(

@@ -84,6 +84,14 @@ class CartController extends Controller
             ]
         );
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Item added to cart.',
+                'cart_count' => $cart->fresh()->items()->count()
+            ]);
+        }
+
         return redirect()->route('cart.index')->with('success', 'Item added to cart.');
     }
 

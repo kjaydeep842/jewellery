@@ -120,10 +120,10 @@ class TattsvisFavouriteController extends Controller
         if ($request->has('sort')) {
             switch ($request->input('sort')) {
                 case 'price_low_high':
-                    $query->orderBy('price', 'asc');
+                    $query->orderBy('selling_price', 'asc');
                     break;
                 case 'price_high_low':
-                    $query->orderBy('price', 'desc');
+                    $query->orderBy('selling_price', 'desc');
                     break;
                 case 'popularity':
                     $query->orderBy('views', 'desc');
@@ -153,7 +153,7 @@ class TattsvisFavouriteController extends Controller
         $shapes = Shape::where('status', 1)->pluck('name');
 
         if ($request->ajax()) {
-            return view('frontend.pages.partials.tattsvisfavourite-grid', compact('products'))->render();
+            return view('frontend.pages.partials.products_grid', compact('products'))->render();
         }
 
         return view('frontend.pages.tattsvisfavourite', compact(

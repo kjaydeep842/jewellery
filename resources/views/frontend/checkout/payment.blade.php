@@ -86,10 +86,10 @@
                 <a href="{{ route('page.tattsvisfavourite') }}"
                     class="flex items-center gap-1 hover:text-white/80 transition-colors">Tattsvi's Favourite</a>
             </div>
-            <div class="relative group">
+            {{-- <div class="relative group">
                 <a href="{{ route('page.exhibition') }}"
                     class="flex items-center gap-1 hover:text-white/80 transition-colors">Exhibition</a>
-            </div>
+            </div> --}}
             <div class="relative group">
                 <a href="{{ route('page.readytostock') }}"
                     class="flex items-center gap-1 hover:text-white/80 transition-colors">Ready To Stock</a>
@@ -109,7 +109,8 @@
     <main class="max-w-[1920px] mx-auto px-4 lg:px-6 py-8 flex flex-col gap-8 min-h-[600px]">
 
         <form id="payment-form" action="{{ route('checkout.process') }}" method="POST"
-            class="w-full flex flex-col lg:flex-row justify-center items-start gap-8">
+            class="w-full flex flex-col lg:flex-row justify-center items-start gap-8"
+            onsubmit="return validatePayment(event)">
             @csrf
             <input type="hidden" name="payment_method" id="selected_payment_method" value="cod"> <!-- Default COD -->
 
@@ -340,9 +341,9 @@
                             class="flex-1 py-3 text-center border border-gray-300 text-gray-600 font-medium rounded-full hover:bg-gray-50 transition-colors uppercase text-sm">
                             Back
                         </a>
-                        <button type="submit"
+                        <button type="submit" id="pay-now-btn"
                             class="flex-[2] py-3 bg-[linear-gradient(90deg,#D9BE87_0%,#BE933C_100%)] text-white font-medium rounded-full shadow-lg hover:opacity-90 transition-opacity uppercase text-sm">
-                            Pay Now
+                            <span>Pay Now</span>
                         </button>
                     </div>
 
@@ -385,6 +386,91 @@
             const content = document.getElementById('content-' + mode);
             if (content) content.classList.remove('hidden');
             else document.getElementById('content-generic').classList.remove('hidden');
+        }
+
+        async function validatePayment(event) {
+            event.preventDefault(); // Always stop standard submission
+
+            const selectedMode = document.getElementById('selected_payment_method').value;
+
+            if (selectedMode === 'cod') {
+                const codCheckbox = document.getElementById('cod_option_final');
+                if (!codCheckbox.checked) {
+                    if (typeof window.showToast === 'function') {
+                        window.showToast("Please select correct payment method for payment", "error");
+                    } else {
+                        alert("Please select correct payment method for payment");
+                    }
+                    return false;
+                }
+            }
+
+            // UI Feedback: Loading state
+            const btn = document.getElementById('pay-now-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+            try {
+                // Perform AJAX request
+                const form = document.getElementById('payment-form');
+                const formData = new FormData(form);
+
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest', // Force Laravel to recognize it as AJAX
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Instantly show the success modal on the same page!
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#CBA65A',
+                        }).then((result) => {
+                            // Only redirect AFTER they click OK
+                            window.location.href = "{{ route('home') }}";
+                        });
+                    } else {
+                        alert(data.message);
+                        window.location.href = "{{ route('home') }}";
+                    }
+                } else {
+                    // Handle failure gracefully
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(data.message || 'Payment failed. Please try again.', 'error');
+                    } else {
+                        alert(data.message || 'Payment failed. Please try again.');
+                    }
+                    // Reset Button
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                }
+            } catch (error) {
+                console.error('Payment Error:', error);
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Something went wrong. Please check your connection and try again.', 'error');
+                } else {
+                    alert('Something went wrong. Please try again.');
+                }
+                // Reset Button
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+            }
+
+            return false;
         }
     </script>
 @endsection

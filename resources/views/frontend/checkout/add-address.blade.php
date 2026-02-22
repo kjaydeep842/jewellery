@@ -67,12 +67,24 @@
                     <div class="flex flex-col gap-3">
                         <h3 class="font-bold text-[#1A1A1A] text-base">Address Type</h3>
                         <div class="flex items-center gap-6">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="type" value="home" class="custom-checkbox" {{ old('type', $address->type ?? 'home') == 'home' ? 'checked' : '' }}>
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <div class="relative flex items-center justify-center">
+                                    <input type="radio" name="type" value="home"
+                                        class="peer appearance-none w-5 h-5 border border-gray-300 rounded-[4px] checked:bg-[#CBA65A] checked:border-[#CBA65A] transition-colors"
+                                        {{ old('type', strtolower($address->type ?? 'home')) == 'home' ? 'checked' : '' }}>
+                                    <i
+                                        class="fa-solid fa-check text-white text-[10px] absolute opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                </div>
                                 <span class="text-[#1A1A1A]">Home</span>
                             </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="type" value="office" class="custom-checkbox" {{ old('type', $address->type ?? '') == 'office' ? 'checked' : '' }}>
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <div class="relative flex items-center justify-center">
+                                    <input type="radio" name="type" value="office"
+                                        class="peer appearance-none w-5 h-5 border border-gray-300 rounded-[4px] checked:bg-[#CBA65A] checked:border-[#CBA65A] transition-colors"
+                                        {{ old('type', strtolower($address->type ?? '')) == 'office' ? 'checked' : '' }}>
+                                    <i
+                                        class="fa-solid fa-check text-white text-[10px] absolute opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                </div>
                                 <span class="text-[#1A1A1A]">Office</span>
                             </label>
                         </div>

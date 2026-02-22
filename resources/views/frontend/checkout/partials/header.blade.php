@@ -27,9 +27,9 @@
         <!-- Stepper -->
         <!-- Stepper -->
         <div class="hidden md:flex items-center gap-4 text-sm font-medium tracking-wide">
-            <div
-                class="{{ $activeStep === 'cart' ? 'text-[#CBA65A] border-b-2 border-[#CBA65A] pb-1 font-bold' : 'text-gray-400' }}">
-                BAG</div>
+            <a href="{{ route('cart.index') }}"
+                class="{{ $activeStep === 'cart' ? 'text-[#CBA65A] border-b-2 border-[#CBA65A] pb-1 font-bold' : 'text-gray-400 cursor-pointer hover:text-[#CBA65A] transition-colors' }}">
+                BAG</a>
             <div class="text-gray-300">----------</div>
             <div
                 class="{{ $activeStep === 'address' ? 'text-[#CBA65A] border-b-2 border-[#CBA65A] pb-1 font-bold' : 'text-gray-400' }}">
@@ -94,12 +94,12 @@
             </div>
 
             <!-- Exhibition -->
-            <div class="relative group">
-                <a href="#" class="flex items-center gap-1 hover:text-black transition-colors py-2">
-                    Exhibition <i
-                        class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300 group-hover:rotate-180"></i>
+            {{-- <div class="relative group">
+                <a href="{{ route('page.exhibition') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors py-2 text-[15px] font-['Outfit'] font-normal tracking-wide">
+                    Exhibition <i class="fa-solid fa-chevron-down text-[10px] ml-1 opacity-70"></i>
                 </a>
-            </div>
+            </div> --}}
 
             <!-- About Us -->
             <div class="relative group">

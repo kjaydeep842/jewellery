@@ -32,12 +32,12 @@
     </div>
 
     <!-- Exhibition -->
-    <div class="mobile-dropdown">
+    {{-- <div class="mobile-dropdown">
         <a href="{{ route('page.exhibition') }}"
             class="flex items-center justify-between w-full text-[15px] font-medium tracking-wider text-gray-800 pb-2 border-b border-gray-50">
             Exhibition
         </a>
-    </div>
+    </div> --}}
 
     <!-- Ready To Stock -->
     <div class="mobile-dropdown">

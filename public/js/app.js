@@ -828,14 +828,15 @@ document.addEventListener("DOMContentLoaded", () => {
    ========================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
-    const wishlistButtons = document.querySelectorAll(".wishlist-btn");
+    document.addEventListener("click", function (e) {
+        // Find the closest parent with .wishlist-btn class
+        const btn = e.target.closest(".wishlist-btn");
 
-    wishlistButtons.forEach((button) => {
-        button.addEventListener("click", function (e) {
+        if (btn) {
             e.preventDefault();
             e.stopPropagation(); // Prevent triggering card click if inside a link
 
-            const productId = this.dataset.productId;
+            const productId = btn.dataset.productId;
 
             fetch("/wishlist/toggle", {
                 method: "POST",
@@ -856,29 +857,32 @@ document.addEventListener("DOMContentLoaded", function () {
                     return response.json();
                 })
                 .then((data) => {
-                    const img = this.querySelector("img");
-                    let faIcon = this.querySelector(".fa-heart");
+                    // Update visual state of the button
+                    const img = btn.querySelector("img");
+                    let faIcon = btn.querySelector(".fa-heart");
 
                     if (data.status === "added") {
                         if (img) img.classList.add("hidden");
 
                         if (!faIcon) {
                             faIcon = document.createElement("i");
+                            // Default sizing based on which icon is available
+                            const iconClass = img && img.classList.contains("w-4") ? "text-sm" : "text-lg";
                             faIcon.className =
-                                "fa-solid fa-heart text-[#CBA65A] text-lg"; // Gold color matching theme
-                            this.appendChild(faIcon);
+                                `fa-solid fa-heart text-[#CBA65A] ${iconClass}`;
+                            btn.appendChild(faIcon);
                         } else {
                             faIcon.classList.remove("hidden");
                         }
 
-                        showToast(data.message, "success");
+                        if (window.showToast) window.showToast(data.message, "success");
                     } else if (data.status === "removed") {
                         if (img) img.classList.remove("hidden");
                         if (faIcon) faIcon.classList.add("hidden");
-                        showToast(data.message, "success");
+                        if (window.showToast) window.showToast(data.message, "success");
                     }
 
-                    // Update counter if it exists
+                    // Update header counter
                     const headerWishlistLink = document.querySelector(
                         'a[href*="wishlist"]',
                     );
@@ -900,46 +904,54 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch((error) => {
                     console.error("Error:", error);
                 });
-        });
+        }
+    });
+});
+
+// Simple Toast Notification globally available
+window.showToast = function (message, type = "success") {
+    // Check if toast container exists
+    let container = document.getElementById("toast-container");
+    if (!container) {
+        container = document.createElement("div");
+        container.id = "toast-container";
+        container.className =
+            "fixed bottom-5 right-5 z-[9999] flex flex-col gap-2";
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement("div");
+    // Default success icon (check-circle) vs warning icon (circle-exclamation)
+    const iconClass = type === "success" ? "fa-circle-check" : "fa-circle-exclamation";
+    // Using amber color for warning/info as well to fit theme, red for error
+    let bgColorClass = "bg-[#CBA65A]";
+    if (type === "error") bgColorClass = "bg-red-600";
+    else if (type === "warning") bgColorClass = "bg-amber-600";
+    else if (type === "info") bgColorClass = "bg-blue-500";
+
+    toast.className = `px-6 py-4 rounded-lg shadow-[0px_4px_20px_0px_rgba(0,0,0,0.15)] text-white font-['Outfit'] font-medium transform transition-all duration-500 translate-y-full ${bgColorClass} border border-[#B39359]`;
+    toast.innerHTML = `<div class="flex items-center gap-2">
+        <i class="fa-solid ${iconClass}"></i>
+        <span class="max-w-[300px] break-words">${message}</span>
+    </div>`;
+    container.appendChild(toast);
+
+    // Animate in
+    requestAnimationFrame(() => {
+        toast.classList.remove("translate-y-full");
     });
 
-    // Simple Toast Notification
-    function showToast(message, type = "success") {
-        // Check if toast container exists
-        let container = document.getElementById("toast-container");
-        if (!container) {
-            container = document.createElement("div");
-            container.id = "toast-container";
-            container.className =
-                "fixed bottom-5 right-5 z-[9999] flex flex-col gap-2";
-            document.body.appendChild(container);
-        }
-
-        const toast = document.createElement("div");
-        toast.className = `px-6 py-4 rounded-lg shadow-[0px_4px_20px_0px_rgba(0,0,0,0.15)] text-white font-['Outfit'] font-medium transform transition-all duration-500 translate-y-full ${type === "success" ? "bg-[#CBA65A]" : "bg-red-600"} border border-[#B39359]`;
-        toast.innerHTML = `<div class="flex items-center gap-2">
-            <i class="fa-solid ${type === "success" ? "fa-circle-check" : "fa-circle-exclamation"}"></i>
-            <span>${message}</span>
-        </div>`;
-        container.appendChild(toast);
-
-        // Animate in
-        requestAnimationFrame(() => {
-            toast.classList.remove("translate-y-full");
-        });
-
-        // Remove after 3 seconds
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.add("translate-y-full");
         setTimeout(() => {
-            toast.classList.add("translate-y-full");
-            setTimeout(() => {
-                toast.remove();
-                if (container.children.length === 0) {
-                    container.remove();
-                }
-            }, 500);
-        }, 3000);
-    }
-});
+            toast.remove();
+            if (container.children.length === 0) {
+                container.remove();
+            }
+        }, 500);
+    }, 3000);
+};
 
 /* =========================================
    Global AJAX Filter Logic

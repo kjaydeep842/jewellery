@@ -65,9 +65,9 @@
             <div class="relative group">
                 <a href="{{ route('page.tattsvisfavourite') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Tattsvi's Favourite</a>
             </div>
-            <div class="relative group">
+            {{-- <div class="relative group">
                 <a href="{{ route('page.exhibition') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Exhibition</a>
-            </div>
+            </div> --}}
             <div class="relative group">
                 <a href="{{ route('page.readytostock') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Ready To Stock</a>
             </div>
@@ -137,7 +137,17 @@
                                     {{ $address->area ? $address->area . ',' : '' }} {{ $address->city }}, {{ $address->state }} - {{ $address->zip }}
                                 </p>
                                 
-                                <p class="text-gray-800 text-sm font-medium font-Outfit">Mobile: <span class="text-gray-600">{{ $address->phone }}</span></p>
+                                <p class="text-gray-800 text-sm font-medium font-Outfit mb-4">Mobile: <span class="text-gray-600">{{ $address->phone }}</span></p>
+
+                                <!-- Remove Address Action Button -->
+                                <button type="button" onclick="event.stopPropagation(); removeAddress({{ $address->id }}, this);" class="group flex flex-row items-center justify-center px-4 py-[8px] gap-2 w-auto border border-gray-200 rounded-[6px] bg-transparent hover:bg-red-50 hover:border-red-200 transition-all shadow-sm relative z-10">
+                                    <div class="w-[18px] h-[18px] flex items-center justify-center opacity-70 group-hover:opacity-100 transition-opacity">
+                                        <img src="{{ asset('assets/trash.png') }}" alt="Delete" class="w-full h-full object-contain">
+                                    </div>
+                                    <span class="font-['Outfit'] font-medium text-sm leading-[24px] text-gray-600 group-hover:text-red-600 transition-colors">
+                                        Remove Address
+                                    </span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -225,6 +235,62 @@
             // Use standard JS concatenation for URL to avoid Blade issues in external JS files (though this is inline)
             // Redirect to select-address route which sets session and moves to payment
             window.location.href = "{{ url('/checkout/select-address') }}/" + id;
+        }
+
+        async function removeAddress(id, btnElement) {
+            if (!confirm('Are you sure you want to remove this address?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/checkout/address/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Remove the address card from the DOM
+                    const card = document.getElementById(`address-card-${id}`);
+                    if (card) {
+                        // Optional fade out effect
+                        card.style.transition = 'opacity 0.3s ease';
+                        card.style.opacity = '0';
+                        setTimeout(() => {
+                            card.remove();
+                            // If this was the selected address, clear the hidden input
+                            const selectedIdInput = document.getElementById('selected-address-id');
+                            if (selectedIdInput.value == id) {
+                                selectedIdInput.value = '';
+                            }
+                        }, 300);
+                    }
+                    
+                    // Show success toast
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(data.message, 'success');
+                    }
+                } else {
+                    // Handle failure
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(data.message || 'Failed to remove address.', 'error');
+                    } else {
+                        alert(data.message || 'Failed to remove address.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error removing address:', error);
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Something went wrong.', 'error');
+                } else {
+                    alert('Something went wrong.');
+                }
+            }
         }
     </script>
 

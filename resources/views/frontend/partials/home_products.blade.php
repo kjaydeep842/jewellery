@@ -7,14 +7,14 @@
                 <span
                     class="absolute font-['Alexandria'] font-light top-2 right-0 w-[65px] h-[20px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[10px] z-10 tracking-wide shadow-sm">Best
                     Seller</span>
-                <form action="{{ route('wishlist.toggle') }}" method="POST" class="absolute bottom-3 left-2 z-20">
-                    @csrf
-                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                    <button type="submit"
-                        class="flex bg-white h-[27px] w-[27px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm">
+                <div class="absolute bottom-3 left-2 z-20 flex bg-white h-[27px] w-[27px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm cursor-pointer wishlist-btn hover:bg-[#FAF8F1]"
+                    data-product-id="{{ $product->id }}">
+                    @if(Auth::check() && Auth::user()->wishlists->contains('product_id', $product->id))
+                        <i class="fa-solid fa-heart text-[#CBA65A] text-sm"></i>
+                    @else
                         <img src="{{ asset('assets/ic_wishlist1.png') }}" class="w-4 h-4" alt="Wishlist">
-                    </button>
-                </form>
+                    @endif
+                </div>
                 <a href="{{ route('product.details', $product->slug) }}"
                     class="w-full h-full flex items-center justify-center block">
                     <img src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->image_path) : asset('assets/ring_2.png') }}"

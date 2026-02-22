@@ -90,13 +90,47 @@ class PageController extends Controller
 
     public function terms()
     {
-        $content = \App\Models\LegalPage::where('type', 'terms')->where('status', true)->first();
-        return view('frontend.pages.terms', compact('content'));
+        $page = \App\Models\LegalPage::where('type', 'terms')->where('status', true)->first();
+        $content = $page ? $this->cleanLegalContent($page->content) : null;
+        $title = $page->title ?? 'Terms & Conditions';
+        return view('frontend.pages.terms', compact('content', 'title'));
     }
 
     public function privacy()
     {
-        $content = \App\Models\LegalPage::where('type', 'privacy')->where('status', true)->first();
-        return view('frontend.pages.privacy', compact('content'));
+        $page = \App\Models\LegalPage::where('type', 'privacy')->where('status', true)->first();
+        $content = $page ? $this->cleanLegalContent($page->content) : null;
+        $title = $page->title ?? 'Privacy Policy';
+        return view('frontend.pages.privacy', compact('content', 'title'));
+    }
+
+    /**
+     * Cleans up legal content that might have been uploaded as a full HTML doc
+     * or accidentally escaped into a code block.
+     */
+    private function cleanLegalContent($content)
+    {
+        if (!$content)
+            return null;
+
+        // 1. If it looks like it was pasted into a visual editor and escaped
+        if (str_contains($content, '&lt;!DOCTYPE') || str_contains($content, '&lt;html') || str_contains($content, '&lt;body')) {
+            $content = htmlspecialchars_decode($content);
+        }
+
+        // 2. If it's wrapped in a <pre> or <code> block by the editor
+        if (preg_match('/^<pre.*><code.*>(.*)<\/code><\/pre>$/is', trim($content), $matches)) {
+            $content = $matches[1];
+        }
+
+        // 3. Extract body content if it's a full document
+        if (preg_match('/<body[^>]*>(.*)<\/body>/is', $content, $matches)) {
+            $content = $matches[1];
+        } else {
+            // Strip out head/html tags if body wasn't found but they exist
+            $content = preg_replace('/<html[^>]*>|<head[^>]*>|.*<\/head>|<\/html>|<!DOCTYPE[^>]*>/is', '', $content);
+        }
+
+        return trim($content);
     }
 }

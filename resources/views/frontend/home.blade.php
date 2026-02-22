@@ -651,14 +651,15 @@
               <span
                 class="absolute font-['Alexandria'] font-light top-2 right-0 w-[75px] h-[25px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[12px] z-10">Best
                 Seller</span>
-              <form action="{{ route('wishlist.toggle') }}" method="POST" class="absolute bottom-3 left-2 z-20">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <button type="submit"
-                  class="flex bg-white h-[32px] w-[32px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all">
+              <div
+                class="absolute bottom-3 left-2 z-20 flex bg-white h-[32px] w-[32px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm cursor-pointer wishlist-btn hover:bg-[#FAF8F1]"
+                data-product-id="{{ $product->id }}">
+                @if(Auth::check() && Auth::user()->wishlists->contains('product_id', $product->id))
+                  <i class="fa-solid fa-heart text-[#CBA65A] text-sm"></i>
+                @else
                   <img src="{{ asset('assets/ic_wishlist1.png') }}" class="w-4 h-4" alt="Wishlist">
-                </button>
-              </form>
+                @endif
+              </div>
               <a href="{{ route('product.details', $product->slug) }}"
                 class="w-full h-full flex items-center justify-center block p-4">
                 <!-- Dynamic Image with Fallback -->
@@ -693,7 +694,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                            class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                                                                      class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -821,8 +822,8 @@
           ];
         @endphp
 
-        @if(isset($categories) && $categories->count() > 0)
-          @foreach($categories as $index => $category)
+        @if(isset($newArrivalCategories) && $newArrivalCategories->count() > 0)
+          @foreach($newArrivalCategories as $index => $category)
             @php
               $style = $launchStyles[$index % 4];
               $gradientId = "paint_launch_" . $index;
@@ -1100,7 +1101,7 @@
                   </h4>
                   <p style="font-family: 'Outfit'"
                     class="font-Outfit font-light text-[14px] md:text-[15px] min-[2000px]:text-xl text-[#5C5C5C] leading-snug">
-                    {{ \Illuminate\Support\Str::limit($bestSellerProduct->short_description ?? 'A Signature Design Crafted For Everyday Elegance', 80) }}
+                    {{ $bestSellerProduct->short_description ?: 'A Signature Design Crafted For Everyday Elegance' }}
                   </p>
                 </div>
               </div>
@@ -1118,7 +1119,12 @@
                     Transparent & Fair Pricing</h4>
                   <p style="font-family: 'Outfit'"
                     class="font-Outfit font-light text-[14px] md:text-[15px] min-[2000px]:text-xl text-[#5C5C5C] leading-snug">
-                    Value That Reflect Purity, Craftsmanship And Trust</p>
+                    @if($bestSellerProduct->discount_price)
+                        Value that reflects purity. Grab this piece at just ₹{{ number_format($bestSellerProduct->discount_price, 2) }}
+                    @else
+                        Value that reflects purity. Exceptional craftsmanship for ₹{{ number_format($bestSellerProduct->selling_price, 2) }}
+                    @endif
+                  </p>
                 </div>
               </div>
 
@@ -1132,7 +1138,7 @@
                 <div class="text-left">
                   <h4 style="font-family: 'Outfit'"
                     class="font-Outfit text-[18px] md:text-[20px] min-[2000px]:text-3xl font-semibold text-[#0D0D0E] leading-tight mb-1">
-                    Certified Pure Gold</h4>
+                    Certified {{ $bestSellerProduct->metal_purity ?? 'Pure' }} {{ $bestSellerProduct->metal_type ?? 'Gold' }}</h4>
                   <p style="font-family: 'Outfit'"
                     class="font-Outfit font-light text-[14px] md:text-[15px] min-[2000px]:text-xl text-[#5C5C5C] leading-snug">
                     Hallmarked Jewellery You Can Wear With Confidence</p>
@@ -1143,7 +1149,7 @@
             <div class="pt-10 text-center w-full flex flex-col items-center">
               <p style="font-family: 'Outfit'"
                 class="font-Outfit font-medium text-[16px] md:text-[18px] min-[2000px]:text-2xl text-[#3D3D3D] mb-6 text-center">
-                Loved Beyond Trends Jewellery that continues to be chosen.</p>
+                Loved Beyond Trends. A {{ $bestSellerProduct->category ? $bestSellerProduct->category->name : 'Jewellery piece' }} that continues to be chosen.</p>
               <a href="{{ route('page.best-seller') }}" style="background: #CD9C56;"
                 class="inline-flex items-center justify-center w-auto h-[50px] min-[2000px]:h-[70px] px-8 min-[2000px]:px-12 rounded-full text-white font-Outfit font-medium text-[16px] min-[2000px]:text-2xl shadow-sm hover:bg-[#b38f45] transition-colors leading-tight">
                 View All Bestsellers
@@ -1305,9 +1311,9 @@
 
           @forelse($reviews as $review)
             <div
-              class="border border-[#DBB358] w-[85vw] md:w-[70%] lg:w-[1070px] min-[2000px]:w-[1200px] flex-shrink-0 snap-center bg-transparent p-6 md:p-8 lg:p-10 min-[2000px]:p-16 rounded-[20px] relative flex flex-col h-auto min-h-[300px] min-[2000px]:min-h-[405px] justify-center group transition-all duration-300 hover:shadow-md">
+              class="border border-[#DBB358] w-[80vw] md:w-[60%] lg:w-[850px] xl:w-[1000px] 2xl:w-[1200px] min-[2000px]:w-[1400px] flex-shrink-0 snap-center bg-transparent p-6 md:p-8 lg:p-10 min-[2000px]:p-16 rounded-[20px] relative flex flex-col h-auto min-h-[300px] min-[2000px]:min-h-[405px] justify-center group transition-all duration-300 hover:shadow-md">
 
-              <div class="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-8 h-full">
+              <div class="flex flex-row items-start gap-4 md:gap-8 h-full">
                 <!-- Product Image as Icon (Left Side) -->
                 <div class="flex-shrink-0">
                   @if($review->product && $review->product->images->first())
@@ -1321,13 +1327,13 @@
                   @endif
                 </div>
 
-                <div class="flex flex-col justify-center h-full w-full">
+                <div class="flex flex-col justify-center h-full w-full overflow-hidden">
                   <p
-                    class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg min-[2000px]:text-3xl leading-relaxed mb-6 font-medium text-center md:text-left">
+                    class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg min-[2000px]:text-3xl leading-relaxed mb-6 font-medium text-left break-words break-all line-clamp-4 md:line-clamp-5">
                     "{{ $review->comment }}"
                   </p>
 
-                  <div class="flex items-center justify-center md:justify-start gap-4">
+                  <div class="flex items-center justify-start gap-4">
                     <!-- User Image -->
                     <img
                       src="{{ $review->user && $review->user->profile_picture ? asset('storage/' . $review->user->profile_picture) : asset('assets/client1.png') }}"
@@ -1355,20 +1361,20 @@
           @empty
             <!-- Fallback -->
             <div
-              class="border border-[#DBB358] w-[85vw] md:w-[70%] lg:w-[1070px] min-[2000px]:w-[1200px] flex-shrink-0 snap-center bg-transparent p-6 md:p-8 lg:p-10 min-[2000px]:p-16 rounded-[20px] relative flex flex-col h-auto min-h-[300px] min-[2000px]:min-h-[405px] justify-center group transition-all duration-300 hover:shadow-md">
-              <div class="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-8 h-full">
+              class="border border-[#DBB358] w-[80vw] md:w-[60%] lg:w-[850px] xl:w-[1000px] 2xl:w-[1200px] min-[2000px]:w-[1400px] flex-shrink-0 snap-center bg-transparent p-6 md:p-8 lg:p-10 min-[2000px]:p-16 rounded-[20px] relative flex flex-col h-auto min-h-[300px] min-[2000px]:min-h-[405px] justify-center group transition-all duration-300 hover:shadow-md">
+              <div class="flex flex-row items-start gap-4 md:gap-8 h-full">
                 <div class="flex-shrink-0">
                   <img src="{{ asset('assets/ReviewQuote.png') }}"
                     class="w-12 h-12 md:w-16 md:h-16 min-[2000px]:w-24 min-[2000px]:h-24 object-contain opacity-100"
                     alt="quote">
                 </div>
-                <div class="flex flex-col justify-center h-full w-full">
+                <div class="flex flex-col justify-center h-full w-full overflow-hidden">
                   <p
-                    class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg min-[2000px]:text-3xl leading-relaxed mb-6 font-medium text-center md:text-left">
+                    class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg min-[2000px]:text-3xl leading-relaxed mb-6 font-medium text-left break-words break-all line-clamp-4 md:line-clamp-5">
                     "Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
                     subtle yet elegant, making them perfect for everyday styling."
                   </p>
-                  <div class="flex items-center justify-center md:justify-start gap-4">
+                  <div class="flex items-center justify-start gap-4">
                     <img src="{{ asset('assets/client1.png') }}"
                       class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-[10px] object-cover" alt="User">
                     <div>
@@ -1447,7 +1453,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                                {{isset($middleBanners) ? $middleBanners->count() : 0 }},
+                                                                                                              {{isset($middleBanners) ? $middleBanners->count() : 0 }},
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

@@ -1,6 +1,23 @@
 @extends('frontend.layouts.master')
 
 @section('content')
+<style>
+    /* Custom Scrollbar for scrolling content */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #d1d5db; 
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af; 
+    }
+</style>
 <!-- Discover Collection Banner -->
 <section class="w-full bg-[#EFE4D6] py-8 md:py-10">
     <div class="max-w-[1600px] mx-auto px-6 text-center">
@@ -39,7 +56,7 @@
         <div id="filter-backdrop" class="fixed inset-0 bg-black/50 z-[90] hidden transition-opacity duration-300 opacity-0 lg:hidden"></div>
 
         <aside id="filter-sidebar"
-            class="fixed inset-0 z-[100] w-full h-full bg-white transition-transform duration-300 -translate-x-full lg:static lg:w-[280px] lg:h-auto lg:bg-transparent lg:block lg:shadow-none lg:translate-x-0 lg:z-auto flex-shrink-0 flex flex-col">
+            class="fixed inset-0 z-[100] w-full h-full bg-white transition-transform duration-300 -translate-x-full lg:sticky lg:top-28 lg:h-[calc(100vh-150px)] lg:w-[280px] lg:bg-transparent lg:block lg:shadow-none lg:translate-x-0 lg:z-auto flex-shrink-0 flex flex-col custom-scrollbar overflow-y-auto">
 
             <form id="filterForm" action="{{ route('products.index') }}" method="GET" class="h-full flex flex-col">
                 <!-- Mobile Header: Back Arrow, Title, Reset -->
@@ -276,7 +293,7 @@
         </aside>
 
         <!-- Products Grid -->
-        <div class="flex-grow">
+        <div class="flex-grow h-[calc(100vh-180px)] overflow-y-auto pr-1 md:pr-4 custom-scrollbar">
             <!-- Sort By -->
             <div class="flex justify-end mb-6 relative z-30">
                 <div class="relative group" id="sort-dropdown-container">

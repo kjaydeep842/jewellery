@@ -1,6 +1,23 @@
 @extends('frontend.layouts.master')
 
 @section('content')
+<style>
+    /* Custom Scrollbar for scrolling content */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #d1d5db; 
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af; 
+    }
+</style>
 
     <style>
         /* Custom Checkbox */
@@ -98,7 +115,7 @@
 
             <!-- Stepper -->
             <div class="hidden md:flex items-center gap-4 text-sm font-medium tracking-wide">
-                <div class="text-[#CBA65A] border-b-2 border-[#CBA65A] pb-1">BAG</div>
+                <a href="{{ route('cart.index') }}" class="text-[#CBA65A] border-b-2 border-[#CBA65A] pb-1">BAG</a>
                 <div class="text-gray-300">----------</div>
                 <div class="text-gray-400">ADDRESS</div>
                 <div class="text-gray-300">----------</div>
@@ -127,9 +144,9 @@
         <div class="relative group">
             <a href="{{ route('page.tattsvisfavourite') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Tattsvi's Favourite</a>
         </div>
-        <div class="relative group">
-            <a href="{{ route('page.exhibition') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Exhibition</a>
-        </div>
+            {{-- <div class="relative group">
+                <a href="{{ route('page.exhibition') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Exhibition</a>
+            </div> --}}
         <div class="relative group">
             <a href="{{ route('page.readytostock') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Ready To Stock</a>
         </div>
@@ -166,11 +183,11 @@
         @else
 
             <!-- Left Column: Bag Items -->
-            <div class="w-full lg:w-2/3 flex flex-col gap-6">
+            <div class="w-full lg:w-2/3 flex flex-col gap-6 h-[calc(100vh-150px)] overflow-y-auto pr-2 custom-scrollbar">
 
                 <!-- Address Banner (Simplified - showing default or prompt) -->
                 @php
-                    $defaultAddress = Auth::check() ? Auth::user()->addresses()->where('is_default', true)->first() : null;
+                    $defaultAddress = Auth::check() ? (Auth::user()->addresses()->where('is_default', true)->first() ?? Auth::user()->addresses()->latest()->first()) : null;
                 @endphp
                 <div
                     class="box-border flex flex-row justify-between items-center p-[20px] gap-[20px] w-full lg:w-[910px] h-auto lg:h-[106px] bg-[rgba(219,179,88,0.1)] border border-[#EFE4CD] rounded-[10px] flex-none order-0 self-stretch grow-0">

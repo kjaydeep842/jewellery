@@ -16,6 +16,11 @@ class HomeController extends Controller
         // Fetch specific categories if needed, or just all for now
         $categories = Category::all();
 
+        // Fetch categories that specifically have new arrival products
+        $newArrivalCategories = Category::whereHas('products', function ($query) {
+            $query->where('is_new', 1)->where('status', 'active');
+        })->get();
+
         // Fetch featured products (latest 8 for now)
         $products = Product::with(['images', 'category'])->latest()->take(10)->get();
 
@@ -85,7 +90,7 @@ class HomeController extends Controller
                 ->get();
         }
 
-        return view('frontend.home', compact('categories', 'products', 'banners', 'middleBanners', 'shapes', 'uniqueStyles', 'bestSellerProduct', 'reviews'));
+        return view('frontend.home', compact('categories', 'newArrivalCategories', 'products', 'banners', 'middleBanners', 'shapes', 'uniqueStyles', 'bestSellerProduct', 'reviews'));
 
     }
 

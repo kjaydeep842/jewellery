@@ -114,6 +114,27 @@ class CheckoutController extends Controller
         return redirect()->route('checkout.payment');
     }
 
+    public function destroyAddress(Request $request, $id)
+    {
+        $address = Auth::user()->addresses()->findOrFail($id);
+
+        // If the address being deleted is currently selected in the session, forget it
+        if (session('selected_address_id') == $address->id) {
+            session()->forget('selected_address_id');
+        }
+
+        $address->delete();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Address removed successfully.'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Address removed successfully');
+    }
+
     public function payment()
     {
         $addressId = session()->get('selected_address_id');
@@ -172,6 +193,13 @@ class CheckoutController extends Controller
 
         session()->forget('selected_address_id');
 
-        return redirect()->route('home')->with('success', 'Order placed successfully!');
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Order placed successfully!'
+            ]);
+        }
+
+        return redirect()->route('home')->with('order_success', 'Order placed successfully!');
     }
 }

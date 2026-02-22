@@ -101,6 +101,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout/address', [CheckoutController::class, 'storeAddress'])->name('checkout.address.store');
     Route::get('/checkout/address/{id}/edit', [CheckoutController::class, 'editAddress'])->name('checkout.address.edit');
     Route::put('/checkout/address/{id}', [CheckoutController::class, 'updateAddress'])->name('checkout.address.update');
+    Route::delete('/checkout/address/{id}', [CheckoutController::class, 'destroyAddress'])->name('checkout.address.destroy');
     Route::get('/checkout/select-address/{id}', [CheckoutController::class, 'selectAddress'])->name('checkout.select-address');
     Route::get('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
     // The original `processOrder` route is replaced by the new `process` route above.

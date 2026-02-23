@@ -4,7 +4,7 @@ $route = $route ?? 'page.new-arrivals';
 
 
 <aside id="filter-sidebar"
-    class="fixed inset-y-0 left-0 z-[60] w-[85%] max-w-[300px] bg-white lg:bg-transparent h-full overflow-y-auto transition-transform duration-300 -translate-x-full shadow-2xl p-5 lg:p-0 lg:shadow-none lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] lg:translate-x-0 lg:w-[280px] lg:block flex-shrink-0 space-y-6 scrollbar-hide">
+    class="fixed inset-y-0 left-0 z-[60] w-[85%] max-w-[300px] bg-white lg:bg-transparent h-full overflow-y-auto transition-transform duration-300 -translate-x-full shadow-2xl p-5 lg:p-0 lg:shadow-none lg:sticky lg:top-[70px] lg:h-[calc(100vh-70px)] lg:translate-x-0 lg:w-[280px] lg:block flex-shrink-0 space-y-6 scrollbar-hide lg:z-[1]">
 
     <!-- Filter Header (Desktop & Mobile) -->
     <div class="flex items-center justify-between mb-6">

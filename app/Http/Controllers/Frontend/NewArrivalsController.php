@@ -21,10 +21,10 @@ class NewArrivalsController extends Controller
 
             // Filter Mapping (Key => Relationship/Column)
             $filters = [
-                'category'      => ['relation' => 'category', 'column' => 'name'],
-                'metal_color'   => ['relation' => 'metalColor', 'column' => 'name'],
+                'category' => ['relation' => 'category', 'column' => 'name'],
+                'metal_color' => ['relation' => 'metalColor', 'column' => 'name'],
                 'diamond_shape' => ['relation' => 'diamondShape', 'column' => 'name'],
-                'size'          => ['relation' => 'variants', 'column' => 'size'],
+                'size' => ['relation' => 'variants', 'column' => 'size'],
             ];
 
             foreach ($filters as $key => $config) {
@@ -49,7 +49,7 @@ class NewArrivalsController extends Controller
                     foreach ($request->input('weight') as $range) {
                         $parts = explode('-', $range);
                         if (count($parts) === 2) {
-                            $q->orWhereBetween('weight', [(float)$parts[0], (float)$parts[1]]);
+                            $q->orWhereBetween('weight', [(float) $parts[0], (float) $parts[1]]);
                         }
                     }
                 });
@@ -63,13 +63,13 @@ class NewArrivalsController extends Controller
                         $cleanRange = str_replace(['₹', ',', ' '], '', $range);
                         $parts = explode('-', $cleanRange);
                         if (count($parts) === 2) {
-                            $q->orWhereBetween('selling_price', [(int)$parts[0], (int)$parts[1]]);
+                            $q->orWhereBetween('selling_price', [(int) $parts[0], (int) $parts[1]]);
                         }
                     }
                 });
             } elseif ($request->filled('min_price') && $request->filled('max_price')) {
-                $min = (int)$request->min_price;
-                $max = (int)$request->max_price;
+                $min = (int) $request->min_price;
+                $max = (int) $request->max_price;
                 $max >= 100000 ? $query->where('selling_price', '>=', $min) : $query->whereBetween('selling_price', [$min, $max]);
             }
 
@@ -78,8 +78,8 @@ class NewArrivalsController extends Controller
             $sortMap = [
                 'price_low_high' => ['selling_price', 'asc'],
                 'price_high_low' => ['selling_price', 'desc'],
-                'popularity'     => ['views', 'desc'],
-                'newest'         => ['created_at', 'desc'],
+                'popularity' => ['views', 'desc'],
+                'newest' => ['created_at', 'desc'],
             ];
             $order = $sortMap[$sort] ?? $sortMap['newest'];
             $query->orderBy($order[0], $order[1]);
@@ -88,19 +88,19 @@ class NewArrivalsController extends Controller
 
             // Fetch Filter Options (Consider caching these if needed)
             $filterOptions = [
-                'categories'    => Category::pluck('name'),
-                'genders'       => Product::distinct()->whereNotNull('gender')->pluck('gender'),
-                'metalColors'   => MetalColor::pluck('name'),
+                'categories' => Category::pluck('name'),
+                'genders' => Product::distinct()->whereNotNull('gender')->pluck('gender'),
+                'metalColors' => MetalColor::pluck('name'),
                 'metalPurities' => Product::distinct()->whereNotNull('metal_purity')->pluck('metal_purity'),
-                'sizes'         => Size::where('status', 1)->pluck('number'),
-                'weightRanges'  => [
+                'sizes' => Size::where('status', 1)->pluck('number'),
+                'weightRanges' => [
                     '0-2' => '0-2 g',
                     '2-5' => '2-5 g',
                     '5-10' => '5-10 g',
                     '10-20' => '10-20 g',
                     '20-30' => '20-30 g'
                 ],
-                'shapes'        => Shape::where('status', 1)->pluck('name'),
+                'shapes' => Shape::where('status', 1)->pluck('name'),
             ];
 
             if ($request->ajax()) {

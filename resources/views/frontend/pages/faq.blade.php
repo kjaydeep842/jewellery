@@ -336,4 +336,49 @@
             Know More About Tattsvi
         </p>
     </div>
+
+    <script>
+        function toggleFAQAccordion(id, btn) {
+            var panel = document.getElementById(id);
+            if (!panel) return;
+
+            var isOpen = !panel.classList.contains('hidden');
+
+            // Close ALL open panels first
+            document.querySelectorAll('[id^="faq-"]').forEach(function (p) {
+                p.classList.add('hidden');
+            });
+            document.querySelectorAll('.icon-container i').forEach(function (icon) {
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+            });
+
+            // If it was closed, open it now
+            if (!isOpen) {
+                panel.classList.remove('hidden');
+                var icon = btn.querySelector('.icon-container i');
+                if (icon) {
+                    icon.classList.remove('fa-plus');
+                    icon.classList.add('fa-minus');
+                }
+            }
+        }
+
+        // Open the first item that has fa-minus icon (pre-expanded) on load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[id^="faq-"]').forEach(function (panel) {
+                if (!panel.classList.contains('hidden')) {
+                    // sync icon to fa-minus
+                    var btn = panel.previousElementSibling;
+                    if (btn) {
+                        var icon = btn.querySelector('.icon-container i');
+                        if (icon) {
+                            icon.classList.remove('fa-plus');
+                            icon.classList.add('fa-minus');
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

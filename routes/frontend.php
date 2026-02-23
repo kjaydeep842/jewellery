@@ -15,6 +15,7 @@ use App\Http\Controllers\Frontend\EighteenKTController;
 use App\Http\Controllers\Frontend\TattsvisFavouriteController;
 use App\Http\Controllers\Frontend\ReadyToStockController;
 use App\Http\Controllers\Frontend\AuthController;
+use App\Http\Controllers\Frontend\InquiryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,7 @@ Route::get('/readytostock', [ReadyToStockController::class, 'index'])->name('pag
 Route::get('/buy-it-again', [PageController::class, 'buyItAgain'])->name('page.buy-it-again');
 Route::get('/contact-us', [PageController::class, 'contact'])->name('page.contact');
 Route::post('/contact-us', [PageController::class, 'storeContact'])->name('contact.store');
+Route::post('/inquiry', [InquiryController::class, 'store'])->name('inquiry.store');
 Route::get('/exhibition', [PageController::class, 'exhibition'])->name('page.exhibition');
 Route::get('/about-us', [PageController::class, 'about'])->name('page.about');
 Route::get('/faq', [PageController::class, 'faq'])->name('page.faq');

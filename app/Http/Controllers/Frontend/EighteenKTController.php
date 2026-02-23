@@ -66,7 +66,7 @@ class EighteenKTController extends Controller
                     foreach ($weights as $weightRange) {
                         $parts = explode('-', $weightRange);
                         if (count($parts) == 2) {
-                            $subQ->orWhereBetween('weight', [(float)$parts[0], (float)$parts[1]]);
+                            $subQ->orWhereBetween('weight', [(float) $parts[0], (float) $parts[1]]);
                         }
                     }
                 });
@@ -80,7 +80,7 @@ class EighteenKTController extends Controller
                         $rangeClean = str_replace(['₹', ',', ' '], '', $range);
                         $parts = explode('-', $rangeClean);
                         if (count($parts) == 2) {
-                            $subQ->orWhereBetween('selling_price', [(int)$parts[0], (int)$parts[1]]);
+                            $subQ->orWhereBetween('selling_price', [(int) $parts[0], (int) $parts[1]]);
                         }
                     }
                 });
@@ -139,7 +139,7 @@ class EighteenKTController extends Controller
                         ->get()
                         ->pluck('size')
                         ->sort(function ($a, $b) {
-                            return (float)$a <=> (float)$b;
+                            return (float) $a <=> (float) $b;
                         })
                         ->values(),
                 ];

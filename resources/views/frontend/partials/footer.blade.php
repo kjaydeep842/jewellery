@@ -25,10 +25,13 @@
                 <div>
                     <h4 class="font-['Outfit'] font-bold text-[16px] mb-4 text-[#0D0D0E]">Customer Service</h4>
                     <ul class="space-y-3 font-['Outfit'] text-[#6E6E6E] text-[14px]">
-                        <li><a href="{{ route('page.faq') }}" class="hover:text-[#CBA65A] transition-colors">FAQs</a></li>
-                        <li><a href="{{ route('page.return-exchange') }}" class="hover:text-[#CBA65A] transition-colors">Return &
+                        <li><a href="{{ route('page.faq') }}" class="hover:text-[#CBA65A] transition-colors">FAQs</a>
+                        </li>
+                        <li><a href="{{ route('page.return-exchange') }}"
+                                class="hover:text-[#CBA65A] transition-colors">Return &
                                 Exchange</a></li>
-                        <li><a href="{{ route('page.contact') }}" class="hover:text-[#CBA65A] transition-colors">Contact Us</a>
+                        <li><a href="{{ route('page.contact') }}" class="hover:text-[#CBA65A] transition-colors">Contact
+                                Us</a>
                         </li>
                     </ul>
                 </div>
@@ -37,9 +40,11 @@
                 <div>
                     <h4 class="font-['Outfit'] font-bold text-[16px] mb-4 text-[#0D0D0E]">About Us</h4>
                     <ul class="space-y-3 font-['Outfit'] text-[#6E6E6E] text-[14px]">
-                        <li><a href="{{ route('page.about') }}" class="hover:text-[#CBA65A] transition-colors">Our Story</a>
+                        <li><a href="{{ route('page.about') }}" class="hover:text-[#CBA65A] transition-colors">Our
+                                Story</a>
                         </li>
-                        <li><a href="{{ route('page.blog') }}" class="hover:text-[#CBA65A] transition-colors">Blogs</a></li>
+                        <li><a href="{{ route('page.blog') }}" class="hover:text-[#CBA65A] transition-colors">Blogs</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -50,18 +55,63 @@
                     class="font-['Outfit'] font-bold text-[#0D0D0E] text-[28px] min-[2000px]:text-5xl leading-[1.2]">
                     Sign up <br>for Exclusive Offers
                 </h4>
-                <p
-                    class="font-['Outfit'] text-base min-[2000px]:text-xl text-[#6E6E6E] leading-relaxed max-w-[350px]">
+                <p class="font-['Outfit'] text-base min-[2000px]:text-xl text-[#6E6E6E] leading-relaxed max-w-[350px]">
                     Be the first to know about new collections, exclusive deals & more!
                 </p>
-                <form class="flex flex-row gap-3 mt-4 w-full" onsubmit="event.preventDefault();">
-                    <input type="email" placeholder="Email Address"
-                        class="border border-[#E5E5E5] rounded-full px-6 py-3 text-base min-[2000px]:text-xl w-full outline-none focus:border-[#CBA65A] font-Outfit bg-white placeholder-gray-400 h-[54px] min-[2000px]:h-[70px] flex-grow">
-                    <button type="submit"
-                        class="bg-[#F9F4E8] text-[#5C4522] px-10 py-3 rounded-full text-base min-[2000px]:text-xl font-medium border border-[#EADDCC] hover:bg-[#F0E6D6] transition-colors font-Outfit whitespace-nowrap h-[54px] min-[2000px]:h-[70px] shadow-sm">
-                        Submit
-                    </button>
+                <form id="footer-inquiry-form" class="flex flex-col gap-3 mt-4 w-full">
+                    @csrf
+                    <div class="flex flex-row gap-3 w-full">
+                        <input id="footer-email-input" type="email" name="email" placeholder="Email Address"
+                            class="border border-[#E5E5E5] rounded-full px-6 py-3 text-base min-[2000px]:text-xl w-full outline-none focus:border-[#CBA65A] font-Outfit bg-white placeholder-gray-400 h-[54px] min-[2000px]:h-[70px] flex-grow">
+                        <button type="submit"
+                            class="bg-[#F9F4E8] text-[#5C4522] px-10 py-3 rounded-full text-base min-[2000px]:text-xl font-medium border border-[#EADDCC] hover:bg-[#F0E6D6] transition-colors font-Outfit whitespace-nowrap h-[54px] min-[2000px]:h-[70px] shadow-sm">
+                            Submit
+                        </button>
+                    </div>
+                    <p id="footer-inquiry-msg" class="text-sm font-Outfit hidden"></p>
                 </form>
+
+                <script>
+                    document.getElementById('footer-inquiry-form').addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        const email = document.getElementById('footer-email-input').value.trim();
+                        const msg = document.getElementById('footer-inquiry-msg');
+                        const btn = this.querySelector('button[type="submit"]');
+
+                        if (!email) return;
+
+                        btn.disabled = true;
+                        btn.textContent = 'Submitting...';
+                        msg.className = 'text-sm font-Outfit hidden';
+
+                        fetch('{{ route("inquiry.store") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({ email: email })
+                        })
+                            .then(res => res.json().then(data => ({ status: res.status, data })))
+                            .then(({ status, data }) => {
+                                msg.textContent = data.message;
+                                msg.className = status === 200
+                                    ? 'text-sm font-Outfit text-green-600'
+                                    : 'text-sm font-Outfit text-amber-700';
+                                if (status === 200) {
+                                    document.getElementById('footer-email-input').value = '';
+                                }
+                            })
+                            .catch(() => {
+                                msg.textContent = 'Something went wrong. Please try again.';
+                                msg.className = 'text-sm font-Outfit text-red-600';
+                            })
+                            .finally(() => {
+                                btn.disabled = false;
+                                btn.textContent = 'Submit';
+                            });
+                    });
+                </script>
             </div>
         </div>
 
@@ -121,7 +171,8 @@
             <div class="text-center mt-4">
                 <p class="font-Outfit text-[14px] min-[2000px]:text-lg text-[#0D0D0E]">Copyright &copy; Tattsvi
                     {{ date('Y') }}. All
-                    Right Reserved</p>
+                    Right Reserved
+                </p>
             </div>
         </div>
     </div>

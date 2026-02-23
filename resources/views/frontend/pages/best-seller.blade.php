@@ -70,6 +70,8 @@
 
             <!-- Products Grid -->
             <div class="flex-grow h-[calc(100vh-180px)] overflow-y-auto pr-1 md:pr-4 custom-scrollbar">
+                {{-- Active Filter Tags --}}
+                @include('frontend.partials.filter-tags')
                 <!-- Grid Container -->
                 <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     @include('frontend.pages.partials.products_grid')
@@ -202,15 +204,15 @@
 
                         // Show Error Message to User
                         $('#products-grid').html(`
-                                <div class="col-span-full flex flex-col items-center justify-center py-12 text-center">
-                                    <i class="fa-solid fa-circle-exclamation text-4xl text-red-400 mb-4"></i>
-                                    <h3 class="text-lg font-medium text-gray-800">Unable to load products</h3>
-                                    <p class="text-sm text-gray-500 mt-1">Please check your connection and try again.</p>
-                                    <button onclick="window.updateProducts()" class="mt-4 px-6 py-2 bg-[#CBA65A] text-white rounded-md hover:bg-[#b08d45] transition-colors">
-                                        Retry
-                                    </button>
-                                </div>
-                            `);
+                                        <div class="col-span-full flex flex-col items-center justify-center py-12 text-center">
+                                            <i class="fa-solid fa-circle-exclamation text-4xl text-red-400 mb-4"></i>
+                                            <h3 class="text-lg font-medium text-gray-800">Unable to load products</h3>
+                                            <p class="text-sm text-gray-500 mt-1">Please check your connection and try again.</p>
+                                            <button onclick="window.updateProducts()" class="mt-4 px-6 py-2 bg-[#CBA65A] text-white rounded-md hover:bg-[#b08d45] transition-colors">
+                                                Retry
+                                            </button>
+                                        </div>
+                                    `);
 
                         activeXhr = null;
                     }
@@ -461,25 +463,25 @@
             // Inject Modal if not exists (Updated HTML with Nav Buttons)
             if ($('#product-modal').length === 0) {
                 const modalHTML = `
-                    <div id="product-modal" class="fixed inset-0 z-[100] bg-black/80 hidden flex items-center justify-center p-4">
-                        <button id="modal-close" class="absolute top-4 right-4 text-white hover:text-gray-300 z-[101]">
-                            <i class="fa-solid fa-xmark text-4xl"></i>
-                        </button>
+                            <div id="product-modal" class="fixed inset-0 z-[100] bg-black/80 hidden flex items-center justify-center p-4">
+                                <button id="modal-close" class="absolute top-4 right-4 text-white hover:text-gray-300 z-[101]">
+                                    <i class="fa-solid fa-xmark text-4xl"></i>
+                                </button>
 
-                        <div class="relative w-full max-w-4xl max-h-[90vh] flex items-center justify-center p-4 group">
-                            <!-- Modal Prev Button -->
-                            <button id="modal-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-[102] w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white transition-colors">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
+                                <div class="relative w-full max-w-4xl max-h-[90vh] flex items-center justify-center p-4 group">
+                                    <!-- Modal Prev Button -->
+                                    <button id="modal-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-[102] w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white transition-colors">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
 
-                            <img id="modal-image" src="" alt="Full View" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl bg-white">
+                                    <img id="modal-image" src="" alt="Full View" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl bg-white">
 
-                            <!-- Modal Next Button -->
-                            <button id="modal-next" class="absolute right-4 top-1/2 -translate-y-1/2 z-[102] w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white transition-colors">
-                                 <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>`;
+                                    <!-- Modal Next Button -->
+                                    <button id="modal-next" class="absolute right-4 top-1/2 -translate-y-1/2 z-[102] w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white transition-colors">
+                                         <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>`;
                 $('body').append(modalHTML);
             }
 

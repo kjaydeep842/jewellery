@@ -73,9 +73,12 @@
                 <!-- Scrollable Content Area -->
                 <div class="flex-grow overflow-y-auto p-5 lg:p-0 space-y-6 pb-24 lg:pb-0">
                     <!-- Desktop Filter Header -->
-                    <div class="hidden lg:flex items-center gap-2 mb-6 font-semibold text-[18px] text-[#878787] font-['Outfit']">
-                        <img src="{{ asset('assets/ic_setting.png') }}" alt="filter" class="w-5 h-5 text-[#878787] object-contain">
-                        Filters
+                    <div class="hidden lg:flex items-center justify-between mb-6 font-['Outfit']">
+                        <div class="flex items-center gap-2 font-semibold text-[18px] text-[#878787]">
+                            <img src="{{ asset('assets/ic_setting.png') }}" alt="filter" class="w-5 h-5 text-[#878787] object-contain">
+                            Filters
+                        </div>
+                        <button type="button" id="clear-filters-top" class="hidden text-sm font-semibold text-[#826230] hover:text-[#5C4522] underline cursor-pointer">Clear</button>
                     </div>
 
                     <!-- Preserve Search -->
@@ -283,6 +286,13 @@
                     </div>
                 </div>
 
+                <!-- Desktop Footer: Clear Filters Button -->
+                <div class="hidden lg:block sticky bottom-0 bg-white pt-4 pb-4 border-t border-gray-100 w-full mt-8">
+                    <button type="button" id="clear-filters-bottom" class="hidden w-full border border-[#826230] text-[#826230] font-medium py-2 rounded-md hover:bg-[#826230] hover:text-white transition-colors cursor-pointer font-['Outfit']">
+                        Clear Filters
+                    </button>
+                </div>
+
                 <!-- Mobile Footer: Apply Button -->
                 <div class="lg:hidden fixed bottom-0 left-0 w-full p-4 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-10 flex-shrink-0">
                     <button type="button" id="apply-filter-btn" class="w-full bg-[#E35442] hover:bg-[#d04532] text-white font-medium py-3 rounded uppercase tracking-wide transition-colors font-['Outfit']">
@@ -329,6 +339,9 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Active Filter Tags --}}
+            @include('frontend.partials.filter-tags')
 
             <!-- Grid Container -->
             <div id="products-container">
@@ -451,10 +464,49 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // === Clear Filters Logic ===
+    const clearTop = document.getElementById('clear-filters-top');
+    const clearBottom = document.getElementById('clear-filters-bottom');
+
+    function hasActiveFilters() {
+        const checked = filterForm.querySelectorAll('.filter-checkbox:checked');
+        const minPrice = parseInt(document.getElementById('hidden-min-price')?.value ?? 0);
+        const maxPrice = parseInt(document.getElementById('hidden-max-price')?.value ?? 100000);
+        return checked.length > 0 || minPrice > 0 || maxPrice < 100000;
+    }
+
+    function updateClearVisibility() {
+        const show = hasActiveFilters();
+        if (clearTop)    clearTop.classList.toggle('hidden', !show);
+        if (clearBottom) clearBottom.classList.toggle('hidden', !show);
+    }
+
+    function clearAllFilters() {
+        filterForm.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
+        const minInput = document.getElementById('min-price-input');
+        const maxInput = document.getElementById('max-price-input');
+        if (minInput) { minInput.value = 0; minInput.dispatchEvent(new Event('input')); }
+        if (maxInput) { maxInput.value = 100000; maxInput.dispatchEvent(new Event('input')); }
+        const hiddenMin = document.getElementById('hidden-min-price');
+        const hiddenMax = document.getElementById('hidden-max-price');
+        if (hiddenMin) hiddenMin.value = 0;
+        if (hiddenMax) hiddenMax.value = 100000;
+        updateClearVisibility();
+        if (window.rebuildFilterTags) window.rebuildFilterTags();
+        updateProducts();
+    }
+
+    if (clearTop)    clearTop.addEventListener('click', clearAllFilters);
+    if (clearBottom) clearBottom.addEventListener('click', clearAllFilters);
+
+    // run once on load
+    updateClearVisibility();
+
     // Checkbox Changes
     filterForm.addEventListener('change', function(e) {
         if (e.target.classList.contains('filter-checkbox')) {
-             if (window.innerWidth >= 1024) {
+            updateClearVisibility();
+            if (window.innerWidth >= 1024) {
                 updateProducts();
             }
         }
@@ -498,6 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const triggerFilter = () => {
              document.querySelectorAll('.price-checkbox').forEach(cb => cb.checked = false);
+             updateClearVisibility();
              if (window.innerWidth >= 1024) {
                  updateProducts();
              }

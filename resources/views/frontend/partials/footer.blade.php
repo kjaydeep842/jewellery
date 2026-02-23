@@ -13,11 +13,11 @@
                 <div>
                     <h4 class="font-['Outfit'] font-bold text-[16px] mb-4 text-[#0D0D0E]">Categories</h4>
                     <ul class="space-y-3 font-['Outfit'] text-[#6E6E6E] text-[14px]">
-                        <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Rings</a></li>
-                        <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Earrings</a></li>
-                        <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Bracelets</a></li>
-                        <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Necklaces</a></li>
-                        <li><a href="#" class="hover:text-[#CBA65A] transition-colors">Bangles</a></li>
+                        @foreach ($categories as $category)
+                            <li><a href="{{ route('products.index', ['category[]' => $category->name]) }}"
+                                    class="footer-category-link hover:text-[#CBA65A] transition-colors"
+                                    data-category="{{ $category->name }}">{{ $category->name }}</a></li>
+                        @endforeach
                     </ul>
                 </div>
 
@@ -111,7 +111,94 @@
                                 btn.textContent = 'Submit';
                             });
                     });
+
+                    // AJAX Redirection for footer categories
+                    document.addEventListener('click', function (e) {
+                        const link = e.target.closest('.footer-category-link');
+                        if (!link) return;
+
+                        const categoryName = link.dataset.category;
+                        const filterForm = document.getElementById('filterForm');
+                        const productsContainer = document.getElementById('products-container');
+
+                        // If on product listing page and AJAX filtering is available
+                        if (filterForm && productsContainer) {
+                            e.preventDefault();
+
+                            // Uncheck all other categories and check this one
+                            const checkboxes = filterForm.querySelectorAll('input[name="category[]"]');
+                            let found = false;
+
+                            // Clear all first
+                            checkboxes.forEach(cb => cb.checked = false);
+
+                            // Try to find and check the matching one
+                            checkboxes.forEach(cb => {
+                                if (cb.value === categoryName) {
+                                    cb.checked = true;
+                                    found = true;
+                                    // Expand the category accordion if it's hidden
+                                    const content = cb.closest('.filter-content');
+                                    if (content && content.classList.contains('hidden')) {
+                                        content.classList.remove('hidden');
+                                        const header = content.previousElementSibling;
+                                        const icon = header?.querySelector('.accordion-icon');
+                                        if (icon) icon.classList.add('rotate-180');
+                                    }
+
+                                    // Trigger change event so filter-tags.blade.php can update
+                                    cb.dispatchEvent(new Event('change', { bubbles: true }));
+                                }
+                            });
+
+                            if (found) {
+                                // Rebuild tags manually if the exposed function exists
+                                if (typeof window.rebuildFilterTags === 'function') {
+                                    window.rebuildFilterTags();
+                                }
+
+                                // Trigger updateProducts (which is defined in products/index.blade.php)
+                                if (typeof updateProducts === 'function') {
+                                    updateProducts();
+                                } else {
+                                    // Fallback: search for updateProducts in scope or trigger form change
+                                    filterForm.dispatchEvent(new Event('change', { bubbles: true }));
+                                }
+
+                                // Scroll to grid top
+                                const scrollAnchor = document.getElementById('active-filter-tags-wrap') || productsContainer;
+                                if (scrollAnchor) scrollAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                                // NOTE: We DO NOT update URL parameters here as requested
+                            } else {
+                                // If category checkbox not found in sidebar, just redirect via POST
+                                submitCategoryPost(categoryName);
+                            }
+                        } else {
+                            // On other pages, use POST form instead of GET link
+                            e.preventDefault();
+                            submitCategoryPost(categoryName);
+                        }
+                    });
+
+                    function submitCategoryPost(categoryName) {
+                        const form = document.getElementById('footerCategoryForm');
+                        const input = document.getElementById('footerCategoryInput');
+                        if (form && input) {
+                            input.value = categoryName;
+                            form.submit();
+                        } else {
+                            // Fallback if form not found
+                            window.location.href = '{{ route("products.index") }}?category[]=' + encodeURIComponent(categoryName);
+                        }
+                    }
                 </script>
+
+                <!-- Hidden Form for Category Redirection via POST -->
+                <form id="footerCategoryForm" action="{{ route('products.index.post') }}" method="POST" class="hidden">
+                    @csrf
+                    <input type="hidden" name="category[]" id="footerCategoryInput">
+                </form>
             </div>
         </div>
 

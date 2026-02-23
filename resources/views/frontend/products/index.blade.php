@@ -98,10 +98,10 @@
                         <div class="mt-3 space-y-2 filter-content {{ is_array(request('category')) && count(request('category')) > 0 ? '' : 'hidden' }}">
                             @foreach($categories as $category)
                             <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" name="category[]" value="{{ $category }}"
-                                    {{ is_array(request('category')) && in_array($category, request('category')) ? 'checked' : '' }}
+                                <input type="checkbox" name="category[]" value="{{ $category->name }}"
+                                    {{ is_array(request('category')) && in_array($category->name, request('category')) ? 'checked' : '' }}
                                     class="filter-checkbox w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A]">
-                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $category }}</span>
+                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $category->name }}</span>
                             </label>
                             @endforeach
                         </div>
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterBackdrop = document.getElementById('filter-backdrop');
     const applyFilterBtn = document.getElementById('apply-filter-btn');
 
-    function updateProducts() {
+    window.updateProducts = function() {
         if (loader) loader.classList.remove('hidden');
         const formData = new FormData(filterForm);
         const params = new URLSearchParams(formData);

@@ -24,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\View::share('settings', $settings);
         }
 
+        if (\Illuminate\Support\Facades\Schema::hasTable('categories')) {
+            $categories = \App\Models\Category::all();
+            \Illuminate\Support\Facades\View::share('categories', $categories);
+        }
+
         \Illuminate\Support\Facades\View::composer(['components.layouts.frontend', 'frontend.partials.header'], function ($view) {
 
             $cartCount = 0;

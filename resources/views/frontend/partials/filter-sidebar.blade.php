@@ -37,12 +37,16 @@ $route = $route ?? 'page.new-arrivals';
             </div>
             <div class="mt-3 space-y-2 hidden">
                 @foreach($categories as $category)
+                @php
+                    $catName = is_object($category) ? $category->name : $category;
+                @endphp
                 <label class="flex items-center gap-2 cursor-pointer group">
-                    <input type="checkbox" name="category[]" value="{{ $category }}" {{ in_array($category, request('category', [])) ? 'checked' : '' }}
+                    <input type="checkbox" name="category[]" value="{{ $catName }}" 
+                        {{ is_array(request('category')) && in_array($catName, request('category')) ? 'checked' : '' }}
                         onchange="window.updateProducts()"
                         class="w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A]">
                     <span
-                        class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors">{{ $category }}</span>
+                        class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors">{{ $catName }}</span>
                 </label>
                 @endforeach
             </div>

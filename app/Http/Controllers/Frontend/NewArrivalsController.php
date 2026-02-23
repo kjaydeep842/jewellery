@@ -88,7 +88,7 @@ class NewArrivalsController extends Controller
 
             // Fetch Filter Options (Consider caching these if needed)
             $filterOptions = [
-                'categories' => Category::pluck('name'),
+                'categories' => Category::all(),
                 'genders' => Product::distinct()->whereNotNull('gender')->pluck('gender'),
                 'metalColors' => MetalColor::pluck('name'),
                 'metalPurities' => Product::distinct()->whereNotNull('metal_purity')->pluck('metal_purity'),

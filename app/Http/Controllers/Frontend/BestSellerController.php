@@ -142,7 +142,7 @@ class BestSellerController extends Controller
         $products = $query->paginate(12)->withQueryString();
 
         // Fetch Filter Options
-        $categories = Category::pluck('name');
+        $categories = Category::all();
         $genders = Product::distinct()->pluck('gender')->filter();
         $metalColors = MetalColor::pluck('name');
         $metalPurities = Product::distinct()->pluck('metal_purity')->filter();

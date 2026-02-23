@@ -128,7 +128,7 @@ class EighteenKTController extends Controller
             // Optimized Master Data Fetching (Cached for 60 minutes)
             $filterData = Cache::remember('18kt_filter_data', 60, function () {
                 return [
-                    'categories' => Category::pluck('name'),
+                    'categories' => Category::all(),
                     'genders' => Product::where('status', 'active')->whereNotNull('gender')->distinct()->pluck('gender'),
                     'metalColors' => MetalColor::where('status', 1)->pluck('name'),
                     'metalPurities' => Product::where('status', 'active')->whereNotNull('metal_purity')->distinct()->pluck('metal_purity'),

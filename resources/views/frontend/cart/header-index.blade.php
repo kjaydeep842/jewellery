@@ -190,8 +190,8 @@
                     $defaultAddress = Auth::check() ? (Auth::user()->addresses()->where('is_default', true)->first() ?? Auth::user()->addresses()->latest()->first()) : null;
                 @endphp
                 <div
-                    class="box-border flex flex-row justify-between items-center p-[20px] gap-[20px] w-full lg:w-[910px] h-auto lg:h-[106px] bg-[rgba(219,179,88,0.1)] border border-[#EFE4CD] rounded-[10px] flex-none order-0 self-stretch grow-0">
-                    <div>
+                    class="box-border flex flex-row justify-between items-center p-[20px] gap-[20px] w-full bg-[rgba(219,179,88,0.1)] border border-[#EFE4CD] rounded-[10px] flex-none order-0 self-stretch grow-0">
+                    <div class="flex-1 min-w-0">
                         @if($defaultAddress)
                             <p class="text-gray-500 text-sm">Deliver To : <span
                                     class="font-semibold text-gray-900">{{ $defaultAddress->name }} ,
@@ -205,13 +205,13 @@
                         @endif
                     </div>
                     <a href="{{ route('checkout.address') }}"
-                        class="text-[#CBA65A] border border-[#CBA65A] px-4 py-1.5 rounded text-sm font-medium hover:bg-[#CBA65A] hover:text-white transition-colors whitespace-nowrap bg-white">
+                        class="text-[#CBA65A] border border-[#CBA65A] px-4 py-1.5 rounded text-sm font-medium hover:bg-[#CBA65A] hover:text-white transition-colors whitespace-nowrap bg-white flex-shrink-0">
                         Change Address
                     </a>
                 </div>
 
                 <!-- Product Selection Container -->
-                <div class="flex flex-col items-start p-0 gap-[10px] w-full lg:w-[910px] flex-none order-1 self-stretch grow-0">
+                <div class="flex flex-col items-start p-0 gap-[10px] w-full flex-none order-1 self-stretch grow-0">
 
                     <!-- Selection Header -->
                     <div
@@ -229,7 +229,7 @@
                     @foreach($cartItems as $item)
                         <!-- Product Card Container -->
                         <div
-                            class="box-border flex flex-row items-start p-0 gap-[10px] w-full lg:w-[910px] h-auto lg:h-[324px]  border border-[#CFD5E3] rounded-[4px] flex-none order-1 self-stretch grow-0 relative group transition-colors overflow-hidden mb-4">
+                            class="box-border flex flex-col md:flex-row items-start p-0 gap-[10px] w-full h-auto border border-[#CFD5E3] rounded-[4px] flex-none order-1 self-stretch grow-0 relative group transition-colors overflow-hidden mb-4">
 
                             <!-- Close Button (Remove Item) -->
                             <form action="{{ route('cart.destroy', $item->id) }}" method="POST"

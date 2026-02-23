@@ -37,7 +37,7 @@
             <a href="{{ route('home') }}" class="hover:text-amber-600 cursor-pointer">Home</a> / <span
                 class="text-gray-800 font-medium">Discover our Collection</span>
         </div>
-        <div class="text-sm text-gray-500 mt-2">
+        <div id="product-count-display" class="text-sm text-gray-500 mt-2">
             Showing : {{ $products->total() }} Products
         </div>
     </div>
@@ -376,23 +376,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.updateProducts = function() {
         if (loader) loader.classList.remove('hidden');
-        const formData = new FormData(filterForm);
-        const params = new URLSearchParams(formData);
+        const formData = $(filterForm).serialize();
 
-        fetch(`{{ route('products.index') }}?${params.toString()}`, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+        $.ajax({
+            url: "{{ route('products.index') }}",
+            type: 'GET',
+            data: formData,
+            success: function(html) {
+                $(productsContainer).html(html);
+
+                // Update product count dynamically
+                const newTotal = $('#product-count-data').attr('data-total');
+                if (newTotal !== undefined) {
+                    $('#product-count-display').text('Showing : ' + newTotal + ' Products');
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (loader) loader.classList.add('hidden');
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr);
+                if (loader) loader.classList.add('hidden');
             }
-        })
-        .then(response => response.text())
-        .then(html => {
-            productsContainer.innerHTML = html;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (loader) loader.classList.add('hidden');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            if (loader) loader.classList.add('hidden');
         });
     }
 
@@ -567,16 +572,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const url = e.target.closest('a').href;
             if (loader) loader.classList.remove('hidden');
             
-            fetch(url, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(html) {
+                    $(productsContainer).html(html);
+
+                    // Update product count dynamically
+                    const newTotal = $('#product-count-data').attr('data-total');
+                    if (newTotal !== undefined) {
+                        $('#product-count-display').text('Showing : ' + newTotal + ' Products');
+                    }
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    if (loader) loader.classList.add('hidden');
                 }
-            })
-            .then(response => response.text())
-            .then(html => {
-                productsContainer.innerHTML = html;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                if (loader) loader.classList.add('hidden');
             });
         }
     });

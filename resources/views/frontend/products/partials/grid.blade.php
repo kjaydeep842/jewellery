@@ -1,16 +1,17 @@
+<div id="product-count-data" data-total="{{ $products->total() }}" class="hidden"></div>
 <div class="flex flex-col gap-6" x-data="{ zoomOpen: false, zoomImage: '' }">
     <!-- Grid Container -->
     <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-0">
         @forelse ($products as $product)
             <div x-data="{
-                                            activeImage: 0,
-                                            images: [
-                                                '{{ $product->images->first() ? asset('storage/' . $product->images->first()->image_path) : asset('assets/ring.png') }}',
-                                                @foreach($product->images->skip(1) as $image)
-                                                    '{{ asset('storage/' . $image->image_path) }}',
-                                                @endforeach
-                                            ]
-                                        }"
+                                                activeImage: 0,
+                                                images: [
+                                                    '{{ $product->images->first() ? asset('storage/' . $product->images->first()->image_path) : asset('assets/ring.png') }}',
+                                                    @foreach($product->images->skip(1) as $image)
+                                                        '{{ asset('storage/' . $image->image_path) }}',
+                                                    @endforeach
+                                                ]
+                                            }"
                 class="bg-[#FAF8F1] border border-[#E8E1D5] hover:shadow-lg transition-shadow rounded-sm overflow-hidden p-2 relative group flex flex-col h-full">
 
                 <!-- Image Area -->
@@ -77,7 +78,8 @@
 
                 <!-- Product Info -->
                 <div class="space-y-1 flex flex-col flex-grow pt-1">
-                    <p class="text-sm text-gray-800 font-medium leading-tight font-['Outfit'] line-clamp-2 min-h-[2.5rem] mb-0.5">
+                    <p
+                        class="text-sm text-gray-800 font-medium leading-tight font-['Outfit'] line-clamp-2 min-h-[2.5rem] mb-0.5">
                         <a href="{{ route('product.details', $product->slug) }}"
                             title="{{ $product->name }}">{{ $product->name }}</a>
                     </p>

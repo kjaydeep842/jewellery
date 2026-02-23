@@ -7,7 +7,7 @@
     <!-- Breadcrumbs -->
     <div class="max-w-[1600px] mx-auto px-6 py-4">
         <p class="text-xs text-gray-500 font-['Outfit']">
-            Home / <span class="text-[#1A1A1A] font-medium">Contact us</span>
+            <a href="{{ route('home') }}" class="hover:text-[#CBA65A] transition-colors">Home</a> / <span class="text-[#1A1A1A] font-medium">Contact us</span>
         </p>
     </div>
 

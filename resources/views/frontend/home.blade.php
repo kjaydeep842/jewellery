@@ -407,6 +407,17 @@
                 console.log('Product data received, count:', data.count);
                 productGrid.innerHTML = data.html;
                 productGrid.style.opacity = '1';
+
+                // Hide/Show Explore All Button based on count
+                const exploreBtn = document.getElementById('exploreAllForm');
+                if (exploreBtn) {
+                  if (data.count === 0) {
+                    exploreBtn.classList.add('hidden');
+                  } else {
+                    exploreBtn.classList.remove('hidden');
+                  }
+                }
+
                 if (loader) loader.classList.add('hidden');
               })
               .catch(error => {
@@ -447,6 +458,17 @@
                 console.log('Slider data received');
                 productSlider.innerHTML = data.html;
                 productSlider.style.opacity = '1';
+
+                // Hide/Show Slider Explore All Button based on count
+                const sliderExploreBtn = document.getElementById('sliderExploreAllForm');
+                if (sliderExploreBtn) {
+                  if (data.count === 0) {
+                    sliderExploreBtn.classList.add('hidden');
+                  } else {
+                    sliderExploreBtn.classList.remove('hidden');
+                  }
+                }
+
                 if (loader) loader.classList.add('hidden');
               })
               .catch(error => {
@@ -694,7 +716,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                                                                      class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                                                                                              class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -833,10 +855,9 @@
               onclick="document.getElementById('launchCategoryInput').value = '{{ $category->name }}'; document.getElementById('launchCategoryForm').submit();"
               class="flex flex-col gap-0 group cursor-pointer px-0 md:px-4 min-w-[75%] sm:min-w-[45%] lg:min-w-[25%] snap-center">
 
-              <!-- Card Image Container -->
               <div class="relative w-full aspect-[0.6] rounded-[40px] overflow-hidden gap-2">
                 <img src="{{ asset('storage/' . $category->image) }}"
-                  class="absolute left-1/2 -translate-x-1/2 w-[82%] h-[75%] object-cover object-bottom transition-transform duration-500 drop-shadow-lg"
+                  class="absolute left-1/2 -translate-x-1/2 w-[82%] h-[75%] object-cover object-bottom transition-transform duration-500 drop-shadow-lg rounded-t-[40px]"
                   alt="{{ $category->name }}">
 
                 <!-- Hover Stars Effect -->
@@ -1066,11 +1087,11 @@
           <!-- Left Image -->
           <div class="flex-1 flex justify-center items-center relative w-full h-full order-first lg:order-none">
             <a href="{{ route('product.details', $bestSellerProduct->slug) }}"
-              class="block w-full max-w-[300px] md:max-w-[450px] lg:max-w-[600px] min-[2000px]:max-w-[1000px]">
+              class="block w-full max-w-[300px] md:max-w-[450px] lg:max-w-[600px] min-[2000px]:max-w-[1000px] aspect-square flex items-center justify-center">
               <img
                 src="{{ $bestSellerProduct->image ? asset('storage/' . $bestSellerProduct->image) : ($bestSellerProduct->images->first() ? asset('storage/' . $bestSellerProduct->images->first()->image_path) : asset('assets/Product Photo.png')) }}"
-                class="w-full h-auto object-contain hover:scale-105 transition-transform duration-500 mix-blend-multiply border-none outline-none ring-0"
-                style="filter: brightness(1.15) contrast(1.05); -webkit-mask-image: radial-gradient(closest-side, black 85%, transparent 100%); mask-image: radial-gradient(closest-side, black 85%, transparent 100%);"
+                class="w-full h-full object-contain hover:scale-105 transition-transform duration-500 mix-blend-multiply border-none outline-none ring-0"
+                style="filter: brightness(1.15) contrast(1.05); -webkit-mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%); mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%);"
                 alt="{{ $bestSellerProduct->name }}">
             </a>
           </div>
@@ -1120,9 +1141,11 @@
                   <p style="font-family: 'Outfit'"
                     class="font-Outfit font-light text-[14px] md:text-[15px] min-[2000px]:text-xl text-[#5C5C5C] leading-snug">
                     @if($bestSellerProduct->discount_price)
-                        Value that reflects purity. Grab this piece at just ₹{{ number_format($bestSellerProduct->discount_price, 2) }}
+                      Value that reflects purity. Grab this piece at just
+                      ₹{{ number_format($bestSellerProduct->discount_price, 2) }}
                     @else
-                        Value that reflects purity. Exceptional craftsmanship for ₹{{ number_format($bestSellerProduct->selling_price, 2) }}
+                      Value that reflects purity. Exceptional craftsmanship for
+                      ₹{{ number_format($bestSellerProduct->selling_price, 2) }}
                     @endif
                   </p>
                 </div>
@@ -1138,7 +1161,9 @@
                 <div class="text-left">
                   <h4 style="font-family: 'Outfit'"
                     class="font-Outfit text-[18px] md:text-[20px] min-[2000px]:text-3xl font-semibold text-[#0D0D0E] leading-tight mb-1">
-                    Certified {{ $bestSellerProduct->metal_purity ?? 'Pure' }} {{ $bestSellerProduct->metal_type ?? 'Gold' }}</h4>
+                    Certified {{ $bestSellerProduct->metal_purity ?? 'Pure' }}
+                    {{ $bestSellerProduct->metal_type ?? 'Gold' }}
+                  </h4>
                   <p style="font-family: 'Outfit'"
                     class="font-Outfit font-light text-[14px] md:text-[15px] min-[2000px]:text-xl text-[#5C5C5C] leading-snug">
                     Hallmarked Jewellery You Can Wear With Confidence</p>
@@ -1149,7 +1174,10 @@
             <div class="pt-10 text-center w-full flex flex-col items-center">
               <p style="font-family: 'Outfit'"
                 class="font-Outfit font-medium text-[16px] md:text-[18px] min-[2000px]:text-2xl text-[#3D3D3D] mb-6 text-center">
-                Loved Beyond Trends. A {{ $bestSellerProduct->category ? $bestSellerProduct->category->name : 'Jewellery piece' }} that continues to be chosen.</p>
+                Loved Beyond Trends. A
+                {{ $bestSellerProduct->category ? $bestSellerProduct->category->name : 'Jewellery piece' }} that continues
+                to be chosen.
+              </p>
               <a href="{{ route('page.best-seller') }}" style="background: #CD9C56;"
                 class="inline-flex items-center justify-center w-auto h-[50px] min-[2000px]:h-[70px] px-8 min-[2000px]:px-12 rounded-full text-white font-Outfit font-medium text-[16px] min-[2000px]:text-2xl shadow-sm hover:bg-[#b38f45] transition-colors leading-tight">
                 View All Bestsellers
@@ -1453,106 +1481,106 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                                              {{isset($middleBanners) ? $middleBanners->count() : 0 }},
-          @json($categories),
-          "{{ url('storage') }}",
-          "{{ asset('') }}"
-        );
-      } else {
-        console.warn('initHomeInteractive function not found. Ensure script.js is loaded.');
-      }
+                                                                                                                      {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+              @json($categories),
+              "{{ url('storage') }}",
+              "{{ asset('') }}"
+            );
+          } else {
+            console.warn('initHomeInteractive function not found. Ensure script.js is loaded.');
+          }
 
-      // Auto-scroll for Diamond Shapes
-      const shapeContainer = document.getElementById('diamond-shapes-container');
-      if (shapeContainer) {
-        const originalContent = Array.from(shapeContainer.children);
+          // Auto-scroll for Diamond Shapes
+          const shapeContainer = document.getElementById('diamond-shapes-container');
+          if (shapeContainer) {
+            const originalContent = Array.from(shapeContainer.children);
 
-        // Clone content to ensure seamless scrolling (x3 for safety)
-        for (let i = 0; i < 2; i++) {
-          originalContent.forEach(item => shapeContainer.appendChild(item.cloneNode(true)));
-        }
-
-        // Auto-scroll logic
-        let scrollAmount = 0;
-        const speed = 0.5;
-        let isHovered = false;
-
-        const pause = () => isHovered = true;
-        const resume = () => isHovered = false;
-
-        shapeContainer.addEventListener('mouseenter', pause);
-        shapeContainer.addEventListener('mouseleave', resume);
-        shapeContainer.addEventListener('touchstart', pause);
-        shapeContainer.addEventListener('touchend', resume);
-
-        // Animation Loop
-        function animateScroll() {
-          if (!isHovered && shapeContainer.scrollWidth > shapeContainer.clientWidth) {
-            scrollAmount += speed;
-
-            if (scrollAmount >= (shapeContainer.scrollWidth / 3)) {
-              scrollAmount = 0;
+            // Clone content to ensure seamless scrolling (x3 for safety)
+            for (let i = 0; i < 2; i++) {
+              originalContent.forEach(item => shapeContainer.appendChild(item.cloneNode(true)));
             }
-            shapeContainer.scrollLeft = scrollAmount;
-          } else {
-            scrollAmount = shapeContainer.scrollLeft;
-          }
-          requestAnimationFrame(animateScroll);
-        }
-        animateScroll();
-      }
 
-      // Continuous Auto-Scroll for Unique Style Slider
-      const uniqueSlider = document.getElementById('uniqueStyleSlider');
-      if (uniqueSlider) {
-        // Clone content for seamless loop (x3 to be safe)
-        const uniqueContent = Array.from(uniqueSlider.children);
-        for (let i = 0; i < 2; i++) {
-          uniqueContent.forEach(item => uniqueSlider.appendChild(item.cloneNode(true)));
-        }
+            // Auto-scroll logic
+            let scrollAmount = 0;
+            const speed = 0.5;
+            let isHovered = false;
 
-        let uniqueScrollAmount = 0;
-        const uniqueSpeed = 0.8; // Slightly faster or adjustable
-        let uniqueHovered = false;
+            const pause = () => isHovered = true;
+            const resume = () => isHovered = false;
 
-        const pauseUnique = () => uniqueHovered = true;
-        const resumeUnique = () => uniqueHovered = false;
+            shapeContainer.addEventListener('mouseenter', pause);
+            shapeContainer.addEventListener('mouseleave', resume);
+            shapeContainer.addEventListener('touchstart', pause);
+            shapeContainer.addEventListener('touchend', resume);
 
-        uniqueSlider.addEventListener('mouseenter', pauseUnique);
-        uniqueSlider.addEventListener('mouseleave', resumeUnique);
-        uniqueSlider.addEventListener('touchstart', pauseUnique);
-        uniqueSlider.addEventListener('touchend', resumeUnique);
+            // Animation Loop
+            function animateScroll() {
+              if (!isHovered && shapeContainer.scrollWidth > shapeContainer.clientWidth) {
+                scrollAmount += speed;
 
-        function animateUniqueScroll() {
-          if (!uniqueHovered && uniqueSlider.scrollWidth > uniqueSlider.clientWidth) {
-            uniqueScrollAmount += uniqueSpeed;
-            // Reset when we've scrolled past the first set (approx 1/3 of total cloned width)
-            if (uniqueScrollAmount >= (uniqueSlider.scrollWidth / 3)) {
-              uniqueScrollAmount = 0;
+                if (scrollAmount >= (shapeContainer.scrollWidth / 3)) {
+                  scrollAmount = 0;
+                }
+                shapeContainer.scrollLeft = scrollAmount;
+              } else {
+                scrollAmount = shapeContainer.scrollLeft;
+              }
+              requestAnimationFrame(animateScroll);
             }
-            uniqueSlider.scrollLeft = uniqueScrollAmount;
-          } else {
-            // Sync scroll amount if user manually scrolled
-            uniqueScrollAmount = uniqueSlider.scrollLeft;
+            animateScroll();
           }
-          requestAnimationFrame(animateUniqueScroll);
-        }
-        animateUniqueScroll();
-      }
 
-      // Testimonial Slider Navigation
-      window.scrollSlider = function (direction) {
-        const slider = document.getElementById('testimonialSlider');
-        if (slider) {
-          const scrollAmount = slider.offsetWidth; // Scroll one full width
-          if (direction === 'left') {
-            slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-          } else {
-            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+          // Continuous Auto-Scroll for Unique Style Slider
+          const uniqueSlider = document.getElementById('uniqueStyleSlider');
+          if (uniqueSlider) {
+            // Clone content for seamless loop (x3 to be safe)
+            const uniqueContent = Array.from(uniqueSlider.children);
+            for (let i = 0; i < 2; i++) {
+              uniqueContent.forEach(item => uniqueSlider.appendChild(item.cloneNode(true)));
+            }
+
+            let uniqueScrollAmount = 0;
+            const uniqueSpeed = 0.8; // Slightly faster or adjustable
+            let uniqueHovered = false;
+
+            const pauseUnique = () => uniqueHovered = true;
+            const resumeUnique = () => uniqueHovered = false;
+
+            uniqueSlider.addEventListener('mouseenter', pauseUnique);
+            uniqueSlider.addEventListener('mouseleave', resumeUnique);
+            uniqueSlider.addEventListener('touchstart', pauseUnique);
+            uniqueSlider.addEventListener('touchend', resumeUnique);
+
+            function animateUniqueScroll() {
+              if (!uniqueHovered && uniqueSlider.scrollWidth > uniqueSlider.clientWidth) {
+                uniqueScrollAmount += uniqueSpeed;
+                // Reset when we've scrolled past the first set (approx 1/3 of total cloned width)
+                if (uniqueScrollAmount >= (uniqueSlider.scrollWidth / 3)) {
+                  uniqueScrollAmount = 0;
+                }
+                uniqueSlider.scrollLeft = uniqueScrollAmount;
+              } else {
+                // Sync scroll amount if user manually scrolled
+                uniqueScrollAmount = uniqueSlider.scrollLeft;
+              }
+              requestAnimationFrame(animateUniqueScroll);
+            }
+            animateUniqueScroll();
           }
-        }
-      };
 
-    });
-  </script>
+          // Testimonial Slider Navigation
+          window.scrollSlider = function (direction) {
+            const slider = document.getElementById('testimonialSlider');
+            if (slider) {
+              const scrollAmount = slider.offsetWidth; // Scroll one full width
+              if (direction === 'left') {
+                slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+              } else {
+                slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+              }
+            }
+          };
+
+        });
+      </script>
 @endsection

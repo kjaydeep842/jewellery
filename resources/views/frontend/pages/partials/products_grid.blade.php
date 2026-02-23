@@ -1,3 +1,4 @@
+<div id="product-count-data" data-total="{{ $products->total() }}" class="hidden"></div>
 @forelse($products as $product)
     @php
         $mainImage = $product->images->first() ? 'storage/' . $product->images->first()->image_path : 'assets/ring.png';

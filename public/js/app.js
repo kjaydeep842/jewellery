@@ -617,11 +617,6 @@ window.initHomeInteractive = function (
                 window.updateProductSlider(category.id);
             }
 
-            // Sync category buttons and hidden input for Explore All button
-            if (typeof window.filterProducts === "function") {
-                window.filterProducts(category.id, null);
-            }
-
             // Update slider Explore All button's hidden input
             const sliderCategoryInput = document.getElementById(
                 "sliderCategoryInput",
@@ -851,7 +846,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
                 .then((response) => {
                     if (response.status === 401) {
-                        window.location.href = "/login";
+                        window.location.href = "/auth/mobile";
                         return;
                     }
                     return response.json();

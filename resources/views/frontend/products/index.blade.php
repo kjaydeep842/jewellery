@@ -31,14 +31,21 @@
 <!-- Main Content : All Collection -->
 <main class="w-full max-w-[1600px] mx-auto px-6 py-8 font-['Outfit'] flex flex-col gap-2.5">
 
-    <!-- Breadcrumb & Title -->
-    <div class="w-full flex flex-col gap-1 self-start">
-        <div class="text-sm text-gray-500">
-            <a href="{{ route('home') }}" class="hover:text-amber-600 cursor-pointer">Home</a> / <span
-                class="text-gray-800 font-medium">Discover our Collection</span>
+    <!-- Top Bar: Breadcrumb, Title & Sort -->
+    <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-4 self-start">
+        <div class="flex flex-col gap-1">
+            <div class="text-sm text-gray-500">
+                <a href="{{ route('home') }}" class="hover:text-amber-600 cursor-pointer">Home</a> / <span
+                    class="text-gray-800 font-medium">Discover our Collection</span>
+            </div>
+            <div id="product-count-display" class="text-sm text-gray-500 mt-2">
+                Showing : {{ $products->total() }} Products
+            </div>
         </div>
-        <div id="product-count-display" class="text-sm text-gray-500 mt-2">
-            Showing : {{ $products->total() }} Products
+
+        <!-- Sort By Dropdown -->
+        <div class="relative z-30">
+            @include('frontend.partials.sort-dropdown')
         </div>
     </div>
 
@@ -304,41 +311,7 @@
 
         <!-- Products Grid -->
         <div class="flex-grow h-[calc(100vh-180px)] overflow-y-auto pr-1 md:pr-4 custom-scrollbar">
-            <!-- Sort By -->
-            <div class="flex justify-end mb-6 relative z-30">
-                <div class="relative group" id="sort-dropdown-container">
-                    <button type="button" id="sort-button"
-                        class="flex items-center gap-2 border border-gray-300 rounded px-4 py-2 bg-white text-sm font-['Outfit'] hover:border-[#CBA65A] transition-colors focus:outline-none">
-                        <span class="text-gray-500">Sort by:</span>
-                        <span id="selected-sort" class="text-[#1A1A1A] font-medium">
-                            @switch(request('sort'))
-                                @case('price_low_high') Price: Low to High @break
-                                @case('price_high_low') Price: High to Low @break
-                                @case('popularity') Popularity @break
-                                @default What's New
-                            @endswitch
-                        </span>
-                        <i class="fa-solid fa-chevron-down text-xs text-gray-400 ml-2 transition-transform duration-200" id="sort-icon"></i>
-                    </button>
-                    <!-- Dropdown Menu -->
-                    <div id="sort-menu"
-                        class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-100 shadow-lg rounded-md hidden z-50">
-                        <div class="py-1">
-                            <button type="button" data-sort="newest"
-                                class="sort-item w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-[#FAF8F1] hover:text-[#CBA65A] font-['Outfit']">What's
-                                New</button>
-                            <button type="button" data-sort="price_low_high"
-                                class="sort-item w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-[#FAF8F1] hover:text-[#CBA65A] font-['Outfit']">Price:
-                                Low to High</button>
-                            <button type="button" data-sort="price_high_low"
-                                class="sort-item w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-[#FAF8F1] hover:text-[#CBA65A] font-['Outfit']">Price:
-                                High to Low</button>
-                            <button type="button" data-sort="popularity"
-                                class="sort-item w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-[#FAF8F1] hover:text-[#CBA65A] font-['Outfit']">Popularity</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             {{-- Active Filter Tags --}}
             @include('frontend.partials.filter-tags')
@@ -429,35 +402,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Sort Selection
-    if (sortButton && sortMenu) {
-        sortButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sortMenu.classList.toggle('hidden');
-            sortIcon.classList.toggle('rotate-180');
-        });
+    // Sort Selection (Using Partial Classes and jQuery for consistency)
+    const $sortButton = $('.sort-button');
+    const $sortMenu = $('.sort-menu');
 
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#sort-dropdown-container')) {
-                sortMenu.classList.add('hidden');
-                sortIcon.classList.remove('rotate-180');
-            }
-        });
+    $(document).on('click', '.sort-button', function (e) {
+        e.stopPropagation();
+        $sortMenu.toggleClass('hidden');
+    });
 
-        document.querySelectorAll('.sort-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const sort = this.dataset.sort;
-                selectedSortText.textContent = this.textContent;
-                
-                if (hiddenSort) hiddenSort.value = sort;
-                
-                sortMenu.classList.add('hidden');
-                sortIcon.classList.remove('rotate-180');
-                updateProducts();
-            });
-        });
-    }
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.sort-dropdown-container').length) {
+            $sortMenu.addClass('hidden');
+        }
+    });
+
+    $(document).on('click', '.sort-item', function (e) {
+        e.preventDefault();
+        const sortValue = $(this).data('sort');
+        const sortText = $(this).text();
+
+        // Update UI
+        $('.selected-sort-text').text(sortText);
+        $sortMenu.addClass('hidden');
+
+        // Update Form Input
+        if (hiddenSort) hiddenSort.value = sortValue;
+
+        // Trigger Update
+        updateProducts();
+    });
 
     // Accordion Logic
     document.querySelectorAll('.filter-accordion-header').forEach(header => {

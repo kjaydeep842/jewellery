@@ -19,7 +19,7 @@
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
                 <div
-                    class="w-[212px] h-[46.8px] min-[2000px]:w-[350px] min-[2000px]:h-auto flex items-center justify-center transition-all duration-300">
+                    class="w-[212px] h-[68px] min-[2000px]:w-[350px] min-[2000px]:h-auto flex items-center justify-center transition-all duration-300">
                     <a href="{{ route('home') }}">
                         <img src="{{ asset('assets/logo_black.png') }}" alt="logo"
                             class="w-full h-auto transition-all duration-300">
@@ -30,14 +30,15 @@
 
             <div id="header-search-section"
                 class="flex-grow max-w-xl w-full lg:w-1/2 order-3 lg:order-2 transition-all duration-300">
-                <div class="relative group w-full max-w-[350px] mx-auto" id="search-container">
+                <div class="relative group w-full max-w-[445px] mx-auto flex flex-row items-center justify-between p-[20px_29px] gap-[10px] h-[65px] bg-[#F2F2F3] border border-transparent focus-within:border-[#B39359]/30 rounded-[100px] transition-all duration-300"
+                    id="search-container">
                     <input type="text" id="search-input"
-                        class="w-full h-[50px] min-[2000px]:h-[70px] bg-gray-100 border border-transparent focus:border-[#B39359]/30 focus:bg-white rounded-full py-2 pl-5 pr-12 text-sm min-[2000px]:text-2xl transition-all outline-none"
+                        class="flex-grow bg-transparent border-none outline-none text-[20px] font-Outfit text-center placeholder:text-[#A2A2A9] text-[#A2A2A9] leading-none min-[2000px]:text-2xl transition-all"
                         placeholder="Search for products">
                     <button id="search-btn"
-                        class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#B39359]">
+                        class="flex-shrink-0 text-gray-400 group-focus-within:text-[#B39359] transition-all duration-300">
                         <img src="{{ asset('assets/ic_search.png') }}" alt="search"
-                            class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
+                            class="w-6 h-6 min-[2000px]:w-8 min-[2000px]:h-8">
                     </button>
                     <!-- Search Dropdown (Hidden by default) -->
                     <div id="search-dropdown"
@@ -198,7 +199,7 @@
             </div>
 
             <div id="header-icons-section"
-                class="flex items-center space-x-5 min-[2000px]:space-x-8 text-gray-600 order-2 lg:order-3 transition-all duration-300">
+                class="flex items-center h-[68px] gap-[20px] min-[2000px]:gap-8 text-gray-600 order-2 lg:order-3 transition-all duration-300">
                 @auth
                     <div class="relative inline-block text-left" id="user-menu-container">
                         <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
@@ -346,7 +347,7 @@
 
                     // Shrink Logo (Targeting the container width)
                     if (logoContainer) {
-                        logoContainer.classList.remove('w-[212px]', 'h-[46.8px]');
+                        logoContainer.classList.remove('w-[212px]', 'h-[68px]');
                         logoContainer.classList.add('w-[140px]', 'h-auto');
                     }
 
@@ -382,7 +383,7 @@
 
                     // Restore Logo
                     if (logoContainer) {
-                        logoContainer.classList.add('w-[212px]', 'h-[46.8px]');
+                        logoContainer.classList.add('w-[212px]', 'h-[68px]');
                         logoContainer.classList.remove('w-[140px]', 'h-auto');
                     }
 

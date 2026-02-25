@@ -62,6 +62,12 @@ Route::middleware(['auth', 'admin'])
         Route::resource('categories', CategoryController::class);
         Route::resource('subcategories', SubcategoryController::class);
         Route::resource('tags', TagController::class);
+
+        // Product Import Routes
+        Route::get('products/import', [\App\Http\Controllers\Admin\ProductImportController::class, 'showImportForm'])->name('products.import');
+        Route::post('products/import', [\App\Http\Controllers\Admin\ProductImportController::class, 'processImport'])->name('products.import.process');
+        Route::get('products/import/template', [\App\Http\Controllers\Admin\ProductImportController::class, 'downloadTemplate'])->name('products.import.template');
+
         Route::resource('products', AdminProductController::class);
         Route::resource('brands', BrandController::class);
         Route::resource('orders', AdminOrderController::class);

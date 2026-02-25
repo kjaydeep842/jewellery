@@ -7,11 +7,19 @@
 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
     <h1 class="text-2xl sm:text-3xl font-premium font-bold text-zinc-900 tracking-wide">Products</h1>
 
-    <a href="{{ route('admin.products.create') }}"
-        class="flex items-center space-x-2 px-6 py-2.5 btn-gold rounded-lg shadow-lg hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5">
-        <span class="text-xl">+</span>
-        <span>Add Product</span>
-    </a>
+    <div class="flex items-center gap-4">
+        <a href="{{ route('admin.products.import') }}" class="flex items-center space-x-2 px-6 py-2.5 bg-zinc-800 text-white hover:bg-zinc-900 rounded-lg shadow-lg hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+            </svg>
+            <span>Bulk Import</span>
+        </a>
+        <a href="{{ route('admin.products.create') }}"
+            class="flex items-center space-x-2 px-6 py-2.5 btn-gold rounded-lg shadow-lg hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5">
+            <span class="text-xl">+</span>
+            <span>Add Product</span>
+        </a>
+    </div>
 </div>
 
 @if(session('success'))
@@ -24,7 +32,30 @@
 </div>
 @endif
 
-
+@if(session('import_stats'))
+<div class="mb-6 bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden">
+    <div class="px-6 py-4 bg-zinc-50 border-b border-zinc-100">
+        <h3 class="text-lg font-bold text-zinc-900">Import Summary</h3>
+    </div>
+    <div class="p-6">
+        <div class="flex flex-wrap gap-4 mb-4">
+            <div class="px-4 py-2 bg-blue-50 text-blue-800 rounded-lg font-bold border border-blue-200 shadow-sm">Scanned: {{ session('import_stats')['total'] }}</div>
+            <div class="px-4 py-2 bg-emerald-50 text-emerald-800 rounded-lg font-bold border border-emerald-200 shadow-sm">Imported: {{ session('import_stats')['success'] }}</div>
+            <div class="px-4 py-2 bg-red-50 text-red-800 rounded-lg font-bold border border-red-200 shadow-sm">Failed: {{ session('import_stats')['failed'] }}</div>
+        </div>
+        @if(session('import_errors') && count(session('import_errors')) > 0)
+        <div class="mt-4 p-4 bg-red-50 text-red-700 rounded-lg border border-red-100 max-h-48 overflow-y-auto w-full">
+            <h4 class="font-bold mb-2">Errors Details:</h4>
+            <ul class="list-disc pl-5 text-sm space-y-1">
+                @foreach(session('import_errors') as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+    </div>
+</div>
+@endif
 
 <div class="bg-white border border-zinc-100 rounded-xl shadow-lg shadow-zinc-200/50 overflow-x-auto animate-enter p-4">
     <table id="productsTable" class="w-full text-left border-collapse stripe hover">

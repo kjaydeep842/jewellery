@@ -143,31 +143,51 @@
             </div>
 
             {{-- Flags --}}
-            <div class="flex gap-6 mt-6">
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" name="status" value="active" class="sr-only peer" checked>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">Active</span>
+            <div class="flex flex-wrap items-center gap-6 mt-6">
+                <label class="inline-flex items-center cursor-pointer group relative">
+                    <input type="checkbox" name="status" value="active" class="peer sr-only" checked>
+                    <div class="h-6 w-6 bg-white border-2 border-zinc-300 rounded flex items-center justify-center transition-all peer-checked:bg-amber-500 peer-checked:border-amber-500 hover:border-amber-400 peer-focus:ring-2 peer-focus:ring-amber-500/30 shadow-sm">
+                        <svg class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700 whitespace-nowrap group-hover:text-amber-600 transition-colors">Active</span>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_featured" value="1" class="sr-only peer" {{ old('is_featured') ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">Featured</span>
+                <label class="inline-flex items-center cursor-pointer group relative">
+                    <input type="checkbox" name="is_featured" value="1" class="peer sr-only" {{ old('is_featured') ? 'checked' : '' }}>
+                    <div class="h-6 w-6 bg-white border-2 border-zinc-300 rounded flex items-center justify-center transition-all peer-checked:bg-amber-500 peer-checked:border-amber-500 hover:border-amber-400 peer-focus:ring-2 peer-focus:ring-amber-500/30 shadow-sm">
+                        <svg class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700 whitespace-nowrap group-hover:text-amber-600 transition-colors">Featured</span>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_new" value="1" class="sr-only peer" {{ old('is_new') ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">New Arrival</span>
+                <label class="inline-flex items-center cursor-pointer group relative">
+                    <input type="checkbox" name="is_new" value="1" class="peer sr-only" {{ old('is_new') ? 'checked' : '' }}>
+                    <div class="h-6 w-6 bg-white border-2 border-zinc-300 rounded flex items-center justify-center transition-all peer-checked:bg-amber-500 peer-checked:border-amber-500 hover:border-amber-400 peer-focus:ring-2 peer-focus:ring-amber-500/30 shadow-sm">
+                        <svg class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700 whitespace-nowrap group-hover:text-amber-600 transition-colors">New Arrival</span>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_bestseller" value="1" class="sr-only peer" {{ old('is_bestseller') ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">Bestseller</span>
+                <label class="inline-flex items-center cursor-pointer group relative">
+                    <input type="checkbox" name="is_bestseller" value="1" class="peer sr-only" {{ old('is_bestseller') ? 'checked' : '' }}>
+                    <div class="h-6 w-6 bg-white border-2 border-zinc-300 rounded flex items-center justify-center transition-all peer-checked:bg-amber-500 peer-checked:border-amber-500 hover:border-amber-400 peer-focus:ring-2 peer-focus:ring-amber-500/30 shadow-sm">
+                        <svg class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700 whitespace-nowrap group-hover:text-amber-600 transition-colors">Bestseller</span>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_ready_to_stock" value="1" class="sr-only peer" {{ old('is_ready_to_stock') ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">Ready To Stock</span>
+                <label class="inline-flex items-center cursor-pointer group relative">
+                    <input type="checkbox" name="is_ready_to_stock" value="1" class="peer sr-only" {{ old('is_ready_to_stock') ? 'checked' : '' }}>
+                    <div class="h-6 w-6 bg-white border-2 border-zinc-300 rounded flex items-center justify-center transition-all peer-checked:bg-amber-500 peer-checked:border-amber-500 hover:border-amber-400 peer-focus:ring-2 peer-focus:ring-amber-500/30 shadow-sm">
+                        <svg class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700 whitespace-nowrap group-hover:text-amber-600 transition-colors">Ready To Stock</span>
                 </label>
             </div>
         </div>
@@ -269,11 +289,21 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-zinc-600 mb-1">Color</label>
-                    <input type="text" name="diamond_color" placeholder="e.g. E-F" value="{{ old('diamond_color') }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    <select name="diamond_color" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                        <option value="">Select Color</option>
+                        @foreach($colors as $color)
+                        <option value="{{ $color->name }}" {{ old('diamond_color') == $color->name ? 'selected' : '' }}>{{ $color->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-zinc-600 mb-1">Clarity</label>
-                    <input type="text" name="diamond_clarity" placeholder="e.g. VVS" value="{{ old('diamond_clarity') }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    <select name="diamond_clarity" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                        <option value="">Select Clarity</option>
+                        @foreach($diamondQualities as $clarity)
+                        <option value="{{ $clarity->name }}" {{ old('diamond_clarity') == $clarity->name ? 'selected' : '' }}>{{ $clarity->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-zinc-600 mb-1">Carat</label>
@@ -385,8 +415,8 @@
             </div>
         </div>
 
-        <div class="flex justify-end pt-6 border-t gap-4">
-            <a href="{{ route('admin.products.index') }}" class="px-8 py-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold rounded-lg shadow-md transition-all">
+        <div class="flex justify-end pt-6 border-t border-zinc-100 gap-4 mt-8">
+            <a href="{{ route('admin.products.index') }}" class="px-8 py-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold rounded-lg shadow-sm transition-all">
                 Cancel
             </a>
             <button type="submit" class="px-8 py-3 btn-gold hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5 rounded-lg shadow-md">

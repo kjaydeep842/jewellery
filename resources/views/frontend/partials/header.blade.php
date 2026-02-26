@@ -13,13 +13,13 @@
 <div id="header-placeholder">
     <header class="bg-white z-50 shadow-sm w-full transition-all duration-300">
         <div id="header-main-container"
-            class="max-w-[1600px] min-[2000px]:max-w-[2400px] mx-auto px-6 py-4 flex flex-wrap lg:flex-nowrap justify-between items-center gap-y-4 lg:gap-0 transition-all duration-300">
-            <div id="header-logo-section" class="flex items-center gap-2 order-1 transition-all duration-300">
+            class="md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto px-6 py-[30px] flex flex-wrap md:flex-nowrap justify-between items-center gap-y-4 lg:gap-0 transition-all duration-300">
+            <div id="header-logo-section" class="flex items-center gap-2 order-1 md:flex-1 transition-all duration-300">
                 <button id="mobile-menu-btn" class="lg:hidden mr-1  text-gray-800 hover:text-[#B39359]">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
                 <div
-                    class="w-[212px] h-[68px] min-[2000px]:w-[350px] min-[2000px]:h-auto flex items-center justify-center transition-all duration-300">
+                    class="w-[212px] h-[50px] min-[2000px]:w-[350px] min-[2000px]:h-auto flex items-center justify-center transition-all duration-300">
                     <a href="{{ route('home') }}">
                         <img src="{{ asset('assets/logo_black.png') }}" alt="logo"
                             class="w-full h-auto transition-all duration-300">
@@ -29,16 +29,16 @@
             </div>
 
             <div id="header-search-section"
-                class="flex-grow max-w-xl w-full lg:w-1/2 order-3 lg:order-2 transition-all duration-300">
-                <div class="relative group w-full max-w-[445px] mx-auto flex flex-row items-center justify-between p-[20px_29px] gap-[10px] h-[65px] bg-[#F2F2F3] border border-transparent focus-within:border-[#B39359]/30 rounded-[100px] transition-all duration-300"
+                class="flex-shrink-0 w-full md:w-auto order-3 md:order-2 transition-all duration-300 ">
+                <div class="relative group w-full max-w-[445px] mx-auto flex flex-row items-center justify-between px-6 gap-[10px] h-[48px] bg-[#F2F2F3] border border-transparent focus-within:border-[#B39359]/30 rounded-[100px] transition-all duration-300"
                     id="search-container">
                     <input type="text" id="search-input"
-                        class="flex-grow bg-transparent border-none outline-none text-[20px] font-Outfit text-center placeholder:text-[#A2A2A9] text-[#A2A2A9] leading-none min-[2000px]:text-2xl transition-all"
+                        class="flex-grow bg-transparent border-none outline-none text-[16px] font-Outfit text-left placeholder:text-[#A2A2A9] text-[#A2A2A9] leading-none min-[2000px]:text-xl transition-all"
                         placeholder="Search for products">
                     <button id="search-btn"
                         class="flex-shrink-0 text-gray-400 group-focus-within:text-[#B39359] transition-all duration-300">
                         <img src="{{ asset('assets/ic_search.png') }}" alt="search"
-                            class="w-6 h-6 min-[2000px]:w-8 min-[2000px]:h-8">
+                            class="w-5 h-5 min-[2000px]:w-7 min-[2000px]:h-7">
                     </button>
                     <!-- Search Dropdown (Hidden by default) -->
                     <div id="search-dropdown"
@@ -199,7 +199,7 @@
             </div>
 
             <div id="header-icons-section"
-                class="flex items-center h-[68px] gap-[20px] min-[2000px]:gap-8 text-gray-600 order-2 lg:order-3 transition-all duration-300">
+                class="flex items-center justify-end gap-[20px] min-[2000px]:gap-8 text-gray-600 order-2 md:order-3 md:flex-1 transition-all duration-300">
                 @auth
                     <div class="relative inline-block text-left" id="user-menu-container">
                         <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
@@ -266,37 +266,43 @@
         <!-- Navigation Bar -->
 
         <nav id="main-navigation"
-            class="hidden lg:flex items-center justify-center space-x-3 lg:space-x-4 min-[2000px]:space-x-12 text-[12px] lg:text-[13px] xl:text-[15px] min-[2000px]:text-2xl font-['Outfit'] font-medium tracking-wide transition-all duration-300">
+            class="hidden lg:flex items-center justify-center gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-normal tracking-normal transition-all duration-300">
             <div class="relative group">
-                <a href="{{ route('page.new-arrivals') }}" class="flex items-center gap-1 hover:text-gold py-4">New
+                <a href="{{ route('page.new-arrivals') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">New
                     Arrivals</a>
             </div>
             <div class="relative group">
-                <a href="{{ route('page.best-seller') }}" class="flex items-center gap-1 hover:text-gold py-4">Best
+                <a href="{{ route('page.best-seller') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Best
                     Seller</a>
             </div>
             <div class="relative group">
-                <a href="{{ route('page.18kt') }}" class="flex items-center gap-1 hover:text-gold py-4">18KT
+                <a href="{{ route('page.18kt') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">18KT
                     Jewellery</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.tattsvisfavourite') }}"
-                    class="flex items-center gap-1 hover:text-gold py-4">Tattsvi's Favourite</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Tattsvi's Favourite</a>
             </div>
             {{-- <div class="relative group">
                 <a href="{{ route('page.exhibition') }}"
-                    class="flex items-center gap-1 hover:text-gold py-4">Exhibition</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Exhibition</a>
             </div> --}}
             <div class="relative group">
-                <a href="{{ route('page.readytostock') }}" class="flex items-center gap-1 hover:text-gold py-4">Ready To
+                <a href="{{ route('page.readytostock') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Ready To
                     Stock</a>
             </div>
             <div class="relative group">
-                <a href="{{ route('page.contact') }}" class="flex items-center gap-1 hover:text-gold py-4">Contact
+                <a href="{{ route('page.contact') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Contact
                     Us</a>
             </div>
             <div class="relative group">
-                <a href="{{ route('page.about') }}" class="flex items-center gap-1 hover:text-gold py-4">About Us</a>
+                <a href="{{ route('page.about') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">About Us</a>
             </div>
         </nav>
     </header>

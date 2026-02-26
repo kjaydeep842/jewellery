@@ -9,33 +9,23 @@
 
   {{-- HERO SECTION AND COLLECTIONS --}}
   <section>
-    <!-- Product Image -->
-    <div class="relative w-full h-full mx-auto overflow-hidden">
-      <!-- Ghost Image for Height Stability -->
-      <div class="w-full relative invisible pointer-events-none">
-        @if(isset($banners) && $banners->count() > 0)
-          <img src="{{ asset('storage/' . $banners->first()->image) }}" class="w-full h-auto block opacity-0" alt="Ghost">
-        @else
-          <img src="assets/Top Banner Section.png" class="w-full h-auto block opacity-0" alt="Ghost">
-        @endif
-      </div>
-
+    <!-- Top Hero Banner -->
+    <div class="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px] mx-auto overflow-hidden">
       <div id="slides" class="grid w-full h-full overflow-hidden absolute inset-0">
 
         @if(isset($banners) && $banners->count() > 0)
           @foreach($banners as $index => $banner)
             <div
-              class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
-              <img src="{{ asset('storage/' . $banner->image) }}"
-                class="{{ $index == 0 ? 'w-full h-auto block' : 'w-full h-full object-cover block' }}"
+              class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
+              <img src="{{ asset('storage/' . $banner->image) }}" class="w-full h-full object-cover block"
                 alt="{{ $banner->title }}">
             </div>
           @endforeach
         @else
           <!-- Fallback Static Slides -->
           <!-- Slide 1 -->
-          <div class="col-start-1 row-start-1 w-full relative transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-auto block" alt="Slide 1">
+          <div class="col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out">
+            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover block" alt="Slide 1">
           </div>
           <!-- Slide 2 -->
           <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
@@ -507,33 +497,22 @@
   </section>
   <!--Banner Section-->
   <section>
-    <!-- Product Image -->
-    <div class="relative w-full h-full mx-auto overflow-hidden">
-      <!-- Ghost Image for Height Stability -->
-      <div class="w-full relative invisible pointer-events-none">
-        @if(isset($middleBanners) && $middleBanners->count() > 0)
-          <img src="{{ url('storage/' . $middleBanners->first()->image) }}" class="w-full h-auto block opacity-0"
-            alt="Ghost">
-        @else
-          <img src="assets/Top Banner Section.png" class="w-full h-auto block opacity-0" alt="Ghost">
-        @endif
-      </div>
-
+    <!-- Middle Banner Slider -->
+    <div class="relative w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] mx-auto overflow-hidden">
       <div id="slides1" class="grid w-full h-full overflow-hidden absolute inset-0">
         @if(isset($middleBanners) && $middleBanners->count() > 0)
           @foreach($middleBanners as $index => $banner)
             <div
-              class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
-              <img src="{{ url('storage/' . $banner->image) }}"
-                class="{{ $index == 0 ? 'w-full h-auto block' : 'w-full h-full object-cover block' }}"
+              class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
+              <img src="{{ url('storage/' . $banner->image) }}" class="w-full h-full object-cover block"
                 alt="{{ $banner->title }}">
             </div>
           @endforeach
         @else
           <!-- Fallback Static Section if no active middle banners -->
           <!-- Slide 1 -->
-          <div class="col-start-1 row-start-1 w-full relative transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-auto block" alt="Slide 1">
+          <div class="col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out">
+            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover block" alt="Slide 1">
           </div>
           <!-- Slide 2 -->
           <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
@@ -716,7 +695,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                                                                                              class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                                                                                                    class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -1481,106 +1460,106 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                                                      {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
-              @json($categories),
-              "{{ url('storage') }}",
-              "{{ asset('') }}"
-            );
+                                                                                                                        {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+          @json($categories),
+          "{{ url('storage') }}",
+          "{{ asset('') }}"
+        );
+      } else {
+        console.warn('initHomeInteractive function not found. Ensure script.js is loaded.');
+      }
+
+      // Auto-scroll for Diamond Shapes
+      const shapeContainer = document.getElementById('diamond-shapes-container');
+      if (shapeContainer) {
+        const originalContent = Array.from(shapeContainer.children);
+
+        // Clone content to ensure seamless scrolling (x3 for safety)
+        for (let i = 0; i < 2; i++) {
+          originalContent.forEach(item => shapeContainer.appendChild(item.cloneNode(true)));
+        }
+
+        // Auto-scroll logic
+        let scrollAmount = 0;
+        const speed = 0.5;
+        let isHovered = false;
+
+        const pause = () => isHovered = true;
+        const resume = () => isHovered = false;
+
+        shapeContainer.addEventListener('mouseenter', pause);
+        shapeContainer.addEventListener('mouseleave', resume);
+        shapeContainer.addEventListener('touchstart', pause);
+        shapeContainer.addEventListener('touchend', resume);
+
+        // Animation Loop
+        function animateScroll() {
+          if (!isHovered && shapeContainer.scrollWidth > shapeContainer.clientWidth) {
+            scrollAmount += speed;
+
+            if (scrollAmount >= (shapeContainer.scrollWidth / 3)) {
+              scrollAmount = 0;
+            }
+            shapeContainer.scrollLeft = scrollAmount;
           } else {
-            console.warn('initHomeInteractive function not found. Ensure script.js is loaded.');
+            scrollAmount = shapeContainer.scrollLeft;
           }
+          requestAnimationFrame(animateScroll);
+        }
+        animateScroll();
+      }
 
-          // Auto-scroll for Diamond Shapes
-          const shapeContainer = document.getElementById('diamond-shapes-container');
-          if (shapeContainer) {
-            const originalContent = Array.from(shapeContainer.children);
+      // Continuous Auto-Scroll for Unique Style Slider
+      const uniqueSlider = document.getElementById('uniqueStyleSlider');
+      if (uniqueSlider) {
+        // Clone content for seamless loop (x3 to be safe)
+        const uniqueContent = Array.from(uniqueSlider.children);
+        for (let i = 0; i < 2; i++) {
+          uniqueContent.forEach(item => uniqueSlider.appendChild(item.cloneNode(true)));
+        }
 
-            // Clone content to ensure seamless scrolling (x3 for safety)
-            for (let i = 0; i < 2; i++) {
-              originalContent.forEach(item => shapeContainer.appendChild(item.cloneNode(true)));
+        let uniqueScrollAmount = 0;
+        const uniqueSpeed = 0.8; // Slightly faster or adjustable
+        let uniqueHovered = false;
+
+        const pauseUnique = () => uniqueHovered = true;
+        const resumeUnique = () => uniqueHovered = false;
+
+        uniqueSlider.addEventListener('mouseenter', pauseUnique);
+        uniqueSlider.addEventListener('mouseleave', resumeUnique);
+        uniqueSlider.addEventListener('touchstart', pauseUnique);
+        uniqueSlider.addEventListener('touchend', resumeUnique);
+
+        function animateUniqueScroll() {
+          if (!uniqueHovered && uniqueSlider.scrollWidth > uniqueSlider.clientWidth) {
+            uniqueScrollAmount += uniqueSpeed;
+            // Reset when we've scrolled past the first set (approx 1/3 of total cloned width)
+            if (uniqueScrollAmount >= (uniqueSlider.scrollWidth / 3)) {
+              uniqueScrollAmount = 0;
             }
-
-            // Auto-scroll logic
-            let scrollAmount = 0;
-            const speed = 0.5;
-            let isHovered = false;
-
-            const pause = () => isHovered = true;
-            const resume = () => isHovered = false;
-
-            shapeContainer.addEventListener('mouseenter', pause);
-            shapeContainer.addEventListener('mouseleave', resume);
-            shapeContainer.addEventListener('touchstart', pause);
-            shapeContainer.addEventListener('touchend', resume);
-
-            // Animation Loop
-            function animateScroll() {
-              if (!isHovered && shapeContainer.scrollWidth > shapeContainer.clientWidth) {
-                scrollAmount += speed;
-
-                if (scrollAmount >= (shapeContainer.scrollWidth / 3)) {
-                  scrollAmount = 0;
-                }
-                shapeContainer.scrollLeft = scrollAmount;
-              } else {
-                scrollAmount = shapeContainer.scrollLeft;
-              }
-              requestAnimationFrame(animateScroll);
-            }
-            animateScroll();
+            uniqueSlider.scrollLeft = uniqueScrollAmount;
+          } else {
+            // Sync scroll amount if user manually scrolled
+            uniqueScrollAmount = uniqueSlider.scrollLeft;
           }
+          requestAnimationFrame(animateUniqueScroll);
+        }
+        animateUniqueScroll();
+      }
 
-          // Continuous Auto-Scroll for Unique Style Slider
-          const uniqueSlider = document.getElementById('uniqueStyleSlider');
-          if (uniqueSlider) {
-            // Clone content for seamless loop (x3 to be safe)
-            const uniqueContent = Array.from(uniqueSlider.children);
-            for (let i = 0; i < 2; i++) {
-              uniqueContent.forEach(item => uniqueSlider.appendChild(item.cloneNode(true)));
-            }
-
-            let uniqueScrollAmount = 0;
-            const uniqueSpeed = 0.8; // Slightly faster or adjustable
-            let uniqueHovered = false;
-
-            const pauseUnique = () => uniqueHovered = true;
-            const resumeUnique = () => uniqueHovered = false;
-
-            uniqueSlider.addEventListener('mouseenter', pauseUnique);
-            uniqueSlider.addEventListener('mouseleave', resumeUnique);
-            uniqueSlider.addEventListener('touchstart', pauseUnique);
-            uniqueSlider.addEventListener('touchend', resumeUnique);
-
-            function animateUniqueScroll() {
-              if (!uniqueHovered && uniqueSlider.scrollWidth > uniqueSlider.clientWidth) {
-                uniqueScrollAmount += uniqueSpeed;
-                // Reset when we've scrolled past the first set (approx 1/3 of total cloned width)
-                if (uniqueScrollAmount >= (uniqueSlider.scrollWidth / 3)) {
-                  uniqueScrollAmount = 0;
-                }
-                uniqueSlider.scrollLeft = uniqueScrollAmount;
-              } else {
-                // Sync scroll amount if user manually scrolled
-                uniqueScrollAmount = uniqueSlider.scrollLeft;
-              }
-              requestAnimationFrame(animateUniqueScroll);
-            }
-            animateUniqueScroll();
+      // Testimonial Slider Navigation
+      window.scrollSlider = function (direction) {
+        const slider = document.getElementById('testimonialSlider');
+        if (slider) {
+          const scrollAmount = slider.offsetWidth; // Scroll one full width
+          if (direction === 'left') {
+            slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+          } else {
+            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
           }
+        }
+      };
 
-          // Testimonial Slider Navigation
-          window.scrollSlider = function (direction) {
-            const slider = document.getElementById('testimonialSlider');
-            if (slider) {
-              const scrollAmount = slider.offsetWidth; // Scroll one full width
-              if (direction === 'left') {
-                slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-              } else {
-                slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-              }
-            }
-          };
-
-        });
-      </script>
+    });
+  </script>
 @endsection

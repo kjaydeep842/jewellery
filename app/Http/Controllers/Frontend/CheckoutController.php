@@ -71,7 +71,7 @@ class CheckoutController extends Controller
 
         Auth::user()->addresses()->create($request->all());
 
-        return redirect()->route('checkout.address');
+        return redirect()->route('checkout.address')->with('success', 'Address added successfully.');
     }
 
     public function editAddress($id)
@@ -104,7 +104,7 @@ class CheckoutController extends Controller
 
         $address->update($request->all());
 
-        return redirect()->route('checkout.address');
+        return redirect()->route('checkout.address')->with('success', 'Address updated successfully.');
     }
 
     public function selectAddress($id)

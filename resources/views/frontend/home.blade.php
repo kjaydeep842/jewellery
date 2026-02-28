@@ -168,10 +168,10 @@
     </div>
   </section>
 
-  <section class="bg-white pt-4 pb-8 md:pt-4 md:pb-16 px-6">
+  <section class="bg-white pt-0 pb-4 md:pt-0 md:pb-8 px-6">
     <div class="max-w-[1600px] min-[2000px]:max-w-full mx-auto">
 
-      <div class="flex items-center justify-center mb-6 md:mb-10 gap-2 md:gap-6">
+      <div class="flex items-center justify-center mb-4 md:mb-6 gap-2 md:gap-4">
         <img src="assets/Design.png" alt="design left" class="h-5 md:h-8 w-auto object-contain">
         <div class="text-center">
           <p class="text-[16px] md:text-2xl min-[2000px]:text-4xl font-Alexandria tracking-[0.1em] text-[#5C4522] mb-1">
@@ -190,12 +190,12 @@
       </form>
       <!-- All shape -->
       <div id="diamond-shapes-container"
-        class="flex overflow-x-auto snap-x snap-mandatory gap-4 items-center md:gap-8 no-scrollbar pb-4">
+        class="flex overflow-x-auto snap-x snap-mandatory gap-2 items-center md:gap-4 no-scrollbar pb-4">
         @if(isset($shapes) && $shapes->count() > 0)
           @foreach($shapes as $shape)
             <div
               onclick="document.getElementById('shapeInput').value = '{{ $shape->name }}'; document.getElementById('shapeFilterForm').submit();"
-              class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+              class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
               <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
                 <img src="{{ asset('storage/' . $shape->image) }}" alt="{{ $shape->name }}"
                   class="w-full h-full object-contain grayscale reflection-img">
@@ -208,7 +208,7 @@
           <!-- Round shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Round'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/round_shape.png" alt="Round" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -218,7 +218,7 @@
           <!-- Oval shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Oval'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/oval_shape.png" alt="Oval" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -228,7 +228,7 @@
           <!-- Princess shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Princess'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/princess_shape.png" alt="Princess"
                 class="w-full h-full object-contain grayscale reflection-img">
@@ -239,7 +239,7 @@
           <!-- Emerald shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Emerald'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/embral.png" alt="Emerald" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -249,7 +249,7 @@
           <!-- Radiant shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Radiant'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/radiant.png" alt="Radiant" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -259,7 +259,7 @@
           <!-- Heart shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Heart'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/heart.png" alt="Heart" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -269,7 +269,7 @@
           <!-- Cushion shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Cushion'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/cushion.png" alt="Cushion" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -279,7 +279,7 @@
           <!-- Pear shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Pear'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/pear.png" alt="Pear" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -289,7 +289,7 @@
           <!-- Marquise shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Marquise'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/marquies.png" alt="Marquise" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -299,7 +299,7 @@
           <!-- Asscher shape -->
           <div
             onclick="document.getElementById('shapeInput').value = 'Asscher'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
             <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
               <img src="assets/asscher.png" alt="Asscher" class="w-full h-full object-contain grayscale reflection-img">
             </div>
@@ -311,9 +311,9 @@
     </div>
   </section>
 
-  <section class="bg-[#FAF9F6] pt-12 pb-8 md:pt-28 md:pb-16 px-6">
+  <section class="bg-[#FAF9F6] pt-8 pb-4 md:pt-16 md:pb-8 px-6">
     <div class="max-w-[1600px] min-[2000px]:max-w-full mx-auto">
-      <div class="flex items-center justify-center mb-6 md:mb-8 gap-2 md:gap-6">
+      <div class="flex items-center justify-center mb-4 md:mb-6 gap-2 md:gap-4">
         <img src="assets/Design.png" alt="design left" class="h-5 md:h-8 w-auto object-contain">
         <div class="text-center">
           <p class="text-[16px] md:text-2xl min-[2000px]:text-4xl font-Alexandria tracking-[0.1em] text-[#5C4522] mb-1">
@@ -705,7 +705,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                                                                                                                                                                                                                            class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -1470,7 +1470,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                                                                                                {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+                                                                                                                                                                          {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

@@ -266,7 +266,7 @@
         <!-- Navigation Bar -->
 
         <nav id="main-navigation"
-            class="hidden lg:flex items-center justify-center gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-normal tracking-normal transition-all duration-300">
+            class="hidden lg:flex items-center justify-center gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-medium tracking-normal transition-all duration-300">
             <div class="relative group">
                 <a href="{{ route('page.new-arrivals') }}"
                     class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">New

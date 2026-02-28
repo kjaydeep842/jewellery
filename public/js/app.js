@@ -151,11 +151,11 @@ const initShutterSlider = (sliderId, dotsId, interval = 5000) => {
                 );
             } else {
                 if (i === index) {
-                    dot.classList.add("bg-white");
-                    dot.classList.remove("bg-white/50");
+                    dot.classList.add("bg-black");
+                    dot.classList.remove("bg-black/10");
                 } else {
-                    dot.classList.add("bg-white/50");
-                    dot.classList.remove("bg-white");
+                    dot.classList.add("bg-black/10");
+                    dot.classList.remove("bg-black");
                 }
             }
         });

@@ -10,14 +10,14 @@
   {{-- HERO SECTION AND COLLECTIONS --}}
   <section>
     <!-- Top Hero Banner -->
-    <div class="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px] mx-auto overflow-hidden">
-      <div id="slides" class="grid w-full h-full overflow-hidden absolute inset-0">
+    <div class="relative w-full aspect-[1920/1100] mx-auto overflow-hidden bg-[#FDFBF7]">
+      <div id="slides" class="grid w-full overflow-hidden absolute top-0 left-0 right-0 -bottom-[2px]">
 
         @if(isset($banners) && $banners->count() > 0)
           @foreach($banners as $index => $banner)
             <div
               class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
-              <img src="{{ asset('storage/' . $banner->image) }}" class="w-full h-full object-cover block"
+              <img src="{{ asset('storage/' . $banner->image) }}" class="w-full h-full object-cover object-center block"
                 alt="{{ $banner->title }}">
             </div>
           @endforeach
@@ -25,39 +25,45 @@
           <!-- Fallback Static Slides -->
           <!-- Slide 1 -->
           <div class="col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover block" alt="Slide 1">
+            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover object-center block" alt="Slide 1">
           </div>
           <!-- Slide 2 -->
           <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover block" alt="Slide 2">
+            <img src="assets/banner.png" class="w-full h-full object-cover object-center block" alt="Slide 2">
           </div>
           <!-- Slide 3 -->
           <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover block" alt="Slide 3">
+            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover object-center block" alt="Slide 3">
           </div>
           <!-- Slide 4 -->
           <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover block" alt="Slide 4">
+            <img src="assets/banner.png" class="w-full h-full object-cover object-center block" alt="Slide 4">
           </div>
         @endif
       </div>
 
+      <!-- Bottom Gradient Overlay -->
+      <div style="background: linear-gradient(180deg, rgba(243, 237, 230, 0) 0%, #FDFBF7 100%);"
+        class="absolute bottom-0 left-0 w-full h-[163px] z-30 pointer-events-none">
+      </div>
+
       <!-- Dots navigation -->
-      <div id="dots" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+      <div id="dots"
+        class="absolute bottom-6 md:bottom-10 right-6 md:right-[60px] lg:right-[100px] flex gap-[5px] w-[135px] z-40">
         @if(isset($banners) && $banners->count() > 0)
           @foreach($banners as $index => $banner)
             <button
-              class="w-8 h-1 rounded-[1px] {{ $index == 0 ? 'bg-white' : 'bg-white/50' }} hover:bg-white transition-all duration-300"
+              class="h-[4px] flex-1 rounded-[2px] {{ $index == 0 ? 'bg-black' : 'bg-black/10' }} hover:bg-black/30 transition-all duration-300"
               aria-label="Slide {{ $index + 1 }}"></button>
           @endforeach
         @else
-          <button class="w-8 h-1 rounded-[1px] bg-white hover:bg-white transition-all duration-300"
+          <button class="h-[4px] flex-1 rounded-[2px] bg-black hover:bg-black/30 transition-all duration-300"
             aria-label="Slide 1"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
+          <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
             aria-label="Slide 2"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
+          <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
             aria-label="Slide 3"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
+          <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
             aria-label="Slide 4"></button>
         @endif
       </div>
@@ -495,151 +501,155 @@
     </div>
     </div>
   </section>
-  <!--Banner Section-->
-  <section>
-    <!-- Middle Banner Slider -->
-    <div class="relative w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] mx-auto overflow-hidden">
-      <div id="slides1" class="grid w-full h-full overflow-hidden absolute inset-0">
-        @if(isset($middleBanners) && $middleBanners->count() > 0)
-          @foreach($middleBanners as $index => $banner)
-            <div
-              class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
-              <img src="{{ url('storage/' . $banner->image) }}" class="w-full h-full object-cover block"
-                alt="{{ $banner->title }}">
+
+  <!--Banner Section Group (Figma Frame 2147239050: 1920x2213) -->
+  <div id="home-middle-banner-group" class="max-w-[1920px] mx-auto overflow-hidden bg-white"
+    style="opacity: 1; transform: rotate(0deg); width: 100%;">
+    <section>
+      <!-- Middle Banner Slider -->
+      <div class="relative w-full aspect-[21/9] md:aspect-[16/9] lg:aspect-[1920/1100] mx-auto overflow-hidden">
+        <div id="slides1" class="grid w-full h-full overflow-hidden absolute inset-0">
+          @if(isset($middleBanners) && $middleBanners->count() > 0)
+            @foreach($middleBanners as $index => $banner)
+              <div
+                class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
+                <img src="{{ url('storage/' . $banner->image) }}" class="w-full h-full object-cover object-center block"
+                  alt="{{ $banner->title }}">
+              </div>
+            @endforeach
+          @else
+            <!-- Fallback Static Section if no active middle banners -->
+            <!-- Slide 1 -->
+            <div class="col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out">
+              <img src="assets/Top Banner Section.png" class="w-full h-full object-cover object-center block" alt="Slide 1">
             </div>
-          @endforeach
-        @else
-          <!-- Fallback Static Section if no active middle banners -->
-          <!-- Slide 1 -->
-          <div class="col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover block" alt="Slide 1">
-          </div>
-          <!-- Slide 2 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover block" alt="Slide 2">
-          </div>
-          <!-- Slide 3 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover block" alt="Slide 3">
-          </div>
-          <!-- Slide 4 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover block" alt="Slide 4">
-          </div>
-        @endif
-      </div>
-
-      <!-- Dots navigation -->
-      <div id="dots1" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-        @if(isset($middleBanners) && $middleBanners->count() > 0)
-          @foreach($middleBanners as $index => $banner)
-            <button
-              class="w-8 h-1 rounded-[1px] {{ $index == 0 ? 'bg-white' : 'bg-white/50' }} hover:bg-white transition-all duration-300"
-              onclick="goToSlide1({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
-          @endforeach
-        @else
-          <button class="w-8 h-1 rounded-[1px] bg-white hover:bg-white transition-all duration-300"
-            aria-label="Slide 1"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 2"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 3"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 4"></button>
-        @endif
-      </div>
-    </div>
-  </section>
-
-  <!-- heading section-->
-  <div class="ticker-wrapper">
-    <div class="ticker">
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-    </div>
-  </div>
-
-  <!--Category Section-->
-  <section class="relative bg-white overflow-hidden">
-    <!-- Background Color Block -->
-    <div class="absolute bottom-0 left-0 w-full h-[35%] bg-[#F3E5E5] pointer-events-none z-0"></div>
-    <div class="absolute bottom-0 left-0 w-full h-[40%] bg-[#F3E5E5]"></div>
-    <div class="relative z-10 max-w-[1600px] mx-auto px-6">
-      <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 md:gap-8 lg:gap-0">
-        <!-- Text Content -->
-        <div
-          class="relative w-full md:w-1/2 lg:w-[50%] flex flex-col items-center md:items-start lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-4 order-0 px-4 md:px-0">
-
-          <!-- Heading Group -->
-          <div class="flex items-center justify-center md:justify-start lg:justify-start gap-4 w-full">
-            <!-- Decorative Line (Responsive) -->
-            <div class="flex-none hidden sm:flex items-center w-[100px] md:w-[140px] lg:w-[280px]">
-              <img src="assets/Design_new.png" alt="" class="w-full h-auto object-contain">
+            <!-- Slide 2 -->
+            <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
+              <img src="assets/banner.png" class="w-full h-full object-cover object-center block" alt="Slide 2">
             </div>
-
-            <!-- Main Title -->
-            <div class="top-5 flex flex-col items-center md:items-start min-w-max">
-              <p style="font-family: 'Alexandria'"
-                class="font-normal text-lg md:text-xl lg:text-2xl text-[#5C4522] leading-tight mb-1">
-                Explore by</p>
-              <h2 id="exploreCategoryTitle" style="font-family: 'Outfit'"
-                class="font-medium text-4xl md:text-5xl lg:text-6xl text-[#CBA65A] leading-tight">
-                Category</h2>
+            <!-- Slide 3 -->
+            <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
+              <img src="assets/Top Banner Section.png" class="w-full h-full object-cover object-center block" alt="Slide 3">
             </div>
-          </div>
-
-          <!-- Description -->
-          <div class="pl-0 md:pl-0 lg:pl-[310px] w-full text-center md:text-left mt-2 lg:mt-0">
-            <p id="catDescription" style="font-family: 'Outfit'"
-              class="font-normal text-base md:text-[18px] min-[2000px]:text-2xl leading-relaxed md:leading-[35px] text-[#3D3D42] max-w-lg md:max-w-xl mx-auto md:mx-0 lg:mx-0">
-              Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
-              subtle yet elegant.
-            </p>
-          </div>
+            <!-- Slide 4 -->
+            <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
+              <img src="assets/banner.png" class="w-full h-full object-cover object-center block" alt="Slide 4">
+            </div>
+          @endif
         </div>
 
-        <!-- Slider Image -->
-        <div
-          class="relative w-full md:w-1/2 lg:w-[50%] h-auto lg:h-[600px] flex flex-col justify-start items-center lg:items-center pt-10 lg:pt-0 px-0 lg:pl-[20px] gap-[1px] grow flex-none order-1">
-          <div class="relative group md:-translate-x-12 lg:-translate-x-20">
+        <!-- Dots navigation -->
+        <div id="dots1" class="absolute bottom-4 right-6 md:right-[60px] lg:right-[100px] flex gap-[5px] w-[135px] z-40">
+          @if(isset($middleBanners) && $middleBanners->count() > 0)
+            @foreach($middleBanners as $index => $banner)
+              <button
+                class="h-[4px] flex-1 rounded-[2px] {{ $index == 0 ? 'bg-black' : 'bg-black/10' }} hover:bg-black/30 transition-all duration-300"
+                onclick="goToSlide1({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
+            @endforeach
+          @else
+            <button class="h-[4px] flex-1 rounded-[2px] bg-black hover:bg-black/30 transition-all duration-300"
+              aria-label="Slide 1"></button>
+            <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
+              aria-label="Slide 2"></button>
+            <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
+              aria-label="Slide 3"></button>
+            <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
+              aria-label="Slide 4"></button>
+          @endif
+        </div>
+    </section>
 
-            <button onclick="changeSlide('prev')"
-              class="absolute -left-6 md:-left-8 lg:-left-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
-              <i class="fa-solid fa-angle-left"></i>
-            </button>
+    <!-- heading section-->
+    <div class="ticker-wrapper">
+      <div class="ticker">
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+      </div>
+    </div>
 
-            <div
-              class="relative w-full max-w-[300px] md:max-w-[340px] lg:max-w-[380px] h-[420px] md:h-[500px] lg:h-[550px] bg-white rounded-b-full border-[10px] border-white shadow-2xl overflow-hidden mx-auto">
-              <img id="mainCatImg" src="assets/Rectangle_sidebar.png"
-                class="w-full h-full object-cover transition-opacity duration-500" alt="Category">
+    <!--Category Section-->
+    <section class="relative bg-white overflow-hidden">
+      <!-- Background Color Block -->
+      <div class="absolute bottom-0 left-0 w-full h-[25%] bg-[#F3E5E5] pointer-events-none z-0"></div>
+      <div class="absolute bottom-0 left-0 w-full h-[30%] bg-[#F3E5E5]"></div>
+      <div class="relative z-10 max-w-[1920px] mx-auto px-6 lg:px-20">
+        <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 md:gap-8 lg:gap-0">
+          <!-- Text Content -->
+          <div
+            class="relative w-full md:w-1/2 lg:w-[50%] flex flex-col items-center md:items-start lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-8 order-0 px-4 md:px-0">
 
-              <div class="absolute bottom-16 left-0 w-full text-center">
-                <span id="mainCatTitle"
-                  class="bg-white/90 backdrop-blur-md px-8 py-2.5 min-[2000px]:px-12 min-[2000px]:py-4 rounded-full text-amber-900 font-serif italic min-[2000px]:text-4xl shadow-sm border border-amber-50 tracking-wide">Rings</span>
+            <!-- Heading Group -->
+            <div class="flex items-center justify-center md:justify-start lg:justify-start gap-4 w-full">
+              <!-- Decorative Line (Responsive) -->
+              <div class="flex-none hidden sm:flex items-center w-[100px] md:w-[140px] lg:w-[280px]">
+                <img src="assets/Design_new.png" alt="" class="w-full h-auto object-contain">
+              </div>
+
+              <!-- Main Title -->
+              <div class="top-5 flex flex-col items-center md:items-start min-w-max">
+                <p style="font-family: 'Alexandria'"
+                  class="font-normal text-lg md:text-xl lg:text-2xl text-[#5C4522] leading-tight mb-1">
+                  Explore by</p>
+                <h2 id="exploreCategoryTitle" style="font-family: 'Outfit'"
+                  class="font-medium text-4xl md:text-5xl lg:text-6xl text-[#CBA65A] leading-tight">
+                  Category</h2>
               </div>
             </div>
 
-            <button onclick="changeSlide('next')"
-              class="absolute -right-6 md:-right-8 lg:-right-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
-              <i class="fa-solid fa-angle-right"></i>
-            </button>
+            <!-- Description -->
+            <div class="pl-0 md:pl-0 lg:pl-[310px] w-full text-center md:text-left mt-2 lg:mt-0">
+              <p id="catDescription" style="font-family: 'Outfit'"
+                class="font-normal text-base md:text-[18px] min-[2000px]:text-2xl leading-relaxed md:leading-[35px] text-[#3D3D42] max-w-lg md:max-w-xl mx-auto md:mx-0 lg:mx-0">
+                Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
+                subtle yet elegant.
+              </p>
+            </div>
+          </div>
 
-            <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-amber-50/50 rounded-full blur-3xl -z-10">
+          <!-- Slider Image -->
+          <div
+            class="relative w-full md:w-1/2 lg:w-[50%] h-auto lg:h-[600px] flex flex-col justify-start items-center lg:items-center pt-10 lg:pt-0 px-0 lg:pl-[20px] gap-[1px] grow flex-none order-1">
+            <div class="relative group md:-translate-x-12 lg:-translate-x-20">
+
+              <button onclick="changeSlide('prev')"
+                class="absolute -left-6 md:-left-8 lg:-left-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
+                <i class="fa-solid fa-angle-left"></i>
+              </button>
+
+              <div
+                class="relative w-full aspect-[3/4] sm:aspect-[4/5] md:aspect-[2/3] max-w-[300px] md:max-w-[340px] lg:max-w-[380px] bg-white rounded-b-full border-[10px] border-white shadow-2xl overflow-hidden mx-auto">
+                <img id="mainCatImg" src="assets/Rectangle_sidebar.png"
+                  class="w-full h-full object-cover transition-opacity duration-500" alt="Category">
+
+                <div class="absolute bottom-16 left-0 w-full text-center">
+                  <span id="mainCatTitle"
+                    class="bg-white/90 backdrop-blur-md px-8 py-2.5 min-[2000px]:px-12 min-[2000px]:py-4 rounded-full text-amber-900 font-serif italic min-[2000px]:text-4xl shadow-sm border border-amber-50 tracking-wide">Rings</span>
+                </div>
+              </div>
+
+              <button onclick="changeSlide('next')"
+                class="absolute -right-6 md:-right-8 lg:-right-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
+                <i class="fa-solid fa-angle-right"></i>
+              </button>
+
+              <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-amber-50/50 rounded-full blur-3xl -z-10">
+              </div>
             </div>
           </div>
         </div>
       </div>
+  </div>
   </section>
 
   <!-- Product Images-->
   <!---category image 1-->
   <!-- Product Images Section with Gradient -->
   <!-- Product Images Section with Gradient -->
-  <section class="w-full pb-12 pt-6 md:pt-10" style="background: linear-gradient(180deg, #F3E5E5 0%, #FDFBF7 100%);">
+  <section class="w-full pb-12 pt-0" style="background: linear-gradient(180deg, #F3E5E5 0%, #FDFBF7 100%);">
     <div id="productsliderGrid"
       class="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-4 md:px-[60px] lg:px-[100px] snap-x snap-mandatory pb-8">
       @if(isset($products) && $products->count() > 0)
@@ -695,7 +705,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                                                                                                    class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                            class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -1460,7 +1470,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                                                        {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+                                                                                                                                                                {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

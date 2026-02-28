@@ -164,10 +164,11 @@
             display: inline-block;
             font-family: outfit;
             padding-right: 50px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 300;
             color: #6b4b4b;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         /* Animation */

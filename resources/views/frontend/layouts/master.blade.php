@@ -156,7 +156,7 @@
             /*border-top: 2px solid #d4b1b1;
             border-bottom: 2px solid #d4b1b1;*/
             white-space: nowrap;
-        }
+           }
 
         /* Moving Text */
         .ticker {

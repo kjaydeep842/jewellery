@@ -22,23 +22,7 @@
             </div>
           @endforeach
         @else
-          <!-- Fallback Static Slides -->
-          <!-- Slide 1 -->
-          <div class="col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover object-center block" alt="Slide 1">
-          </div>
-          <!-- Slide 2 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover object-center block" alt="Slide 2">
-          </div>
-          <!-- Slide 3 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover object-center block" alt="Slide 3">
-          </div>
-          <!-- Slide 4 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover object-center block" alt="Slide 4">
-          </div>
+          {{-- No Fallback Banners --}}
         @endif
       </div>
 
@@ -57,14 +41,7 @@
               aria-label="Slide {{ $index + 1 }}"></button>
           @endforeach
         @else
-          <button class="h-[4px] flex-1 rounded-[2px] bg-black hover:bg-black/30 transition-all duration-300"
-            aria-label="Slide 1"></button>
-          <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
-            aria-label="Slide 2"></button>
-          <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
-            aria-label="Slide 3"></button>
-          <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
-            aria-label="Slide 4"></button>
+          {{-- No Fallback Dots --}}
         @endif
       </div>
     </div>
@@ -205,107 +182,7 @@
             </div>
           @endforeach
         @else
-          <!-- Round shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Round'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/round_shape.png" alt="Round" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Round</span>
-          </div>
-          <!-- Oval shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Oval'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/oval_shape.png" alt="Oval" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Oval</span>
-          </div>
-          <!-- Princess shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Princess'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/princess_shape.png" alt="Princess"
-                class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Princess</span>
-          </div>
-          <!-- Emerald shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Emerald'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/embral.png" alt="Emerald" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Emerald</span>
-          </div>
-          <!-- Radiant shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Radiant'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/radiant.png" alt="Radiant" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Radiant</span>
-          </div>
-          <!-- Heart shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Heart'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/heart.png" alt="Heart" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Heart</span>
-          </div>
-          <!-- Cushion shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Cushion'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/cushion.png" alt="Cushion" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] group-hover:text-black transition-colors group-hover:order-first">Cushion</span>
-          </div>
-          <!-- Pear shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Pear'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/pear.png" alt="Pear" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest  group-hover:text-black transition-colors group-hover:order-first">Pear</span>
-          </div>
-          <!-- Marquise shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Marquise'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/marquies.png" alt="Marquise" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest  group-hover:text-black transition-colors group-hover:order-first">Marquise</span>
-          </div>
-          <!-- Asscher shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Asscher'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/asscher.png" alt="Asscher" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest  group-hover:text-black transition-colors group-hover:order-first">Asscher</span>
-          </div>
+          {{-- No Fallback Shapes --}}
         @endif
       </div>
     </div>
@@ -519,23 +396,7 @@
               </div>
             @endforeach
           @else
-            <!-- Fallback Static Section if no active middle banners -->
-            <!-- Slide 1 -->
-            <div class="col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out">
-              <img src="assets/Top Banner Section.png" class="w-full h-full object-cover object-center block" alt="Slide 1">
-            </div>
-            <!-- Slide 2 -->
-            <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-              <img src="assets/banner.png" class="w-full h-full object-cover object-center block" alt="Slide 2">
-            </div>
-            <!-- Slide 3 -->
-            <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-              <img src="assets/Top Banner Section.png" class="w-full h-full object-cover object-center block" alt="Slide 3">
-            </div>
-            <!-- Slide 4 -->
-            <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-              <img src="assets/banner.png" class="w-full h-full object-cover object-center block" alt="Slide 4">
-            </div>
+            {{-- No Fallback Banners --}}
           @endif
         </div>
 
@@ -549,14 +410,7 @@
                 onclick="goToSlide1({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
             @endforeach
           @else
-            <button class="w-[30px] h-[4px] rounded-[2px] bg-white hover:bg-white/80 transition-all duration-300"
-              aria-label="Slide 1"></button>
-            <button class="w-[30px] h-[4px] rounded-[2px] bg-white/50 hover:bg-white/80 transition-all duration-300"
-              aria-label="Slide 2"></button>
-            <button class="w-[30px] h-[4px] rounded-[2px] bg-white/50 hover:bg-white/80 transition-all duration-300"
-              aria-label="Slide 3"></button>
-            <button class="w-[30px] h-[4px] rounded-[2px] bg-white/50 hover:bg-white/80 transition-all duration-300"
-              aria-label="Slide 4"></button>
+            {{-- No Fallback Dots --}}
           @endif
         </div>
     </section>
@@ -654,90 +508,7 @@
   <section class="w-full pb-12 pt-0" style="background: linear-gradient(180deg, #F3E5E5 0%, #FDFBF7 100%);">
     <div id="productsliderGrid"
       class="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-4 md:px-[60px] lg:px-[100px] snap-x snap-mandatory pb-8 pt-">
-      @if(isset($products) && $products->count() > 0)
-        @foreach($products as $product)
-          <!-- Dynamic Product Item -->
-          <div
-            class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start">
-            <div
-              class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
-              <span
-                class="absolute font-['Alexandria'] font-light top-2 right-0 w-[75px] h-[25px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[12px] z-10">Best
-                Seller</span>
-              <div
-                class="absolute bottom-3 left-2 z-20 flex bg-white h-[32px] w-[32px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm cursor-pointer wishlist-btn hover:bg-[#FAF8F1]"
-                data-product-id="{{ $product->id }}">
-                @if(Auth::check() && Auth::user()->wishlists->contains('product_id', $product->id))
-                  <i class="fa-solid fa-heart text-[#CBA65A] text-sm"></i>
-                @else
-                  <img src="{{ asset('assets/ic_wishlist1.png') }}" class="w-4 h-4" alt="Wishlist">
-                @endif
-              </div>
-              <a href="{{ route('product.details', $product->slug) }}"
-                class="w-full h-full flex items-center justify-center block p-4">
-                <!-- Dynamic Image with Fallback -->
-                @php
-                  $hMainImage = $product->image ?: ($product->images->first() ? $product->images->first()->image_path : null);
-                @endphp
-                @if($hMainImage)
-                  <img src="{{ asset('storage/' . $hMainImage) }}" alt="{{ $product->name }}"
-                    class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:scale-110">
-                @else
-                  <div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 text-xs">
-                    No Image
-                  </div>
-                @endif
-              </a>
-            </div>
-            <div class="text-center font-['Outfit'] px-1">
-              <!-- Dynamic Name -->
-              <h3
-                class="text-sm md:text-base font-medium text-[#1A1A1A] mb-1 truncate w-full hover:text-[#C34A37] transition-colors"
-                title="{{ $product->name }}">
-                <a href="{{ route('product.details', $product->slug) }}">{{ $product->name }}</a>
-              </h3>
-              <div class="flex flex-wrap items-center justify-center gap-2 text-xs md:text-sm">
-                <!-- Dynamic Price -->
-                <span class="font-bold text-[#1A1A1A] whitespace-nowrap">₹
-                  {{ number_format($product->price, 2) }}</span>
-                <!-- Dummy Original Price Logic -->
-                <span class="text-[#999999] line-through whitespace-nowrap">₹
-                  {{ number_format($product->price * 1.2, 2) }}</span>
-              </div>
-            </div>
-          </div>
-        @endforeach
-      @else
-        <!-- Fallback Static Items (Repeated for Demo) -->
-        @for ($i = 0; $i < 5; $i++)
-          <!-- <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
-          <div
-            class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
-            <span
-              class="absolute font-['Alexandria'] font-light top-2 right-0 w-[75px] h-[25px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[12px] z-10">Best
-              Seller</span>
-            <button
-              class="absolute flex bottom-3 left-2 bg-white h-[32px] w-[32px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all z-20">
-              <img src="{{ asset('assets/ic_wishlist1.png') }}" class="w-4 h-4" alt="">
-            </button>
-            <div class="w-full h-full flex items-center justify-center p-4">
-              {{-- No Fallback Image --}}
-            </div>
-          </div>
-          <div class="text-center font-['Outfit'] px-1">
-            <h3
-              class="text-sm md:text-base font-medium text-[#1A1A1A] mb-1 truncate w-full hover:text-[#C34A37] transition-colors">
-              Twist Cross Cage
-              Ring</h3>
-            <div class="flex items-center justify-center gap-2 text-xs md:text-sm">
-              <span class="font-bold text-[#1A1A1A]">₹ 949.00</span>
-              <span class="text-[#999999] line-through">₹ 949.00</span>
-            </div>
-          </div>
-          <!-- </div> -->
-        @endfor
-      @endif
+      @include('frontend.partials.home_product_slider')
     </div>
 
     </div>
@@ -994,48 +765,7 @@
               </div>
             @endforeach
           @else
-            <!-- Fallback -->
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq1.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq2.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq3.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq4.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq1.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq2.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq3.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq4.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
+            {{-- No Fallback Items --}}
           @endif
 
         </div>
@@ -1364,7 +1094,7 @@
                   <div class="flex items-center justify-start gap-4">
                     <!-- User Image -->
                     <img
-                      src="{{ $review->user && $review->user->profile_picture ? asset('storage/' . $review->user->profile_picture) : asset('assets/client1.png') }}"
+                      src="{{ $review->user && $review->user->profile_picture ? asset('storage/' . $review->user->profile_picture) : '' }}"
                       class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-[10px] object-cover"
                       alt="{{ $review->user->name ?? 'User' }}">
 
@@ -1387,36 +1117,7 @@
               </div>
             </div>
           @empty
-            <!-- Fallback -->
-            <div
-              class="border border-[#DBB358] w-[80vw] md:w-[60%] lg:w-[850px] xl:w-[1000px] 2xl:w-[1200px] min-[2000px]:w-[1400px] flex-shrink-0 snap-center bg-transparent p-6 md:p-8 lg:p-10 min-[2000px]:p-16 rounded-[20px] relative flex flex-col h-auto min-h-[300px] min-[2000px]:min-h-[405px] justify-center group transition-all duration-300 hover:shadow-md">
-              <div class="flex flex-row items-start gap-4 md:gap-8 h-full">
-                <div class="flex-shrink-0">
-                  <img src="{{ asset('assets/ReviewQuote.png') }}"
-                    class="w-12 h-12 md:w-16 md:h-16 min-[2000px]:w-24 min-[2000px]:h-24 object-contain opacity-100"
-                    alt="quote">
-                </div>
-                <div class="flex flex-col justify-center h-full w-full overflow-hidden">
-                  <p
-                    class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg min-[2000px]:text-3xl leading-relaxed mb-6 font-medium text-left break-words break-all line-clamp-4 md:line-clamp-5">
-                    "Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
-                    subtle yet elegant, making them perfect for everyday styling."
-                  </p>
-                  <div class="flex items-center justify-start gap-4">
-                    <img src="{{ asset('assets/client1.png') }}"
-                      class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-[10px] object-cover" alt="User">
-                    <div>
-                      <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-base min-[2000px]:text-2xl">
-                        Ananya R.</h4>
-                      <div class="flex gap-1 text-[#CBA65A] text-[10px] min-[2000px]:text-lg">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                          class="fas fa-star"></i><i class="fas fa-star"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {{-- No Fallback Reviews --}}
           @endforelse
         </div>
 
@@ -1481,7 +1182,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                      {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+                                  {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

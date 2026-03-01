@@ -1,5 +1,5 @@
 <header x-data="{ notificationOpen: false, profileOpen: false }" style="background-color: var(--color-header);"
-    class="flex items-center justify-between px-4 md:px-8 py-4 md:py-5 sticky top-0 z-40 mb-6 transition-all duration-300 shadow-sm border-b border-amber-100">
+    class="flex-shrink-0 flex items-center justify-between px-4 md:px-8 py-4 md:py-5 z-40 transition-all duration-300 shadow-sm border-b border-zinc-100">
 
     <div class="flex items-center relative z-10">
         <!-- Mobile Sidebar Toggle -->

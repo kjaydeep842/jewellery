@@ -82,14 +82,14 @@
 
     <!-- Top Promo Bar (Re-included here since we hide global one to control order/style if needed, or remove if identical) -->
     <!-- User's design has Ticker. Master has Ticker. If we hide .ticker-wrapper globally for this page, we hide BOTH. 
-                 We should rename this ticker wrapper or accept Master's. 
-                 User's ticker text is identical. Let's use Master's ticker? 
-                 Wait, User's HTML has ticker *above* header. Master has ticker *above* header.
-                 If I hide master header (#header-placeholder), I keep master ticker?
-                 Master Ticker is separate div .ticker-wrapper.
-                 If I hide .ticker-wrapper, I hide both.
-                 Decision: Hide Master Ticker and Header, render everything fresh here to match exact design requested.
-            -->
+                     We should rename this ticker wrapper or accept Master's. 
+                     User's ticker text is identical. Let's use Master's ticker? 
+                     Wait, User's HTML has ticker *above* header. Master has ticker *above* header.
+                     If I hide master header (#header-placeholder), I keep master ticker?
+                     Master Ticker is separate div .ticker-wrapper.
+                     If I hide .ticker-wrapper, I hide both.
+                     Decision: Hide Master Ticker and Header, render everything fresh here to match exact design requested.
+                -->
     <div class="ticker-wrapper" style="display: block !important;">
         <div class="ticker">
             <span>✦ Find a new reason to shine with our Solitaires ✦</span>
@@ -235,7 +235,7 @@
                                 products selected</span>
                         </label>
                         <!-- <button
-                                        class="text-[#7D8FAB] hover:text-red-500 text-[16px] font-medium transition-colors font-Outfit">Remove</button> -->
+                                                class="text-[#7D8FAB] hover:text-red-500 text-[16px] font-medium transition-colors font-Outfit">Remove</button> -->
                     </div>
 
                     @foreach($cartItems as $item)
@@ -264,7 +264,7 @@
                                         ? (Str::startsWith($item->product->images->first()->image_path, 'http')
                                             ? $item->product->images->first()->image_path
                                             : asset('storage/' . $item->product->images->first()->image_path))
-                                        : asset('assets/ring.png');
+                                        : '';
                                 @endphp
                                 <img src="{{ $imagePath }}" alt="{{ $item->product->name }}"
                                     class="w-[95%] h-[95%] object-contain mix-blend-multiply">

@@ -13,7 +13,7 @@
 <div id="header-placeholder">
     <header class="bg-white z-50 shadow-sm w-full transition-all duration-300">
         <div id="header-main-container"
-            class="md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto px-6 py-[30px] flex flex-wrap md:flex-nowrap justify-between items-center gap-y-4 lg:gap-0 transition-all duration-300">
+            class="md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto px-6 py-4 flex flex-wrap md:flex-nowrap justify-between items-center gap-y-4 lg:gap-0 transition-all duration-300">
             <div id="header-logo-section" class="flex items-center gap-2 order-1 md:flex-1 transition-all duration-300">
                 <button id="mobile-menu-btn" class="lg:hidden mr-1 text-gray-800 hover:text-[#B39359]">
                     <i class="fa-solid fa-bars text-xl"></i>
@@ -140,8 +140,7 @@
                                     class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -152,8 +151,7 @@
                                     class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -265,40 +263,40 @@
             class="hidden lg:flex items-center justify-center flex-wrap gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-medium tracking-normal transition-all duration-300 md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto">
             <div class="relative group">
                 <a href="{{ route('page.new-arrivals') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">New
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">New
                     Arrivals</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.best-seller') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Best
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Best
                     Seller</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.18kt') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">18KT
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">18KT
                     Jewellery</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.tattsvisfavourite') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Tattsvi's Favourite</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Tattsvi's Favourite</a>
             </div>
             {{-- <div class="relative group">
                 <a href="{{ route('page.exhibition') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Exhibition</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Exhibition</a>
             </div> --}}
             <div class="relative group">
                 <a href="{{ route('page.readytostock') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Ready To
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Ready To
                     Stock</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.contact') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">Contact
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Contact
                     Us</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.about') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">About Us</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">About Us</a>
             </div>
         </nav>
     </header>
@@ -345,6 +343,10 @@
 
                 // --- RESET LAYOUT ---
                 header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
+
+                if (logoSection) {
+                    logoSection.classList.remove('lg:ml-14');
+                }
 
                 if (headerMainContainer) {
                     headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
@@ -396,6 +398,11 @@
                             headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
                             // Ensure it doesn't take full width
                             headerMainContainer.style.width = 'auto';
+                        }
+
+                        if (logoSection) {
+                            // Move logo little bit right side as requested
+                            logoSection.classList.add('lg:ml-14');
                         }
 
                         if (mainNav) {

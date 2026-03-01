@@ -150,12 +150,15 @@ const initShutterSlider = (sliderId, dotsId, interval = 5000) => {
                     "bg-opacity-100",
                 );
             } else {
+                const activeClass = dotsContainer.dataset.active || "bg-black";
+                const inactiveClass = dotsContainer.dataset.inactive || "bg-black/10";
+
                 if (i === index) {
-                    dot.classList.add("bg-black");
-                    dot.classList.remove("bg-black/10");
+                    dot.classList.add(activeClass);
+                    dot.classList.remove(inactiveClass);
                 } else {
-                    dot.classList.add("bg-black/10");
-                    dot.classList.remove("bg-black");
+                    dot.classList.add(inactiveClass);
+                    dot.classList.remove(activeClass);
                 }
             }
         });

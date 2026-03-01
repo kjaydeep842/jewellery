@@ -33,31 +33,36 @@
         }
     </script>
     <style>
-        body {
-            font-family: 'Inter';
-            overflow-x: hidden;
-            width: 100%;
+        * {
+            box-sizing: border-box;
+            max-width: 100vw;
+        }
+
+        html, body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         html {
-            overflow-x: hidden;
-            width: 100%;
-            max-width: 100%;
-            -ms-overflow-style: none;
-            /* IE and Edge */
+            height: 100%;
             scrollbar-width: none;
             /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
         }
 
-        /* Hide scrollbar for Chrome, Safari and Opera */
+        /* Hide scrollbars globally */
         ::-webkit-scrollbar {
-            display: none;
-        }
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
         }
 
         .serif {

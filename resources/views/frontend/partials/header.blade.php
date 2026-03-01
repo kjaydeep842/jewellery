@@ -15,12 +15,12 @@
         <div id="header-main-container"
             class="md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto px-6 py-[30px] flex flex-wrap md:flex-nowrap justify-between items-center gap-y-4 lg:gap-0 transition-all duration-300">
             <div id="header-logo-section" class="flex items-center gap-2 order-1 md:flex-1 transition-all duration-300">
-                <button id="mobile-menu-btn" class="lg:hidden mr-1  text-gray-800 hover:text-[#B39359]">
+                <button id="mobile-menu-btn" class="lg:hidden mr-1 text-gray-800 hover:text-[#B39359]">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
                 <div
-                    class="w-[212px] h-[50px] min-[2000px]:w-[350px] min-[2000px]:h-auto flex items-center justify-center transition-all duration-300">
-                    <a href="{{ route('home') }}">
+                    class="w-[140px] sm:w-[180px] md:w-[212px] h-auto min-[2000px]:w-[350px] flex items-center justify-center transition-all duration-300">
+                    <a href="{{ route('home') }}" class="block w-full">
                         <img src="{{ asset('assets/logo_black.png') }}" alt="logo"
                             class="w-full h-auto transition-all duration-300">
                     </a>
@@ -29,11 +29,11 @@
             </div>
 
             <div id="header-search-section"
-                class="flex-shrink-0 w-full md:w-auto order-3 md:order-2 transition-all duration-300 ">
-                <div class="relative group w-full max-w-[445px] mx-auto flex flex-row items-center justify-between px-6 gap-[10px] h-[48px] bg-[#F2F2F3] border border-transparent focus-within:border-[#B39359]/30 rounded-[100px] transition-all duration-300"
+                class="flex-shrink-0 w-full lg:w-auto order-3 lg:order-2 transition-all duration-300">
+                <div class="relative group w-full lg:w-[445px] mx-auto flex flex-row items-center justify-between px-4 sm:px-6 gap-[10px] h-[48px] bg-[#F2F2F3] border border-transparent focus-within:border-[#B39359]/30 rounded-[100px] transition-all duration-300"
                     id="search-container">
                     <input type="text" id="search-input"
-                        class="flex-grow bg-transparent border-none outline-none text-[16px] font-Outfit text-left placeholder:text-[#A2A2A9] text-[#A2A2A9] leading-none min-[2000px]:text-xl transition-all"
+                        class="flex-grow bg-transparent border-none outline-none text-[14px] sm:text-[16px] font-Outfit text-left placeholder:text-[#A2A2A9] text-[#A2A2A9] leading-none min-[2000px]:text-xl transition-all"
                         placeholder="Search for products">
                     <button id="search-btn"
                         class="flex-shrink-0 text-gray-400 group-focus-within:text-[#B39359] transition-all duration-300">
@@ -266,7 +266,7 @@
         <!-- Navigation Bar -->
 
         <nav id="main-navigation"
-            class="hidden lg:flex items-center justify-center gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-medium tracking-normal transition-all duration-300">
+            class="hidden lg:flex items-center justify-center flex-wrap gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-medium tracking-normal transition-all duration-300 md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto">
             <div class="relative group">
                 <a href="{{ route('page.new-arrivals') }}"
                     class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-4">New
@@ -329,6 +329,37 @@
             if (logoImg) logoImg.classList.add('transition-all', 'duration-300');
             if (logoContainer) logoContainer.classList.add('transition-all', 'duration-300');
 
+            function resetHeaderState() {
+                // Return to normal unstuck state
+                if (header.classList.contains('fixed')) {
+                    header.classList.remove('fixed', 'top-0', 'left-0');
+                    header.classList.add('relative');
+                    if (placeholder) placeholder.style.height = 'auto';
+                }
+
+                // Show All
+                if (searchSection) searchSection.classList.remove('hidden');
+                if (iconsSection) iconsSection.classList.remove('hidden');
+
+                // Restore Logo
+                if (logoContainer) {
+                    logoContainer.classList.add('w-[212px]', 'h-[68px]');
+                    logoContainer.classList.remove('w-[140px]', 'h-auto');
+                }
+
+                // --- RESET LAYOUT ---
+                header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
+
+                if (headerMainContainer) {
+                    headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
+                    headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap');
+                    headerMainContainer.style.width = '';
+                }
+                if (mainNav) {
+                    mainNav.classList.add('justify-center');
+                }
+            }
+
             function updateHeader() {
                 const st = window.scrollY;
 
@@ -347,63 +378,38 @@
                     }
 
                     // ALWAYS COMPACT (Scrolling Down OR Up, as long as not at top)
-                    // Hide Search & Icons
-                    if (searchSection) searchSection.classList.add('hidden');
-                    if (iconsSection) iconsSection.classList.add('hidden');
+                    // Only compact layout on desktop screens
+                    if (window.innerWidth >= 1024) {
+                        // Hide Search & Icons
+                        if (searchSection) searchSection.classList.add('hidden');
+                        if (iconsSection) iconsSection.classList.add('hidden');
 
-                    // Shrink Logo (Targeting the container width)
-                    if (logoContainer) {
-                        logoContainer.classList.remove('w-[212px]', 'h-[68px]');
-                        logoContainer.classList.add('w-[140px]', 'h-auto');
-                    }
+                        // Shrink Logo (Targeting the container width)
+                        if (logoContainer) {
+                            logoContainer.classList.remove('w-[212px]', 'h-[68px]');
+                            logoContainer.classList.add('w-[140px]', 'h-auto');
+                        }
 
-                    // --- NEW: INLINE LAYOUT ---
-                    // Force header to be a flex row container, CENTERED
-                    header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
+                        // --- NEW: INLINE LAYOUT ---
+                        // Force header to be a flex row container, CENTERED
+                        header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
 
-                    if (headerMainContainer) {
-                        // Collapse the main container to just fit the logo
-                        headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                        headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
-                        // Ensure it doesn't take full width
-                        headerMainContainer.style.width = 'auto';
-                    }
+                        if (headerMainContainer) {
+                            // Collapse the main container to just fit the logo
+                            headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
+                            headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
+                            // Ensure it doesn't take full width
+                            headerMainContainer.style.width = 'auto';
+                        }
 
-                    if (mainNav) {
-                        // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
-                        mainNav.classList.remove('justify-center');
-                        // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
+                        if (mainNav) {
+                            // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
+                            mainNav.classList.remove('justify-center');
+                            // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
+                        }
                     }
                 } else {
-                    // AT TOP
-                    // Reset Fixed Positioning
-                    if (header.classList.contains('fixed')) {
-                        header.classList.remove('fixed', 'top-0', 'left-0');
-                        header.classList.add('relative');
-                        if (placeholder) placeholder.style.height = 'auto';
-                    }
-
-                    // Show All
-                    if (searchSection) searchSection.classList.remove('hidden');
-                    if (iconsSection) iconsSection.classList.remove('hidden');
-
-                    // Restore Logo
-                    if (logoContainer) {
-                        logoContainer.classList.add('w-[212px]', 'h-[68px]');
-                        logoContainer.classList.remove('w-[140px]', 'h-auto');
-                    }
-
-                    // --- RESET LAYOUT ---
-                    header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
-
-                    if (headerMainContainer) {
-                        headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                        headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap');
-                        headerMainContainer.style.width = '';
-                    }
-                    if (mainNav) {
-                        mainNav.classList.add('justify-center');
-                    }
+                    resetHeaderState();
                 }
 
                 lastScrollTop = st;
@@ -411,6 +417,20 @@
 
             window.addEventListener('scroll', function () {
                 updateHeader();
+            });
+
+            window.addEventListener('resize', function () {
+                if (window.innerWidth < 1024 && window.scrollY > threshold) {
+                    resetHeaderState(); // clears compact styles
+                    // immediately re-apply sticky behavior
+                    if (placeholder) placeholder.style.height = header.offsetHeight + 'px';
+                    header.classList.remove('relative');
+                    header.classList.add('fixed', 'top-0', 'left-0');
+                } else if (window.innerWidth < 1024) {
+                    resetHeaderState();
+                } else {
+                    updateHeader();
+                }
             });
         });
     </script>

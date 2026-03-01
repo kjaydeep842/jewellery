@@ -265,8 +265,8 @@
     </div>
 
     <!-- Watermark -->
-    <div class="w-full flex justify-center pointer-events-none mt-10">
-        <h1 class="text-[15vw] font-Outfit font-[900] uppercase tracking-[0.2em] leading-none select-none"
+    <div class="w-full flex justify-center pointer-events-none mt-10 overflow-hidden px-4">
+        <h1 class="text-[12vw] font-Outfit font-[900] uppercase tracking-[0.1em] leading-none select-none max-w-full truncate"
             style="background: linear-gradient(180deg, rgba(151, 102, 0, 0.07) 0%, rgba(219, 179, 88, 0.021) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">
             TATTSVI
         </h1>

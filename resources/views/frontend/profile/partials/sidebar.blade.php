@@ -1,4 +1,5 @@
-<div class="w-full lg:w-[445px] flex-shrink-0 flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
+<div x-data="{ mobileMenuOpen: false }"
+    class="w-full lg:w-[445px] flex-shrink-0 flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
     <!-- User Profile Card -->
     <a href="{{ route('profile.edit') }}"
         class="flex flex-row items-center p-4 gap-5 w-full h-[103px] bg-[rgba(219,179,88,0.1)] border border-[#EFE4CD] rounded-[10px] group transition-all hover:bg-[rgba(219,179,88,0.15)] hover:border-[#CBA65A]/30">
@@ -49,8 +50,16 @@
         </div>
     </a>
 
+    <!-- Mobile Menu Toggle Button (Visible only on mobile) -->
+    <button @click="mobileMenuOpen = !mobileMenuOpen"
+        class="lg:hidden w-full flex items-center justify-between p-4 bg-white border border-[#EFE4CD] rounded-[10px] shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-colors hover:bg-gray-50 focus:outline-none">
+        <span class="font-medium text-[#1A1A1A] font-['Outfit'] text-[15px]">Profile Navigation</span>
+        <i class="fa-solid text-[#CBA65A] text-sm transition-transform duration-300"
+            :class="mobileMenuOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+    </button>
+
     <!-- Navigation Links -->
-    <div class="flex flex-col gap-8">
+    <div class="flex-col gap-8" :class="mobileMenuOpen ? 'flex' : 'hidden lg:flex'">
         <!-- Overview -->
         <div>
             <h4 class="text-[#989898] text-[13px] font-['Outfit'] uppercase mb-4 tracking-wide font-normal">

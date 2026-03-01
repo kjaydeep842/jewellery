@@ -55,67 +55,17 @@
                         <div class="flex justify-between items-center mb-8">
                             <h2 class="font-['Outfit'] font-semibold text-[#1A1A1A] text-xl min-[2000px]:text-3xl">My Wishlist
                             </h2>
-                            <p class="text-sm text-gray-400 font-['Outfit']">Showing : {{ $wishlists->count() }} Products</p>
+                            <p class="text-[13px] text-[#A2A2A9] font-['Outfit']">Showing : {{ $wishlists->count() }} Products
+                            </p>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[1600px]:grid-cols-5 gap-3 md:gap-5"
+                            x-data="{ zoomOpen: false, zoomImages: [], zoomIndex: 0 }">
                             @foreach($wishlists as $item)
-                                <!-- Product Card -->
-                                <div
-                                    class="bg-white border border-gray-100 hover:shadow-md transition-shadow rounded-xl overflow-hidden p-3 relative group">
-                                    <div
-                                        class="w-full aspect-square flex items-center justify-center mb-3 relative rounded-lg overflow-hidden bg-[#FDFBF7]">
-                                        <!-- Remove from Wishlist -->
-                                        <form action="{{ route('wishlist.destroy', $item->id) }}" method="POST"
-                                            class="absolute top-2 right-2 z-10">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-400 hover:text-red-500 transition-colors">
-                                                <i class="fa-solid fa-xmark text-xs"></i>
-                                            </button>
-                                        </form>
-
-                                        @if($item->product->images->count() > 0)
-                                            <img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}"
-                                                alt="{{ $item->product->name }}"
-                                                class="w-full h-full object-contain mix-blend-multiply transition-opacity duration-300">
-                                        @else
-                                            <img src="{{ asset('assets/ring.png') }}" alt="{{ $item->product->name }}"
-                                                class="w-full h-full object-contain mix-blend-multiply transition-opacity duration-300">
-                                        @endif
-
-                                        <!-- Hover Action: Add to Cart -->
-                                        <div
-                                            class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform bg-white/90 backdrop-blur-sm">
-                                            <form action="{{ route('cart.store') }}" method="POST" class="w-full">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{ $item->product_id }}">
-                                                <input type="hidden" name="quantity" value="1">
-                                                <button type="submit"
-                                                    class="bg-[#CBA65A] text-white text-sm font-medium w-full h-10 rounded-full shadow-sm hover:bg-[#B39359] transition-colors font-['Outfit']">
-                                                    Add to Bag
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-1 mt-1">
-                                        <a href="{{ route('product.details', $item->product->slug) }}">
-                                            <p
-                                                class="text-sm text-gray-800 font-medium leading-tight font-['Outfit'] hover:text-[#B39359] line-clamp-2">
-                                                {{ $item->product->name }}
-                                            </p>
-                                        </a>
-                                        <p class="text-base font-bold text-[#1A1A1A] font-['Outfit']">
-                                            @if($item->product->category && $item->product->category->name == 'Diamond')
-                                                ₹{{ number_format($item->product->price * 84, 2) }}
-                                            @else
-                                                ₹{{ number_format($item->product->sale_price ?? $item->product->price, 2) }}
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
+                                @include('frontend.partials.wishlist-card', ['product' => $item->product, 'wishlist_item_id' => $item->id])
                             @endforeach
+
+                            @include('frontend.partials.zoom-modal')
                         </div>
                     </div>
                 @endif

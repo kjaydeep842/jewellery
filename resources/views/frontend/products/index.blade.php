@@ -1,584 +1,311 @@
 @extends('frontend.layouts.master')
 
 @section('content')
-<style>
-    /* Custom Scrollbar for scrolling content */
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-        border-radius: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #d1d5db; 
-        border-radius: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #9ca3af; 
-    }
-</style>
-<!-- Discover Collection Banner -->
-<section class="w-full bg-[#EFE4D6] py-8 md:py-10">
-    <div class="max-w-[1600px] mx-auto px-6 text-center">
-        <h1 class="text-3xl md:text-5xl font-['Outfit'] font-medium text-[#5C4522] mb-4">Discover our Collection</h1>
-        <p class="max-w-2xl mx-auto text-sm md:text-base text-gray-700 font-['Inter'] leading-relaxed">
-            Find a new reason to shine with our Solitaires. Explore our wide range of jewelry collections designed to make every moment special.
-        </p>
-    </div>
-</section>
+    <style>
+        /* Custom Scrollbar for scrolling content */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
 
-<!-- Main Content : All Collection -->
-<main class="w-full max-w-[1600px] mx-auto px-6 py-8 font-['Outfit'] flex flex-col gap-2.5">
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
 
-    <!-- Top Bar: Breadcrumb, Title & Sort -->
-    <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-4 self-start">
-        <div class="flex flex-col gap-1">
-            <div class="text-sm text-gray-500">
-                <a href="{{ route('home') }}" class="hover:text-amber-600 cursor-pointer">Home</a> / <span
-                    class="text-gray-800 font-medium">Discover our Collection</span>
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+    <!-- Discover Collection Banner -->
+    <section class="w-full bg-[#EFE4D6] py-8 md:py-10">
+        <div class="max-w-[1920px] mx-auto px-4 text-center">
+            <h1
+                class="w-auto mx-auto font-['Outfit'] font-medium text-[40px] md:text-[70px] leading-[1.2] md:leading-[88px] text-[#826230] mb-4 whitespace-normal lg:whitespace-nowrap">
+                Discover our Collection</h1>
+            <p class="max-w-2xl mx-auto text-sm md:text-base font-['Inter'] leading-relaxed">
+                Find a new reason to shine with our Solitaires. Explore our wide range of jewelry collections designed to
+                make every moment special.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content : All Collection -->
+    <main
+        class="w-full max-w-[1920px] min-[2000px]:max-w-[2400px] mx-auto px-3 lg:px-8 py-8 font-['Outfit'] flex flex-col gap-2.5">
+
+        <!-- Top Bar: Breadcrumb, Title & Sort -->
+        <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-4 self-start">
+            <div class="flex flex-col gap-1">
+                <div class="text-sm text-gray-500">
+                    <a href="{{ route('home') }}" class="hover:text-amber-600 cursor-pointer">Home</a> / <span
+                        class="text-gray-800 font-medium">Discover our Collection</span>
+                </div>
+                <div id="product-count-display" class="text-sm text-gray-500 mt-2">
+                    Showing : {{ $products->total() }} Products
+                </div>
             </div>
-            <div id="product-count-display" class="text-sm text-gray-500 mt-2">
-                Showing : {{ $products->total() }} Products
+
+            <!-- Sort By Dropdown -->
+            <div class="relative z-30">
+                @include('frontend.partials.sort-dropdown')
             </div>
         </div>
 
-        <!-- Sort By Dropdown -->
-        <div class="relative z-30">
-            @include('frontend.partials.sort-dropdown')
-        </div>
-    </div>
+        <!-- Layout: Sidebar + Grid -->
+        <div class="w-full flex flex-col lg:flex-row lg:items-start gap-8 mt-4 relative">
 
-    <!-- Layout: Sidebar + Grid -->
-    <div class="w-full flex flex-col lg:flex-row gap-8 mt-4 relative">
-
-        <!-- Mobile Filter Button -->
-        <div class="lg:hidden flex items-center mb-6">
-            <button id="mobile-filter-btn" class="flex items-center gap-2 border border-gray-300 rounded px-5 py-2.5 bg-white text-sm font-['Outfit'] hover:border-[#CBA65A] transition-colors shadow-sm">
-                <img src="{{ asset('assets/ic_setting.png') }}" alt="filter" class="w-4 h-4 object-contain opacity-70">
-                <span class="font-medium">Filters</span>
+            <!-- Mobile Filter Toggle (Visible < lg) -->
+            <button id="mobile-filter-btn"
+                class="lg:hidden flex items-center gap-2 mb-4 font-semibold text-[18px] text-[#878787]">
+                <img src="{{ asset('assets/ic_setting.png') }}" alt="filter" class="w-5 h-5 object-contain"> Filters
             </button>
-        </div>
+            <div id="filter-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="closeFilter()"></div>
 
-        <div id="filter-backdrop" class="fixed inset-0 bg-black/50 z-[90] hidden transition-opacity duration-300 opacity-0 lg:hidden"></div>
+            <!-- Filter Sidebar (Desktop: Static | Mobile: Off-Canvas) -->
+            @include('frontend.partials.filter-sidebar', ['route' => 'products.index'])
 
-        <aside id="filter-sidebar"
-            class="fixed inset-0 z-[100] w-full h-full bg-white transition-transform duration-300 -translate-x-full lg:sticky lg:top-28 lg:h-[calc(100vh-150px)] lg:w-[280px] lg:bg-transparent lg:block lg:shadow-none lg:translate-x-0 lg:z-auto flex-shrink-0 flex flex-col custom-scrollbar overflow-y-auto">
+            <!-- Products Grid -->
+            <div class="flex-grow h-[calc(100vh-180px)] overflow-y-auto pr-1 md:pr-4 custom-scrollbar">
 
-            <form id="filterForm" action="{{ route('products.index') }}" method="GET" class="h-full flex flex-col">
-                <!-- Mobile Header: Back Arrow, Title, Reset -->
-                <div class="flex items-center justify-between p-4 border-b border-gray-200 lg:hidden flex-shrink-0">
-                    <div class="flex items-center gap-3">
-                        <button type="button" id="close-filter-btn" class="text-gray-800 hover:text-gray-600 focus:outline-none">
-                            <i class="fa-solid fa-arrow-left text-xl"></i>
-                        </button>
-                        <span class="font-medium text-lg text-gray-800">Filters</span>
-                    </div>
-                    <a href="{{ route('products.index') }}" class="text-sm font-medium text-gray-500 hover:text-gray-800 uppercase">RESET</a>
+
+                {{-- Active Filter Tags --}}
+                @include('frontend.partials.filter-tags')
+
+                <!-- Grid Container -->
+                <div id="products-container">
+                    @include('frontend.products.partials.grid')
                 </div>
-
-                <!-- Scrollable Content Area -->
-                <div class="flex-grow overflow-y-auto p-5 lg:p-0 space-y-6 pb-24 lg:pb-0">
-                    <!-- Desktop Filter Header -->
-                    <div class="hidden lg:flex items-center justify-between mb-6 font-['Outfit']">
-                        <div class="flex items-center gap-2 font-semibold text-[18px] text-[#878787]">
-                            <img src="{{ asset('assets/ic_setting.png') }}" alt="filter" class="w-5 h-5 text-[#878787] object-contain">
-                            Filters
-                        </div>
-                        <button type="button" id="clear-filters-top" class="hidden text-sm font-semibold text-[#826230] hover:text-[#5C4522] underline cursor-pointer">Clear</button>
-                    </div>
-
-                    <!-- Preserve Search -->
-                    @if(request('search'))
-                        <input type="hidden" name="search" value="{{ request('search') }}">
-                    @endif
-                    <!-- Preserve Sort -->
-                    <input type="hidden" name="sort" id="hidden-sort" value="{{ request('sort', 'newest') }}">
-
-                    <!-- Filter Item: Category -->
-                    @if($categories->count() > 0)
-                    <div class="pb-4 filter-container">
-                        <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                            <span class="font-semibold text-[#1A1A1A] text-[16px] font-['Outfit']">Category</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-[#CBA65A] transition-transform duration-200 accordion-icon"></i>
-                        </div>
-                        <div class="mt-3 space-y-2 filter-content {{ is_array(request('category')) && count(request('category')) > 0 ? '' : 'hidden' }}">
-                            @foreach($categories as $category)
-                            <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" name="category[]" value="{{ $category->name }}"
-                                    {{ is_array(request('category')) && in_array($category->name, request('category')) ? 'checked' : '' }}
-                                    class="filter-checkbox w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A]">
-                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $category->name }}</span>
-                            </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Filter Item: Gender -->
-                    @if($genders->count() > 0)
-                    <div class="pb-4 filter-container">
-                        <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                            <span class="font-semibold text-[#1A1A1A] text-[16px] font-['Outfit']">Gender</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-[#CBA65A] transition-transform duration-200 accordion-icon"></i>
-                        </div>
-                        <div class="mt-3 space-y-2 filter-content hidden">
-                            @foreach($genders as $gender)
-                            <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" name="gender[]" value="{{ $gender }}"
-                                    {{ is_array(request('gender')) && in_array($gender, request('gender')) ? 'checked' : '' }}
-                                    class="filter-checkbox w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A]">
-                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $gender }}</span>
-                            </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Filter Item: Metal Color -->
-                    @if($metalColors->count() > 0)
-                    <div class="pb-4 filter-container">
-                        <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                            <span class="font-semibold text-[#1A1A1A] text-[16px] font-['Outfit']">Metal Color</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-[#CBA65A] transition-transform duration-200 accordion-icon"></i>
-                        </div>
-                        <div class="mt-3 space-y-2 filter-content hidden">
-                            @foreach($metalColors as $color)
-                            <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" name="metal_color[]" value="{{ $color }}"
-                                    {{ is_array(request('metal_color')) && in_array($color, request('metal_color')) ? 'checked' : '' }}
-                                    class="filter-checkbox w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A]">
-                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $color }}</span>
-                            </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Filter Item: Metal Purity -->
-                    @if($metalPurities->count() > 0)
-                    <div class="pb-4 filter-container">
-                        <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                            <span class="font-semibold text-[#1A1A1A] text-[16px] font-['Outfit']">Metal Purity</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-[#CBA65A] transition-transform duration-200 accordion-icon"></i>
-                        </div>
-                        <div class="mt-3 space-y-2 filter-content hidden">
-                            @foreach($metalPurities as $purity)
-                            <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" name="metal_purity[]" value="{{ $purity }}"
-                                    {{ is_array(request('metal_purity')) && in_array($purity, request('metal_purity')) ? 'checked' : '' }}
-                                    class="filter-checkbox w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A]">
-                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $purity }}</span>
-                            </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Filter Item: Diamond Shape -->
-                    @if($shapes->count() > 0)
-                    <div class="pb-4 filter-container">
-                        <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                            <span class="font-semibold text-[#1A1A1A] text-[16px] font-['Outfit']">Diamond Shape</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-[#CBA65A] transition-transform duration-200 accordion-icon"></i>
-                        </div>
-                        <div class="mt-3 space-y-2 filter-content hidden">
-                            @foreach($shapes as $index => $shape)
-                            <label class="flex items-center gap-2 cursor-pointer group {{ $index >= 5 ? 'hidden extra-shape' : '' }}">
-                                <input type="checkbox" name="diamond_shape[]" value="{{ $shape }}"
-                                    {{ is_array(request('diamond_shape')) && in_array($shape, request('diamond_shape')) ? 'checked' : '' }}
-                                    class="filter-checkbox w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A]">
-                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $shape }}</span>
-                            </label>
-                            @endforeach
-                            
-                            @if($shapes->count() > 5)
-                            <button type="button" class="text-xs text-[#CBA65A] hover:underline mt-2 ml-7 view-more-shapes">
-                                + View More
-                            </button>
-                            @endif
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Filter Item: Size -->
-                    @if(count($sizes) > 0)
-                    <div class="pb-4 filter-container">
-                        <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                            <span class="font-semibold text-[#1A1A1A] text-[16px] font-['Outfit']">Size</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-[#CBA65A] transition-transform duration-200 accordion-icon"></i>
-                        </div>
-                        <div class="mt-3 filter-content hidden">
-                            <div class="grid grid-cols-4 gap-2">
-                                @foreach($sizes as $size)
-                                <label class="relative flex items-center justify-center">
-                                    <input type="checkbox" name="size[]" value="{{ $size }}"
-                                        {{ is_array(request('size')) && in_array($size, request('size')) ? 'checked' : '' }}
-                                        class="filter-checkbox sr-only peer">
-                                    <span class="w-full text-center py-2 text-xs border border-gray-200 rounded-md cursor-pointer hover:border-[#CBA65A] peer-checked:bg-[#CBA65A] peer-checked:text-white peer-checked:border-[#CBA65A] transition-all select-none font-['Outfit']">{{ $size }}</span>
-                                </label>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Filter Item: Weight Range -->
-                    @if(count($weightRanges) > 0)
-                    <div class="pb-4 filter-container">
-                        <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                            <span class="font-semibold text-[#1A1A1A] text-[16px] font-['Outfit']">Weight Ranges</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-[#CBA65A] transition-transform duration-200 accordion-icon"></i>
-                        </div>
-                        <div class="mt-3 space-y-2 filter-content hidden">
-                            @foreach($weightRanges as $value => $label)
-                            <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" name="weight[]" value="{{ $value }}"
-                                    {{ is_array(request('weight')) && in_array($value, request('weight')) ? 'checked' : '' }}
-                                    class="filter-checkbox w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A]">
-                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $label }}</span>
-                            </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Filter Item: Price -->
-                    <div class="pb-4 filter-container">
-                        <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                            <span class="font-semibold text-[#1A1A1A] text-[16px] font-['Outfit']">Price Range</span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-[#CBA65A] transition-transform duration-200 accordion-icon"></i>
-                        </div>
-                        <div class="mt-3 space-y-2 filter-content hidden">
-                            <!-- Price Checkboxes -->
-                            @php
-                                $priceRanges = [
-                                    '₹ 0 - ₹ 10,000',
-                                    '₹ 10,000 - ₹ 20,000',
-                                    '₹ 20,000 - ₹ 30,000',
-                                    '₹ 30,000 - ₹ 40,000',
-                                    '₹ 40,000 - ₹ 50,000',
-                                    '₹ 50,000 - ₹ 100,000'
-                                ];
-                            @endphp
-                            @foreach($priceRanges as $range)
-                            <label class="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" name="price[]" value="{{ $range }}"
-                                    {{ is_array(request('price')) && in_array($range, request('price')) ? 'checked' : '' }}
-                                    class="filter-checkbox w-5 h-5 border-gray-300 rounded text-[#CBA65A] focus:ring-[#CBA65A] cursor-pointer accent-[#CBA65A] price-checkbox">
-                                <span class="text-sm text-gray-600 group-hover:text-[#CBA65A] transition-colors font-['Outfit']">{{ $range }}</span>
-                            </label>
-                            @endforeach
-
-                            <!-- Custom Price Slider -->
-                            <div class="px-2 mt-4">
-                                <label class="text-sm font-semibold text-gray-800 mb-2 block font-['Outfit']">Custom Price</label>
-                                <div class="price-slider-container w-full pt-4 pb-2">
-                                    <div class="relative w-full h-1 bg-gray-200 rounded-full">
-                                        <div id="price-track" class="absolute h-full bg-[#CBA65A] rounded-full"></div>
-                                        <input type="range" id="min-price-input" min="0" max="100000" value="{{ request('min_price', 0) }}" step="1000"
-                                            class="absolute w-full h-1 bg-transparent appearance-none pointer-events-none z-20 cursor-pointer [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[1.5px] [&::-webkit-slider-thumb]:border-[#CBA65A] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-md">
-                                        <input type="range" id="max-price-input" min="0" max="100000" value="{{ request('max_price', 100000) }}" step="1000"
-                                            class="absolute w-full h-1 bg-transparent appearance-none pointer-events-none z-20 cursor-pointer [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[1.5px] [&::-webkit-slider-thumb]:border-[#CBA65A] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-md">
-                                    </div>
-                                    <div class="flex justify-between items-center mt-4">
-                                        <span id="min-price-display" class="font-medium text-sm text-gray-700 font-['Outfit']">₹ 0</span>
-                                        <span id="max-price-display" class="font-medium text-sm text-gray-700 font-['Outfit']">₹ 100,000+</span>
-                                    </div>
-                                    <input type="hidden" name="min_price" id="hidden-min-price" value="{{ request('min_price', 0) }}">
-                                    <input type="hidden" name="max_price" id="hidden-max-price" value="{{ request('max_price', 100000) }}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Desktop Footer: Clear Filters Button -->
-                <div class="hidden lg:block sticky bottom-0 bg-white pt-4 pb-4 border-t border-gray-100 w-full mt-8">
-                    <button type="button" id="clear-filters-bottom" class="hidden w-full border border-[#826230] text-[#826230] font-medium py-2 rounded-md hover:bg-[#826230] hover:text-white transition-colors cursor-pointer font-['Outfit']">
-                        Clear Filters
-                    </button>
-                </div>
-
-                <!-- Mobile Footer: Apply Button -->
-                <div class="lg:hidden fixed bottom-0 left-0 w-full p-4 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-10 flex-shrink-0">
-                    <button type="button" id="apply-filter-btn" class="w-full bg-[#E35442] hover:bg-[#d04532] text-white font-medium py-3 rounded uppercase tracking-wide transition-colors font-['Outfit']">
-                        APPLY
-                    </button>
-                </div>
-            </form>
-        </aside>
-
-        <!-- Products Grid -->
-        <div class="flex-grow h-[calc(100vh-180px)] overflow-y-auto pr-1 md:pr-4 custom-scrollbar">
-
-
-            {{-- Active Filter Tags --}}
-            @include('frontend.partials.filter-tags')
-
-            <!-- Grid Container -->
-            <div id="products-container">
-                @include('frontend.products.partials.grid')
             </div>
+
         </div>
-
-    </div>
-</main>
+    </main>
 
 
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const filterForm = document.getElementById('filterForm');
-    const productsContainer = document.getElementById('products-container');
-    const loader = document.getElementById('page-loader');
-    
-    // Sort Elements
-    const sortButton = document.getElementById('sort-button');
-    const sortMenu = document.getElementById('sort-menu');
-    const selectedSortText = document.getElementById('selected-sort');
-    const sortIcon = document.getElementById('sort-icon');
-    const hiddenSort = document.getElementById('hidden-sort');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterForm = document.getElementById('filterForm');
+            const productsContainer = document.getElementById('products-container');
+            const loader = document.getElementById('page-loader');
 
-    // Mobile Sidebar Elements
-    const mobileFilterBtn = document.getElementById('mobile-filter-btn');
-    const closeFilterBtn = document.getElementById('close-filter-btn');
-    const filterSidebar = document.getElementById('filter-sidebar');
-    const filterBackdrop = document.getElementById('filter-backdrop');
-    const applyFilterBtn = document.getElementById('apply-filter-btn');
+            // Sort Elements
+            const sortButton = document.getElementById('sort-button');
+            const sortMenu = document.getElementById('sort-menu');
+            const selectedSortText = document.getElementById('selected-sort');
+            const sortIcon = document.getElementById('sort-icon');
+            const hiddenSort = document.getElementById('hidden-sort');
 
-    window.updateProducts = function() {
-        if (loader) loader.classList.remove('hidden');
-        const formData = $(filterForm).serialize();
+            window.updateProducts = function () {
+                if (loader) loader.classList.remove('hidden');
+                const formData = $(filterForm).serialize();
 
-        $.ajax({
-            url: "{{ route('products.index') }}",
-            type: 'GET',
-            data: formData,
-            success: function(html) {
-                $(productsContainer).html(html);
+                $.ajax({
+                    url: "{{ route('products.index') }}",
+                    type: 'GET',
+                    data: formData,
+                    success: function (html) {
+                        $(productsContainer).html(html);
 
-                // Update product count dynamically
-                const newTotal = $('#product-count-data').attr('data-total');
-                if (newTotal !== undefined) {
-                    $('#product-count-display').text('Showing : ' + newTotal + ' Products');
+                        // Update product count dynamically
+                        const newTotal = $('#product-count-data').attr('data-total');
+                        if (newTotal !== undefined) {
+                            $('#product-count-display').text('Showing : ' + newTotal + ' Products');
+                        }
+
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        if (loader) loader.classList.add('hidden');
+                    },
+                    error: function (xhr) {
+                        console.error('Error:', xhr);
+                        if (loader) loader.classList.add('hidden');
+                    }
+                });
+            };
+
+            // Sort Selection (Using Partial Classes and jQuery for consistency)
+            const $sortButton = $('.sort-button');
+            const $sortMenu = $('.sort-menu');
+
+            $(document).on('click', '.sort-button', function (e) {
+                e.stopPropagation();
+                $sortMenu.toggleClass('hidden');
+            });
+
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.sort-dropdown-container').length) {
+                    $sortMenu.addClass('hidden');
+                }
+            });
+
+            $(document).on('click', '.sort-item', function (e) {
+                e.preventDefault();
+                const sortValue = $(this).data('sort');
+                const sortText = $(this).text();
+
+                // Update UI
+                $('.selected-sort-text').text(sortText);
+                $sortMenu.addClass('hidden');
+
+                // Update Form Input
+                if (hiddenSort) hiddenSort.value = sortValue;
+
+                // Trigger Update
+                updateProducts();
+            });
+
+            // Accordion Logic
+            document.querySelectorAll('.filter-accordion-header').forEach(header => {
+                header.addEventListener('click', function () {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.accordion-icon');
+                    if (content) content.classList.toggle('hidden');
+                    if (icon) icon.classList.toggle('rotate-180');
+                });
+            });
+
+            // === Clear Filters Logic ===
+            window.toggleClearButton = function () {
+                let hasFilters = false;
+                if ($('#filterForm input[type="checkbox"]:checked').length > 0) {
+                    hasFilters = true;
+                }
+                const hiddenMin = document.getElementById('hidden-min-price');
+                const hiddenMax = document.getElementById('hidden-max-price');
+                if ((hiddenMin && hiddenMin.value != 0) || (hiddenMax && hiddenMax.value != 100000)) {
+                    hasFilters = true;
                 }
 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                if (loader) loader.classList.add('hidden');
-            },
-            error: function(xhr) {
-                console.error('Error:', xhr);
-                if (loader) loader.classList.add('hidden');
-            }
-        });
-    }
+                if (hasFilters) {
+                    $('.clear-filters-btn').removeClass('hidden');
+                } else {
+                    $('.clear-filters-btn').addClass('hidden');
+                }
+            };
 
-    // Toggle Mobile Sidebar
-    function toggleSidebar(show) {
-        if (!filterSidebar || !filterBackdrop) return;
-        if (show) {
-            filterSidebar.classList.remove('-translate-x-full');
-            filterBackdrop.classList.remove('hidden');
-            setTimeout(() => filterBackdrop.classList.remove('opacity-0'), 10);
-            document.body.style.overflow = 'hidden';
-        } else {
-            filterSidebar.classList.add('-translate-x-full');
-            filterBackdrop.classList.add('opacity-0');
-            setTimeout(() => {
-                filterBackdrop.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-    }
+            $(document).on('click', '.clear-filters-btn', function () {
+                $('#filterForm input[type="checkbox"]').prop('checked', false);
 
-    if (mobileFilterBtn) mobileFilterBtn.addEventListener('click', () => toggleSidebar(true));
-    if (closeFilterBtn) closeFilterBtn.addEventListener('click', () => toggleSidebar(false));
-    if (filterBackdrop) filterBackdrop.addEventListener('click', () => toggleSidebar(false));
-    if (applyFilterBtn) {
-        applyFilterBtn.addEventListener('click', () => {
-            toggleSidebar(false);
-            updateProducts();
-        });
-    }
+                // Reset price sliders
+                $('#min-price-input').val(0);
+                $('#max-price-input').val(100000);
+                $('#hidden-min-price').val(0);
+                $('#hidden-max-price').val(100000);
 
-    // Sort Selection (Using Partial Classes and jQuery for consistency)
-    const $sortButton = $('.sort-button');
-    const $sortMenu = $('.sort-menu');
+                // Reset visual track and display for slider
+                if (typeof updatePriceSlider === 'function') {
+                    updatePriceSlider();
+                }
 
-    $(document).on('click', '.sort-button', function (e) {
-        e.stopPropagation();
-        $sortMenu.toggleClass('hidden');
-    });
+                window.toggleClearButton();
+                window.updateProducts();
+            });
 
-    $(document).on('click', function (e) {
-        if (!$(e.target).closest('.sort-dropdown-container').length) {
-            $sortMenu.addClass('hidden');
-        }
-    });
+            // run once on load
+            window.toggleClearButton();
 
-    $(document).on('click', '.sort-item', function (e) {
-        e.preventDefault();
-        const sortValue = $(this).data('sort');
-        const sortText = $(this).text();
+            // Checkbox Changes
+            $('#filterForm').on('change', 'input[type="checkbox"]', function (e) {
+                window.toggleClearButton();
+                // Ensure desktop automatically triggers Ajax update on checkbox toggle
+                if (window.innerWidth >= 1024) {
+                    window.updateProducts();
+                }
+            });
 
-        // Update UI
-        $('.selected-sort-text').text(sortText);
-        $sortMenu.addClass('hidden');
+            // Price Slider Logic
+            const minPriceInput = document.getElementById('min-price-input');
+            const maxPriceInput = document.getElementById('max-price-input');
+            const minPriceDisplay = document.getElementById('min-price-display');
+            const maxPriceDisplay = document.getElementById('max-price-display');
+            const priceTrack = document.getElementById('price-track');
+            const hiddenMinPrice = document.getElementById('hidden-min-price');
+            const hiddenMaxPrice = document.getElementById('hidden-max-price');
 
-        // Update Form Input
-        if (hiddenSort) hiddenSort.value = sortValue;
+            if (minPriceInput && maxPriceInput) {
+                window.updatePriceSlider = function () {
+                    let minVal = parseInt(minPriceInput.value) || 0;
+                    let maxVal = parseInt(maxPriceInput.value) || 100000;
+                    const maxPrice = 100000;
 
-        // Trigger Update
-        updateProducts();
-    });
-
-    // Accordion Logic
-    document.querySelectorAll('.filter-accordion-header').forEach(header => {
-        header.addEventListener('click', function() {
-            const content = this.nextElementSibling;
-            const icon = this.querySelector('.accordion-icon');
-            if (content) content.classList.toggle('hidden');
-            if (icon) icon.classList.toggle('rotate-180');
-        });
-    });
-
-    // === Clear Filters Logic ===
-    const clearTop = document.getElementById('clear-filters-top');
-    const clearBottom = document.getElementById('clear-filters-bottom');
-
-    function hasActiveFilters() {
-        const checked = filterForm.querySelectorAll('.filter-checkbox:checked');
-        const minPrice = parseInt(document.getElementById('hidden-min-price')?.value ?? 0);
-        const maxPrice = parseInt(document.getElementById('hidden-max-price')?.value ?? 100000);
-        return checked.length > 0 || minPrice > 0 || maxPrice < 100000;
-    }
-
-    function updateClearVisibility() {
-        const show = hasActiveFilters();
-        if (clearTop)    clearTop.classList.toggle('hidden', !show);
-        if (clearBottom) clearBottom.classList.toggle('hidden', !show);
-    }
-
-    function clearAllFilters() {
-        filterForm.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
-        const minInput = document.getElementById('min-price-input');
-        const maxInput = document.getElementById('max-price-input');
-        if (minInput) { minInput.value = 0; minInput.dispatchEvent(new Event('input')); }
-        if (maxInput) { maxInput.value = 100000; maxInput.dispatchEvent(new Event('input')); }
-        const hiddenMin = document.getElementById('hidden-min-price');
-        const hiddenMax = document.getElementById('hidden-max-price');
-        if (hiddenMin) hiddenMin.value = 0;
-        if (hiddenMax) hiddenMax.value = 100000;
-        updateClearVisibility();
-        if (window.rebuildFilterTags) window.rebuildFilterTags();
-        updateProducts();
-    }
-
-    if (clearTop)    clearTop.addEventListener('click', clearAllFilters);
-    if (clearBottom) clearBottom.addEventListener('click', clearAllFilters);
-
-    // run once on load
-    updateClearVisibility();
-
-    // Checkbox Changes
-    filterForm.addEventListener('change', function(e) {
-        if (e.target.classList.contains('filter-checkbox')) {
-            updateClearVisibility();
-            if (window.innerWidth >= 1024) {
-                updateProducts();
-            }
-        }
-    });
-
-    // Price Slider Logic
-    const minPriceInput = document.getElementById('min-price-input');
-    const maxPriceInput = document.getElementById('max-price-input');
-    const minPriceDisplay = document.getElementById('min-price-display');
-    const maxPriceDisplay = document.getElementById('max-price-display');
-    const priceTrack = document.getElementById('price-track');
-    const hiddenMinPrice = document.getElementById('hidden-min-price');
-    const hiddenMaxPrice = document.getElementById('hidden-max-price');
-
-    if (minPriceInput && maxPriceInput) {
-        function updatePriceSlider() {
-            const min = parseInt(minPriceInput.value);
-            const max = parseInt(maxPriceInput.value);
-            const range = maxPriceInput.max - maxPriceInput.min;
-            
-            if (min > max - 1000) {
-                minPriceInput.value = max - 1000;
-            }
-
-            const percent1 = ((minPriceInput.value - minPriceInput.min) / range) * 100;
-            const percent2 = ((maxPriceInput.value - maxPriceInput.min) / range) * 100;
-
-            priceTrack.style.left = percent1 + '%';
-            priceTrack.style.width = (percent2 - percent1) + '%';
-
-            minPriceDisplay.textContent = '₹ ' + parseInt(minPriceInput.value).toLocaleString();
-            maxPriceDisplay.textContent = '₹ ' + parseInt(maxPriceInput.value).toLocaleString() + (maxPriceInput.value == maxPriceInput.max ? '+' : '');
-
-            hiddenMinPrice.value = minPriceInput.value;
-            hiddenMaxPrice.value = maxPriceInput.value;
-        }
-
-        updatePriceSlider();
-        minPriceInput.addEventListener('input', updatePriceSlider);
-        maxPriceInput.addEventListener('input', updatePriceSlider);
-
-        const triggerFilter = () => {
-             document.querySelectorAll('.price-checkbox').forEach(cb => cb.checked = false);
-             updateClearVisibility();
-             if (window.innerWidth >= 1024) {
-                 updateProducts();
-             }
-        };
-
-        minPriceInput.addEventListener('change', triggerFilter);
-        maxPriceInput.addEventListener('change', triggerFilter);
-    }
-
-    // Pagination AJAX
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.pagination a')) {
-            e.preventDefault();
-            const url = e.target.closest('a').href;
-            if (loader) loader.classList.remove('hidden');
-            
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function(html) {
-                    $(productsContainer).html(html);
-
-                    // Update product count dynamically
-                    const newTotal = $('#product-count-data').attr('data-total');
-                    if (newTotal !== undefined) {
-                        $('#product-count-display').text('Showing : ' + newTotal + ' Products');
+                    if (minVal > maxVal) {
+                        const tmp = minVal;
+                        minVal = maxVal;
+                        maxVal = tmp;
                     }
 
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    if (loader) loader.classList.add('hidden');
+                    const minPercent = (minVal / maxPrice) * 100;
+                    const maxPercent = (maxVal / maxPrice) * 100;
+
+                    priceTrack.style.left = minPercent + '%';
+                    priceTrack.style.width = (maxPercent - minPercent) + '%';
+
+                    minPriceDisplay.textContent = '₹ ' + minVal.toLocaleString();
+                    maxPriceDisplay.textContent = '₹ ' + maxVal.toLocaleString() + (maxVal >= maxPrice ? '+' : '');
+
+                    hiddenMinPrice.value = minVal;
+                    hiddenMaxPrice.value = maxVal;
+                };
+
+                window.updatePriceSlider();
+                minPriceInput.addEventListener('input', window.updatePriceSlider);
+                maxPriceInput.addEventListener('input', window.updatePriceSlider);
+
+                const triggerFilter = () => {
+                    window.toggleClearButton();
+                    if (window.innerWidth >= 1024) {
+                        window.updateProducts();
+                    }
+                };
+
+                minPriceInput.addEventListener('change', triggerFilter);
+                maxPriceInput.addEventListener('change', triggerFilter);
+            }
+
+            // Pagination AJAX
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.pagination a')) {
+                    e.preventDefault();
+                    const url = e.target.closest('a').href;
+                    if (loader) loader.classList.remove('hidden');
+
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        success: function (html) {
+                            $(productsContainer).html(html);
+
+                            // Update product count dynamically
+                            const newTotal = $('#product-count-data').attr('data-total');
+                            if (newTotal !== undefined) {
+                                $('#product-count-display').text('Showing : ' + newTotal + ' Products');
+                            }
+
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            if (loader) loader.classList.add('hidden');
+                        }
+                    });
                 }
             });
-        }
-    });
 
-    // View More Shapes Toggle
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('view-more-shapes')) {
-            const btn = e.target;
-            const container = btn.closest('.filter-content');
-            const extraShapes = container.querySelectorAll('.extra-shape');
-            
-            extraShapes.forEach(shape => {
-                shape.classList.toggle('hidden');
+            // View More Shapes Toggle
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('view-more-shapes')) {
+                    const btn = e.target;
+                    const container = btn.closest('.filter-content');
+                    const extraShapes = container.querySelectorAll('.extra-shape');
+
+                    extraShapes.forEach(shape => {
+                        shape.classList.toggle('hidden');
+                    });
+
+                    btn.textContent = btn.textContent.trim() === '+ View More' ? '- View Less' : '+ View More';
+                }
             });
-
-            btn.textContent = btn.textContent.trim() === '+ View More' ? '- View Less' : '+ View More';
-        }
-    });
-});
-</script>
+        });
+    </script>
 @endsection

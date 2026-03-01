@@ -168,7 +168,7 @@
     </div>
   </section>
 
-  <section class="bg-white pt-0 pb-4 md:pt-0 md:pb-8 px-6">
+  <section class="bg-transparent pt-0 pb-4 md:pt-0 md:pb-8 px-6">
     <div class="max-w-[1600px] min-[2000px]:max-w-full mx-auto">
 
       <div class="flex items-center justify-center mb-4 md:mb-6 gap-2 md:gap-4">
@@ -190,7 +190,7 @@
       </form>
       <!-- All shape -->
       <div id="diamond-shapes-container"
-        class="flex overflow-x-auto snap-x snap-mandatory gap-2 items-center md:gap-4 no-scrollbar pb-4">
+        class="flex overflow-x-auto snap-x snap-mandatory gap-[10px] justify-between items-center no-scrollbar pb-4 w-full max-w-[1920px] mx-auto px-4 lg:px-[273px]">
         @if(isset($shapes) && $shapes->count() > 0)
           @foreach($shapes as $shape)
             <div
@@ -503,11 +503,12 @@
   </section>
 
   <!--Banner Section Group (Figma Frame 2147239050: 1920x2213) -->
-  <div id="home-middle-banner-group" class="max-w-[1920px] mx-auto overflow-hidden bg-white"
+  <div id="home-middle-banner-group" class="mx-auto overflow-hidden bg-transparent"
     style="opacity: 1; transform: rotate(0deg); width: 100%;">
     <section>
       <!-- Middle Banner Slider -->
-      <div class="relative w-full aspect-[21/9] md:aspect-[16/9] lg:aspect-[1920/1100] mx-auto overflow-hidden">
+      <div
+        class="relative w-full aspect-[4/3] md:aspect-[21/9] lg:aspect-[1920/800] 2xl:aspect-[1920/800] mx-auto overflow-hidden">
         <div id="slides1" class="grid w-full h-full overflow-hidden absolute inset-0">
           @if(isset($middleBanners) && $middleBanners->count() > 0)
             @foreach($middleBanners as $index => $banner)
@@ -539,21 +540,22 @@
         </div>
 
         <!-- Dots navigation -->
-        <div id="dots1" class="absolute bottom-4 right-6 md:right-[60px] lg:right-[100px] flex gap-[5px] w-[135px] z-40">
+        <div id="dots1" data-active="bg-white" data-inactive="bg-white/50"
+          class="absolute bottom-6 md:bottom-[30px] left-1/2 -translate-x-1/2 flex gap-[5px] w-auto justify-center z-40">
           @if(isset($middleBanners) && $middleBanners->count() > 0)
             @foreach($middleBanners as $index => $banner)
               <button
-                class="h-[4px] flex-1 rounded-[2px] {{ $index == 0 ? 'bg-black' : 'bg-black/10' }} hover:bg-black/30 transition-all duration-300"
+                class="w-[30px] h-[4px] rounded-[2px] {{ $index == 0 ? 'bg-white' : 'bg-white/50' }} hover:bg-white/80 transition-all duration-300"
                 onclick="goToSlide1({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
             @endforeach
           @else
-            <button class="h-[4px] flex-1 rounded-[2px] bg-black hover:bg-black/30 transition-all duration-300"
+            <button class="w-[30px] h-[4px] rounded-[2px] bg-white hover:bg-white/80 transition-all duration-300"
               aria-label="Slide 1"></button>
-            <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
+            <button class="w-[30px] h-[4px] rounded-[2px] bg-white/50 hover:bg-white/80 transition-all duration-300"
               aria-label="Slide 2"></button>
-            <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
+            <button class="w-[30px] h-[4px] rounded-[2px] bg-white/50 hover:bg-white/80 transition-all duration-300"
               aria-label="Slide 3"></button>
-            <button class="h-[4px] flex-1 rounded-[2px] bg-black/10 hover:bg-black/30 transition-all duration-300"
+            <button class="w-[30px] h-[4px] rounded-[2px] bg-white/50 hover:bg-white/80 transition-all duration-300"
               aria-label="Slide 4"></button>
           @endif
         </div>
@@ -572,20 +574,20 @@
     </div>
 
     <!--Category Section-->
-    <section class="relative bg-white overflow-hidden">
+    <section class="relative bg-transparent overflow-hidden">
       <!-- Background Color Block -->
       <div class="absolute bottom-0 left-0 w-full h-[25%] bg-[#F3E5E5] pointer-events-none z-0"></div>
       <div class="absolute bottom-0 left-0 w-full h-[30%] bg-[#F3E5E5]"></div>
       <div class="relative z-10 max-w-[1920px] mx-auto px-6 lg:px-20">
-        <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 md:gap-8 lg:gap-0">
+        <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 md:gap-8 lg:gap-10">
           <!-- Text Content -->
           <div
-            class="relative w-full md:w-1/2 lg:w-[50%] flex flex-col items-center md:items-start lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-8 order-0 px-4 md:px-0">
+            class="relative w-full md:w-1/2 lg:w-[45%] flex flex-col items-center md:items-start lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-8 order-0 px-4 md:px-0">
 
             <!-- Heading Group -->
             <div class="flex items-center justify-center md:justify-start lg:justify-start gap-4 w-full">
               <!-- Decorative Line (Responsive) -->
-              <div class="flex-none hidden sm:flex items-center w-[100px] md:w-[140px] lg:w-[280px]">
+              <div class="flex-none hidden sm:flex items-center w-[100px] md:w-[140px] lg:w-[200px]">
                 <img src="assets/Design_new.png" alt="" class="w-full h-auto object-contain">
               </div>
 
@@ -601,7 +603,7 @@
             </div>
 
             <!-- Description -->
-            <div class="pl-0 md:pl-0 lg:pl-[310px] w-full text-center md:text-left mt-2 lg:mt-0">
+            <div class="pl-0 md:pl-0 lg:pl-[216px] w-full text-center md:text-left mt-2 lg:mt-0 xl:pl-[216px]">
               <p id="catDescription" style="font-family: 'Outfit'"
                 class="font-normal text-base md:text-[18px] min-[2000px]:text-2xl leading-relaxed md:leading-[35px] text-[#3D3D42] max-w-lg md:max-w-xl mx-auto md:mx-0 lg:mx-0">
                 Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
@@ -613,7 +615,7 @@
           <!-- Slider Image -->
           <div
             class="relative w-full md:w-1/2 lg:w-[50%] h-auto lg:h-[600px] flex flex-col justify-start items-center lg:items-center pt-10 lg:pt-0 px-0 lg:pl-[20px] gap-[1px] grow flex-none order-1">
-            <div class="relative group md:-translate-x-12 lg:-translate-x-20">
+            <div class="relative group">
 
               <button onclick="changeSlide('prev')"
                 class="absolute -left-6 md:-left-8 lg:-left-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
@@ -651,7 +653,7 @@
   <!-- Product Images Section with Gradient -->
   <section class="w-full pb-12 pt-0" style="background: linear-gradient(180deg, #F3E5E5 0%, #FDFBF7 100%);">
     <div id="productsliderGrid"
-      class="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-4 md:px-[60px] lg:px-[100px] snap-x snap-mandatory pb-8">
+      class="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-4 md:px-[60px] lg:px-[100px] snap-x snap-mandatory pb-8 pt-">
       @if(isset($products) && $products->count() > 0)
         @foreach($products as $product)
           <!-- Dynamic Product Item -->
@@ -674,13 +676,17 @@
               <a href="{{ route('product.details', $product->slug) }}"
                 class="w-full h-full flex items-center justify-center block p-4">
                 <!-- Dynamic Image with Fallback -->
-                <img
-                  src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->image_path) : asset('assets/ring.png') }}"
-                  alt="{{ $product->name }}"
-                  class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-                <img
-                  src="{{ $product->images->skip(1)->first() ? asset('storage/' . $product->images->skip(1)->first()->image_path) : asset('assets/hover_image_p.png') }}"
-                  class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                @php
+                  $hMainImage = $product->image ?: ($product->images->first() ? $product->images->first()->image_path : null);
+                @endphp
+                @if($hMainImage)
+                  <img src="{{ asset('storage/' . $hMainImage) }}" alt="{{ $product->name }}"
+                    class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:scale-110">
+                @else
+                  <div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 text-xs">
+                    No Image
+                  </div>
+                @endif
               </a>
             </div>
             <div class="text-center font-['Outfit'] px-1">
@@ -705,7 +711,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -935,7 +941,7 @@
 
 
   <!-- Unique Style Section -->
-  <section class="bg-white pt-4 pb-8 md:pt-8 md:pb-0 overflow-hidden relative w-full max-w-[100vw] z-20">
+  <section class="bg-transparent pt-4 pb-8 md:pt-8 md:pb-0 overflow-hidden relative w-full max-w-[100vw] z-20">
     <!-- Title -->
     <div class="text-center mb-0 relative z-30">
       <div class="flex items-center justify-center gap-1 md:gap-4 mb-2">
@@ -1077,11 +1083,19 @@
           <div class="flex-1 flex justify-center items-center relative w-full h-full order-first lg:order-none">
             <a href="{{ route('product.details', $bestSellerProduct->slug) }}"
               class="block w-full max-w-[300px] md:max-w-[450px] lg:max-w-[600px] min-[2000px]:max-w-[1000px] aspect-square flex items-center justify-center">
-              <img
-                src="{{ $bestSellerProduct->image ? asset('storage/' . $bestSellerProduct->image) : ($bestSellerProduct->images->first() ? asset('storage/' . $bestSellerProduct->images->first()->image_path) : asset('assets/Product Photo.png')) }}"
-                class="w-full h-full object-contain hover:scale-105 transition-transform duration-500 mix-blend-multiply border-none outline-none ring-0"
-                style="filter: brightness(1.15) contrast(1.05); -webkit-mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%); mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%);"
-                alt="{{ $bestSellerProduct->name }}">
+              @php
+                $bsImagePath = $bestSellerProduct->image ?: ($bestSellerProduct->images->first() ? $bestSellerProduct->images->first()->image_path : null);
+              @endphp
+              @if($bsImagePath)
+                <img src="{{ asset('storage/' . $bsImagePath) }}"
+                  class="w-full h-full object-contain hover:scale-105 transition-transform duration-500 mix-blend-multiply border-none outline-none ring-0"
+                  style="filter: brightness(1.15) contrast(1.05); -webkit-mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%); mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%);"
+                  alt="{{ $bestSellerProduct->name }}">
+              @else
+                <div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 text-lg">
+                  No Image
+                </div>
+              @endif
             </a>
           </div>
 
@@ -1303,7 +1317,7 @@
       </div>
     </div>
   </section>
-  <section class="py-8 md:py-20 bg-white px-4 md:px-8 w-full max-w-[100vw] overflow-hidden">
+  <section class="py-8 md:py-20 bg-transparent px-4 md:px-8 w-full max-w-[100vw] overflow-hidden">
     <div class="w-full mx-auto">
       <!-- Header -->
       <div class="text-center mb-12">
@@ -1470,7 +1484,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                                                                                                          {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+                  {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

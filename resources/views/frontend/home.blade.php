@@ -1092,11 +1092,17 @@
                   </p>
 
                   <div class="flex items-center justify-start gap-4">
-                    <!-- User Image -->
-                    <img
-                      src="{{ $review->user && $review->user->profile_picture ? asset('storage/' . $review->user->profile_picture) : '' }}"
-                      class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-[10px] object-cover"
-                      alt="{{ $review->user->name ?? 'User' }}">
+                    <!-- User Image or Initials Fallback -->
+                    @if($review->user && $review->user->profile_picture)
+                      <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                        class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-full object-cover border border-[#EADDCC]"
+                        alt="{{ $review->user->name ?? 'User' }}">
+                    @else
+                      <div
+                        class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[#5C4522] font-['Outfit'] font-bold text-sm md:text-base min-[2000px]:text-2xl uppercase border border-[#EADDCC]">
+                        {{ $review->user->initials ?? 'U' }}
+                      </div>
+                    @endif
 
                     <div>
                       <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-base min-[2000px]:text-2xl">
@@ -1182,7 +1188,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                  {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+                                        {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"
@@ -1284,4 +1290,7 @@
 
     });
   </script>
+  @guest
+    @include('frontend.partials.login_popup')
+  @endguest
 @endsection

@@ -900,15 +900,25 @@
                                             </p>
                                             <div
                                                 class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
-                                                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-                                                    <span
-                                                        class="text-[#0D0D0E] font-['Outfit'] text-sm sm:text-base md:text-[20px] font-medium leading-none">{{ $review->user->name ?? 'Anonymous' }}</span>
-                                                    <div
-                                                        class="border border-[#D7D7DA] rounded-lg px-3 py-1 bg-white text-[12px] sm:text-[14px] flex items-center gap-2 font-['Outfit']">
-                                                        <span class="font-bold text-[#1A1A1A]">{{ $review->rating }}</span>
-                                                        <i class="fas fa-star text-[#F5B800] text-[10px] sm:text-[12px]"></i>
-                                                        <span
-                                                            class="text-[#808080] border-l border-[#D7D7DA] pl-2 ml-1 font-['Outfit']">{{ $review->created_at->format('d M Y') }}</span>
+                                                <div class="flex items-center gap-4">
+                                                    <!-- Profile Avatar or Initials -->
+                                                    @if($review->user && $review->user->profile_picture)
+                                                        <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                                            class="w-10 h-10 rounded-full object-cover border border-[#D7D7DA]"
+                                                            alt="{{ $review->user->name ?? 'User' }}">
+                                                    @else
+                                                        <div class="w-10 h-10 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[#5C4522] font-['Outfit'] font-bold text-sm uppercase border border-[#EADDCC]">
+                                                            {{ $review->user->initials ?? 'U' }}
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    <div class="flex flex-col">
+                                                        <span class="text-[#0D0D0E] font-['Outfit'] text-sm sm:text-base md:text-[18px] font-medium leading-none">{{ $review->user->name ?? 'Anonymous' }}</span>
+                                                        <div class="mt-2 border border-[#D7D7DA] rounded-lg px-3 py-1 bg-white text-[12px] sm:text-[14px] flex items-center gap-2 font-['Outfit'] w-fit">
+                                                            <span class="font-bold text-[#1A1A1A]">{{ $review->rating }}</span>
+                                                            <i class="fas fa-star text-[#F5B800] text-[10px] sm:text-[12px]"></i>
+                                                            <span class="text-[#808080] border-l border-[#D7D7DA] pl-2 ml-1 font-['Outfit']">{{ $review->created_at->format('d M Y') }}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

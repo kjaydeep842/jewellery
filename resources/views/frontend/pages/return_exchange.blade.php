@@ -29,108 +29,32 @@
     <main class="w-full flex-grow bg-white py-16 px-6">
         <div class="max-w-[1374px] mx-auto flex flex-col gap-[10px]">
 
-            <!-- Question 1 -->
-            <div class="w-full bg-white rounded-[14px] border border-[#EFE4CD] overflow-hidden">
-                <button
-                    class="flex flex-row justify-between items-center py-[20px] px-[20px] md:px-[30px] gap-[10px] w-full min-h-[74px] text-left focus:outline-none group"
-                    onclick="toggleReturnAccordion('faq-1', this)">
-                    <span class="font-['Outfit'] font-semibold text-[#5C4522] text-sm md:text-[22px] leading-none">What is
-                        Tattsvi's Return
-                        and Exchange Policy? How does it work?</span>
-                    <div
-                        class="icon-wrapper w-[24px] h-[24px] md:w-[32px] md:h-[32px] rounded-full bg-[#EFE4CD] flex items-center justify-center transition-colors">
-                        <i class="fa-solid fa-plus text-[#1A1A1A] text-[10px] md:text-xs"></i>
-                    </div>
-                </button>
-                <div id="faq-1" class="hidden bg-[#FBF9F3] px-[20px] md:px-[30px] py-[12px] transition-all duration-300">
-                    <p class="font-['Outfit'] text-[#5C5C5C] text-sm md:text-base leading-relaxed">
-                        We offer a 30-day return and exchange policy for all our products. The item must be unused
-                        and in its original packaging.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Question 2 -->
-            <div class="w-full bg-white rounded-[14px] border border-[#EFE4CD] overflow-hidden">
-                <button
-                    class="flex flex-row justify-between items-center py-[20px] px-[20px] md:px-[30px] gap-[10px] w-full min-h-[74px] text-left focus:outline-none group"
-                    onclick="toggleReturnAccordion('faq-2', this)">
-                    <span class="font-['Outfit'] font-semibold text-[#5C4522] text-sm md:text-[22px] leading-none">To return
-                        a product to
-                        Tattsvi, please follow these steps:</span>
-                    <div
-                        class="icon-wrapper w-[24px] h-[24px] md:w-[32px] md:h-[32px] rounded-full bg-[#EFE4CD] flex items-center justify-center transition-colors">
-                        <i class="fa-solid fa-plus text-[#1A1A1A] text-[10px] md:text-xs"></i>
-                    </div>
-                </button>
-                <div id="faq-2" class="hidden bg-[#FBF9F3] px-[20px] md:px-[30px] py-[12px] transition-all duration-300">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                        <p class="font-['Outfit'] text-[#5C5C5C] text-sm md:text-base leading-relaxed flex-1">
-                            If a piece is no longer available on our website, please contact our Customer Relationship
-                            Management team. We will do our best to make it available for you.
-                        </p>
-                        <span
-                            class="font-['Outfit'] text-[#1A1A1A] text-xs font-semibold px-3 py-1 bg-white rounded border border-[#EFE4CD]">14K
-                            Gold</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 3 -->
-            <div class="w-full bg-white rounded-[14px] border border-[#EFE4CD] overflow-hidden">
-                <button
-                    class="flex flex-row justify-between items-center py-[20px] px-[20px] md:px-[30px] gap-[10px] w-full min-h-[74px] text-left focus:outline-none group"
-                    onclick="toggleReturnAccordion('faq-3', this)">
-                    <span class="font-['Outfit'] font-semibold text-[#5C4522] text-sm md:text-[22px] leading-none">How do I
-                        place an
-                        exchange request on Tattsvi?</span>
-                    <div
-                        class="icon-wrapper w-[24px] h-[24px] md:w-[32px] md:h-[32px] rounded-full bg-[#EFE4CD] flex items-center justify-center transition-colors">
-                        <i class="fa-solid fa-plus text-[#1A1A1A] text-[10px] md:text-xs"></i>
-                    </div>
-                </button>
-                <div id="faq-3" class="hidden bg-[#FBF9F3] px-[20px] md:px-[30px] py-[12px] transition-all duration-300">
-                    <p class="font-['Outfit'] text-[#5C5C5C] text-sm md:text-base leading-relaxed">
-                        You can place an exchange request by logging into your account and visiting the 'My Orders'
-                        section. Select the item and choose 'Exchange'.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Remaining Questions -->
-            @php
-                $remainingQuestions = [
-                    "What is No Questions Asked Returns?",
-                    "How long does the refund process take?",
-                    "Can I return an item purchased during a sale?",
-                    "What if I receive a damaged product?",
-                    "Do I need to pay for shipping when returning?",
-                    "Can I exchange a product more than once?",
-                    "Is there a limit to the number of returns?"
-                ];
-            @endphp
-
-            @foreach($remainingQuestions as $index => $question)
+            @forelse($policies as $index => $policy)
                 <div class="w-full bg-white rounded-[14px] border border-[#EFE4CD] overflow-hidden">
                     <button
                         class="flex flex-row justify-between items-center py-[20px] px-[20px] md:px-[30px] gap-[10px] w-full min-h-[74px] text-left focus:outline-none group"
-                        onclick="toggleReturnAccordion('faq-{{ $index + 4 }}', this)">
+                        onclick="toggleReturnAccordion('faq-{{ $index }}', this)">
                         <span
-                            class="font-['Outfit'] font-semibold text-[#5C4522] text-sm md:text-[22px] leading-none uppercase tracking-tight">{{ $question }}</span>
+                            class="font-['Outfit'] font-semibold text-[#5C4522] text-sm md:text-[22px] leading-none uppercase tracking-tight">
+                            {{ $policy->title }}
+                        </span>
                         <div
                             class="icon-wrapper w-[24px] h-[24px] md:w-[32px] md:h-[32px] rounded-full bg-[#EFE4CD] flex items-center justify-center transition-colors">
                             <i class="fa-solid fa-plus text-[#1A1A1A] text-[10px] md:text-xs"></i>
                         </div>
                     </button>
-                    <div id="faq-{{ $index + 4 }}"
+                    <div id="faq-{{ $index }}"
                         class="hidden bg-[#FBF9F3] px-[20px] md:px-[30px] py-[12px] transition-all duration-300">
-                        <p class="font-['Outfit'] text-[#5C5C5C] text-sm md:text-base leading-relaxed">
-                            We accept returns without asking for a reason, as long as the product is in its original
-                            condition.
-                        </p>
+                        <div class="font-['Outfit'] text-[#5C5C5C] text-sm md:text-base leading-relaxed">
+                            {!! $policy->content !!}
+                        </div>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="text-center py-10">
+                    <p class="font-['Outfit'] text-[#5C5C5C]">No return or exchange policies found.</p>
+                </div>
+            @endforelse
 
         </div>
     </main>

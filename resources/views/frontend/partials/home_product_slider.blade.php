@@ -18,10 +18,10 @@
                 </div>
                 <a href="{{ route('product.details', $product->slug) }}"
                     class="w-full h-full flex items-center justify-center block">
-                    <!-- Dynamic Image with Fallback -->
-                    <img src="{{ $product->images->first()->url ?? 'assets/ring.png' }}" alt="{{ $product->name }}"
+                    <!-- Dynamic Image without Fallback -->
+                    <img src="{{ $product->images->first()->url ?? '' }}" alt="{{ $product->name }}"
                         class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-                    <img src="{{ $product->images->skip(1)->first()->url ?? 'assets/hover_image_p.png' }}"
+                    <img src="{{ $product->images->skip(1)->first()->url ?? '' }}"
                         class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
                 </a>
             </div>

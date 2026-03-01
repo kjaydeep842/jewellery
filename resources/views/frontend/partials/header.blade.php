@@ -96,8 +96,7 @@
                                     class="search-top-btn flex items-center gap-2.5  border border-[#E6E6E6]  hover:border-[#D4AF37] rounded-2xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Mangalsutra</span>
@@ -108,8 +107,7 @@
                                     class="search-top-btn flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply gap-4 ">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -120,8 +118,7 @@
                                     class="flex items-center gap-1.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -132,8 +129,7 @@
                                     class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>

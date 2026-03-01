@@ -46,8 +46,8 @@
                     class="w-full h-full object-contain mix-blend-multiply transition-opacity duration-300">
             </template>
             <template x-if="images.length === 0 || !images[activeImage]">
-                <div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 text-xs">
-                    No Image
+                <div class="w-full h-full flex items-center justify-center bg-gray-50/50">
+                    {{-- No Fallback Image --}}
                 </div>
             </template>
         </a>

@@ -711,7 +711,7 @@
         <!-- Fallback Static Items (Repeated for Demo) -->
         @for ($i = 0; $i < 5; $i++)
           <!-- <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
           <div
             class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
             <span
@@ -722,10 +722,7 @@
               <img src="{{ asset('assets/ic_wishlist1.png') }}" class="w-4 h-4" alt="">
             </button>
             <div class="w-full h-full flex items-center justify-center p-4">
-              <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-              <img src="{{ asset('assets/hover_image_p.png') }}"
-                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+              {{-- No Fallback Image --}}
             </div>
           </div>
           <div class="text-center font-['Outfit'] px-1">
@@ -1092,8 +1089,8 @@
                   style="filter: brightness(1.15) contrast(1.05); -webkit-mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%); mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%);"
                   alt="{{ $bestSellerProduct->name }}">
               @else
-                <div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 text-lg">
-                  No Image
+                <div class="w-full h-full flex items-center justify-center bg-gray-50/50">
+                  {{-- No Fallback Image --}}
                 </div>
               @endif
             </a>
@@ -1484,7 +1481,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                  {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+                      {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

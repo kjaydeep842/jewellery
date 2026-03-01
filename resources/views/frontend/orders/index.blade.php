@@ -98,9 +98,7 @@
                                                         alt="{{ $product->name }}" 
                                                         class="w-full h-full object-contain mix-blend-multiply">
                                                 @else
-                                                    <img src="{{ asset('assets/ring.png') }}" 
-                                                        alt="{{ $product->name }}" 
-                                                        class="w-full h-full object-contain mix-blend-multiply">
+                                                    {{-- No Fallback Image --}}
                                                 @endif
                                             </div>
                                             

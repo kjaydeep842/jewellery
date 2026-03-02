@@ -97,12 +97,12 @@
 
                   <!-- Vertical Line (Visible initially) -->
                   <div
-                    class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[2px] h-20 bg-white/70 z-10 group-hover:opacity-0 transition-opacity">
+                    class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[2px] h-10 md:h-14 lg:h-20 bg-white/70 z-10 group-hover:opacity-0 transition-opacity">
                   </div>
 
                   <!-- "Pill" (Visible initially) -->
                   <div
-                    class="absolute bottom-12 md:bottom-20 left-1/2 -translate-x-1/2 font-['Outfit'] bg-white/90 px-4 py-1 md:px-6 md:py-1.5 min-[2000px]:px-10 min-[2000px]:py-3 rounded-full text-xs md:text-sm min-[2000px]:text-2xl font-bold tracking-widest group-hover:hidden transition-all whitespace-nowrap">
+                    class="absolute bottom-7 md:bottom-10 lg:bottom-16 xl:bottom-20 left-1/2 -translate-x-1/2 font-['Outfit'] bg-white/90 px-2.5 py-0.5 md:px-3.5 md:py-1 lg:px-5 lg:py-1 xl:px-6 xl:py-1.5 min-[2000px]:px-10 min-[2000px]:py-3 rounded-full text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-[18px] min-[1400px]:text-[20px] min-[2000px]:text-2xl font-normal tracking-normal text-[#0D0D0E] group-hover:hidden transition-all whitespace-nowrap z-20">
                     {{ $category->name }}
                   </div>
                   <!-- Hover Overlay & Button -->
@@ -110,9 +110,13 @@
                     class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <button type="button"
                       onclick="document.getElementById('premiumCategoryInput').value = '{{ $category->name }}'; document.getElementById('premiumCategoryForm').submit();"
-                      class="flex bg-white items-center gap-2 px-4 py-1.5 md:px-6 md:py-2 min-[2000px]:px-10 min-[2000px]:py-4 border border-[#5C4522] rounded-full text-[#5C4522] transition-all duration-300 group cursor-pointer">
-                      <img src="assets/share_icon.png" class="w-3 h-3 md:w-4 md:h-4 min-[2000px]:w-6 min-[2000px]:h-6" alt="">
-                      <span class="text-[10px] md:text-xs min-[2000px]:text-xl font-bold tracking-widest">View More</span>
+                      class="flex bg-white items-center gap-1.5 md:gap-2 px-2.5 py-1 md:py-1 md:px-3.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 min-[2000px]:px-10 min-[2000px]:py-4 border border-[#5C4522] rounded-full text-[#5C4522] transition-all duration-300 cursor-pointer">
+                      <img src="assets/share_icon.png"
+                        class="w-2.5 h-2.5 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 xl:w-4 xl:h-4 min-[2000px]:w-6 min-[2000px]:h-6"
+                        alt="">
+                      <span
+                        class="font-['Outfit'] text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-[18px] min-[1400px]:text-[20px] min-[2000px]:text-2xl font-normal tracking-normal text-[#0D0D0E]">View
+                        More</span>
                     </button>
                   </div>
                 </div>
@@ -1188,7 +1192,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                        {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+                                                  {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

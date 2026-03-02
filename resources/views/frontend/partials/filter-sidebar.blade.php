@@ -4,11 +4,12 @@ $route = $route ?? 'page.new-arrivals';
 
 
 <aside id="filter-sidebar"
+    style="font-family: 'Alexandria', sans-serif;"
     class="fixed inset-y-0 left-0 z-[60] w-[85%] max-w-[300px] bg-white lg:bg-transparent h-full overflow-y-auto transition-transform duration-300 -translate-x-full shadow-2xl p-5 lg:p-0 lg:shadow-none lg:sticky lg:top-[70px] lg:h-[calc(100vh-70px)] lg:translate-x-0 lg:w-[280px] lg:block flex-shrink-0 space-y-6 scrollbar-hide lg:z-[1]">
 
     <!-- Filter Header (Desktop & Mobile) -->
     <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-2 font-medium text-[18px] text-[#878787]">
+        <div class="flex items-center gap-2 font-Alexandria font-medium text-[18px] text-[#878787]">
             <img src="{{ asset('assets/ic_setting.png') }}" alt="filter" class="w-5 h-5 object-contain lg:opacity-60"> Filters
         </div>
         <div class="flex items-center gap-3">
@@ -30,7 +31,7 @@ $route = $route ?? 'page.new-arrivals';
         @if(count($categories) > 0)
         <div class="pb-4">
             <div
-                class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
+                class="flex font-['Alexandria'] justify-between items-center cursor-pointer group filter-accordion-header select-none">
                 <span class="font-medium text-[#1A1A1A] text-[16px]">Category</span>
                 <i
                     class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-amber-600 transition-transform duration-200 accordion-icon"></i>
@@ -196,9 +197,9 @@ $route = $route ?? 'page.new-arrivals';
 
         <!-- Filter Item: Price Range -->
         <div class="border-b border-gray-100 py-4 filter-container">
-            <div class="flex justify-between items-center cursor-pointer group filter-accordion-header select-none">
-                <span class="font-medium text-gray-800 text-[15px] tracking-wider">Price Range</span>
-                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-gray-600 transition-transform duration-200 accordion-icon"></i>
+            <div class="flex font-['Alexandria'] justify-between items-center cursor-pointer group filter-accordion-header select-none">
+                <span class="font-medium text-[#1A1A1A] text-[16px]">Price Range</span>
+                <i class="fa-solid fa-chevron-down text-xs text-gray-400 group-hover:text-amber-600 transition-transform duration-200 accordion-icon"></i>
             </div>
             <div class="mt-4 space-y-3 filter-content hidden pl-2">
                 <!-- Price Checkboxes -->

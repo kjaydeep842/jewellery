@@ -260,43 +260,44 @@
         <!-- Navigation Bar -->
 
         <nav id="main-navigation"
-            class="hidden lg:flex items-center justify-center flex-wrap gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-medium tracking-normal transition-all duration-300 md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto">
+            class="hidden lg:flex items-center justify-center flex-nowrap lg:gap-4 xl:gap-5 2xl:gap-[40px] min-[2000px]:gap-12 lg:text-[14px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-normal tracking-normal leading-none transition-all duration-300 md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto">
             <div class="relative group">
                 <a href="{{ route('page.new-arrivals') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">New
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">New
                     Arrivals</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.best-seller') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Best
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Best
                     Seller</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.18kt') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">18KT
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">18KT
                     Jewellery</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.tattsvisfavourite') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Tattsvi's Favourite</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Tattsvi's
+                    Favourite</a>
             </div>
             {{-- <div class="relative group">
                 <a href="{{ route('page.exhibition') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Exhibition</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Exhibition</a>
             </div> --}}
             <div class="relative group">
                 <a href="{{ route('page.readytostock') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Ready To
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Ready To
                     Stock</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.contact') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Contact
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Contact
                     Us</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.about') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">About Us</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">About Us</a>
             </div>
         </nav>
     </header>

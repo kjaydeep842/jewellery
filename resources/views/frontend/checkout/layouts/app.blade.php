@@ -213,6 +213,26 @@
         @include('frontend.partials.mobile-menu')
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Toast Session Message Handlers ---
+            @if (session('success'))
+                if (window.showToast) window.showToast("{{ session('success') }}", "success");
+            @endif
+
+            @if (session('error'))
+                if (window.showToast) window.showToast("{{ session('error') }}", "error");
+            @endif
+
+            @if (session('info'))
+                if (window.showToast) window.showToast("{{ session('info') }}", "info");
+            @endif
+
+            @if (session('warning'))
+                if (window.showToast) window.showToast("{{ session('warning') }}", "warning");
+            @endif
+        });
+    </script>
 </body>
 
 </html>

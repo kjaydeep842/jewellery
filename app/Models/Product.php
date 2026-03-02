@@ -29,6 +29,7 @@ class Product extends Model
         'is_featured', // New
         'is_new', // New
         'is_bestseller', // New
+        'is_ready_to_stock',
         'meta_title', // New
         'meta_description', // New
         'meta_keywords', // New

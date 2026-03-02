@@ -150,12 +150,15 @@ const initShutterSlider = (sliderId, dotsId, interval = 5000) => {
                     "bg-opacity-100",
                 );
             } else {
+                const activeClass = dotsContainer.dataset.active || "bg-black";
+                const inactiveClass = dotsContainer.dataset.inactive || "bg-black/10";
+
                 if (i === index) {
-                    dot.classList.add("bg-white");
-                    dot.classList.remove("bg-white/50");
+                    dot.classList.add(activeClass);
+                    dot.classList.remove(inactiveClass);
                 } else {
-                    dot.classList.add("bg-white/50");
-                    dot.classList.remove("bg-white");
+                    dot.classList.add(inactiveClass);
+                    dot.classList.remove(activeClass);
                 }
             }
         });
@@ -582,18 +585,12 @@ window.initHomeInteractive = function (
     const catDesc = document.getElementById("catDescription");
     const exploreCatTitle = document.getElementById("exploreCategoryTitle");
 
-    window.changeSlide = function (direction) {
+    function updateSliderUI(index) {
         if (!categoriesData || categoriesData.length === 0) return;
-
-        if (direction === "next") {
-            currentCatIndex = (currentCatIndex + 1) % categoriesData.length;
-        } else {
-            currentCatIndex =
-                (currentCatIndex - 1 + categoriesData.length) %
-                categoriesData.length;
-        }
-
+        
+        currentCatIndex = index;
         const category = categoriesData[currentCatIndex];
+
         if (catImg) catImg.style.opacity = "0";
 
         setTimeout(() => {
@@ -601,11 +598,12 @@ window.initHomeInteractive = function (
                 const baseUrl = category.image ? storageBaseUrl : assetBaseUrl;
                 const imagePath =
                     category.image || "assets/Rectangle_sidebar.png";
-                // Handle slashes carefully
-                const finalUrl = baseUrl.endsWith("/")
-                    ? baseUrl + imagePath
-                    : baseUrl + "/" + imagePath;
-                catImg.src = finalUrl;
+                if (catImg.src !== baseUrl + "/" + imagePath) {
+                    const finalUrl = baseUrl.endsWith("/")
+                        ? baseUrl + imagePath
+                        : baseUrl + "/" + imagePath;
+                    catImg.src = finalUrl;
+                }
             }
             if (catTitle) catTitle.textContent = category.name;
             if (catDesc) catDesc.textContent = category.description || "";
@@ -631,6 +629,29 @@ window.initHomeInteractive = function (
                 }
             }
         }, 300);
+    }
+
+    window.changeSlide = function (direction) {
+        if (!categoriesData || categoriesData.length === 0) return;
+
+        let newIndex;
+        if (direction === "next") {
+            newIndex = (currentCatIndex + 1) % categoriesData.length;
+        } else {
+            newIndex = (currentCatIndex - 1 + categoriesData.length) % categoriesData.length;
+        }
+        updateSliderUI(newIndex);
+    };
+
+    window.selectCategorySlide = function (categoryId) {
+        if (!categoriesData || categoriesData.length === 0) return;
+        
+        if (categoryId === 'all') return;
+
+        const index = categoriesData.findIndex(c => c.id == categoryId);
+        if (index !== -1) {
+            updateSliderUI(index);
+        }
     };
 
     // Initialize slider category input on page load

@@ -99,6 +99,28 @@
                 icon.classList.add('fa-minus');
             }
         }
+        function zoomImageHover(e) {
+            const container = document.getElementById('image-zoom-container');
+            const img = document.getElementById('main-image');
+            if (!img) return;
+
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const xPercent = (x / rect.width) * 100;
+            const yPercent = (y / rect.height) * 100;
+
+            img.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+            img.style.transform = 'scale(2.5)';
+        }
+
+        function resetZoomHover() {
+            const img = document.getElementById('main-image');
+            if (!img) return;
+            img.style.transformOrigin = 'center center';
+            img.style.transform = 'scale(1)';
+        }
     </script>
 
     <main
@@ -109,14 +131,20 @@
             <div class="space-y-2 sm:space-y-3 md:space-y-4" style="border-radius: 0;">
                 <!-- Main Image Container -->
                 <div class="w-full max-w-full lg:max-w-[1143px] mx-auto" style="border-radius: 0;">
-                    <div class="relative w-full bg-white" style="aspect-ratio: 1143 / 1319; border-radius: 0;">
-                        @if($product->images->count() > 0)
-                            <img id="main-image" src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                                alt="{{ $product->name }}"
-                                class="absolute inset-0 w-full h-full object-contain p-4 sm:p-6 md:p-8 lg:p-10">
+                    <div id="image-zoom-container" class="relative w-full bg-white overflow-hidden cursor-zoom-in"
+                        style="aspect-ratio: 1143 / 1319; border-radius: 0;" onmousemove="zoomImageHover(event)"
+                        onmouseleave="resetZoomHover()">
+                        @php
+                            $pMainImagePath = $product->image ?: ($product->images->first() ? $product->images->first()->image_path : null);
+                        @endphp
+                        @if($pMainImagePath)
+                            <img id="main-image" src="{{ asset('storage/' . $pMainImagePath) }}" alt="{{ $product->name }}"
+                                class="absolute inset-0 w-full h-full object-contain p-4 sm:p-6 md:p-8 lg:p-10 transition-transform duration-100 ease-out pointer-events-none origin-center">
                         @else
-                            <img id="main-image" src="{{ asset('assets/ring.png') }}" alt="{{ $product->name }}"
-                                class="absolute inset-0 w-full h-full object-contain p-4 sm:p-6 md:p-8 lg:p-10">
+                            <div
+                                class="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-50/50 pointer-events-none">
+                                {{-- No Fallback Image --}}
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -514,12 +542,16 @@
                     </div>
                     <div
                         class="w-full max-w-[300px] aspect-square rounded-[12px] border border-[#F2F4F7] flex items-center justify-center p-4 bg-white">
-                        @if($product->images->count() > 0)
-                            <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                                alt="{{ $product->name }}" class="w-full h-full object-contain mix-blend-multiply">
-                        @else
-                            <img src="{{ asset('assets/ring.png') }}" alt="{{ $product->name }}"
+                        @php
+                            $aMainImagePath = $product->image ?: ($product->images->first() ? $product->images->first()->image_path : null);
+                        @endphp
+                        @if($aMainImagePath)
+                            <img src="{{ asset('storage/' . $aMainImagePath) }}" alt="{{ $product->name }}"
                                 class="w-full h-full object-contain mix-blend-multiply">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center bg-gray-50/50">
+                                {{-- No Fallback Image --}}
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -839,21 +871,22 @@
                 <!-- Right Side: Reviews Card -->
                 <div class="w-full lg:w-2/3"
                     x-data="{ 
-                                                                                                                                                                                    current: 0, 
-                                                                                                                                                                                    total: {{ ceil($product->reviews->count() / 3) }},
-                                                                                                                                                                                    next() { this.current = (this.current + 1) % this.total },
-                                                                                                                                                                                    prev() { this.current = (this.current - 1 + this.total) % this.total }
-                                                                                                                                                                                }">
+                                                                                                                                                                                                            current: 0, 
+                                                                                                                                                                                                            total: {{ ceil($product->reviews->count() / 3) }},
+                                                                                                                                                                                                            next() { this.current = (this.current + 1) % this.total },
+                                                                                                                                                                                                            prev() { this.current = (this.current - 1 + this.total) % this.total }
+                                                                                                                                                                                                        }">
                     <div class="bg-white rounded-xl sm:rounded-2xl border border-[#F2F4F7] overflow-hidden shadow-sm">
                         <!-- Card Header -->
                         <div class="bg-white border-b border-[#F2F4F7] px-4 sm:px-6 md:px-8 py-4 sm:py-5">
-                            <h3 class="text-[#5C4522] font-bold font-['Outfit'] text-base sm:text-lg md:text-xl">Customers
+                            <h3 class="text-[#5C4522] font-semibold font-['Outfit'] text-base sm:text-lg md:text-xl">
+                                Customers
                                 Review</h3>
                         </div>
 
                         <!-- Card Body (Reviews List) -->
                         <div
-                            class="bg-[#FAF8F1] px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 h-[280px] sm:h-[320px] md:h-[350px] lg:h-[380px] overflow-y-auto space-y-4 sm:space-y-5 md:space-y-6 custom-scrollbar relative">
+                            class="bg-[#FAF8F1] px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 h-auto min-h-[400px] lg:min-h-[500px] space-y-4 sm:space-y-5 md:space-y-6 relative">
                             @forelse($product->reviews->chunk(3) as $index => $chunk)
                                 <div x-show="current === {{ $index }}"
                                     class="space-y-4 sm:space-y-5 md:space-y-6 transition-opacity duration-300"
@@ -862,20 +895,30 @@
                                     @foreach($chunk as $review)
                                         <div class="border-b border-[#E8E1D5] pb-4 sm:pb-5 md:pb-6 last:border-0 last:pb-0">
                                             <p
-                                                class="text-[#3D3D42] text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed mb-3 sm:mb-4 font-['Outfit'] italic text-left">
+                                                class="text-[#3D3D42] text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed mb-3 sm:mb-4 font-['Outfit'] break-words overflow-hidden">
                                                 "{{ $review->comment }}"
                                             </p>
                                             <div
                                                 class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
-                                                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-                                                    <span
-                                                        class="text-[#1A1A1A] font-['Outfit'] text-xs sm:text-sm font-bold">{{ $review->user->name ?? 'Anonymous' }}</span>
-                                                    <div
-                                                        class="border border-[#D7D7DA] rounded px-2 py-0.5 bg-white text-[10px] sm:text-xs flex items-center gap-1">
-                                                        <span class="font-bold">{{ $review->rating }}</span>
-                                                        <i class="fas fa-star text-yellow-500 text-[8px] sm:text-[10px]"></i>
-                                                        <span
-                                                            class="text-[#808080] border-l-2 pl-1 ml-1 font-['Outfit']">{{ $review->created_at->format('d M Y') }}</span>
+                                                <div class="flex items-center gap-4">
+                                                    <!-- Profile Avatar or Initials -->
+                                                    @if($review->user && $review->user->profile_picture)
+                                                        <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                                            class="w-10 h-10 rounded-full object-cover border border-[#D7D7DA]"
+                                                            alt="{{ $review->user->name ?? 'User' }}">
+                                                    @else
+                                                        <div class="w-10 h-10 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[#5C4522] font-['Outfit'] font-bold text-sm uppercase border border-[#EADDCC]">
+                                                            {{ $review->user->initials ?? 'U' }}
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    <div class="flex flex-col">
+                                                        <span class="text-[#0D0D0E] font-['Outfit'] text-sm sm:text-base md:text-[18px] font-medium leading-none">{{ $review->user->name ?? 'Anonymous' }}</span>
+                                                        <div class="mt-2 border border-[#D7D7DA] rounded-lg px-3 py-1 bg-white text-[12px] sm:text-[14px] flex items-center gap-2 font-['Outfit'] w-fit">
+                                                            <span class="font-bold text-[#1A1A1A]">{{ $review->rating }}</span>
+                                                            <i class="fas fa-star text-[#F5B800] text-[10px] sm:text-[12px]"></i>
+                                                            <span class="text-[#808080] border-l border-[#D7D7DA] pl-2 ml-1 font-['Outfit']">{{ $review->created_at->format('d M Y') }}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -919,21 +962,21 @@
     @if($banners->count() > 0)
         <section class="relative w-full h-auto mt-8 sm:mt-10 mb-8 sm:mb-10"
             x-data="{ 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                currentSlide: 0, 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                total: {{ $banners->count() }},
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                interval: null,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                init() { 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.interval = setInterval(() => { this.next() }, 5000); 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                next() { 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.currentSlide = (this.currentSlide + 1) % this.total; 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                goTo(index) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.currentSlide = index;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    clearInterval(this.interval);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    this.interval = setInterval(() => { this.next() }, 5000);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            currentSlide: 0, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            total: {{ $banners->count() }},
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            interval: null,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            init() { 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                this.interval = setInterval(() => { this.next() }, 5000); 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            next() { 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                this.currentSlide = (this.currentSlide + 1) % this.total; 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            goTo(index) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                this.currentSlide = index;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                clearInterval(this.interval);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                this.interval = setInterval(() => { this.next() }, 5000);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }">
 
             <div class="relative w-full ">
                 @foreach($banners as $index => $banner)
@@ -1012,24 +1055,17 @@
                                 </div>
                                 <a href="{{ route('product.details', $related->slug) }}"
                                     class="w-full h-full flex items-center justify-center block">
-                                    @if($related->images->count() > 0)
-                                        <!-- Main Image -->
-                                        <img src="{{ asset('storage/' . $related->images->first()->image_path) }}"
-                                            alt="{{ $related->name }}"
-                                            class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-                                        <!-- Hover Image -->
-                                        @if($related->images->count() > 1)
-                                            <img src="{{ asset('storage/' . $related->images->skip(1)->first()->image_path) }}"
-                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
-                                        @else
-                                            <img src="{{ asset('storage/' . $related->images->first()->image_path) }}"
-                                                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
-                                        @endif
+                                    @php
+                                        $rMainImagePath = $related->image ?: ($related->images->first() ? $related->images->first()->image_path : null);
+                                    @endphp
+                                    @if($rMainImagePath)
+                                        <img src="{{ asset('storage/' . $rMainImagePath) }}" alt="{{ $related->name }}"
+                                            class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:scale-110">
                                     @else
-                                        <img src="{{ asset('assets/ring.png') }}" alt="{{ $related->name }}"
-                                            class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-                                        <img src="{{ asset('assets/hover_image_p.png') }}"
-                                            class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                                        <div
+                                            class="w-full h-full flex items-center justify-center bg-gray-50/50 text-gray-400 text-xs text-center">
+                                            {{-- No Fallback Image --}}
+                                        </div>
                                     @endif
                                 </a>
                             </div>

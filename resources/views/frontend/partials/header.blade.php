@@ -13,14 +13,14 @@
 <div id="header-placeholder">
     <header class="bg-white z-50 shadow-sm w-full transition-all duration-300">
         <div id="header-main-container"
-            class="max-w-[1600px] min-[2000px]:max-w-[2400px] mx-auto px-6 py-4 flex flex-wrap lg:flex-nowrap justify-between items-center gap-y-4 lg:gap-0 transition-all duration-300">
-            <div id="header-logo-section" class="flex items-center gap-2 order-1 transition-all duration-300">
-                <button id="mobile-menu-btn" class="lg:hidden mr-1  text-gray-800 hover:text-[#B39359]">
+            class="md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto px-6 py-4 flex flex-wrap md:flex-nowrap justify-between items-center gap-y-4 lg:gap-0 transition-all duration-300">
+            <div id="header-logo-section" class="flex items-center gap-2 order-1 md:flex-1 transition-all duration-300">
+                <button id="mobile-menu-btn" class="lg:hidden mr-1 text-gray-800 hover:text-[#B39359]">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
                 <div
-                    class="w-[212px] h-[68px] min-[2000px]:w-[350px] min-[2000px]:h-auto flex items-center justify-center transition-all duration-300">
-                    <a href="{{ route('home') }}">
+                    class="w-[140px] sm:w-[180px] md:w-[212px] h-auto min-[2000px]:w-[350px] flex items-center justify-center transition-all duration-300">
+                    <a href="{{ route('home') }}" class="block w-full">
                         <img src="{{ asset('assets/logo_black.png') }}" alt="logo"
                             class="w-full h-auto transition-all duration-300">
                     </a>
@@ -29,16 +29,16 @@
             </div>
 
             <div id="header-search-section"
-                class="flex-grow max-w-xl w-full lg:w-1/2 order-3 lg:order-2 transition-all duration-300">
-                <div class="relative group w-full max-w-[445px] mx-auto flex flex-row items-center justify-between p-[20px_29px] gap-[10px] h-[65px] bg-[#F2F2F3] border border-transparent focus-within:border-[#B39359]/30 rounded-[100px] transition-all duration-300"
+                class="flex-shrink-0 w-full lg:w-auto order-3 lg:order-2 transition-all duration-300">
+                <div class="relative group w-full lg:w-[445px] mx-auto flex flex-row items-center justify-between px-4 sm:px-6 gap-[10px] h-[48px] bg-[#F2F2F3] border border-transparent focus-within:border-[#B39359]/30 rounded-[100px] transition-all duration-300"
                     id="search-container">
                     <input type="text" id="search-input"
-                        class="flex-grow bg-transparent border-none outline-none text-[20px] font-Outfit text-center placeholder:text-[#A2A2A9] text-[#A2A2A9] leading-none min-[2000px]:text-2xl transition-all"
+                        class="flex-grow bg-transparent border-none outline-none text-[14px] sm:text-[16px] font-Outfit text-left placeholder:text-[#A2A2A9] text-[#A2A2A9] leading-none min-[2000px]:text-xl transition-all"
                         placeholder="Search for products">
                     <button id="search-btn"
                         class="flex-shrink-0 text-gray-400 group-focus-within:text-[#B39359] transition-all duration-300">
                         <img src="{{ asset('assets/ic_search.png') }}" alt="search"
-                            class="w-6 h-6 min-[2000px]:w-8 min-[2000px]:h-8">
+                            class="w-5 h-5 min-[2000px]:w-7 min-[2000px]:h-7">
                     </button>
                     <!-- Search Dropdown (Hidden by default) -->
                     <div id="search-dropdown"
@@ -96,8 +96,7 @@
                                     class="search-top-btn flex items-center gap-2.5  border border-[#E6E6E6]  hover:border-[#D4AF37] rounded-2xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Mangalsutra</span>
@@ -108,8 +107,7 @@
                                     class="search-top-btn flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply gap-4 ">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -120,8 +118,7 @@
                                     class="flex items-center gap-1.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -132,8 +129,7 @@
                                     class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -144,8 +140,7 @@
                                     class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -156,8 +151,7 @@
                                     class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
                                     <div
                                         class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                                            class="w-9 h-9 object-contain mix-blend-multiply">
+                                        {{-- No Fallback Image --}}
                                     </div>
                                     <span
                                         class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
@@ -199,7 +193,7 @@
             </div>
 
             <div id="header-icons-section"
-                class="flex items-center h-[68px] gap-[20px] min-[2000px]:gap-8 text-gray-600 order-2 lg:order-3 transition-all duration-300">
+                class="flex items-center justify-end gap-[20px] min-[2000px]:gap-8 text-gray-600 order-2 md:order-3 md:flex-1 transition-all duration-300">
                 @auth
                     <div class="relative inline-block text-left" id="user-menu-container">
                         <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
@@ -266,37 +260,43 @@
         <!-- Navigation Bar -->
 
         <nav id="main-navigation"
-            class="hidden lg:flex items-center justify-center space-x-3 lg:space-x-4 min-[2000px]:space-x-12 text-[12px] lg:text-[13px] xl:text-[15px] min-[2000px]:text-2xl font-['Outfit'] font-medium tracking-wide transition-all duration-300">
+            class="hidden lg:flex items-center justify-center flex-wrap gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-medium tracking-normal transition-all duration-300 md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto">
             <div class="relative group">
-                <a href="{{ route('page.new-arrivals') }}" class="flex items-center gap-1 hover:text-gold py-4">New
+                <a href="{{ route('page.new-arrivals') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">New
                     Arrivals</a>
             </div>
             <div class="relative group">
-                <a href="{{ route('page.best-seller') }}" class="flex items-center gap-1 hover:text-gold py-4">Best
+                <a href="{{ route('page.best-seller') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Best
                     Seller</a>
             </div>
             <div class="relative group">
-                <a href="{{ route('page.18kt') }}" class="flex items-center gap-1 hover:text-gold py-4">18KT
+                <a href="{{ route('page.18kt') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">18KT
                     Jewellery</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.tattsvisfavourite') }}"
-                    class="flex items-center gap-1 hover:text-gold py-4">Tattsvi's Favourite</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Tattsvi's Favourite</a>
             </div>
             {{-- <div class="relative group">
                 <a href="{{ route('page.exhibition') }}"
-                    class="flex items-center gap-1 hover:text-gold py-4">Exhibition</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Exhibition</a>
             </div> --}}
             <div class="relative group">
-                <a href="{{ route('page.readytostock') }}" class="flex items-center gap-1 hover:text-gold py-4">Ready To
+                <a href="{{ route('page.readytostock') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Ready To
                     Stock</a>
             </div>
             <div class="relative group">
-                <a href="{{ route('page.contact') }}" class="flex items-center gap-1 hover:text-gold py-4">Contact
+                <a href="{{ route('page.contact') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Contact
                     Us</a>
             </div>
             <div class="relative group">
-                <a href="{{ route('page.about') }}" class="flex items-center gap-1 hover:text-gold py-4">About Us</a>
+                <a href="{{ route('page.about') }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">About Us</a>
             </div>
         </nav>
     </header>
@@ -323,6 +323,41 @@
             if (logoImg) logoImg.classList.add('transition-all', 'duration-300');
             if (logoContainer) logoContainer.classList.add('transition-all', 'duration-300');
 
+            function resetHeaderState() {
+                // Return to normal unstuck state
+                if (header.classList.contains('fixed')) {
+                    header.classList.remove('fixed', 'top-0', 'left-0');
+                    header.classList.add('relative');
+                    if (placeholder) placeholder.style.height = 'auto';
+                }
+
+                // Show All
+                if (searchSection) searchSection.classList.remove('hidden');
+                if (iconsSection) iconsSection.classList.remove('hidden');
+
+                // Restore Logo
+                if (logoContainer) {
+                    logoContainer.classList.add('w-[212px]', 'h-[68px]');
+                    logoContainer.classList.remove('w-[140px]', 'h-auto');
+                }
+
+                // --- RESET LAYOUT ---
+                header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
+
+                if (logoSection) {
+                    logoSection.classList.remove('lg:ml-14');
+                }
+
+                if (headerMainContainer) {
+                    headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
+                    headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap');
+                    headerMainContainer.style.width = '';
+                }
+                if (mainNav) {
+                    mainNav.classList.add('justify-center');
+                }
+            }
+
             function updateHeader() {
                 const st = window.scrollY;
 
@@ -341,63 +376,43 @@
                     }
 
                     // ALWAYS COMPACT (Scrolling Down OR Up, as long as not at top)
-                    // Hide Search & Icons
-                    if (searchSection) searchSection.classList.add('hidden');
-                    if (iconsSection) iconsSection.classList.add('hidden');
+                    // Only compact layout on desktop screens
+                    if (window.innerWidth >= 1024) {
+                        // Hide Search & Icons
+                        if (searchSection) searchSection.classList.add('hidden');
+                        if (iconsSection) iconsSection.classList.add('hidden');
 
-                    // Shrink Logo (Targeting the container width)
-                    if (logoContainer) {
-                        logoContainer.classList.remove('w-[212px]', 'h-[68px]');
-                        logoContainer.classList.add('w-[140px]', 'h-auto');
-                    }
+                        // Shrink Logo (Targeting the container width)
+                        if (logoContainer) {
+                            logoContainer.classList.remove('w-[212px]', 'h-[68px]');
+                            logoContainer.classList.add('w-[140px]', 'h-auto');
+                        }
 
-                    // --- NEW: INLINE LAYOUT ---
-                    // Force header to be a flex row container, CENTERED
-                    header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
+                        // --- NEW: INLINE LAYOUT ---
+                        // Force header to be a flex row container, CENTERED
+                        header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
 
-                    if (headerMainContainer) {
-                        // Collapse the main container to just fit the logo
-                        headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                        headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
-                        // Ensure it doesn't take full width
-                        headerMainContainer.style.width = 'auto';
-                    }
+                        if (headerMainContainer) {
+                            // Collapse the main container to just fit the logo
+                            headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
+                            headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
+                            // Ensure it doesn't take full width
+                            headerMainContainer.style.width = 'auto';
+                        }
 
-                    if (mainNav) {
-                        // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
-                        mainNav.classList.remove('justify-center');
-                        // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
+                        if (logoSection) {
+                            // Move logo little bit right side as requested
+                            logoSection.classList.add('lg:ml-14');
+                        }
+
+                        if (mainNav) {
+                            // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
+                            mainNav.classList.remove('justify-center');
+                            // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
+                        }
                     }
                 } else {
-                    // AT TOP
-                    // Reset Fixed Positioning
-                    if (header.classList.contains('fixed')) {
-                        header.classList.remove('fixed', 'top-0', 'left-0');
-                        header.classList.add('relative');
-                        if (placeholder) placeholder.style.height = 'auto';
-                    }
-
-                    // Show All
-                    if (searchSection) searchSection.classList.remove('hidden');
-                    if (iconsSection) iconsSection.classList.remove('hidden');
-
-                    // Restore Logo
-                    if (logoContainer) {
-                        logoContainer.classList.add('w-[212px]', 'h-[68px]');
-                        logoContainer.classList.remove('w-[140px]', 'h-auto');
-                    }
-
-                    // --- RESET LAYOUT ---
-                    header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
-
-                    if (headerMainContainer) {
-                        headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                        headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap');
-                        headerMainContainer.style.width = '';
-                    }
-                    if (mainNav) {
-                        mainNav.classList.add('justify-center');
-                    }
+                    resetHeaderState();
                 }
 
                 lastScrollTop = st;
@@ -405,6 +420,20 @@
 
             window.addEventListener('scroll', function () {
                 updateHeader();
+            });
+
+            window.addEventListener('resize', function () {
+                if (window.innerWidth < 1024 && window.scrollY > threshold) {
+                    resetHeaderState(); // clears compact styles
+                    // immediately re-apply sticky behavior
+                    if (placeholder) placeholder.style.height = header.offsetHeight + 'px';
+                    header.classList.remove('relative');
+                    header.classList.add('fixed', 'top-0', 'left-0');
+                } else if (window.innerWidth < 1024) {
+                    resetHeaderState();
+                } else {
+                    updateHeader();
+                }
             });
         });
     </script>

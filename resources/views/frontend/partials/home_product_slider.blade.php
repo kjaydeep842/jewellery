@@ -17,12 +17,21 @@
                     @endif
                 </div>
                 <a href="{{ route('product.details', $product->slug) }}"
-                    class="w-full h-full flex items-center justify-center block">
-                    <!-- Dynamic Image with Fallback -->
-                    <img src="{{ $product->images->first()->url ?? 'assets/ring.png' }}" alt="{{ $product->name }}"
-                        class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-                    <img src="{{ $product->images->skip(1)->first()->url ?? 'assets/hover_image_p.png' }}"
-                        class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
+                    class="w-full h-full flex items-center justify-center block p-4">
+                    <!-- Dynamic Image with Hover Effect -->
+                    @php
+                        $firstImage = $product->image ?: ($product->images->first() ? $product->images->first()->image_path : null);
+                        $secondImage = $product->images->count() > 1 ? $product->images->skip(1)->first()->image_path : null;
+                    @endphp
+                    @if($firstImage)
+                        <img src="{{ asset('storage/' . $firstImage) }}" alt="{{ $product->name }}"
+                            class="w-full h-full object-contain mix-blend-multiply transition-all duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
+                    @endif
+                    @if($secondImage)
+                        <img src="{{ asset('storage/' . $secondImage) }}"
+                            class="w-full h-full object-contain mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110"
+                            alt="{{ $product->name }} hover">
+                    @endif
                 </a>
             </div>
             <div class="text-center font-['Outfit'] px-2">

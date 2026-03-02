@@ -1,23 +1,26 @@
 @extends('frontend.layouts.master')
 
 @section('content')
-<style>
-    /* Custom Scrollbar for scrolling content */
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-        border-radius: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #d1d5db; 
-        border-radius: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #9ca3af; 
-    }
-</style>
+    <style>
+        /* Custom Scrollbar for scrolling content */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
 
     <style>
         /* Custom Checkbox */
@@ -79,14 +82,14 @@
 
     <!-- Top Promo Bar (Re-included here since we hide global one to control order/style if needed, or remove if identical) -->
     <!-- User's design has Ticker. Master has Ticker. If we hide .ticker-wrapper globally for this page, we hide BOTH. 
-             We should rename this ticker wrapper or accept Master's. 
-             User's ticker text is identical. Let's use Master's ticker? 
-             Wait, User's HTML has ticker *above* header. Master has ticker *above* header.
-             If I hide master header (#header-placeholder), I keep master ticker?
-             Master Ticker is separate div .ticker-wrapper.
-             If I hide .ticker-wrapper, I hide both.
-             Decision: Hide Master Ticker and Header, render everything fresh here to match exact design requested.
-        -->
+                     We should rename this ticker wrapper or accept Master's. 
+                     User's ticker text is identical. Let's use Master's ticker? 
+                     Wait, User's HTML has ticker *above* header. Master has ticker *above* header.
+                     If I hide master header (#header-placeholder), I keep master ticker?
+                     Master Ticker is separate div .ticker-wrapper.
+                     If I hide .ticker-wrapper, I hide both.
+                     Decision: Hide Master Ticker and Header, render everything fresh here to match exact design requested.
+                -->
     <div class="ticker-wrapper" style="display: block !important;">
         <div class="ticker">
             <span>✦ Find a new reason to shine with our Solitaires ✦</span>
@@ -130,33 +133,41 @@
         </div>
 
         <!-- Navigation Bar (Standard) -->
-    <nav
-        class="hidden lg:flex items-center justify-center space-x-6 min-[2000px]:space-x-12 text-[15px] min-[2000px]:text-2xl font-['Outfit'] font-medium tracking-wide bg-[linear-gradient(90deg,#D9BE87_0%,#BE933C_100%)] w-full py-[14px] text-white">
-        <div class="relative group">
-            <a href="{{ route('page.new-arrivals') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">New Arrivals</a>
-        </div>
-        <div class="relative group">
-            <a href="{{ route('page.best-seller') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Best Seller</a>
-        </div>
-        <div class="relative group">
-            <a href="{{ route('page.18kt') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">18KT Jewellery</a>
-        </div>
-        <div class="relative group">
-            <a href="{{ route('page.tattsvisfavourite') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Tattsvi's Favourite</a>
-        </div>
+        <nav
+            class="hidden lg:flex items-center justify-center space-x-6 min-[2000px]:space-x-12 text-[15px] min-[2000px]:text-2xl font-['Outfit'] font-medium tracking-wide bg-[linear-gradient(90deg,#D9BE87_0%,#BE933C_100%)] w-full py-[14px] text-white">
+            <div class="relative group">
+                <a href="{{ route('page.new-arrivals') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors">New Arrivals</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.best-seller') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors">Best Seller</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.18kt') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors">18KT Jewellery</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.tattsvisfavourite') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors">Tattsvi's Favourite</a>
+            </div>
             {{-- <div class="relative group">
-                <a href="{{ route('page.exhibition') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Exhibition</a>
+                <a href="{{ route('page.exhibition') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors">Exhibition</a>
             </div> --}}
-        <div class="relative group">
-            <a href="{{ route('page.readytostock') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Ready To Stock</a>
-        </div>
-        <div class="relative group">
-            <a href="{{ route('page.contact') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">Contact Us</a>
-        </div>
-        <div class="relative group">
-            <a href="{{ route('page.about') }}" class="flex items-center gap-1 hover:text-white/80 transition-colors">About Us</a>
-        </div>
-    </nav>
+            <div class="relative group">
+                <a href="{{ route('page.readytostock') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors">Ready To Stock</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.contact') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors">Contact Us</a>
+            </div>
+            <div class="relative group">
+                <a href="{{ route('page.about') }}"
+                    class="flex items-center gap-1 hover:text-white/80 transition-colors">About Us</a>
+            </div>
+        </nav>
     </header>
 
     <!-- Main Content -->
@@ -197,7 +208,8 @@
                                     class="font-semibold text-gray-900">{{ $defaultAddress->name }} ,
                                     {{ $defaultAddress->zip }}</span></p>
                             <p class="text-gray-500 text-xs mt-1">
-                                {{ Str::limit($defaultAddress->address_line_1 . ', ' . $defaultAddress->city, 60) }}</p>
+                                {{ Str::limit($defaultAddress->address_line_1 . ', ' . $defaultAddress->city, 60) }}
+                            </p>
                         @else
                             <p class="text-gray-500 text-sm">Deliver To : <span class="font-semibold text-gray-900">Select
                                     Address</span></p>
@@ -223,7 +235,7 @@
                                 products selected</span>
                         </label>
                         <!-- <button
-                                class="text-[#7D8FAB] hover:text-red-500 text-[16px] font-medium transition-colors font-Outfit">Remove</button> -->
+                                                class="text-[#7D8FAB] hover:text-red-500 text-[16px] font-medium transition-colors font-Outfit">Remove</button> -->
                     </div>
 
                     @foreach($cartItems as $item)
@@ -252,7 +264,7 @@
                                         ? (Str::startsWith($item->product->images->first()->image_path, 'http')
                                             ? $item->product->images->first()->image_path
                                             : asset('storage/' . $item->product->images->first()->image_path))
-                                        : asset('assets/ring.png');
+                                        : '';
                                 @endphp
                                 <img src="{{ $imagePath }}" alt="{{ $item->product->name }}"
                                     class="w-[95%] h-[95%] object-contain mix-blend-multiply">
@@ -390,7 +402,7 @@
                         @php
                             $img = $product->images->first()
                                 ? (Str::startsWith($product->images->first()->image_path, 'http') ? $product->images->first()->image_path : asset('storage/' . $product->images->first()->image_path))
-                                : asset('assets/ring.png');
+                                : '';
                         @endphp
                         <!-- Product Card -->
                         <div class="flex flex-col gap-3">

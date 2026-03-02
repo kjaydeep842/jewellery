@@ -9,66 +9,39 @@
 
   {{-- HERO SECTION AND COLLECTIONS --}}
   <section>
-    <!-- Product Image -->
-    <div class="relative w-full h-full mx-auto overflow-hidden">
-      <!-- Ghost Image for Height Stability -->
-      <div class="w-full relative invisible pointer-events-none">
-        @if(isset($banners) && $banners->count() > 0)
-          <img src="{{ asset('storage/' . $banners->first()->image) }}" class="w-full h-auto block opacity-0" alt="Ghost">
-        @else
-          <img src="assets/Top Banner Section.png" class="w-full h-auto block opacity-0" alt="Ghost">
-        @endif
-      </div>
-
-      <div id="slides" class="grid w-full h-full overflow-hidden absolute inset-0">
+    <!-- Top Hero Banner -->
+    <div class="relative w-full aspect-[1920/1100] mx-auto overflow-hidden bg-[#FDFBF7]">
+      <div id="slides" class="grid w-full overflow-hidden absolute top-0 left-0 right-0 -bottom-[2px]">
 
         @if(isset($banners) && $banners->count() > 0)
           @foreach($banners as $index => $banner)
             <div
-              class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
-              <img src="{{ asset('storage/' . $banner->image) }}"
-                class="{{ $index == 0 ? 'w-full h-auto block' : 'w-full h-full object-cover block' }}"
+              class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
+              <img src="{{ asset('storage/' . $banner->image) }}" class="w-full h-full object-cover object-center block"
                 alt="{{ $banner->title }}">
             </div>
           @endforeach
         @else
-          <!-- Fallback Static Slides -->
-          <!-- Slide 1 -->
-          <div class="col-start-1 row-start-1 w-full relative transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-auto block" alt="Slide 1">
-          </div>
-          <!-- Slide 2 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover block" alt="Slide 2">
-          </div>
-          <!-- Slide 3 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover block" alt="Slide 3">
-          </div>
-          <!-- Slide 4 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover block" alt="Slide 4">
-          </div>
+          {{-- No Fallback Banners --}}
         @endif
       </div>
 
+      <!-- Bottom Gradient Overlay -->
+      <div style="background: linear-gradient(180deg, rgba(243, 237, 230, 0) 0%, #FDFBF7 100%);"
+        class="absolute bottom-0 left-0 w-full h-[163px] z-30 pointer-events-none">
+      </div>
+
       <!-- Dots navigation -->
-      <div id="dots" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+      <div id="dots"
+        class="absolute bottom-6 md:bottom-10 right-6 md:right-[60px] lg:right-[100px] flex gap-[5px] w-[135px] z-40">
         @if(isset($banners) && $banners->count() > 0)
           @foreach($banners as $index => $banner)
             <button
-              class="w-8 h-1 rounded-[1px] {{ $index == 0 ? 'bg-white' : 'bg-white/50' }} hover:bg-white transition-all duration-300"
+              class="h-[4px] flex-1 rounded-[2px] {{ $index == 0 ? 'bg-black' : 'bg-black/10' }} hover:bg-black/30 transition-all duration-300"
               aria-label="Slide {{ $index + 1 }}"></button>
           @endforeach
         @else
-          <button class="w-8 h-1 rounded-[1px] bg-white hover:bg-white transition-all duration-300"
-            aria-label="Slide 1"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 2"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 3"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 4"></button>
+          {{-- No Fallback Dots --}}
         @endif
       </div>
     </div>
@@ -172,10 +145,10 @@
     </div>
   </section>
 
-  <section class="bg-white pt-4 pb-8 md:pt-4 md:pb-16 px-6">
+  <section class="bg-transparent pt-0 pb-4 md:pt-0 md:pb-8 px-6">
     <div class="max-w-[1600px] min-[2000px]:max-w-full mx-auto">
 
-      <div class="flex items-center justify-center mb-6 md:mb-10 gap-2 md:gap-6">
+      <div class="flex items-center justify-center mb-4 md:mb-6 gap-2 md:gap-4">
         <img src="assets/Design.png" alt="design left" class="h-5 md:h-8 w-auto object-contain">
         <div class="text-center">
           <p class="text-[16px] md:text-2xl min-[2000px]:text-4xl font-Alexandria tracking-[0.1em] text-[#5C4522] mb-1">
@@ -194,12 +167,12 @@
       </form>
       <!-- All shape -->
       <div id="diamond-shapes-container"
-        class="flex overflow-x-auto snap-x snap-mandatory gap-4 items-center md:gap-8 no-scrollbar pb-4">
+        class="flex overflow-x-auto snap-x snap-mandatory gap-[10px] justify-between items-center no-scrollbar pb-4 w-full max-w-[1920px] mx-auto px-4 lg:px-[273px]">
         @if(isset($shapes) && $shapes->count() > 0)
           @foreach($shapes as $shape)
             <div
               onclick="document.getElementById('shapeInput').value = '{{ $shape->name }}'; document.getElementById('shapeFilterForm').submit();"
-              class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
+              class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[22%] md:min-w-[100px]">
               <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
                 <img src="{{ asset('storage/' . $shape->image) }}" alt="{{ $shape->name }}"
                   class="w-full h-full object-contain grayscale reflection-img">
@@ -209,115 +182,15 @@
             </div>
           @endforeach
         @else
-          <!-- Round shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Round'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/round_shape.png" alt="Round" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Round</span>
-          </div>
-          <!-- Oval shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Oval'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/oval_shape.png" alt="Oval" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Oval</span>
-          </div>
-          <!-- Princess shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Princess'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/princess_shape.png" alt="Princess"
-                class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Princess</span>
-          </div>
-          <!-- Emerald shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Emerald'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/embral.png" alt="Emerald" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Emerald</span>
-          </div>
-          <!-- Radiant shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Radiant'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/radiant.png" alt="Radiant" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Radiant</span>
-          </div>
-          <!-- Heart shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Heart'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/heart.png" alt="Heart" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest group-hover:text-black transition-colors group-hover:order-first">Heart</span>
-          </div>
-          <!-- Cushion shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Cushion'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/cushion.png" alt="Cushion" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] group-hover:text-black transition-colors group-hover:order-first">Cushion</span>
-          </div>
-          <!-- Pear shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Pear'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/pear.png" alt="Pear" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest  group-hover:text-black transition-colors group-hover:order-first">Pear</span>
-          </div>
-          <!-- Marquise shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Marquise'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/marquies.png" alt="Marquise" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest  group-hover:text-black transition-colors group-hover:order-first">Marquise</span>
-          </div>
-          <!-- Asscher shape -->
-          <div
-            onclick="document.getElementById('shapeInput').value = 'Asscher'; document.getElementById('shapeFilterForm').submit();"
-            class="flex flex-col items-center group cursor-pointer gap-2 md:gap-4 flex-shrink-0 snap-start min-w-[28%] md:min-w-[12%]">
-            <div class="w-14 h-14 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
-              <img src="assets/asscher.png" alt="Asscher" class="w-full h-full object-contain grayscale reflection-img">
-            </div>
-            <span
-              class="text-[10px] min-[2000px]:text-xl font-['Outfit'] tracking-widest  group-hover:text-black transition-colors group-hover:order-first">Asscher</span>
-          </div>
+          {{-- No Fallback Shapes --}}
         @endif
       </div>
     </div>
   </section>
 
-  <section class="bg-[#FAF9F6] pt-12 pb-8 md:pt-28 md:pb-16 px-6">
+  <section class="bg-[#FAF9F6] pt-8 pb-4 md:pt-16 md:pb-8 px-6">
     <div class="max-w-[1600px] min-[2000px]:max-w-full mx-auto">
-      <div class="flex items-center justify-center mb-6 md:mb-8 gap-2 md:gap-6">
+      <div class="flex items-center justify-center mb-4 md:mb-6 gap-2 md:gap-4">
         <img src="assets/Design.png" alt="design left" class="h-5 md:h-8 w-auto object-contain">
         <div class="text-center">
           <p class="text-[16px] md:text-2xl min-[2000px]:text-4xl font-Alexandria tracking-[0.1em] text-[#5C4522] mb-1">
@@ -505,247 +378,137 @@
     </div>
     </div>
   </section>
-  <!--Banner Section-->
-  <section>
-    <!-- Product Image -->
-    <div class="relative w-full h-full mx-auto overflow-hidden">
-      <!-- Ghost Image for Height Stability -->
-      <div class="w-full relative invisible pointer-events-none">
-        @if(isset($middleBanners) && $middleBanners->count() > 0)
-          <img src="{{ url('storage/' . $middleBanners->first()->image) }}" class="w-full h-auto block opacity-0"
-            alt="Ghost">
-        @else
-          <img src="assets/Top Banner Section.png" class="w-full h-auto block opacity-0" alt="Ghost">
-        @endif
-      </div>
 
-      <div id="slides1" class="grid w-full h-full overflow-hidden absolute inset-0">
-        @if(isset($middleBanners) && $middleBanners->count() > 0)
-          @foreach($middleBanners as $index => $banner)
-            <div
-              class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
-              <img src="{{ url('storage/' . $banner->image) }}"
-                class="{{ $index == 0 ? 'w-full h-auto block' : 'w-full h-full object-cover block' }}"
-                alt="{{ $banner->title }}">
-            </div>
-          @endforeach
-        @else
-          <!-- Fallback Static Section if no active middle banners -->
-          <!-- Slide 1 -->
-          <div class="col-start-1 row-start-1 w-full relative transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-auto block" alt="Slide 1">
-          </div>
-          <!-- Slide 2 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover block" alt="Slide 2">
-          </div>
-          <!-- Slide 3 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/Top Banner Section.png" class="w-full h-full object-cover block" alt="Slide 3">
-          </div>
-          <!-- Slide 4 -->
-          <div class="absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out">
-            <img src="assets/banner.png" class="w-full h-full object-cover block" alt="Slide 4">
-          </div>
-        @endif
-      </div>
-
-      <!-- Dots navigation -->
-      <div id="dots1" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-        @if(isset($middleBanners) && $middleBanners->count() > 0)
-          @foreach($middleBanners as $index => $banner)
-            <button
-              class="w-8 h-1 rounded-[1px] {{ $index == 0 ? 'bg-white' : 'bg-white/50' }} hover:bg-white transition-all duration-300"
-              onclick="goToSlide1({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
-          @endforeach
-        @else
-          <button class="w-8 h-1 rounded-[1px] bg-white hover:bg-white transition-all duration-300"
-            aria-label="Slide 1"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 2"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 3"></button>
-          <button class="w-8 h-1 rounded-[1px] bg-white/50 hover:bg-white transition-all duration-300"
-            aria-label="Slide 4"></button>
-        @endif
-      </div>
-    </div>
-  </section>
-
-  <!-- heading section-->
-  <div class="ticker-wrapper">
-    <div class="ticker">
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-      <span>✦ Where Luxury Meets Legacy ✦</span>
-    </div>
-  </div>
-
-  <!--Category Section-->
-  <section class="relative bg-white overflow-hidden">
-    <!-- Background Color Block -->
-    <div class="absolute bottom-0 left-0 w-full h-[35%] bg-[#F3E5E5] pointer-events-none z-0"></div>
-    <div class="absolute bottom-0 left-0 w-full h-[40%] bg-[#F3E5E5]"></div>
-    <div class="relative z-10 max-w-[1600px] mx-auto px-6">
-      <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 md:gap-8 lg:gap-0">
-        <!-- Text Content -->
-        <div
-          class="relative w-full md:w-1/2 lg:w-[50%] flex flex-col items-center md:items-start lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-4 order-0 px-4 md:px-0">
-
-          <!-- Heading Group -->
-          <div class="flex items-center justify-center md:justify-start lg:justify-start gap-4 w-full">
-            <!-- Decorative Line (Responsive) -->
-            <div class="flex-none hidden sm:flex items-center w-[100px] md:w-[140px] lg:w-[280px]">
-              <img src="assets/Design_new.png" alt="" class="w-full h-auto object-contain">
-            </div>
-
-            <!-- Main Title -->
-            <div class="top-5 flex flex-col items-center md:items-start min-w-max">
-              <p style="font-family: 'Alexandria'"
-                class="font-normal text-lg md:text-xl lg:text-2xl text-[#5C4522] leading-tight mb-1">
-                Explore by</p>
-              <h2 id="exploreCategoryTitle" style="font-family: 'Outfit'"
-                class="font-medium text-4xl md:text-5xl lg:text-6xl text-[#CBA65A] leading-tight">
-                Category</h2>
-            </div>
-          </div>
-
-          <!-- Description -->
-          <div class="pl-0 md:pl-0 lg:pl-[310px] w-full text-center md:text-left mt-2 lg:mt-0">
-            <p id="catDescription" style="font-family: 'Outfit'"
-              class="font-normal text-base md:text-[18px] min-[2000px]:text-2xl leading-relaxed md:leading-[35px] text-[#3D3D42] max-w-lg md:max-w-xl mx-auto md:mx-0 lg:mx-0">
-              Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
-              subtle yet elegant.
-            </p>
-          </div>
+  <!--Banner Section Group (Figma Frame 2147239050: 1920x2213) -->
+  <div id="home-middle-banner-group" class="mx-auto overflow-hidden bg-transparent"
+    style="opacity: 1; transform: rotate(0deg); width: 100%;">
+    <section>
+      <!-- Middle Banner Slider -->
+      <div
+        class="relative w-full aspect-[4/3] md:aspect-[21/9] lg:aspect-[1920/800] 2xl:aspect-[1920/800] mx-auto overflow-hidden">
+        <div id="slides1" class="grid w-full h-full overflow-hidden absolute inset-0">
+          @if(isset($middleBanners) && $middleBanners->count() > 0)
+            @foreach($middleBanners as $index => $banner)
+              <div
+                class="{{ $index == 0 ? 'col-start-1 row-start-1 w-full h-full relative transition-transform duration-[1500ms] ease-out' : 'absolute top-0 left-0 w-full h-full transition-transform duration-[1500ms] ease-out' }}">
+                <img src="{{ url('storage/' . $banner->image) }}" class="w-full h-full object-cover object-center block"
+                  alt="{{ $banner->title }}">
+              </div>
+            @endforeach
+          @else
+            {{-- No Fallback Banners --}}
+          @endif
         </div>
 
-        <!-- Slider Image -->
-        <div
-          class="relative w-full md:w-1/2 lg:w-[50%] h-auto lg:h-[600px] flex flex-col justify-start items-center lg:items-center pt-10 lg:pt-0 px-0 lg:pl-[20px] gap-[1px] grow flex-none order-1">
-          <div class="relative group md:-translate-x-12 lg:-translate-x-20">
+        <!-- Dots navigation -->
+        <div id="dots1" data-active="bg-white" data-inactive="bg-white/50"
+          class="absolute bottom-6 md:bottom-[30px] left-1/2 -translate-x-1/2 flex gap-[5px] w-auto justify-center z-40">
+          @if(isset($middleBanners) && $middleBanners->count() > 0)
+            @foreach($middleBanners as $index => $banner)
+              <button
+                class="w-[30px] h-[4px] rounded-[2px] {{ $index == 0 ? 'bg-white' : 'bg-white/50' }} hover:bg-white/80 transition-all duration-300"
+                onclick="goToSlide1({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
+            @endforeach
+          @else
+            {{-- No Fallback Dots --}}
+          @endif
+        </div>
+    </section>
 
-            <button onclick="changeSlide('prev')"
-              class="absolute -left-6 md:-left-8 lg:-left-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
-              <i class="fa-solid fa-angle-left"></i>
-            </button>
+    <!-- heading section-->
+    <div class="ticker-wrapper">
+      <div class="ticker">
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+        <span>✦ Where Luxury Meets Legacy ✦</span>
+      </div>
+    </div>
 
-            <div
-              class="relative w-full max-w-[300px] md:max-w-[340px] lg:max-w-[380px] h-[420px] md:h-[500px] lg:h-[550px] bg-white rounded-b-full border-[10px] border-white shadow-2xl overflow-hidden mx-auto">
-              <img id="mainCatImg" src="assets/Rectangle_sidebar.png"
-                class="w-full h-full object-cover transition-opacity duration-500" alt="Category">
+    <!--Category Section-->
+    <section class="relative bg-transparent overflow-hidden">
+      <!-- Background Color Block -->
+      <div class="absolute bottom-0 left-0 w-full h-[25%] bg-[#F3E5E5] pointer-events-none z-0"></div>
+      <div class="absolute bottom-0 left-0 w-full h-[30%] bg-[#F3E5E5]"></div>
+      <div class="relative z-10 max-w-[1920px] mx-auto px-6 lg:px-20">
+        <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-10 md:gap-8 lg:gap-10">
+          <!-- Text Content -->
+          <div
+            class="relative w-full md:w-1/2 lg:w-[45%] flex flex-col items-center md:items-start lg:items-start py-8 md:py-12 lg:py-16 gap-6 lg:gap-8 order-0 px-4 md:px-0">
 
-              <div class="absolute bottom-16 left-0 w-full text-center">
-                <span id="mainCatTitle"
-                  class="bg-white/90 backdrop-blur-md px-8 py-2.5 min-[2000px]:px-12 min-[2000px]:py-4 rounded-full text-amber-900 font-serif italic min-[2000px]:text-4xl shadow-sm border border-amber-50 tracking-wide">Rings</span>
+            <!-- Heading Group -->
+            <div class="flex items-center justify-center md:justify-start lg:justify-start gap-4 w-full">
+              <!-- Decorative Line (Responsive) -->
+              <div class="flex-none hidden sm:flex items-center w-[100px] md:w-[140px] lg:w-[200px]">
+                <img src="assets/Design_new.png" alt="" class="w-full h-auto object-contain">
+              </div>
+
+              <!-- Main Title -->
+              <div class="top-5 flex flex-col items-center md:items-start min-w-max">
+                <p style="font-family: 'Alexandria'"
+                  class="font-normal text-lg md:text-xl lg:text-2xl text-[#5C4522] leading-tight mb-1">
+                  Explore by</p>
+                <h2 id="exploreCategoryTitle" style="font-family: 'Outfit'"
+                  class="font-medium text-4xl md:text-5xl lg:text-6xl text-[#CBA65A] leading-tight">
+                  Category</h2>
               </div>
             </div>
 
-            <button onclick="changeSlide('next')"
-              class="absolute -right-6 md:-right-8 lg:-right-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
-              <i class="fa-solid fa-angle-right"></i>
-            </button>
+            <!-- Description -->
+            <div class="pl-0 md:pl-0 lg:pl-[216px] w-full text-center md:text-left mt-2 lg:mt-0 xl:pl-[216px]">
+              <p id="catDescription" style="font-family: 'Outfit'"
+                class="font-normal text-base md:text-[18px] min-[2000px]:text-2xl leading-relaxed md:leading-[35px] text-[#3D3D42] max-w-lg md:max-w-xl mx-auto md:mx-0 lg:mx-0">
+                Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
+                subtle yet elegant.
+              </p>
+            </div>
+          </div>
 
-            <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-amber-50/50 rounded-full blur-3xl -z-10">
+          <!-- Slider Image -->
+          <div
+            class="relative w-full md:w-1/2 lg:w-[50%] h-auto lg:h-[600px] flex flex-col justify-start items-center lg:items-center pt-10 lg:pt-0 px-0 lg:pl-[20px] gap-[1px] grow flex-none order-1">
+            <div class="relative group">
+
+              <button onclick="changeSlide('prev')"
+                class="absolute -left-6 md:-left-8 lg:-left-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
+                <i class="fa-solid fa-angle-left"></i>
+              </button>
+
+              <div
+                class="relative w-full aspect-[3/4] sm:aspect-[4/5] md:aspect-[2/3] max-w-[300px] md:max-w-[340px] lg:max-w-[380px] bg-white rounded-b-full border-[10px] border-white shadow-2xl overflow-hidden mx-auto">
+                <img id="mainCatImg" src="assets/Rectangle_sidebar.png"
+                  class="w-full h-full object-cover transition-opacity duration-500" alt="Category">
+
+                <div class="absolute bottom-16 left-0 w-full text-center">
+                  <span id="mainCatTitle"
+                    class="bg-white/90 backdrop-blur-md px-8 py-2.5 min-[2000px]:px-12 min-[2000px]:py-4 rounded-full text-amber-900 font-serif italic min-[2000px]:text-4xl shadow-sm border border-amber-50 tracking-wide">Rings</span>
+                </div>
+              </div>
+
+              <button onclick="changeSlide('next')"
+                class="absolute -right-6 md:-right-8 lg:-right-12 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#EAD8A6] border border-amber-100 flex items-center justify-center text-amber-800 shadow-xl hover:bg-amber-50 transition-all active:scale-90">
+                <i class="fa-solid fa-angle-right"></i>
+              </button>
+
+              <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-amber-50/50 rounded-full blur-3xl -z-10">
+              </div>
             </div>
           </div>
         </div>
       </div>
+  </div>
   </section>
 
   <!-- Product Images-->
   <!---category image 1-->
   <!-- Product Images Section with Gradient -->
   <!-- Product Images Section with Gradient -->
-  <section class="w-full pb-12 pt-6 md:pt-10" style="background: linear-gradient(180deg, #F3E5E5 0%, #FDFBF7 100%);">
+  <section class="w-full pb-12 pt-0" style="background: linear-gradient(180deg, #F3E5E5 0%, #FDFBF7 100%);">
     <div id="productsliderGrid"
-      class="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-4 md:px-[60px] lg:px-[100px] snap-x snap-mandatory pb-8">
-      @if(isset($products) && $products->count() > 0)
-        @foreach($products as $product)
-          <!-- Dynamic Product Item -->
-          <div
-            class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start">
-            <div
-              class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
-              <span
-                class="absolute font-['Alexandria'] font-light top-2 right-0 w-[75px] h-[25px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[12px] z-10">Best
-                Seller</span>
-              <div
-                class="absolute bottom-3 left-2 z-20 flex bg-white h-[32px] w-[32px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm cursor-pointer wishlist-btn hover:bg-[#FAF8F1]"
-                data-product-id="{{ $product->id }}">
-                @if(Auth::check() && Auth::user()->wishlists->contains('product_id', $product->id))
-                  <i class="fa-solid fa-heart text-[#CBA65A] text-sm"></i>
-                @else
-                  <img src="{{ asset('assets/ic_wishlist1.png') }}" class="w-4 h-4" alt="Wishlist">
-                @endif
-              </div>
-              <a href="{{ route('product.details', $product->slug) }}"
-                class="w-full h-full flex items-center justify-center block p-4">
-                <!-- Dynamic Image with Fallback -->
-                <img
-                  src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->image_path) : asset('assets/ring.png') }}"
-                  alt="{{ $product->name }}"
-                  class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-                <img
-                  src="{{ $product->images->skip(1)->first() ? asset('storage/' . $product->images->skip(1)->first()->image_path) : asset('assets/hover_image_p.png') }}"
-                  class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
-              </a>
-            </div>
-            <div class="text-center font-['Outfit'] px-1">
-              <!-- Dynamic Name -->
-              <h3
-                class="text-sm md:text-base font-medium text-[#1A1A1A] mb-1 truncate w-full hover:text-[#C34A37] transition-colors"
-                title="{{ $product->name }}">
-                <a href="{{ route('product.details', $product->slug) }}">{{ $product->name }}</a>
-              </h3>
-              <div class="flex flex-wrap items-center justify-center gap-2 text-xs md:text-sm">
-                <!-- Dynamic Price -->
-                <span class="font-bold text-[#1A1A1A] whitespace-nowrap">₹
-                  {{ number_format($product->price, 2) }}</span>
-                <!-- Dummy Original Price Logic -->
-                <span class="text-[#999999] line-through whitespace-nowrap">₹
-                  {{ number_format($product->price * 1.2, 2) }}</span>
-              </div>
-            </div>
-          </div>
-        @endforeach
-      @else
-        <!-- Fallback Static Items (Repeated for Demo) -->
-        @for ($i = 0; $i < 5; $i++)
-          <!-- <div
-                                                                                                                                                                                                                                                                                              class="flex flex-col gap-3 w-[calc(50%-8px)] md:w-[calc(33.33%-16px)] lg:w-[calc(25%-18px)] xl:w-[calc(20%-20px)] flex-shrink-0 snap-start"> -->
-          <div
-            class="bg-white box-border relative w-full aspect-square rounded-[14px] shadow-[0_2px_8px_rgba(0,0,0,0.08)] group transition-all duration-300 hover:shadow-lg overflow-hidden">
-            <span
-              class="absolute font-['Alexandria'] font-light top-2 right-0 w-[75px] h-[25px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[12px] z-10">Best
-              Seller</span>
-            <button
-              class="absolute flex bottom-3 left-2 bg-white h-[32px] w-[32px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all z-20">
-              <img src="{{ asset('assets/ic_wishlist1.png') }}" class="w-4 h-4" alt="">
-            </button>
-            <div class="w-full h-full flex items-center justify-center p-4">
-              <img src="{{ asset('assets/ring.png') }}" alt="Ring"
-                class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-              <img src="{{ asset('assets/hover_image_p.png') }}"
-                class="w-full h-full object-cover mix-blend-multiply absolute inset-0 p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
-            </div>
-          </div>
-          <div class="text-center font-['Outfit'] px-1">
-            <h3
-              class="text-sm md:text-base font-medium text-[#1A1A1A] mb-1 truncate w-full hover:text-[#C34A37] transition-colors">
-              Twist Cross Cage
-              Ring</h3>
-            <div class="flex items-center justify-center gap-2 text-xs md:text-sm">
-              <span class="font-bold text-[#1A1A1A]">₹ 949.00</span>
-              <span class="text-[#999999] line-through">₹ 949.00</span>
-            </div>
-          </div>
-          <!-- </div> -->
-        @endfor
-      @endif
+      class="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-4 md:px-[60px] lg:px-[100px] snap-x snap-mandatory pb-8 pt-">
+      @include('frontend.partials.home_product_slider')
     </div>
 
     </div>
@@ -946,7 +709,7 @@
 
 
   <!-- Unique Style Section -->
-  <section class="bg-white pt-4 pb-8 md:pt-8 md:pb-0 overflow-hidden relative w-full max-w-[100vw] z-20">
+  <section class="bg-transparent pt-4 pb-8 md:pt-8 md:pb-0 overflow-hidden relative w-full max-w-[100vw] z-20">
     <!-- Title -->
     <div class="text-center mb-0 relative z-30">
       <div class="flex items-center justify-center gap-1 md:gap-4 mb-2">
@@ -1002,48 +765,7 @@
               </div>
             @endforeach
           @else
-            <!-- Fallback -->
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq1.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq2.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq3.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq4.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq1.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq2.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq3.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
-            <div
-              class="relative min-w-[35%] md:min-w-[30%] lg:min-w-[25%] h-full bg-black overflow-hidden group cursor-pointer border-r border-white/10">
-              <img src="assets/Uniq4.png"
-                class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-            </div>
+            {{-- No Fallback Items --}}
           @endif
 
         </div>
@@ -1088,11 +810,19 @@
           <div class="flex-1 flex justify-center items-center relative w-full h-full order-first lg:order-none">
             <a href="{{ route('product.details', $bestSellerProduct->slug) }}"
               class="block w-full max-w-[300px] md:max-w-[450px] lg:max-w-[600px] min-[2000px]:max-w-[1000px] aspect-square flex items-center justify-center">
-              <img
-                src="{{ $bestSellerProduct->image ? asset('storage/' . $bestSellerProduct->image) : ($bestSellerProduct->images->first() ? asset('storage/' . $bestSellerProduct->images->first()->image_path) : asset('assets/Product Photo.png')) }}"
-                class="w-full h-full object-contain hover:scale-105 transition-transform duration-500 mix-blend-multiply border-none outline-none ring-0"
-                style="filter: brightness(1.15) contrast(1.05); -webkit-mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%); mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%);"
-                alt="{{ $bestSellerProduct->name }}">
+              @php
+                $bsImagePath = $bestSellerProduct->image ?: ($bestSellerProduct->images->first() ? $bestSellerProduct->images->first()->image_path : null);
+              @endphp
+              @if($bsImagePath)
+                <img src="{{ asset('storage/' . $bsImagePath) }}"
+                  class="w-full h-full object-contain hover:scale-105 transition-transform duration-500 mix-blend-multiply border-none outline-none ring-0"
+                  style="filter: brightness(1.15) contrast(1.05); -webkit-mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%); mask-image: radial-gradient(ellipse at center, black 90%, transparent 100%);"
+                  alt="{{ $bestSellerProduct->name }}">
+              @else
+                <div class="w-full h-full flex items-center justify-center bg-gray-50/50">
+                  {{-- No Fallback Image --}}
+                </div>
+              @endif
             </a>
           </div>
 
@@ -1314,7 +1044,7 @@
       </div>
     </div>
   </section>
-  <section class="py-8 md:py-20 bg-white px-4 md:px-8 w-full max-w-[100vw] overflow-hidden">
+  <section class="py-8 md:py-20 bg-transparent px-4 md:px-8 w-full max-w-[100vw] overflow-hidden">
     <div class="w-full mx-auto">
       <!-- Header -->
       <div class="text-center mb-12">
@@ -1362,11 +1092,17 @@
                   </p>
 
                   <div class="flex items-center justify-start gap-4">
-                    <!-- User Image -->
-                    <img
-                      src="{{ $review->user && $review->user->profile_picture ? asset('storage/' . $review->user->profile_picture) : asset('assets/client1.png') }}"
-                      class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-[10px] object-cover"
-                      alt="{{ $review->user->name ?? 'User' }}">
+                    <!-- User Image or Initials Fallback -->
+                    @if($review->user && $review->user->profile_picture)
+                      <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                        class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-full object-cover border border-[#EADDCC]"
+                        alt="{{ $review->user->name ?? 'User' }}">
+                    @else
+                      <div
+                        class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[#5C4522] font-['Outfit'] font-bold text-sm md:text-base min-[2000px]:text-2xl uppercase border border-[#EADDCC]">
+                        {{ $review->user->initials ?? 'U' }}
+                      </div>
+                    @endif
 
                     <div>
                       <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-base min-[2000px]:text-2xl">
@@ -1387,36 +1123,7 @@
               </div>
             </div>
           @empty
-            <!-- Fallback -->
-            <div
-              class="border border-[#DBB358] w-[80vw] md:w-[60%] lg:w-[850px] xl:w-[1000px] 2xl:w-[1200px] min-[2000px]:w-[1400px] flex-shrink-0 snap-center bg-transparent p-6 md:p-8 lg:p-10 min-[2000px]:p-16 rounded-[20px] relative flex flex-col h-auto min-h-[300px] min-[2000px]:min-h-[405px] justify-center group transition-all duration-300 hover:shadow-md">
-              <div class="flex flex-row items-start gap-4 md:gap-8 h-full">
-                <div class="flex-shrink-0">
-                  <img src="{{ asset('assets/ReviewQuote.png') }}"
-                    class="w-12 h-12 md:w-16 md:h-16 min-[2000px]:w-24 min-[2000px]:h-24 object-contain opacity-100"
-                    alt="quote">
-                </div>
-                <div class="flex flex-col justify-center h-full w-full overflow-hidden">
-                  <p
-                    class="font-['Outfit'] text-[#0D0D0E] text-base md:text-lg min-[2000px]:text-3xl leading-relaxed mb-6 font-medium text-left break-words break-all line-clamp-4 md:line-clamp-5">
-                    "Tattsvi jewellery feels incredibly refined and comfortable to wear. The designs are
-                    subtle yet elegant, making them perfect for everyday styling."
-                  </p>
-                  <div class="flex items-center justify-start gap-4">
-                    <img src="{{ asset('assets/client1.png') }}"
-                      class="w-10 h-10 min-[2000px]:w-16 min-[2000px]:h-16 rounded-[10px] object-cover" alt="User">
-                    <div>
-                      <h4 class="font-['Outfit'] font-semibold text-[#0D0D0E] text-base min-[2000px]:text-2xl">
-                        Ananya R.</h4>
-                      <div class="flex gap-1 text-[#CBA65A] text-[10px] min-[2000px]:text-lg">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                          class="fas fa-star"></i><i class="fas fa-star"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {{-- No Fallback Reviews --}}
           @endforelse
         </div>
 
@@ -1481,106 +1188,109 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                                                                                      {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
-              @json($categories),
-              "{{ url('storage') }}",
-              "{{ asset('') }}"
-            );
+                                        {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+          @json($categories),
+          "{{ url('storage') }}",
+          "{{ asset('') }}"
+        );
+      } else {
+        console.warn('initHomeInteractive function not found. Ensure script.js is loaded.');
+      }
+
+      // Auto-scroll for Diamond Shapes
+      const shapeContainer = document.getElementById('diamond-shapes-container');
+      if (shapeContainer) {
+        const originalContent = Array.from(shapeContainer.children);
+
+        // Clone content to ensure seamless scrolling (x3 for safety)
+        for (let i = 0; i < 2; i++) {
+          originalContent.forEach(item => shapeContainer.appendChild(item.cloneNode(true)));
+        }
+
+        // Auto-scroll logic
+        let scrollAmount = 0;
+        const speed = 0.5;
+        let isHovered = false;
+
+        const pause = () => isHovered = true;
+        const resume = () => isHovered = false;
+
+        shapeContainer.addEventListener('mouseenter', pause);
+        shapeContainer.addEventListener('mouseleave', resume);
+        shapeContainer.addEventListener('touchstart', pause);
+        shapeContainer.addEventListener('touchend', resume);
+
+        // Animation Loop
+        function animateScroll() {
+          if (!isHovered && shapeContainer.scrollWidth > shapeContainer.clientWidth) {
+            scrollAmount += speed;
+
+            if (scrollAmount >= (shapeContainer.scrollWidth / 3)) {
+              scrollAmount = 0;
+            }
+            shapeContainer.scrollLeft = scrollAmount;
           } else {
-            console.warn('initHomeInteractive function not found. Ensure script.js is loaded.');
+            scrollAmount = shapeContainer.scrollLeft;
           }
+          requestAnimationFrame(animateScroll);
+        }
+        animateScroll();
+      }
 
-          // Auto-scroll for Diamond Shapes
-          const shapeContainer = document.getElementById('diamond-shapes-container');
-          if (shapeContainer) {
-            const originalContent = Array.from(shapeContainer.children);
+      // Continuous Auto-Scroll for Unique Style Slider
+      const uniqueSlider = document.getElementById('uniqueStyleSlider');
+      if (uniqueSlider) {
+        // Clone content for seamless loop (x3 to be safe)
+        const uniqueContent = Array.from(uniqueSlider.children);
+        for (let i = 0; i < 2; i++) {
+          uniqueContent.forEach(item => uniqueSlider.appendChild(item.cloneNode(true)));
+        }
 
-            // Clone content to ensure seamless scrolling (x3 for safety)
-            for (let i = 0; i < 2; i++) {
-              originalContent.forEach(item => shapeContainer.appendChild(item.cloneNode(true)));
+        let uniqueScrollAmount = 0;
+        const uniqueSpeed = 0.8; // Slightly faster or adjustable
+        let uniqueHovered = false;
+
+        const pauseUnique = () => uniqueHovered = true;
+        const resumeUnique = () => uniqueHovered = false;
+
+        uniqueSlider.addEventListener('mouseenter', pauseUnique);
+        uniqueSlider.addEventListener('mouseleave', resumeUnique);
+        uniqueSlider.addEventListener('touchstart', pauseUnique);
+        uniqueSlider.addEventListener('touchend', resumeUnique);
+
+        function animateUniqueScroll() {
+          if (!uniqueHovered && uniqueSlider.scrollWidth > uniqueSlider.clientWidth) {
+            uniqueScrollAmount += uniqueSpeed;
+            // Reset when we've scrolled past the first set (approx 1/3 of total cloned width)
+            if (uniqueScrollAmount >= (uniqueSlider.scrollWidth / 3)) {
+              uniqueScrollAmount = 0;
             }
-
-            // Auto-scroll logic
-            let scrollAmount = 0;
-            const speed = 0.5;
-            let isHovered = false;
-
-            const pause = () => isHovered = true;
-            const resume = () => isHovered = false;
-
-            shapeContainer.addEventListener('mouseenter', pause);
-            shapeContainer.addEventListener('mouseleave', resume);
-            shapeContainer.addEventListener('touchstart', pause);
-            shapeContainer.addEventListener('touchend', resume);
-
-            // Animation Loop
-            function animateScroll() {
-              if (!isHovered && shapeContainer.scrollWidth > shapeContainer.clientWidth) {
-                scrollAmount += speed;
-
-                if (scrollAmount >= (shapeContainer.scrollWidth / 3)) {
-                  scrollAmount = 0;
-                }
-                shapeContainer.scrollLeft = scrollAmount;
-              } else {
-                scrollAmount = shapeContainer.scrollLeft;
-              }
-              requestAnimationFrame(animateScroll);
-            }
-            animateScroll();
+            uniqueSlider.scrollLeft = uniqueScrollAmount;
+          } else {
+            // Sync scroll amount if user manually scrolled
+            uniqueScrollAmount = uniqueSlider.scrollLeft;
           }
+          requestAnimationFrame(animateUniqueScroll);
+        }
+        animateUniqueScroll();
+      }
 
-          // Continuous Auto-Scroll for Unique Style Slider
-          const uniqueSlider = document.getElementById('uniqueStyleSlider');
-          if (uniqueSlider) {
-            // Clone content for seamless loop (x3 to be safe)
-            const uniqueContent = Array.from(uniqueSlider.children);
-            for (let i = 0; i < 2; i++) {
-              uniqueContent.forEach(item => uniqueSlider.appendChild(item.cloneNode(true)));
-            }
-
-            let uniqueScrollAmount = 0;
-            const uniqueSpeed = 0.8; // Slightly faster or adjustable
-            let uniqueHovered = false;
-
-            const pauseUnique = () => uniqueHovered = true;
-            const resumeUnique = () => uniqueHovered = false;
-
-            uniqueSlider.addEventListener('mouseenter', pauseUnique);
-            uniqueSlider.addEventListener('mouseleave', resumeUnique);
-            uniqueSlider.addEventListener('touchstart', pauseUnique);
-            uniqueSlider.addEventListener('touchend', resumeUnique);
-
-            function animateUniqueScroll() {
-              if (!uniqueHovered && uniqueSlider.scrollWidth > uniqueSlider.clientWidth) {
-                uniqueScrollAmount += uniqueSpeed;
-                // Reset when we've scrolled past the first set (approx 1/3 of total cloned width)
-                if (uniqueScrollAmount >= (uniqueSlider.scrollWidth / 3)) {
-                  uniqueScrollAmount = 0;
-                }
-                uniqueSlider.scrollLeft = uniqueScrollAmount;
-              } else {
-                // Sync scroll amount if user manually scrolled
-                uniqueScrollAmount = uniqueSlider.scrollLeft;
-              }
-              requestAnimationFrame(animateUniqueScroll);
-            }
-            animateUniqueScroll();
+      // Testimonial Slider Navigation
+      window.scrollSlider = function (direction) {
+        const slider = document.getElementById('testimonialSlider');
+        if (slider) {
+          const scrollAmount = slider.offsetWidth; // Scroll one full width
+          if (direction === 'left') {
+            slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+          } else {
+            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
           }
+        }
+      };
 
-          // Testimonial Slider Navigation
-          window.scrollSlider = function (direction) {
-            const slider = document.getElementById('testimonialSlider');
-            if (slider) {
-              const scrollAmount = slider.offsetWidth; // Scroll one full width
-              if (direction === 'left') {
-                slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-              } else {
-                slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-              }
-            }
-          };
-
-        });
-      </script>
+    });
+  </script>
+  @guest
+    @include('frontend.partials.login_popup')
+  @endguest
 @endsection

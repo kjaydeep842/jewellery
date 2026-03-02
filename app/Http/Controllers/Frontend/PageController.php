@@ -67,12 +67,14 @@ class PageController extends Controller
 
     public function faq()
     {
-        return view('frontend.pages.faq');
+        $faqs = \App\Models\Faq::where('status', true)->get();
+        return view('frontend.pages.faq', compact('faqs'));
     }
 
     public function returnExchange()
     {
-        return view('frontend.pages.return_exchange');
+        $policies = \App\Models\ReturnExchange::where('status', true)->get();
+        return view('frontend.pages.return_exchange', compact('policies'));
     }
 
     public function blog()

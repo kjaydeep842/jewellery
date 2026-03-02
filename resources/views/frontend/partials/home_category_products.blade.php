@@ -11,9 +11,9 @@
                     <img src="assets/ic_wishlist1.png" class="w-4 h-4" alt="">
                 </button>
                 <div class="w-full h-full flex items-center justify-center">
-                    <img src="{{ $product->images->first()->url ?? 'assets/ring_2.png' }}" alt="{{ $product->name }}"
+                    <img src="{{ $product->images->first()->url ?? '' }}" alt="{{ $product->name }}"
                         class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 ease-in-out group-hover:opacity-0 group-hover:scale-110">
-                    <img src="{{ $product->images->get(1)->url ?? 'assets/hover_image_p.png' }}"
+                    <img src="{{ $product->images->get(1)->url ?? '' }}"
                         class="w-full h-full object-cover mix-blend-multiply absolute inset-0 opacity-0 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-110">
                 </div>
             </div>

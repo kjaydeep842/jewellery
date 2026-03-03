@@ -90,92 +90,46 @@
 
                             <!-- Top Searches Items Container -->
                             <div
-                                class="flex flex-row flex-wrap items-center content-start p-[14px_16px] gap-[12px] w-full min-h-[152px] box-border flex-shrink-0">
-                                <!-- Item 1 -->
-                                <button data-search="Mangalsutra"
-                                    class="search-top-btn flex items-center gap-2.5  border border-[#E6E6E6]  hover:border-[#D4AF37] rounded-2xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
-                                    <div
-                                        class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        {{-- No Fallback Image --}}
-                                    </div>
-                                    <span
-                                        class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Mangalsutra</span>
-                                </button>
-
-                                <!-- Item 2 -->
-                                <button data-search="Rings"
-                                    class="search-top-btn flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
-                                    <div
-                                        class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        {{-- No Fallback Image --}}
-                                    </div>
-                                    <span
-                                        class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
-                                </button>
-
-                                <!-- Item 3 -->
-                                <button
-                                    class="flex items-center gap-1.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
-                                    <div
-                                        class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        {{-- No Fallback Image --}}
-                                    </div>
-                                    <span
-                                        class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
-                                </button>
-
-                                <!-- Item 4 -->
-                                <button
-                                    class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
-                                    <div
-                                        class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        {{-- No Fallback Image --}}
-                                    </div>
-                                    <span
-                                        class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
-                                </button>
-
-                                <!-- Item 5 -->
-                                <button
-                                    class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
-                                    <div
-                                        class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        {{-- No Fallback Image --}}
-                                    </div>
-                                    <span
-                                        class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
-                                </button>
-
-                                <!-- Item 6 -->
-                                <button
-                                    class="flex items-center gap-2.5 border border-[#E6E6E6] hover:border-[#D4AF37] rounded-xl p-1.5 pr-2 transition-all bg-white hover:shadow-md group h-[60px] w-[133px] flex-none">
-                                    <div
-                                        class="w-[36px] h-[36px] rounded bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center group-hover:bg-white transition-colors">
-                                        {{-- No Fallback Image --}}
-                                    </div>
-                                    <span
-                                        class="text-[#1A1A1A] font-['Outfit'] text-[13px] font-medium group-hover:text-[#5C4522] whitespace-nowrap tracking-tight">Rings</span>
-                                </button>
+                                class="flex flex-row flex-wrap items-center content-start p-[14px_16px] gap-[8px] w-full min-h-[120px] box-border flex-shrink-0">
+                                @if(isset($topSearchCategories) && $topSearchCategories->count() > 0)
+                                    @foreach($topSearchCategories as $topCat)
+                                        <button data-search="{{ $topCat->name }}"
+                                            class="search-top-btn flex items-center gap-[8px] border border-[#E6E6E6] hover:border-[#D4AF37] rounded-[16px] p-[8px] pr-[12px] transition-all bg-white hover:shadow-md group flex-none">
+                                            <div
+                                                class="w-[40px] h-[40px] rounded-[8px] bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center overflow-hidden">
+                                                @if($topCat->product_image)
+                                                    <img src="{{ asset('storage/' . $topCat->product_image) }}"
+                                                        alt="{{ $topCat->name }}"
+                                                        class="w-full h-full object-contain mix-blend-multiply">
+                                                @else
+                                                    <img src="{{ asset('assets/logo.png') }}" alt="{{ $topCat->name }}"
+                                                        class="w-5 h-5 object-contain opacity-30">
+                                                @endif
+                                            </div>
+                                            <span
+                                                class="text-[#2E2E2E] font-['Outfit'] text-[12px] font-normal group-hover:text-[#5C4522] whitespace-nowrap">{{ $topCat->name }}</span>
+                                        </button>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
 
-                        <!-- Suggestions View (Hidden by default) - Preserved for JS Compatibility -->
-                        <div id="search-suggestions-view" class="hidden w-full h-full flex-col">
+                        <!-- Suggestions View (Hidden by default) -->
+                        <div id="search-suggestions-view" class="hidden w-full flex-col">
                             <!-- Suggestions Header -->
-                            <div class="px-5 py-4">
-                                <h3 class="text-[#8B7E66] text-xs font-['Outfit'] uppercase tracking-wide">Suggestions
-                                </h3>
+                            <div class="px-5 py-3 border-b border-gray-100">
+                                <h3 class="text-[#888891] text-[18px] font-['Outfit'] font-normal">Suggestions</h3>
                             </div>
 
                             <!-- Suggestions List -->
                             <div id="suggestions-list" class="flex-1 flex flex-col overflow-y-auto">
-                                <!-- Dynamic Content -->
+                                <!-- Dynamic suggestion items rendered by JS -->
                             </div>
 
                             <!-- Search For Footer -->
                             <button id="search-for-btn"
-                                class="w-full px-5 py-4 mt-auto border-t border-gray-100 flex items-center justify-between hover:bg-gray-50 transition-colors group bg-[#FFFCF8]">
-                                <span class="text-[#1A1A1A] font-['Outfit'] text-[15px] font-medium">Search For "<span
+                                class="w-full px-5 py-4 mt-auto border-t border-gray-100 flex items-center justify-between hover:bg-gray-50 transition-colors group">
+                                <span class="text-[#1A1A1A] font-['Outfit'] text-[20px] font-medium">Search For "<span
                                         id="search-query-text" class="font-semibold"></span>"</span>
                                 <i
                                     class="fa-solid fa-arrow-right text-gray-400 group-hover:text-[#B39359] transition-colors"></i>
@@ -260,43 +214,44 @@
         <!-- Navigation Bar -->
 
         <nav id="main-navigation"
-            class="hidden lg:flex items-center justify-center flex-wrap gap-4 xl:gap-5 2xl:gap-8 min-[2000px]:gap-12 text-[13px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-medium tracking-normal transition-all duration-300 md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto">
+            class="hidden lg:flex items-center justify-center flex-nowrap lg:gap-4 xl:gap-5 2xl:gap-[40px] min-[2000px]:gap-12 lg:text-[14px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-normal tracking-normal leading-none transition-all duration-300 md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto">
             <div class="relative group">
                 <a href="{{ route('page.new-arrivals') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">New
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">New
                     Arrivals</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.best-seller') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Best
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Best
                     Seller</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.18kt') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">18KT
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">18KT
                     Jewellery</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.tattsvisfavourite') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Tattsvi's Favourite</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Tattsvi's
+                    Favourite</a>
             </div>
             {{-- <div class="relative group">
                 <a href="{{ route('page.exhibition') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Exhibition</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Exhibition</a>
             </div> --}}
             <div class="relative group">
                 <a href="{{ route('page.readytostock') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Ready To
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Ready To
                     Stock</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.contact') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">Contact
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Contact
                     Us</a>
             </div>
             <div class="relative group">
                 <a href="{{ route('page.about') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2">About Us</a>
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">About Us</a>
             </div>
         </nav>
     </header>

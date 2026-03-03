@@ -59,6 +59,16 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('cartCount', $cartCount);
             $view->with('wishlistCount', $wishlistCount);
+
+            // Top Search Categories with product images
+            $topSearchCategories = \App\Models\Category::whereHas('products', function ($q) {
+                $q->where('status', 'active');
+            })->take(6)->get()->map(function ($cat) {
+                $product = $cat->products()->where('status', 'active')->whereNotNull('image')->first();
+                $cat->product_image = $product ? $product->image : null;
+                return $cat;
+            });
+            $view->with('topSearchCategories', $topSearchCategories);
         });
     }
 }

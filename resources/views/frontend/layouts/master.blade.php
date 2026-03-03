@@ -38,7 +38,8 @@
             max-width: 100vw;
         }
 
-        html, body {
+        html,
+        body {
             overflow-x: hidden !important;
             width: 100% !important;
             max-width: 100% !important;
@@ -156,7 +157,7 @@
             /*border-top: 2px solid #d4b1b1;
             border-bottom: 2px solid #d4b1b1;*/
             white-space: nowrap;
-           }
+        }
 
         /* Moving Text */
         .ticker {
@@ -167,13 +168,13 @@
 
         .ticker span {
             display: inline-block;
-            font-family: outfit;
+            font-family: 'Outfit', sans-serif;
             padding-right: 50px;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 300;
-            color: #6b4b4b;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            color: #5C4522;
+            letter-spacing: 0;
+            line-height: 100%;
         }
 
         /* Animation */
@@ -191,7 +192,6 @@
             -webkit-box-reflect: below -45px linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.15));
         }
     </style>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -214,15 +214,12 @@
     <div id="mobile-menu-sidebar"
         class="fixed top-0 left-0 w-[85%] max-w-[320px] h-full bg-white z-[70] transform -translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
         <!-- Header -->
-        <div class="p-5 flex justify-between items-center border-b border-gray-100 bg-cream">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 flex items-center justify-center">
-                    <img src="{{ asset('assets/logo.png') }}" alt="logo">
-                </div>
-                <span class="serif text-xl tracking-tighter">TATTSVI</span>
-            </div>
+        <div class="px-5 py-4 flex justify-between items-center border-b border-gray-100 bg-white">
+            <a href="{{ route('home') }}" class="block">
+                <img src="{{ asset('assets/logo_black.png') }}" alt="Tattsvi" class="w-[130px] h-auto">
+            </a>
             <button id="close-menu-btn"
-                class="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-500 hover:text-red-500 shadow-sm transition-colors">
+                class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 text-gray-500 hover:text-red-500 shadow-sm transition-colors">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>

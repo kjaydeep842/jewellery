@@ -298,16 +298,32 @@ class ProductController extends Controller
             return response()->json([]);
         }
 
-        $suggestions = Product::where('status', 1)
-            ->where(function ($q) use ($query) {
-                $q->where('name', 'like', "%{$query}%")
-                    ->orWhere('tags', 'like', "%{$query}%"); // Assuming tags exist or just name
-            })
+        $suggestions = collect();
+
+        // 1. Match category names
+        $categories = \App\Models\Category::where('name', 'like', "%{$query}%")
+            ->select('name')
+            ->take(3)
+            ->get()
+            ->pluck('name');
+
+        foreach ($categories as $catName) {
+            $suggestions->push(['name' => $catName, 'type' => 'category']);
+        }
+
+        // 2. Match product names (distinct)
+        $products = Product::where('status', 'active')
+            ->where('name', 'like', "%{$query}%")
             ->select('name', 'slug')
-            ->latest()
-            ->take(5)
+            ->take(8)
             ->get();
 
-        return response()->json($suggestions);
+        foreach ($products as $product) {
+            if (!$suggestions->contains('name', $product->name)) {
+                $suggestions->push(['name' => $product->name, 'slug' => $product->slug, 'type' => 'product']);
+            }
+        }
+
+        return response()->json($suggestions->take(6)->values());
     }
 }

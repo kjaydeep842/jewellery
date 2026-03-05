@@ -15,8 +15,8 @@ jobs:
         with:
           host: server50.shared.spaceship.host
           username: keclribpbb
-          key: ${{ secrets.TATTSVI }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
-            cd /home/keclribpbb/repositories/tattsvi
+            cd /home/keclribpbb/tattsvi.in
             git pull origin main
-            rsync -av --delete /home/keclribpbb/repositories/tattsvi/ /home/keclribpbb/tattsvi.in/

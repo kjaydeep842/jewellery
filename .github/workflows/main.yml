@@ -1,4 +1,4 @@
-name: Deploy Tattsvi Website
+name: Deploy Tattsvi
 
 on:
   push:
@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Server
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: server50.shared.spaceship.host
           username: keclribpbb
           key: ${{ secrets.SSH_KEY }}
-          port: 65002
+          port: 22
           script: |
             cd /home/keclribpbb/tattsvi.in
             git pull origin main

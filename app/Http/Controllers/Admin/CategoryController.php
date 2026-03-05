@@ -11,8 +11,12 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::latest()->paginate(10);
-        return view('admin.categories.index', compact('categories'));
+        try {
+            $categories = Category::latest()->paginate(10);
+            return view('admin.categories.index', compact('categories'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load categories. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -25,16 +29,27 @@ class CategoryController extends Controller
         $request->validate([
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
-        Category::create([
-            'name'        => $request->name,
-            'slug'        => Str::slug($request->name),
-            'description' => $request->description,
-        ]);
+        try {
+            $data = [
+                'name'        => $request->name,
+                'slug'        => Str::slug($request->name),
+                'description' => $request->description,
+            ];
 
-        return redirect()->route('admin.categories.index')
-                         ->with('success', 'Category created successfully.');
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('categories', 'public');
+            }
+
+            Category::create($data);
+
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Category created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create category. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(Category $category)
@@ -47,23 +62,38 @@ class CategoryController extends Controller
         $request->validate([
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
-        $category->update([
-            'name'        => $request->name,
-            'slug'        => Str::slug($request->name),
-            'description' => $request->description,
-        ]);
+        try {
+            $data = [
+                'name'        => $request->name,
+                'slug'        => Str::slug($request->name),
+                'description' => $request->description,
+            ];
 
-        return redirect()->route('admin.categories.index')
-                         ->with('success', 'Category updated successfully.');
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('categories', 'public');
+            }
+
+            $category->update($data);
+
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Category updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update category. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function destroy(Category $category)
     {
-        $category->delete();
+        try {
+            $category->delete();
 
-        return redirect()->route('admin.categories.index')
-                         ->with('success', 'Category deleted successfully.');
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Category deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete category. ' . $e->getMessage()]);
+        }
     }
 }

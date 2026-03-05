@@ -40,6 +40,24 @@ class CartController extends Controller
         return view('frontend.checkout.cart', compact('cartItems'));
     }
 
+    public function headerIndex()
+    {
+        $cart = $this->getCart();
+        $cartItems = $cart->items()->with(['product', 'variant'])->get();
+
+        $totalMrp = $cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+        $discount = 0; // Logic for discount can be added here
+        $platformFee = 20;
+        $totalAmount = $totalMrp - $discount + $platformFee;
+
+        // Fetch similar products (e.g., random 4 items)
+        $similarProducts = Product::inRandomOrder()->take(4)->get();
+
+        return view('frontend.cart.header-index', compact('cartItems', 'totalMrp', 'discount', 'platformFee', 'totalAmount', 'similarProducts'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -65,6 +83,14 @@ class CartController extends Controller
                 'price' => $price
             ]
         );
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Item added to cart.',
+                'cart_count' => $cart->fresh()->items()->count()
+            ]);
+        }
 
         return redirect()->route('cart.index')->with('success', 'Item added to cart.');
     }

@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo.png') }}">
 
     <title>{{ config('app.name', 'Laravel') }} - Admin</title>
 
@@ -40,24 +41,36 @@
             background-color: #d4af37;
         }
 
-        .gold-gradient {
+        .btn-gold {
             background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+            color: white;
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #edc95e 0%, #d4af37 100%);
         }
 
         .dark-bg {
-            background-color: #1a1a1a;
+            background-color: #0f172a;
         }
 
-        .input-field {
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #fff;
+        /* Slate 900 */
+        .input-dark {
+            background: #1e293b;
+            /* Slate 800 */
+            border: 1px solid #334155;
+            color: #f8fafc;
         }
 
-        .input-field:focus {
+        .input-dark:focus {
             border-color: #d4af37;
-            ring: 1px solid #d4af37;
+            box-shadow: 0 0 0 1px #d4af37;
             outline: none;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>

@@ -13,10 +13,46 @@ use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
+    private function getCartData()
+    {
+        $cart = Cart::where('user_id', Auth::id())->where('status', 'active')->first();
+
+        if (!$cart || $cart->items->isEmpty()) {
+            return null;
+        }
+
+        $cartItems = $cart->items;
+        $totalMrp = $cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+        $discount = 0;
+        $platformFee = 20;
+        $totalAmount = $totalMrp - $discount + $platformFee;
+
+        return compact('cartItems', 'totalMrp', 'discount', 'platformFee', 'totalAmount');
+    }
+
     public function address()
     {
         $addresses = Auth::user()->addresses;
-        return view('frontend.checkout.address', compact('addresses'));
+        $cartData = $this->getCartData();
+
+        if (!$cartData) {
+            return redirect()->route('cart.index');
+        }
+
+        return view('frontend.checkout.address', array_merge(compact('addresses'), $cartData));
+    }
+
+    public function createAddress()
+    {
+        $cartData = $this->getCartData();
+
+        if (!$cartData) {
+            return redirect()->route('cart.index');
+        }
+
+        return view('frontend.checkout.add-address', $cartData);
     }
 
     public function storeAddress(Request $request)
@@ -25,6 +61,7 @@ class CheckoutController extends Controller
             'name' => 'required|string',
             'phone' => 'required|string',
             'address_line_1' => 'required|string',
+            'area' => 'required|string',
             'city' => 'required|string',
             'state' => 'required|string',
             'zip' => 'required|string',
@@ -34,7 +71,40 @@ class CheckoutController extends Controller
 
         Auth::user()->addresses()->create($request->all());
 
-        return redirect()->route('checkout.payment');
+        return redirect()->route('checkout.address')->with('success', 'Address added successfully.');
+    }
+
+    public function editAddress($id)
+    {
+        $address = Auth::user()->addresses()->findOrFail($id);
+        $cartData = $this->getCartData();
+
+        if (!$cartData) {
+            return redirect()->route('cart.index');
+        }
+
+        return view('frontend.checkout.add-address', array_merge(compact('address'), $cartData));
+    }
+
+    public function updateAddress(Request $request, $id)
+    {
+        $address = Auth::user()->addresses()->findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string',
+            'phone' => 'required|string',
+            'address_line_1' => 'required|string',
+            'area' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'zip' => 'required|string',
+            'country' => 'required|string',
+            'type' => 'required|in:home,office',
+        ]);
+
+        $address->update($request->all());
+
+        return redirect()->route('checkout.address')->with('success', 'Address updated successfully.');
     }
 
     public function selectAddress($id)
@@ -44,6 +114,27 @@ class CheckoutController extends Controller
         return redirect()->route('checkout.payment');
     }
 
+    public function destroyAddress(Request $request, $id)
+    {
+        $address = Auth::user()->addresses()->findOrFail($id);
+
+        // If the address being deleted is currently selected in the session, forget it
+        if (session('selected_address_id') == $address->id) {
+            session()->forget('selected_address_id');
+        }
+
+        $address->delete();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Address removed successfully.'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Address removed successfully');
+    }
+
     public function payment()
     {
         $addressId = session()->get('selected_address_id');
@@ -51,18 +142,17 @@ class CheckoutController extends Controller
             return redirect()->route('checkout.address');
         }
 
-        $cart = Cart::where('user_id', Auth::id())->where('status', 'active')->first();
-        if (!$cart || $cart->items->isEmpty()) {
+        $address = Address::find($addressId);
+        $cartData = $this->getCartData();
+
+        if (!$cartData) {
             return redirect()->route('cart.index');
         }
 
-        $total = $cart->items->sum(fn($item) => $item->price * $item->quantity);
-        $address = Address::find($addressId);
-
-        return view('frontend.checkout.payment', compact('total', 'address', 'cart'));
+        return view('frontend.checkout.payment', array_merge(compact('address'), $cartData));
     }
 
-    public function processOrder(Request $request)
+    public function process(Request $request)
     {
         $cart = Cart::where('user_id', Auth::id())->where('status', 'active')->first();
         if (!$cart) {
@@ -103,6 +193,13 @@ class CheckoutController extends Controller
 
         session()->forget('selected_address_id');
 
-        return redirect()->route('home')->with('success', 'Order placed successfully!');
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Order placed successfully!'
+            ]);
+        }
+
+        return redirect()->route('home')->with('order_success', 'Order placed successfully!');
     }
 }

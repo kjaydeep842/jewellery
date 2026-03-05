@@ -17,14 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'Test User',
-                'password' => bcrypt('password'), // Ensure password is set if creating
-            ]
-        );
-
+        $this->call(UserSeeder::class);
         $this->call(ProductDetailsSeeder::class);
     }
 }

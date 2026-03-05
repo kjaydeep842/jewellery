@@ -10,8 +10,12 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::latest()->paginate(10);
-        return view('admin.orders.index', compact('orders'));
+        try {
+            $orders = Order::latest()->paginate(10);
+            return view('admin.orders.index', compact('orders'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load orders. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -29,10 +33,14 @@ class OrderController extends Controller
             'status' => 'required|string',
         ]);
 
-        Order::create($request->all());
+        try {
+            Order::create($request->all());
 
-        return redirect()->route('admin.orders.index')
-            ->with('success', 'Order created successfully.');
+            return redirect()->route('admin.orders.index')
+                ->with('success', 'Order created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create order. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(Order $order)
@@ -50,10 +58,14 @@ class OrderController extends Controller
             'status' => 'required|string',
         ]);
 
-        $order->update($request->all());
+        try {
+            $order->update($request->all());
 
-        return redirect()->route('admin.orders.index')
-            ->with('success', 'Order updated successfully.');
+            return redirect()->route('admin.orders.index')
+                ->with('success', 'Order updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update order. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function show(Order $order)
@@ -63,9 +75,13 @@ class OrderController extends Controller
 
     public function destroy(Order $order)
     {
-        $order->delete();
+        try {
+            $order->delete();
 
-        return redirect()->route('admin.orders.index')
-            ->with('success', 'Order deleted successfully.');
+            return redirect()->route('admin.orders.index')
+                ->with('success', 'Order deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete order. ' . $e->getMessage()]);
+        }
     }
 }

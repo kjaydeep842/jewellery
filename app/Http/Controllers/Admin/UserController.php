@@ -11,8 +11,12 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->paginate(10);
-        return view('admin.users.index', compact('users'));
+        try {
+            $users = User::latest()->paginate(10);
+            return view('admin.users.index', compact('users'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load users. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -27,19 +31,21 @@ class UserController extends Controller
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'is_admin' => 'nullable|boolean',
-
         ]);
 
-       User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'is_admin' => $request->is_admin ? 1 : 0,
-        ]);
+        try {
+            User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+                'is_admin' => $request->is_admin ? 1 : 0,
+            ]);
 
-
-        return redirect()->route('admin.users.index')
-                         ->with('success', 'User created successfully.');
+            return redirect()->route('admin.users.index')
+                ->with('success', 'User created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create user. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(User $user)
@@ -53,30 +59,40 @@ class UserController extends Controller
             'name'  => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'is_admin' => 'nullable|boolean',
-
         ]);
-
-        $user->name  = $request->name;
-        $user->email = $request->email;
 
         if ($request->password) {
             $request->validate(['password' => 'min:6']);
-            $user->password = Hash::make($request->password);
         }
 
-        $user->is_admin = $request->is_admin ? 1 : 0;
+        try {
+            $user->name  = $request->name;
+            $user->email = $request->email;
 
-        $user->save();
+            if ($request->password) {
+                $user->password = Hash::make($request->password);
+            }
 
-        return redirect()->route('admin.users.index')
-                         ->with('success', 'User updated successfully.');
+            $user->is_admin = $request->is_admin ? 1 : 0;
+
+            $user->save();
+
+            return redirect()->route('admin.users.index')
+                ->with('success', 'User updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update user. ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function destroy(User $user)
     {
-        $user->delete();
+        try {
+            $user->delete();
 
-        return redirect()->route('admin.users.index')
-                         ->with('success', 'User deleted successfully.');
+            return redirect()->route('admin.users.index')
+                ->with('success', 'User deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete user. ' . $e->getMessage()]);
+        }
     }
 }

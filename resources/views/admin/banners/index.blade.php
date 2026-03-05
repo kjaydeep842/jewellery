@@ -28,6 +28,7 @@
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">ID</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Title</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Section</th>
+                    <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Product Banner?</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Image</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Status</th>
                     <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Actions</th>
@@ -42,6 +43,13 @@
                         <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider {{ $banner->type == 'top' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700' }}">
                             {{ ucfirst($banner->type) }}
                         </span>
+                    </td>
+                    <td class="p-4">
+                        @if($banner->is_product_banner)
+                            <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">Yes</span>
+                        @else
+                            <span class="text-gray-400 text-xs">-</span>
+                        @endif
                     </td>
                     <td class="p-4">
                         @if($banner->image)

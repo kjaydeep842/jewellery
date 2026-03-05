@@ -1,73 +1,80 @@
-<x-layouts.frontend>
-    <div class="bg-gray-50 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-serif font-bold text-gray-900 mb-8 text-center">My Wishlist</h1>
+@extends('frontend.layouts.master')
 
-            @if($wishlists->isEmpty())
-                <div class="text-center py-20 bg-white shadow-sm rounded-lg">
-                    <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    <p class="text-gray-500 text-lg mb-6">Your wishlist is currently empty.</p>
-                    <a href="{{ route('home') }}"
-                        class="inline-block bg-[#D4AF37] text-white font-bold uppercase tracking-widest py-3 px-8 hover:bg-gray-900 transition-colors">
-                        Continue Shopping
-                    </a>
-                </div>
-            @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    @foreach($wishlists as $item)
-                        <div
-                            class="bg-white border border-gray-100 p-4 hover:shadow-xl transition-shadow duration-300 relative group">
-                            <!-- Image -->
-                            <div class="relative overflow-hidden aspect-square bg-gray-50 mb-4">
-                                @if($item->product->images->isNotEmpty())
-                                    <img src="{{ Str::startsWith($item->product->images->first()->image_path, 'http') ? $item->product->images->first()->image_path : asset('storage/' . $item->product->images->first()->image_path) }}"
-                                        alt="{{ $item->product->name }}"
-                                        class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500">
-                                @endif
+@section('content')
+    <style>
+        /* Custom Scrollbar for right-side content */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
 
-                                <!-- Delete Button -->
-                                <div class="absolute top-2 right-2">
-                                    <form action="{{ route('wishlist.destroy', $item->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-white p-2 rounded-full shadow hover:bg-red-50 hover:text-red-500 transition-colors">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
 
-                            <!-- Details -->
-                            <h3
-                                class="font-serif font-bold text-gray-900 group-hover:text-[#D4AF37] transition-colors truncate text-center">
-                                <a href="{{ route('product.details', $item->product->slug) }}">{{ $item->product->name }}</a>
-                            </h3>
-                            <p class="text-center text-gray-900 font-bold mt-1">
-                                ${{ number_format($item->product->sale_price ?? $item->product->price, 2) }}</p>
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
 
-                            <!-- Add to Cart -->
-                            <div class="mt-4">
-                                <form action="{{ route('cart.store') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $item->product->id }}">
-                                    <input type="hidden" name="quantity" value="1">
-                                    <button type="submit"
-                                        class="w-full bg-gray-900 text-white text-xs font-bold uppercase tracking-widest py-3 hover:bg-[#D4AF37] transition-colors">
-                                        Add to Cart
-                                    </button>
-                                </form>
-                            </div>
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+    <main class="w-full flex-grow pt-2 pb-2 min-[2000px]:pt-20 min-[2000px]:pb-32 bg-[#FDFBF7] flex justify-center">
+        <div
+            class="flex flex-col lg:flex-row justify-center items-start p-4 md:p-10 gap-5 md:gap-10 max-w-[1920px] w-full self-stretch">
+
+            <!-- Sidebar -->
+            @include('frontend.profile.partials.sidebar')
+
+            <!-- Main Content -->
+            <div class="flex-grow flex flex-col h-[calc(100vh-150px)] overflow-y-auto pr-1 md:pr-4 custom-scrollbar">
+                @if($wishlists->isEmpty())
+                    <!-- Empty State Section -->
+                    <div class="flex-grow flex flex-col items-center justify-center p-[40px] gap-6 rounded-[10px]"
+                        style="background: linear-gradient(90deg, rgba(219, 179, 88, 0.042) 0%, rgba(151, 102, 0, 0.14) 100%);">
+                        <div class="relative">
+                            <img src="{{ asset('assets/IC -pagenot found.png') }}" alt="Empty Wishlist Icon"
+                                class="object-contain h-[80px] w-auto opacity-80">
                         </div>
-                    @endforeach
-                </div>
-            @endif
+                        <div class="text-center space-y-2">
+                            <h2 class="text-2xl font-['Outfit'] font-bold text-[#1A1A1A]">Your Wishlist Is Empty</h2>
+                            <p class="text-base text-[#6E6E77] max-w-md mx-auto font-['Outfit']">
+                                Add items that you like to your wishlist. Review them anytime and easily move them to the bag.
+                            </p>
+                        </div>
+                        <a href="{{ route('home') }}" style="background: linear-gradient(90deg, #D9BE87 0%, #BE933C 100%);"
+                            class="px-10 py-4 rounded-full text-white font-['Outfit'] font-medium text-lg shadow-md hover:opacity-90 transition-all">
+                            Start Shopping
+                        </a>
+                    </div>
+                @else
+                    <!-- Wishlist Content -->
+                    <div class="p-4 md:p-10 bg-white rounded-[10px] shadow-sm flex-grow">
+                        <div class="flex justify-between items-center mb-8">
+                            <h2 class="font-['Outfit'] font-semibold text-[#1A1A1A] text-xl min-[2000px]:text-3xl">My Wishlist
+                            </h2>
+                            <p class="text-[13px] text-[#A2A2A9] font-['Outfit']">Showing : {{ $wishlists->count() }} Products
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[1600px]:grid-cols-5 gap-3 md:gap-5"
+                            x-data="{ zoomOpen: false, zoomImages: [], zoomIndex: 0 }">
+                            @foreach($wishlists as $item)
+                                @include('frontend.partials.wishlist-card', ['product' => $item->product, 'wishlist_item_id' => $item->id])
+                            @endforeach
+
+                            @include('frontend.partials.zoom-modal')
+                        </div>
+                    </div>
+                @endif
+            </div>
         </div>
+    </main>
+
+    <!-- Know More Section -->
+    <div class="w-full bg-[#E9D3D6] py-4 flex items-center justify-center">
+        <span class="text-[#0D0D0E] font-['Outfit'] text-base font-medium">Know More About Tattsvi</span>
     </div>
-</x-layouts.frontend>
+@endsection

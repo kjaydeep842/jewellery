@@ -3,84 +3,120 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Product;
-use Illuminate\Support\Str;
 use App\Models\Category;
-use App\Models\Tag;
-use App\Models\Subcategory;
+use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Subcategory;
+use App\Models\Tag;
+use App\Models\ProductVariant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use App\Models\Review;
 
+// Masters
+use App\Models\Metal;
+use App\Models\MetalColor;
+use App\Models\Shape;
+use App\Models\DiamondQuality;
+use App\Models\Size;
+
+use App\Models\Brand;
+use App\Models\Unit;
+use App\Models\Color;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('tags')->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        try {
+            $products = Product::with(['variants', 'category', 'brand'])->withCount('reviews')->latest()->paginate(10);
+            return view('admin.products.index', compact('products'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load products. ' . $e->getMessage()]);
+        }
     }
 
     public function create()
     {
-        $categories = Category::all();
-        $tags = Tag::all();
-        $subcategories = Subcategory::all();
-
-        return view('admin.products.create', compact('categories', 'tags', 'subcategories'));
+        return view('admin.products.create', [
+            'categories' => Category::all(),
+            'subcategories' => Subcategory::all(),
+            'brands' => Brand::where('status', true)->get(),
+            'units' => Unit::where('status', true)->get(),
+            'colors' => Color::where('status', true)->get(), // Generic colors
+            'tags' => Tag::all(),
+            'metals' => Metal::where('status', true)->get(),
+            'metalColors' => MetalColor::where('status', true)->get(),
+            'shapes' => Shape::where('status', true)->get(),
+            'diamondQualities' => DiamondQuality::where('status', true)->get(),
+            'sizes' => Size::orderBy('sort_order')->get(),
+        ]);
     }
-
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|unique:products,slug',
             'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:subcategories,id',
-            'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|max:2048',
-            'tags' => 'array',
-            'tags.*' => 'exists:tags,id',
-            'images.*' => 'image|max:4096',
-            'making_charges' => 'nullable|numeric|min:0',
-            'tax_rate' => 'nullable|numeric|min:0',
-            'metal_type' => 'nullable|string',
-            'metal_purity' => 'nullable|string',
-            'gender' => 'nullable|string',
-            'occasion' => 'nullable|string',
-            'variants' => 'nullable|array',
-            'stones' => 'nullable|array',
+            'image' => 'nullable|image|max:10240', // 10MB
+            'video_url' => 'nullable|url',
+            'brand_id' => 'nullable|exists:brands,id',
+            'unit_id' => 'nullable|exists:units,id',
+            'color_id' => 'nullable|exists:colors,id',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
         ]);
 
         try {
             \Illuminate\Support\Facades\DB::beginTransaction();
 
-            $data = $request->only([
-                'name',
-                'category_id',
-                'subcategory_id',
-                'description',
-                'price',
-                'making_charges',
-                'tax_rate',
-                'metal_type',
-                'metal_purity',
-                'gender',
-                'occasion'
-            ]);
-            $data['slug'] = Str::slug($request->name);
-            // Fallback if slug exists logic can be added here
+            $data = $request->except(['tags', 'images', 'variants', 'image', 'remove_images']);
 
+            // Booleans
+            $data['is_featured'] = $request->boolean('is_featured');
+            $data['is_new'] = $request->boolean('is_new');
+            $data['is_bestseller'] = $request->boolean('is_bestseller');
+            $data['is_ready_to_stock'] = $request->boolean('is_ready_to_stock');
+
+            // Slug
+            if (empty($data['slug'])) {
+                $data['slug'] = Str::slug($data['name']);
+            }
+            // Ensure unique slug
+            $slug = $data['slug'];
+            $count = 1;
+            while (Product::where('slug', $slug)->exists()) {
+                $slug = $data['slug'] . '-' . $count++;
+            }
+            $data['slug'] = $slug;
+
+            // SKU
+            if (empty($data['sku'])) {
+                $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
+            }
+            // Ensure unique SKU
+            while (Product::where('sku', $data['sku'])->exists()) {
+                $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
+            }
+
+            // Main Image
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('products', 'public');
             }
 
+            // Create Product
             $product = Product::create($data);
 
+            // Tags
             if ($request->filled('tags')) {
                 $product->tags()->sync($request->tags);
             }
 
+            // Gallery Images
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $file) {
                     $path = $file->store('products/gallery', 'public');
@@ -91,105 +127,113 @@ class ProductController extends Controller
                 }
             }
 
+            // Variants (Sizes)
             if ($request->filled('variants')) {
+                $processedSizes = [];
                 foreach ($request->variants as $variant) {
-                    if (!empty($variant['sku'])) {
-                        $product->variants()->create($variant);
+                    if (!empty($variant['size']) && !in_array($variant['size'], $processedSizes)) {
+                        $processedSizes[] = $variant['size'];
+                        ProductVariant::create([
+                            'product_id' => $product->id,
+                            'size' => $variant['size'],
+                            'stock_quantity' => $variant['stock'] ?? 0,
+                            'sku' => $product->sku . '-' . Str::slug($variant['size']),
+                            'price' => $product->price,
+                        ]);
                     }
-                }
-            }
-
-            if ($request->filled('stones')) {
-                foreach ($request->stones as $stone) {
-                    $product->stones()->create($stone);
                 }
             }
 
             \Illuminate\Support\Facades\DB::commit();
 
-            return redirect()->route('admin.products.index')
-                ->with('success', 'Product created successfully.');
-
+            return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\DB::rollBack();
-            return redirect()->back()->withInput()->with('error', 'Error creating product: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => 'Failed to create product: ' . $e->getMessage()]);
         }
     }
 
     public function edit(Product $product)
     {
-        $categories = Category::all();
-        $tags = Tag::all();
+        $product->load(['tags', 'images', 'variants']);
 
-        // Load subcategories for the current category
-        $subcategories = Subcategory::all(); // Load ALL for JS filtering, or fetch specific? 
-        // Better: Load all subcategories so JS can filter cleanly on Edit too without AJAX call
-
-        $product->load('tags', 'images', 'variants', 'stones');
-
-        return view('admin.products.edit', compact(
-            'product',
-            'categories',
-            'subcategories',
-            'tags'
-        ));
+        return view('admin.products.edit', [
+            'product' => $product,
+            'categories' => Category::all(),
+            'subcategories' => Subcategory::all(),
+            'brands' => Brand::where('status', true)->get(),
+            'units' => Unit::where('status', true)->get(),
+            'colors' => Color::where('status', true)->get(), // Generic colors
+            'tags' => Tag::all(),
+            'metals' => Metal::where('status', true)->get(),
+            'metalColors' => MetalColor::where('status', true)->get(),
+            'shapes' => Shape::where('status', true)->get(),
+            'diamondQualities' => DiamondQuality::where('status', true)->get(),
+            'sizes' => Size::orderBy('sort_order')->get(),
+        ]);
     }
-
 
     public function update(Request $request, Product $product)
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|unique:products,slug,' . $product->id,
             'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:subcategories,id',
-            'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|max:2048',
-            'tags' => 'array',
-            'tags.*' => 'exists:tags,id',
-            'images.*' => 'image|max:4096',
-            'making_charges' => 'nullable|numeric|min:0',
-            'tax_rate' => 'nullable|numeric|min:0',
-            'metal_type' => 'nullable|string',
-            'variants' => 'nullable|array',
-            'stones' => 'nullable|array',
+            'image' => 'nullable|image|max:10240',
+            'video_url' => 'nullable|url',
         ]);
 
         try {
             \Illuminate\Support\Facades\DB::beginTransaction();
 
-            $data = $request->only([
-                'name',
-                'category_id',
-                'subcategory_id',
-                'description',
-                'price',
-                'making_charges',
-                'tax_rate',
-                'metal_type',
-                'metal_purity',
-                'gender',
-                'occasion'
-            ]);
-            $data['slug'] = Str::slug($request->name);
+            $data = $request->except(['tags', 'images', 'variants', 'image', 'remove_images']);
 
+            // Booleans
+            $data['is_featured'] = $request->boolean('is_featured');
+            $data['is_new'] = $request->boolean('is_new');
+            $data['is_bestseller'] = $request->boolean('is_bestseller');
+            $data['is_ready_to_stock'] = $request->boolean('is_ready_to_stock');
+
+            // Slug
+            if (empty($data['slug'])) {
+                $data['slug'] = Str::slug($data['name']);
+            }
+            if ($data['slug'] !== $product->slug) {
+                $slug = $data['slug'];
+                $count = 1;
+                while (Product::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+                    $slug = $data['slug'] . '-' . $count++;
+                }
+                $data['slug'] = $slug;
+            }
+
+            // SKU Generation if missing
+            if (empty($product->sku) && empty($data['sku'])) {
+                $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
+                while (Product::where('sku', $data['sku'])->where('id', '!=', $product->id)->exists()) {
+                    $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
+                }
+            }
+
+            // Main Image
             if ($request->hasFile('image')) {
-                if ($product->image && file_exists(public_path('storage/' . $product->image))) {
-                    unlink(public_path('storage/' . $product->image));
+                if ($product->image && Storage::disk('public')->exists($product->image)) {
+                    Storage::disk('public')->delete($product->image);
                 }
                 $data['image'] = $request->file('image')->store('products', 'public');
-            } else {
-                $data['image'] = $product->image;
             }
 
             $product->update($data);
 
+            // Tags
             if ($request->filled('tags')) {
                 $product->tags()->sync($request->tags);
             } else {
-                $product->tags()->sync([]);
+                $product->tags()->detach();
             }
 
+            // Gallery Images Add
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $file) {
                     $path = $file->store('products/gallery', 'public');
@@ -200,46 +244,57 @@ class ProductController extends Controller
                 }
             }
 
-            // Sync Variants: Delete All -> Recreate (Simple, clean)
-            $product->variants()->delete();
-            if ($request->filled('variants')) {
-                foreach ($request->variants as $variant) {
-                    if (!empty($variant['sku'])) {
-                        $product->variants()->create($variant);
+            // Gallery Images Remove
+            if ($request->filled('remove_images')) {
+                $idsToRemove = $request->input('remove_images');
+                $images = ProductImage::whereIn('id', $idsToRemove)->where('product_id', $product->id)->get();
+                foreach ($images as $img) {
+                    if (Storage::disk('public')->exists($img->image_path)) {
+                        Storage::disk('public')->delete($img->image_path);
                     }
+                    $img->delete();
                 }
             }
 
-            // Sync Stones
-            $product->stones()->delete();
-            if ($request->filled('stones')) {
-                foreach ($request->stones as $stone) {
-                    $product->stones()->create($stone);
+            // Variants Sync
+            ProductVariant::where('product_id', $product->id)->delete();
+            if ($request->filled('variants')) {
+                $processedSizes = [];
+                foreach ($request->variants as $variant) {
+                    if (!empty($variant['size']) && !in_array($variant['size'], $processedSizes)) {
+                        $processedSizes[] = $variant['size'];
+                        ProductVariant::create([
+                            'product_id' => $product->id,
+                            'size' => $variant['size'],
+                            'stock_quantity' => $variant['stock'] ?? 0,
+                            'sku' => $product->sku . '-' . Str::slug($variant['size']),
+                            'price' => $product->price,
+                        ]);
+                    }
                 }
             }
 
             \Illuminate\Support\Facades\DB::commit();
 
-            return redirect()->route('admin.products.index')
-                ->with('success', 'Product updated successfully.');
-
+            return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\DB::rollBack();
-            return redirect()->back()->withInput()->with('error', 'Error updating product: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => 'Failed to update product: ' . $e->getMessage()]);
         }
     }
 
-
-
     public function destroy(Product $product)
     {
-        if ($product->image && file_exists(public_path('storage/' . $product->image))) {
-            unlink(public_path('storage/' . $product->image));
+        try {
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $product->delete();
+
+            return redirect()->route('admin.products.index')
+                ->with('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete product. ' . $e->getMessage()]);
         }
-
-        $product->delete();
-
-        return redirect()->route('admin.products.index')
-            ->with('success', 'Product deleted successfully.');
     }
 }

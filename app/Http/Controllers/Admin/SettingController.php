@@ -11,8 +11,12 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $settings = GeneralSetting::first() ?? new GeneralSetting();
-        return view('admin.settings.index', compact('settings'));
+        try {
+            $settings = GeneralSetting::first() ?? new GeneralSetting();
+            return view('admin.settings.index', compact('settings'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to load settings. ' . $e->getMessage()]);
+        }
     }
 
     public function update(Request $request)
@@ -23,27 +27,31 @@ class SettingController extends Controller
             'secondary_color' => 'required|string',
             'header_color' => 'nullable|string',
             'font_family' => 'required|string',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
-        $settings = GeneralSetting::first();
-        if (!$settings) {
-            $settings = new GeneralSetting();
-        }
-
-        $data = $request->only(['site_name', 'primary_color', 'secondary_color', 'header_color', 'font_family']);
-
-        if ($request->hasFile('logo')) {
-            // Delete old logo if exists
-            if ($settings->logo_path) {
-                Storage::disk('public')->delete($settings->logo_path);
+        try {
+            $settings = GeneralSetting::first();
+            if (!$settings) {
+                $settings = new GeneralSetting();
             }
-            $path = $request->file('logo')->store('logos', 'public');
-            $data['logo_path'] = $path;
+
+            $data = $request->only(['site_name', 'primary_color', 'secondary_color', 'header_color', 'font_family']);
+
+            if ($request->hasFile('logo')) {
+                // Delete old logo if exists
+                if ($settings->logo_path && Storage::disk('public')->exists($settings->logo_path)) {
+                    Storage::disk('public')->delete($settings->logo_path);
+                }
+                $path = $request->file('logo')->store('logos', 'public');
+                $data['logo_path'] = $path;
+            }
+
+            $settings->fill($data)->save();
+
+            return redirect()->back()->with('success', 'Settings updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update settings. ' . $e->getMessage()])->withInput();
         }
-
-        $settings->fill($data)->save();
-
-        return redirect()->back()->with('success', 'Settings updated successfully.');
     }
 }

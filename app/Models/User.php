@@ -22,6 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'phone_verified_at',
+        'otp_notify',
+        'gender',
+        'profile_picture',
     ];
 
     /**
@@ -44,6 +49,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'otp_notify' => 'boolean',
         ];
     }
     public function orders()
@@ -65,5 +71,37 @@ class User extends Authenticatable
     {
         // Assuming one active cart per user
         return $this->hasOne(Cart::class)->where('status', 'active');
+    }
+
+    /**
+     * Get the user's initials.
+     */
+    public function getInitialsAttribute(): string
+    {
+        if (!$this->name) {
+            return 'U';
+        }
+
+        $words = explode(' ', $this->name);
+        $initials = '';
+
+        foreach ($words as $word) {
+            $initials .= strtoupper(substr($word, 0, 1));
+            if (strlen($initials) >= 2) break;
+        }
+
+        return $initials ?: 'U';
+    }
+
+    /**
+     * Get the URL for the user's profile picture.
+     */
+    public function getProfilePictureUrlAttribute(): string
+    {
+        if ($this->profile_picture) {
+            return asset('storage/' . $this->profile_picture);
+        }
+
+        return asset('assets/ic_User.png'); // Default placeholder
     }
 }

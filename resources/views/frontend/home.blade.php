@@ -82,7 +82,7 @@
         @if(isset($categories) && $categories->count() > 0)
           @foreach($categories as $category)
             <div
-              class="min-w-[calc(50%-12px)] md:min-w-[calc(25%-18px)] lg:min-w-[calc(20%-20px)] min-[2000px]:min-w-[calc(20%-20px)] snap-start group">
+              class="w-[calc(50%-12px)] md:w-[calc(25%-18px)] lg:w-[calc(20%-20px)] min-[2000px]:w-[calc(20%-20px)] flex-shrink-0 snap-start group">
               <div class="relative w-full aspect-[2/3] rounded-[999px] border border-[#C19757] p-2 md:p-3 overflow-visible">
                 <!-- Star Icon -->
                 <div
@@ -1192,7 +1192,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof initHomeInteractive === 'function') {
         initHomeInteractive(
-                                                  {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
+                                                    {{isset($middleBanners) ? $middleBanners->count() : 0 }}          ,
           @json($categories),
           "{{ url('storage') }}",
           "{{ asset('') }}"

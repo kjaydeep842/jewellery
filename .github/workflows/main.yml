@@ -1,0 +1,22 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: server50.shared.spaceship.host
+          username: keclribpbb
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/keclribpbb/repositories/tattsvi
+            git pull origin main
+            rsync -av --delete /home/keclribpbb/repositories/tattsvi/ /home/keclribpbb/tattsvi.in/

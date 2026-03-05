@@ -15,7 +15,7 @@ jobs:
         with:
           host: server50.shared.spaceship.host
           username: keclribpbb
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.TATTSVI }}
           script: |
             cd /home/keclribpbb/repositories/tattsvi
             git pull origin main

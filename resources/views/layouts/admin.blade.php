@@ -354,13 +354,15 @@
         {{-- Navbar --}}
         @include('admin.partials.navbar')
 
-        {{-- Main Content --}}
-        <main class="flex-1 p-8 overflow-y-auto">
+        {{-- Main Content Area (Scrollable) --}}
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth relative z-10">
             @yield('content')
         </main>
 
-        {{-- Footer --}}
-        @include('admin.partials.footer')
+        {{-- Footer (Fixed bottom of viewport) --}}
+        <div class="bg-white border-t border-zinc-100 relative z-20">
+            @include('admin.partials.footer')
+        </div>
     </div>
 
     {{-- Stack for Page Specific Scripts --}}

@@ -147,31 +147,31 @@
             </div>
 
             {{-- Flags --}}
-            <div class="flex gap-6 mt-6">
-                <label class="inline-flex items-center cursor-pointer">
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 mt-6 bg-zinc-50 p-6 rounded-xl border border-zinc-100">
+                <label class="inline-flex items-center cursor-pointer group">
                     <input type="checkbox" name="status" value="active" class="sr-only peer" {{ old('status', $product->status) == 'active' ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">Active</span>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700">Active</span>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
+                <label class="inline-flex items-center cursor-pointer group">
                     <input type="checkbox" name="is_featured" value="1" class="sr-only peer" {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">Featured</span>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700">Featured</span>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
+                <label class="inline-flex items-center cursor-pointer group">
                     <input type="checkbox" name="is_new" value="1" class="sr-only peer" {{ old('is_new', $product->is_new) ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">New Arrival</span>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700">New Arrival</span>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
+                <label class="inline-flex items-center cursor-pointer group">
                     <input type="checkbox" name="is_bestseller" value="1" class="sr-only peer" {{ old('is_bestseller', $product->is_bestseller) ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">Bestseller</span>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700">Bestseller</span>
                 </label>
-                <label class="inline-flex items-center cursor-pointer">
+                <label class="inline-flex items-center cursor-pointer group">
                     <input type="checkbox" name="is_ready_to_stock" value="1" class="sr-only peer" {{ old('is_ready_to_stock', $product->is_ready_to_stock) ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900">Ready To Stock</span>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
+                    <span class="ms-3 text-sm font-semibold text-zinc-700">Ready To Stock</span>
                 </label>
             </div>
         </div>

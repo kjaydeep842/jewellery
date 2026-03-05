@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Tattsvi Website
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
+      - name: Deploy to Server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: server50.shared.spaceship.host
@@ -20,3 +20,7 @@ jobs:
           script: |
             cd /home/keclribpbb/tattsvi.in
             git pull origin main
+            composer install --no-dev --optimize-autoloader
+            php artisan config:clear
+            php artisan cache:clear
+            php artisan view:clear

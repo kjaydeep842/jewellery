@@ -294,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initAutoScroll("productScroll1", 2000);
     initAutoScroll("productScroll2", 2000);
-    initAutoScroll("launchScroll", 2000);
+    // initAutoScroll("launchScroll", 2000); // Disabled to prevent duplicate categories
 
     // Jewellery Slider (Premium Collection)
     const jewellerySlider = document.getElementById("jewellerySlider");
@@ -587,7 +587,7 @@ window.initHomeInteractive = function (
 
     function updateSliderUI(index) {
         if (!categoriesData || categoriesData.length === 0) return;
-        
+
         currentCatIndex = index;
         const category = categoriesData[currentCatIndex];
 
@@ -645,7 +645,7 @@ window.initHomeInteractive = function (
 
     window.selectCategorySlide = function (categoryId) {
         if (!categoriesData || categoriesData.length === 0) return;
-        
+
         if (categoryId === 'all') return;
 
         const index = categoriesData.findIndex(c => c.id == categoryId);

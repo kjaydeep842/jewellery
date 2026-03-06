@@ -19,7 +19,7 @@ class HomeController extends Controller
         // Fetch categories that specifically have new arrival products
         $newArrivalCategories = Category::whereHas('products', function ($query) {
             $query->where('is_new', 1)->where('status', 'active');
-        })->get();
+        })->get()->unique('name');
 
         // Fetch featured products (latest 8 for now)
         $products = Product::with(['images', 'category'])->latest()->take(10)->get();

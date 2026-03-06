@@ -21,8 +21,22 @@ jobs:
         extensions: mbstring, bcmath, mysql
         coverage: none
 
+    # IMPORTANT: Create env file
+    - name: Copy .env
+      run: cp .env.example .env
+
+    # IMPORTANT: Generate Laravel key
+    - name: Generate APP_KEY
+      run: php artisan key:generate
+
     - name: Install Composer dependencies
       run: composer install --no-dev --optimize-autoloader
+
+    # Fix storage permissions
+    - name: Set Laravel permissions
+      run: |
+        chmod -R 777 storage
+        chmod -R 777 bootstrap/cache
 
     - name: Setup Node
       uses: actions/setup-node@v4
@@ -45,6 +59,8 @@ jobs:
         script: |
           cd /home/keclribpbb/tattsvi.in
           git pull origin main
+          composer install --no-dev --optimize-autoloader
           php artisan migrate --force
           php artisan config:clear
           php artisan cache:clear
+          php artisan route:clear

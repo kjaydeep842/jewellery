@@ -20,37 +20,31 @@ jobs:
         php-version: 8.2
         extensions: mbstring, bcmath, mysql
 
-    # Create env file
     - name: Copy env
       run: cp .env.example .env
 
-    # Install composer dependencies FIRST
-    - name: Install Composer dependencies
+    # Disable DB for CI
+    - name: Disable database
+      run: |
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=null/' .env
+
+    - name: Install Composer
       run: composer install --no-dev --optimize-autoloader
 
-    # Now artisan commands work
     - name: Generate APP_KEY
       run: php artisan key:generate
 
-    # Fix permissions
-    - name: Set Laravel permissions
-      run: |
-        chmod -R 777 storage
-        chmod -R 777 bootstrap/cache
-
-    # Setup Node
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
         node-version: 20
 
-    - name: Install npm dependencies
+    - name: Install npm
       run: npm install
 
-    - name: Build Vite assets
+    - name: Build assets
       run: npm run build
 
-    # Deploy
     - name: Deploy to Server
       uses: appleboy/ssh-action@v1.0.3
       with:

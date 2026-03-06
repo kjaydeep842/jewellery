@@ -11,40 +11,58 @@ jobs:
 
     steps:
 
+    # 1️⃣ Checkout project
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # 2️⃣ Setup PHP
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: 8.2
-        extensions: mbstring, bcmath, mysql
+        extensions: mbstring, bcmath, sqlite, mysql
+        coverage: none
 
-    - name: Copy env
+    # 3️⃣ Copy env file
+    - name: Copy .env
       run: cp .env.example .env
 
-    # Disable DB for CI
-    - name: Disable database
+    # 4️⃣ Setup temporary SQLite database for CI
+    - name: Setup SQLite for CI
       run: |
-        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=null/' .env
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+        mkdir -p database
+        touch database/database.sqlite
 
+    # 5️⃣ Install Composer dependencies
     - name: Install Composer
-      run: composer install --no-dev --optimize-autoloader
+      run: composer install --no-dev --optimize-autoloader --no-interaction
 
+    # 6️⃣ Generate Laravel APP_KEY
     - name: Generate APP_KEY
       run: php artisan key:generate
 
+    # 7️⃣ Fix Laravel permissions
+    - name: Fix permissions
+      run: |
+        chmod -R 777 storage
+        chmod -R 777 bootstrap/cache
+
+    # 8️⃣ Setup Node
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
         node-version: 20
 
-    - name: Install npm
+    # 9️⃣ Install NPM dependencies
+    - name: Install NPM
       run: npm install
 
+    # 🔟 Build Vite assets
     - name: Build assets
       run: npm run build
 
+    # 1️⃣1️⃣ Deploy to server
     - name: Deploy to Server
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -59,3 +77,4 @@ jobs:
           php artisan migrate --force
           php artisan config:clear
           php artisan cache:clear
+          php artisan route:clear

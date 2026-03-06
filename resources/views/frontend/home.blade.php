@@ -58,7 +58,7 @@ $firstCategory = $categories->first();
       <!-- Premium -->
       <span
         class="font-['Alexandria'] font-normal text-sm md:text-2xl min-[2000px]:text-[40px] text-[#5C4522] leading-tight text-center z-10 relative">
-        Premiumsss
+        Premiums
       </span>
       <!-- Collection -->
       <span

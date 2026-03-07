@@ -45,7 +45,7 @@ jobs:
         host: server50.shared.spaceship.host
         username: keclribpbb
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 65002
+        port: 21098
         script: |
           cd /home/keclribpbb/tattsvi.in
           git pull origin main

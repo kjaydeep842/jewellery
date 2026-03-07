@@ -58,7 +58,7 @@ $firstCategory = $categories->first();
       <!-- Premium -->
       <span
         class="font-['Alexandria'] font-normal text-sm md:text-2xl min-[2000px]:text-[40px] text-[#5C4522] leading-tight text-center z-10 relative">
-        Premiums
+        Premium
       </span>
       <!-- Collection -->
       <span
@@ -124,6 +124,7 @@ $firstCategory = $categories->first();
       </div>
       @endforeach
       @endif
+
 
     </div>
 
@@ -563,55 +564,56 @@ $firstCategory = $categories->first();
       class="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1800px] h-[10px] max-w-none bg-[#FDFBF7] rounded-[50%] -z-10 blur-xl pointer-events-none">
     </div>
 
+    <!-- Hidden Form for Category Filtering via POST -->
+    <form id="launchCategoryForm" action="{{ route('products.index.post') }}" method="POST" class="hidden">
+      @csrf
+      <input type="hidden" name="category[]" id="launchCategoryInput">
+      <input type="hidden" name="is_new" value="1">
+    </form>
+
+    @php
+    $launchStyles = [
+    [
+    'gradient_stops' => [
+    ['color' => '#FFF6E3', 'offset' => 0],
+    ['color' => '#E8C889', 'offset' => 1]
+    ],
+    'star_color' => '#C19757',
+    'curve_filter' => '' // Default
+    ],
+    [
+    'gradient_stops' => [
+    ['color' => '#FCECEC', 'offset' => 0],
+    ['color' => '#E7B6A7', 'offset' => 1]
+    ],
+    'star_color' => '#CBA65A',
+    'curve_filter' => 'brightness(0) saturate(100%) invert(86%) sepia(20%) saturate(713%) hue-rotate(323deg) brightness(97%) contrast(93%)'
+    ],
+    [
+    'gradient_stops' => [
+    ['color' => '#F4F1EC', 'offset' => 0],
+    ['color' => '#D6C3A5', 'offset' => 1]
+    ],
+    'star_color' => '#D6C3A5',
+    'curve_filter' => 'brightness(0) saturate(100%) invert(84%) sepia(8%) saturate(928%) hue-rotate(352deg) brightness(97%) contrast(93%)'
+    ],
+    [
+    'gradient_stops' => [
+    ['color' => '#FFF1E8', 'offset' => 0],
+    ['color' => '#F3C6A8', 'offset' => 1]
+    ],
+    'star_color' => '#F3C6A8',
+    'curve_filter' => 'brightness(0) saturate(100%) invert(87%) sepia(17%) saturate(1043%) hue-rotate(320deg) brightness(101%) contrast(91%)'
+    ]
+    ];
+    @endphp
+
     <!-- Product Cards Grid -->
     <div id="launchScroll"
       class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-6 relative z-10 w-full px-6 md:px-8 min-[1800px]:px-[calc((100vw-1600px)/2)]"
       style="-webkit-overflow-scrolling: touch;">
-      <!-- Hidden Form for Category Filtering via POST -->
-      <form id="launchCategoryForm" action="{{ route('products.index.post') }}" method="POST" class="hidden">
-        @csrf
-        <input type="hidden" name="category[]" id="launchCategoryInput">
-        <input type="hidden" name="is_new" value="1">
-      </form>
 
-      @php
-      $launchStyles = [
-      [
-      'gradient_stops' => [
-      ['color' => '#FFF6E3', 'offset' => 0],
-      ['color' => '#E8C889', 'offset' => 1]
-      ],
-      'star_color' => '#C19757',
-      'curve_filter' => '' // Default
-      ],
-      [
-      'gradient_stops' => [
-      ['color' => '#FCECEC', 'offset' => 0],
-      ['color' => '#E7B6A7', 'offset' => 1]
-      ],
-      'star_color' => '#CBA65A',
-      'curve_filter' => 'brightness(0) saturate(100%) invert(86%) sepia(20%) saturate(713%) hue-rotate(323deg) brightness(97%) contrast(93%)'
-      ],
-      [
-      'gradient_stops' => [
-      ['color' => '#F4F1EC', 'offset' => 0],
-      ['color' => '#D6C3A5', 'offset' => 1]
-      ],
-      'star_color' => '#D6C3A5',
-      'curve_filter' => 'brightness(0) saturate(100%) invert(84%) sepia(8%) saturate(928%) hue-rotate(352deg) brightness(97%) contrast(93%)'
-      ],
-      [
-      'gradient_stops' => [
-      ['color' => '#FFF1E8', 'offset' => 0],
-      ['color' => '#F3C6A8', 'offset' => 1]
-      ],
-      'star_color' => '#F3C6A8',
-      'curve_filter' => 'brightness(0) saturate(100%) invert(87%) sepia(17%) saturate(1043%) hue-rotate(320deg) brightness(101%) contrast(91%)'
-      ]
-      ];
-      @endphp
-
-      @if(isset($newArrivalCategories) && $newArrivalCategories->count() > 0)
+      @if(!empty($newArrivalCategories) && $newArrivalCategories->count())
       @foreach($newArrivalCategories as $index => $category)
       @php
       $style = $launchStyles[$index % 4];
@@ -692,13 +694,6 @@ $firstCategory = $categories->first();
                 d="M0 20C110 75 241 75 351 20V230C351 246.569 337.569 260 321 260H30C13.4315 260 0 246.569 0 230V20Z"
                 fill="url(#{{ $gradientRefId }})" />
             </svg>
-            <div class="absolute bottom-[35%] w-full text-center z-30">
-              <p class="font-['Outfit'] text-sm min-[2000px]:text-xl text-[#5C4522] mb-1">
-                9KT Solid Gold</p>
-              <h3 class="font-['Outfit'] text-xl min-[2000px]:text-3xl font-medium text-[#5C4522]">
-                {{ $category->name }}
-              </h3>
-            </div>
           </div>
         </div>
       </div>
@@ -1190,18 +1185,21 @@ $firstCategory = $categories->first();
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    if (typeof initHomeInteractive === 'function') {
-      initHomeInteractive({
-          {
-            isset($middleBanners) ? $middleBanners - > count() : 0
-          }
-        },
-        @json($categories),
-        "{{ url('storage') }}",
-        "{{ asset('') }}"
+    const bannerCount = "{{$middleBanners->count() ?? 0}}";
+    const categoriesData = @json($categories);
+    const storageUrl = "{{ url('storage') }}";
+    const assetUrl = "{{ asset('') }}";
+
+    // 2. Pass those variables to your function
+    if (window.initHomeInteractive) {
+      window.initHomeInteractive(
+        bannerCount,
+        categoriesData,
+        storageUrl,
+        assetUrl
       );
     } else {
-      console.warn('initHomeInteractive function not found. Ensure script.js is loaded.');
+      console.warn("initHomeInteractive not found");
     }
 
     // Auto-scroll for Diamond Shapes
@@ -1246,19 +1244,30 @@ $firstCategory = $categories->first();
 
     // Continuous Auto-Scroll for Unique Style Slider
     const uniqueSlider = document.getElementById('uniqueStyleSlider');
+
     if (uniqueSlider) {
-      // Clone content for seamless loop (x3 to be safe)
+
       const uniqueContent = Array.from(uniqueSlider.children);
-      for (let i = 0; i < 2; i++) {
-        uniqueContent.forEach(item => uniqueSlider.appendChild(item.cloneNode(true)));
+
+      // ✅ Clone only if more than 1 item
+      if (uniqueContent.length <= 1) {
+        for (let i = 0; i < 2; i++) {
+          uniqueContent.forEach(item => {
+            uniqueSlider.appendChild(item.cloneNode(true));
+          });
+        }
       }
 
       let uniqueScrollAmount = 0;
-      const uniqueSpeed = 0.8; // Slightly faster or adjustable
+      const uniqueSpeed = 0.8;
       let uniqueHovered = false;
 
-      const pauseUnique = () => uniqueHovered = true;
-      const resumeUnique = () => uniqueHovered = false;
+      const pauseUnique = () => {
+        uniqueHovered = true;
+      };
+      const resumeUnique = () => {
+        uniqueHovered = false;
+      };
 
       uniqueSlider.addEventListener('mouseenter', pauseUnique);
       uniqueSlider.addEventListener('mouseleave', resumeUnique);
@@ -1266,19 +1275,27 @@ $firstCategory = $categories->first();
       uniqueSlider.addEventListener('touchend', resumeUnique);
 
       function animateUniqueScroll() {
-        if (!uniqueHovered && uniqueSlider.scrollWidth > uniqueSlider.clientWidth) {
+
+        // ✅ Run scroll only if more than 1 item
+        if (!uniqueHovered && uniqueContent.length > 1 && uniqueSlider.scrollWidth > uniqueSlider.clientWidth) {
+
           uniqueScrollAmount += uniqueSpeed;
-          // Reset when we've scrolled past the first set (approx 1/3 of total cloned width)
+
           if (uniqueScrollAmount >= (uniqueSlider.scrollWidth / 3)) {
             uniqueScrollAmount = 0;
           }
+
           uniqueSlider.scrollLeft = uniqueScrollAmount;
+
         } else {
-          // Sync scroll amount if user manually scrolled
+
           uniqueScrollAmount = uniqueSlider.scrollLeft;
+
         }
+
         requestAnimationFrame(animateUniqueScroll);
       }
+
       animateUniqueScroll();
     }
 

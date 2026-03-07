@@ -151,7 +151,8 @@ const initShutterSlider = (sliderId, dotsId, interval = 5000) => {
                 );
             } else {
                 const activeClass = dotsContainer.dataset.active || "bg-black";
-                const inactiveClass = dotsContainer.dataset.inactive || "bg-black/10";
+                const inactiveClass =
+                    dotsContainer.dataset.inactive || "bg-black/10";
 
                 if (i === index) {
                     dot.classList.add(activeClass);
@@ -231,14 +232,18 @@ const initAutoScroll = (containerId, interval = 2000) => {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    // Clone items to create an infinite loop effect
-    const originalChildren = Array.from(container.children);
-    if (originalChildren.length > 0) {
-        originalChildren.forEach((item) => {
-            const clone = item.cloneNode(true);
-            container.appendChild(clone);
-        });
-    }
+    // ✅ Filter for actual display items (DIVs) and ignore hidden tags or scripts
+    const children = Array.from(container.children).filter(
+        (child) => child.tagName === "DIV",
+    );
+
+    if (children.length <= 1) return; // ✅ Don't clone if only 1 item
+
+    // Clone items once to create enough width for the loop
+    children.forEach((item) => {
+        const clone = item.cloneNode(true);
+        container.appendChild(clone);
+    });
 
     let isPaused = false;
     let scrollInterval;
@@ -638,7 +643,9 @@ window.initHomeInteractive = function (
         if (direction === "next") {
             newIndex = (currentCatIndex + 1) % categoriesData.length;
         } else {
-            newIndex = (currentCatIndex - 1 + categoriesData.length) % categoriesData.length;
+            newIndex =
+                (currentCatIndex - 1 + categoriesData.length) %
+                categoriesData.length;
         }
         updateSliderUI(newIndex);
     };
@@ -646,9 +653,9 @@ window.initHomeInteractive = function (
     window.selectCategorySlide = function (categoryId) {
         if (!categoriesData || categoriesData.length === 0) return;
 
-        if (categoryId === 'all') return;
+        if (categoryId === "all") return;
 
-        const index = categoriesData.findIndex(c => c.id == categoryId);
+        const index = categoriesData.findIndex((c) => c.id == categoryId);
         if (index !== -1) {
             updateSliderUI(index);
         }
@@ -883,19 +890,23 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (!faIcon) {
                             faIcon = document.createElement("i");
                             // Default sizing based on which icon is available
-                            const iconClass = img && img.classList.contains("w-4") ? "text-sm" : "text-lg";
-                            faIcon.className =
-                                `fa-solid fa-heart text-[#CBA65A] ${iconClass}`;
+                            const iconClass =
+                                img && img.classList.contains("w-4")
+                                    ? "text-sm"
+                                    : "text-lg";
+                            faIcon.className = `fa-solid fa-heart text-[#CBA65A] ${iconClass}`;
                             btn.appendChild(faIcon);
                         } else {
                             faIcon.classList.remove("hidden");
                         }
 
-                        if (window.showToast) window.showToast(data.message, "success");
+                        if (window.showToast)
+                            window.showToast(data.message, "success");
                     } else if (data.status === "removed") {
                         if (img) img.classList.remove("hidden");
                         if (faIcon) faIcon.classList.add("hidden");
-                        if (window.showToast) window.showToast(data.message, "success");
+                        if (window.showToast)
+                            window.showToast(data.message, "success");
                     }
 
                     // Update header counter
@@ -938,7 +949,8 @@ window.showToast = function (message, type = "success") {
 
     const toast = document.createElement("div");
     // Default success icon (check-circle) vs warning icon (circle-exclamation)
-    const iconClass = type === "success" ? "fa-circle-check" : "fa-circle-exclamation";
+    const iconClass =
+        type === "success" ? "fa-circle-check" : "fa-circle-exclamation";
     // Using amber color for warning/info as well to fit theme, red for error
     let bgColorClass = "bg-[#CBA65A]";
     if (type === "error") bgColorClass = "bg-red-600";

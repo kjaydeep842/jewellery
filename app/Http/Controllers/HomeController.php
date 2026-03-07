@@ -91,7 +91,6 @@ class HomeController extends Controller
         }
 
         return view('frontend.home', compact('categories', 'newArrivalCategories', 'products', 'banners', 'middleBanners', 'shapes', 'uniqueStyles', 'bestSellerProduct', 'reviews'));
-
     }
 
     public function filterProducts(Request $request)
@@ -122,20 +121,17 @@ class HomeController extends Controller
     {
         $faqs = \App\Models\Faq::where('status', true)->get();
         return view('frontend.faqs', compact('faqs'));
-
     }
 
     public function returnExchange()
     {
         $returns = \App\Models\ReturnExchange::where('status', true)->get();
         return view('frontend.return_exchange', compact('returns'));
-
     }
 
     public function showContactForm()
     {
         return view('frontend.contact');
-
     }
 
     public function submitContactForm(Request $request)

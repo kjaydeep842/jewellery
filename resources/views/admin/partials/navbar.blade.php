@@ -29,8 +29,10 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-                <span
-                    class="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white animate-pulse"></span>
+                @if(Auth::user()->unreadNotifications->count() > 0)
+                    <span
+                        class="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white animate-pulse"></span>
+                @endif
             </button>
 
             <!-- Mobile Backdrop -->
@@ -46,72 +48,47 @@
 
                 <div class="px-4 py-3 border-b border-zinc-100 bg-amber-50/50 flex justify-between items-center">
                     <h3 class="font-bold text-zinc-800 font-heading">Notifications</h3>
-                    <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">3 New</span>
+                    @if(Auth::user()->unreadNotifications->count() > 0)
+                        <span
+                            class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">{{ Auth::user()->unreadNotifications->count() }}
+                            New</span>
+                    @endif
                 </div>
 
                 <div class="max-h-80 overflow-y-auto">
-                    <!-- New Order -->
-                    <a href="#"
-                        class="block px-4 py-4 hover:bg-zinc-50 transition-colors border-b border-zinc-50 last:border-0 group">
-                        <div class="flex items-start">
-                            <div
-                                class="flex-shrink-0 bg-emerald-100 rounded-full p-2 text-emerald-600 group-hover:bg-emerald-200 transition-colors mt-1">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                </svg>
+                    @forelse(Auth::user()->notifications->take(10) as $notification)
+                        <a href="{{ isset($notification->data['order_id']) ? route('admin.orders.show', $notification->data['order_id']) : '#' }}"
+                            class="block px-4 py-4 hover:bg-zinc-50 transition-colors border-b border-zinc-50 last:border-0 group {{ $notification->read_at ? 'opacity-60' : '' }}">
+                            <div class="flex items-start">
+                                <div
+                                    class="flex-shrink-0 bg-emerald-100 rounded-full p-2 text-emerald-600 group-hover:bg-emerald-200 transition-colors mt-1">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <p class="text-sm font-bold text-zinc-800">
+                                        {{ $notification->data['message'] ?? 'New Notification' }}</p>
+                                    @if(isset($notification->data['total_amount']))
+                                        <p class="text-sm text-zinc-600 mt-0.5">Order Total:
+                                            ₹{{ number_format($notification->data['total_amount'], 2) }}</p>
+                                    @endif
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $notification->created_at->diffForHumans() }}
+                                    </p>
+                                </div>
                             </div>
-                            <div class="ml-4 flex-1">
-                                <p class="text-sm font-bold text-zinc-800">New Order #1024</p>
-                                <p class="text-sm text-zinc-600 mt-0.5">Customer placed a new order for $1,200.</p>
-                                <p class="text-xs text-zinc-400 mt-1">2 minutes ago</p>
-                            </div>
+                        </a>
+                    @empty
+                        <div class="px-4 py-8 text-center text-zinc-500">
+                            <p class="text-sm">No notifications yet</p>
                         </div>
-                    </a>
-
-                    <!-- Low Stock -->
-                    <a href="#"
-                        class="block px-4 py-4 hover:bg-zinc-50 transition-colors border-b border-zinc-50 last:border-0 group">
-                        <div class="flex items-start">
-                            <div
-                                class="flex-shrink-0 bg-amber-100 rounded-full p-2 text-amber-600 group-hover:bg-amber-200 transition-colors mt-1">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="ml-4 flex-1">
-                                <p class="text-sm font-bold text-zinc-800">Low Stock Alert</p>
-                                <p class="text-sm text-zinc-600 mt-0.5">Gold Ring (Size 6) is running low.</p>
-                                <p class="text-xs text-zinc-400 mt-1">1 hour ago</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- New Customer -->
-                    <a href="#" class="block px-4 py-4 hover:bg-zinc-50 transition-colors group">
-                        <div class="flex items-start">
-                            <div
-                                class="flex-shrink-0 bg-blue-100 rounded-full p-2 text-blue-600 group-hover:bg-blue-200 transition-colors mt-1">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="ml-4 flex-1">
-                                <p class="text-sm font-bold text-zinc-800">New Customer</p>
-                                <p class="text-sm text-zinc-600 mt-0.5">Sarah Johnson joined your store.</p>
-                                <p class="text-xs text-zinc-400 mt-1">3 hours ago</p>
-                            </div>
-                        </div>
-                    </a>
+                    @endforelse
                 </div>
 
-                <a href="#"
+                <a href="{{ route('admin.notifications.markRead') }}"
                     class="block text-center text-xs font-bold text-amber-600 py-3 bg-amber-50 hover:bg-amber-100 transition-colors uppercase tracking-wide border-t border-amber-100">
-                    View All Notifications
+                    Mark All As Read
                 </a>
             </div>
         </div>

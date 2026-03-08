@@ -16,6 +16,7 @@ use App\Http\Controllers\Frontend\TattsvisFavouriteController;
 use App\Http\Controllers\Frontend\ReadyToStockController;
 use App\Http\Controllers\Frontend\AuthController;
 use App\Http\Controllers\Frontend\InquiryController;
+use App\Http\Controllers\Frontend\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +82,8 @@ Route::get('/ajax/products/category/{id}', [ProductController::class, 'fetchByCa
     ->name('ajax.products.category');
 Route::get('/ajax/search-suggestions', [ProductController::class, 'searchSuggestions'])
     ->name('ajax.search.suggestions');
+Route::post('/ajax/product/{id}/calculate-price', [ProductController::class, 'calculatePrice'])
+    ->name('ajax.product.calculate-price');
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +94,7 @@ Route::get('/ajax/search-suggestions', [ProductController::class, 'searchSuggest
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::delete('/cart/bulk/destroy', [CartController::class, 'bulkDestroy'])->name('cart.bulk-destroy');
 
 // Checkout (Auth Required)
 Route::middleware(['auth'])->group(function () {
@@ -135,10 +139,9 @@ Route::middleware(['auth'])->group(function () {
 
     // })->name('dashboard');
 
-    Route::get('/orders', function () {
-        $orders = Auth::user()->orders()->latest()->get();
-        return view('frontend.orders.index', compact('orders'));
-    })->name('orders.index');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}/cancel', [OrderController::class, 'cancelForm'])->name('orders.cancel');
+    Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel.submit');
 
 
 

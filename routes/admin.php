@@ -114,6 +114,9 @@ Route::middleware(['auth', 'admin'])
         Route::patch('units/{unit}/toggle', [\App\Http\Controllers\Admin\UnitController::class, 'toggleStatus'])->name('units.toggle');
         Route::patch('colors/{color}/toggle', [\App\Http\Controllers\Admin\ColorController::class, 'toggleStatus'])->name('colors.toggle');
 
+        // Notifications
+        Route::get('notifications/mark-read', [AdminController::class, 'markNotificationsRead'])->name('notifications.markRead');
+
         // Settings
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');

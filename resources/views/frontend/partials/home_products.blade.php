@@ -4,9 +4,11 @@
             class="flex flex-col gap-3 w-[calc(50%-10px)] md:w-[calc(25%-15px)] lg:w-[calc(20%-16px)] flex-shrink-0 snap-start">
             <div
                 class="bg-[#FDFBF7] box-border relative w-full aspect-square border border-[#D7D7DA] rounded-[14px] group transition-all overflow-hidden shadow-md hover:shadow-xl">
-                <span
-                    class="absolute font-['Alexandria'] font-light top-2 right-0 w-[65px] h-[20px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[10px] z-10 tracking-wide shadow-sm">Best
-                    Seller</span>
+                @if($product->is_bestseller)
+                    <span
+                        class="absolute font-['Alexandria'] font-light top-2 right-0 w-[65px] h-[20px] bg-[#C34A37] rounded-l-[100px] flex items-center justify-center text-white text-[10px] z-10 tracking-wide shadow-sm">Best
+                        Seller</span>
+                @endif
                 <div class="absolute bottom-3 left-2 z-20 flex bg-white h-[27px] w-[27px] items-center justify-center rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm cursor-pointer wishlist-btn hover:bg-[#FAF8F1]"
                     data-product-id="{{ $product->id }}">
                     @if(Auth::check() && Auth::user()->wishlists->contains('product_id', $product->id))
@@ -41,9 +43,9 @@
                 </h3>
                 <div class="flex flex-wrap items-center justify-center gap-2 text-xs md:text-sm lg:text-base">
                     <span class="font-bold font-['outfit'] text-[#1A1A1A] whitespace-nowrap">₹
-                        {{ number_format($product->price, 2) }}</span>
+                        {{ number_format($product->selling_price, 0) }}</span>
                     <span class="text-[#999999] line-through whitespace-nowrap">₹
-                        {{ number_format($product->price * 1.2, 2) }}</span>
+                        {{ number_format($product->price, 0) }}</span>
                 </div>
             </div>
         </div>

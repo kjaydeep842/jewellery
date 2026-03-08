@@ -14,6 +14,8 @@ class Order extends Model
         'total_amount',
         'status',
         'address_id',
+        'cancel_reason',
+        'cancel_comment',
     ];
 
     public function items()

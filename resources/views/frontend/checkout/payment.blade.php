@@ -439,11 +439,11 @@
                             confirmButtonColor: '#CBA65A',
                         }).then((result) => {
                             // Only redirect AFTER they click OK
-                            window.location.href = "{{ route('home') }}";
+                            window.location.href = data.redirect_url || "{{ route('home') }}";
                         });
                     } else {
                         alert(data.message);
-                        window.location.href = "{{ route('home') }}";
+                        window.location.href = data.redirect_url || "{{ route('home') }}";
                     }
                 } else {
                     // Handle failure gracefully

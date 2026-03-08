@@ -32,7 +32,7 @@
                     </a>
                 </div>
             @else
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 min-[1400px]:grid-cols-5 gap-4 md:gap-5 box-border"
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 min-[1600px]:grid-cols-5 gap-4 md:gap-6 box-border"
                     x-data="{ zoomOpen: false, zoomImages: [], zoomIndex: 0 }">
                     @foreach($wishlists as $item)
                         @include('frontend.partials.wishlist-card', ['product' => $item->product, 'wishlist_item_id' => $item->id])

@@ -127,18 +127,24 @@ class ProductController extends Controller
                 }
             }
 
-            // Variants (Sizes)
+            // Variants (Combinations)
             if ($request->filled('variants')) {
-                $processedSizes = [];
+                $processedVariants = [];
                 foreach ($request->variants as $variant) {
-                    if (!empty($variant['size']) && !in_array($variant['size'], $processedSizes)) {
-                        $processedSizes[] = $variant['size'];
+                    $signature = ($variant['size'] ?? '') . '-' . ($variant['color'] ?? '') . '-' . ($variant['material_purity'] ?? '') . '-' . ($variant['diamond_quality'] ?? '') . '-' . ($variant['shape'] ?? '');
+
+                    if (!empty($variant['price']) && !in_array($signature, $processedVariants)) {
+                        $processedVariants[] = $signature;
                         ProductVariant::create([
                             'product_id' => $product->id,
-                            'size' => $variant['size'],
+                            'size' => $variant['size'] ?? null,
+                            'color' => $variant['color'] ?? null,
+                            'material_purity' => $variant['material_purity'] ?? null,
+                            'diamond_quality' => $variant['diamond_quality'] ?? null,
+                            'shape' => $variant['shape'] ?? null,
                             'stock_quantity' => $variant['stock'] ?? 0,
-                            'sku' => $product->sku . '-' . Str::slug($variant['size']),
-                            'price' => $product->price,
+                            'sku' => $product->sku . '-' . Str::slug($signature),
+                            'price' => $variant['price'],
                         ]);
                     }
                 }
@@ -259,16 +265,22 @@ class ProductController extends Controller
             // Variants Sync
             ProductVariant::where('product_id', $product->id)->delete();
             if ($request->filled('variants')) {
-                $processedSizes = [];
+                $processedVariants = [];
                 foreach ($request->variants as $variant) {
-                    if (!empty($variant['size']) && !in_array($variant['size'], $processedSizes)) {
-                        $processedSizes[] = $variant['size'];
+                    $signature = ($variant['size'] ?? '') . '-' . ($variant['color'] ?? '') . '-' . ($variant['material_purity'] ?? '') . '-' . ($variant['diamond_quality'] ?? '') . '-' . ($variant['shape'] ?? '');
+
+                    if (!empty($variant['price']) && !in_array($signature, $processedVariants)) {
+                        $processedVariants[] = $signature;
                         ProductVariant::create([
                             'product_id' => $product->id,
-                            'size' => $variant['size'],
+                            'size' => $variant['size'] ?? null,
+                            'color' => $variant['color'] ?? null,
+                            'material_purity' => $variant['material_purity'] ?? null,
+                            'diamond_quality' => $variant['diamond_quality'] ?? null,
+                            'shape' => $variant['shape'] ?? null,
                             'stock_quantity' => $variant['stock'] ?? 0,
-                            'sku' => $product->sku . '-' . Str::slug($variant['size']),
-                            'price' => $product->price,
+                            'sku' => $product->sku . '-' . Str::slug($signature),
+                            'price' => $variant['price'],
                         ]);
                     }
                 }

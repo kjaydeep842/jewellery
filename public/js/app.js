@@ -611,8 +611,8 @@ window.initHomeInteractive = function (
                 }
             }
             if (catTitle) catTitle.textContent = category.name;
-            if (catDesc) catDesc.textContent = category.description || "";
-            if (exploreCatTitle) exploreCatTitle.textContent = category.name;
+            // if (catDesc) catDesc.textContent = category.description || "";
+            // if (exploreCatTitle) exploreCatTitle.textContent = category.name;
 
             if (catImg) catImg.style.opacity = "1";
 

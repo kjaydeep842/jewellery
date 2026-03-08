@@ -88,4 +88,10 @@ class AdminController extends Controller
             'revenueProgress'
         ));
     }
+
+    public function markNotificationsRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->back()->with('success', 'All notifications marked as read.');
+    }
 }

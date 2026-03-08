@@ -3,445 +3,601 @@
 @section('title', 'Edit Product')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-zinc-800">Edit Product: {{ $product->name }}</h1>
-        <a href="{{ route('admin.products.index') }}" class="px-5 py-2.5 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 font-semibold shadow-sm transition-all flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            Back to List
-        </a>
-    </div>
+    <div class="container mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-zinc-800">Edit Product: {{ $product->name }}</h1>
+            <a href="{{ route('admin.products.index') }}"
+                class="px-5 py-2.5 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 font-semibold shadow-sm transition-all flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                    </path>
+                </svg>
+                Back to List
+            </a>
+        </div>
 
-    @if($errors->any())
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-        <strong class="font-bold">Whoops!</strong>
-        <span class="block sm:inline">There were some problems with your input.</span>
-        <ul class="mt-2 list-disc list-inside text-sm">
-            @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
+        @if($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                <strong class="font-bold">Whoops!</strong>
+                <span class="block sm:inline">There were some problems with your input.</span>
+                <ul class="mt-2 list-disc list-inside text-sm">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-    <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg border border-zinc-100 p-8"
-        x-data="{ variants: {{ json_encode($product->variants->map(function($v){ return ['size' => $v->size, 'stock' => $v->stock_quantity]; })) }} }">
-        @csrf
-        @method('PUT')
+        <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data"
+            class="bg-white rounded-xl shadow-lg border border-zinc-100 p-8" x-data='{ 
+                    variants: {!! json_encode($product->variants->map(function ($v) {
+        return ["size" => $v->size ?? "", "color" => $v->color ?? "", "diamond_quality" => $v->diamond_quality ?? "", "material_purity" => $v->material_purity ?? "", "shape" => $v->shape ?? "", "price" => $v->price ?? "", "stock" => $v->stock_quantity]; })) !!},
+                    selectedCategoryId: "{{ old('category_id', $product->category_id) }}",
+                    categoryNames: @json($categories->pluck('name', 'id'))
+                }'>
+            @csrf
+            @method('PUT')
 
-        {{-- 1. Basic Product Info --}}
-        <div class="mb-8 border-b border-gray-100 pb-6">
-            <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Basic Product Info</h2>
+            {{-- 1. Basic Product Info --}}
+            <div class="mb-8 border-b border-gray-100 pb-6">
+                <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Basic Product
+                    Info</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Product Name <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" value="{{ old('name', $product->name) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500" required>
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Slug</label>
-                    <input type="text" name="slug" value="{{ old('slug', $product->slug) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">SKU</label>
-                    <input type="text" name="sku" value="{{ old('sku', $product->sku) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Product Name <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="name" value="{{ old('name', $product->name) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Slug</label>
+                        <input type="text" name="slug" value="{{ old('slug', $product->slug) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">SKU</label>
+                        <input type="text" name="sku" value="{{ old('sku', $product->sku) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+
+                    {{-- Categories & Masters --}}
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Category <span
+                                class="text-red-500">*</span></label>
+                        <select name="category_id" x-model="selectedCategoryId"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                            required>
+                            <option value="">-- Select Category --</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Subcategory</label>
+                        <select name="subcategory_id"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                            <option value="">-- Select Subcategory --</option>
+                            @foreach($subcategories as $sub)
+                                <option value="{{ $sub->id }}" {{ old('subcategory_id', $product->subcategory_id) == $sub->id ? 'selected' : '' }}>{{ $sub->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Brand</label>
+                        <select name="brand_id"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                            <option value="">-- Select Brand --</option>
+                            @foreach($brands as $brand)
+                                <option value="{{ $brand->id }}" {{ old('brand_id', $product->brand_id) == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Unit</label>
+                        <select name="unit_id"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                            <option value="">-- Select Unit --</option>
+                            @foreach($units as $unit)
+                                <option value="{{ $unit->id }}" {{ old('unit_id', $product->unit_id) == $unit->id ? 'selected' : '' }}>{{ $unit->name }} ({{ $unit->code }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Color (Generic)</label>
+                        <select name="color_id"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                            <option value="">-- Select Color --</option>
+                            @foreach($colors as $color)
+                                <option value="{{ $color->id }}" {{ old('color_id', $product->color_id) == $color->id ? 'selected' : '' }}>{{ $color->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <label class="block font-semibold text-zinc-700 mb-3">Tags</label>
+                        <div class="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                                @foreach($tags as $tag)
+                                    <label class="relative flex items-center cursor-pointer group">
+                                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" {{ (collect(old('tags', $product->tags->pluck('id')))->contains($tag->id)) ? 'checked' : '' }}
+                                            class="peer sr-only">
+                                        <div class="w-full px-4 py-2.5 bg-white border-2 border-zinc-200 rounded-lg text-center text-sm font-medium text-zinc-700 transition-all
+                                                            peer-checked:bg-amber-50 peer-checked:border-amber-500 peer-checked:text-amber-700 peer-checked:shadow-md
+                                                            hover:border-amber-300 hover:shadow-sm
+                                                            flex items-center justify-center gap-2">
+                                            <svg class="w-4 h-4 opacity-0 peer-checked:opacity-100 transition-opacity text-amber-600"
+                                                fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span>{{ $tag->name }}</span>
+                                        </div>
+                                    </label>
+                                @endforeach
+                            </div>
+                            @if($tags->isEmpty())
+                                <p class="text-zinc-500 text-sm text-center py-4">No tags available. <a
+                                        href="{{ route('admin.tags.create') }}" class="text-amber-600 hover:underline">Create
+                                        one</a></p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Price (Base) <span
+                                class="text-red-500">*</span></label>
+                        <input type="number" step="0.01" name="price" value="{{ old('price', $product->price) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Discount Price</label>
+                        <input type="number" step="0.01" name="discount_price"
+                            value="{{ old('discount_price', $product->discount_price) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Total/Global Stock</label>
+                        <input type="number" name="stock" value="{{ old('stock', $product->stock) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                    </div>
                 </div>
 
-                {{-- Categories & Masters --}}
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Category <span class="text-red-500">*</span></label>
-                    <select name="category_id" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500" required>
-                        <option value="">-- Select Category --</option>
-                        @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                        @endforeach
-                    </select>
+                <div class="mb-4">
+                    <label class="block font-semibold text-zinc-700 mb-2">Short Description</label>
+                    <textarea name="short_description" rows="2"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">{{ old('short_description', $product->short_description) }}</textarea>
                 </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Subcategory</label>
-                    <select name="subcategory_id" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
-                        <option value="">-- Select Subcategory --</option>
-                        @foreach($subcategories as $sub)
-                        <option value="{{ $sub->id }}" {{ old('subcategory_id', $product->subcategory_id) == $sub->id ? 'selected' : '' }}>{{ $sub->name }}</option>
-                        @endforeach
-                    </select>
+
+                <div class="mb-4">
+                    <label class="block font-semibold text-zinc-700 mb-2">Description</label>
+                    <textarea name="description" rows="4"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">{{ old('description', $product->description) }}</textarea>
                 </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Brand</label>
-                    <select name="brand_id" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
-                        <option value="">-- Select Brand --</option>
-                        @foreach($brands as $brand)
-                        <option value="{{ $brand->id }}" {{ old('brand_id', $product->brand_id) == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
-                        @endforeach
-                    </select>
+
+                {{-- Flags --}}
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 mt-6 bg-zinc-50 p-6 rounded-xl border border-zinc-100">
+                    <label class="inline-flex items-center cursor-pointer group">
+                        <input type="checkbox" name="status" value="active" class="sr-only peer" {{ old('status', $product->status) == 'active' ? 'checked' : '' }}>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all">
+                        </div>
+                        <span class="ms-3 text-sm font-semibold text-zinc-700">Active</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer group">
+                        <input type="checkbox" name="is_featured" value="1" class="sr-only peer" {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all">
+                        </div>
+                        <span class="ms-3 text-sm font-semibold text-zinc-700">Featured</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer group">
+                        <input type="checkbox" name="is_new" value="1" class="sr-only peer" {{ old('is_new', $product->is_new) ? 'checked' : '' }}>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all">
+                        </div>
+                        <span class="ms-3 text-sm font-semibold text-zinc-700">New Arrival</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer group">
+                        <input type="checkbox" name="is_bestseller" value="1" class="sr-only peer" {{ old('is_bestseller', $product->is_bestseller) ? 'checked' : '' }}>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all">
+                        </div>
+                        <span class="ms-3 text-sm font-semibold text-zinc-700">Bestseller</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer group">
+                        <input type="checkbox" name="is_ready_to_stock" value="1" class="sr-only peer" {{ old('is_ready_to_stock', $product->is_ready_to_stock) ? 'checked' : '' }}>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all">
+                        </div>
+                        <span class="ms-3 text-sm font-semibold text-zinc-700">Ready To Stock</span>
+                    </label>
                 </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Unit</label>
-                    <select name="unit_id" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
-                        <option value="">-- Select Unit --</option>
-                        @foreach($units as $unit)
-                        <option value="{{ $unit->id }}" {{ old('unit_id', $product->unit_id) == $unit->id ? 'selected' : '' }}>{{ $unit->name }} ({{ $unit->code }})</option>
-                        @endforeach
-                    </select>
+            </div>
+
+            {{-- 2. Media --}}
+            <div class="mb-8 border-b border-gray-100 pb-6">
+                <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Media</h2>
+                <div class="flex gap-6 mb-6">
+                    <!-- Current Main Image -->
+                    @if($product->image)
+                        <div
+                            class="w-32 h-32 relative border rounded bg-gray-50 flex items-center justify-center overflow-hidden">
+                            <img src="{{ Storage::url($product->image) }}" class="max-h-full max-w-full object-contain">
+                        </div>
+                    @endif
+                    <div class="flex-1">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block font-semibold text-zinc-700 mb-2">Update Main Image</label>
+                                <input type="file" name="image"
+                                    class="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-zinc-700 mb-2">Video URL</label>
+                                <input type="url" name="video_url" value="{{ old('video_url', $product->video_url) }}"
+                                    placeholder="https://..."
+                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block font-semibold text-zinc-700 mb-2">Add More Gallery Images</label>
+                                <input type="file" name="images[]" multiple
+                                    class="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-100">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Color (Generic)</label>
-                    <select name="color_id" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
-                        <option value="">-- Select Color --</option>
-                        @foreach($colors as $color)
-                        <option value="{{ $color->id }}" {{ old('color_id', $product->color_id) == $color->id ? 'selected' : '' }}>{{ $color->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="md:col-span-2 lg:col-span-3">
-                    <label class="block font-semibold text-zinc-700 mb-3">Tags</label>
-                    <div class="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                            @foreach($tags as $tag)
-                            <label class="relative flex items-center cursor-pointer group">
-                                <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
-                                    {{ (collect(old('tags', $product->tags->pluck('id')))->contains($tag->id)) ? 'checked' : '' }}
-                                    class="peer sr-only">
-                                <div class="w-full px-4 py-2.5 bg-white border-2 border-zinc-200 rounded-lg text-center text-sm font-medium text-zinc-700 transition-all
-                                    peer-checked:bg-amber-50 peer-checked:border-amber-500 peer-checked:text-amber-700 peer-checked:shadow-md
-                                    hover:border-amber-300 hover:shadow-sm
-                                    flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4 opacity-0 peer-checked:opacity-100 transition-opacity text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span>{{ $tag->name }}</span>
+
+                <!-- Current Gallery -->
+                @if($product->images->count() > 0)
+                    <div class="mb-4">
+                        <label class="block font-semibold text-zinc-700 mb-2">Current Gallery Images (Select to Remove)</label>
+                        <div class="grid grid-cols-4 md:grid-cols-6 gap-4">
+                            @foreach($product->images as $img)
+                                <div
+                                    class="relative group border rounded-lg overflow-hidden h-24 bg-gray-50 flex items-center justify-center">
+                                    <img src="{{ Storage::url($img->image_path) }}" class="max-h-full max-w-full">
+                                    <div
+                                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <input type="checkbox" name="remove_images[]" value="{{ $img->id }}"
+                                            class="w-5 h-5 text-red-600 rounded">
+                                    </div>
                                 </div>
-                            </label>
                             @endforeach
                         </div>
-                        @if($tags->isEmpty())
-                        <p class="text-zinc-500 text-sm text-center py-4">No tags available. <a href="{{ route('admin.tags.create') }}" class="text-amber-600 hover:underline">Create one</a></p>
-                        @endif
                     </div>
-                </div>
-
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Price (Base) <span class="text-red-500">*</span></label>
-                    <input type="number" step="0.01" name="price" value="{{ old('price', $product->price) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500" required>
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Discount Price</label>
-                    <input type="number" step="0.01" name="discount_price" value="{{ old('discount_price', $product->discount_price) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Total/Global Stock</label>
-                    <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-semibold text-zinc-700 mb-2">Short Description</label>
-                <textarea name="short_description" rows="2" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">{{ old('short_description', $product->short_description) }}</textarea>
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-semibold text-zinc-700 mb-2">Description</label>
-                <textarea name="description" rows="4" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">{{ old('description', $product->description) }}</textarea>
-            </div>
-
-            {{-- Flags --}}
-            <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 mt-6 bg-zinc-50 p-6 rounded-xl border border-zinc-100">
-                <label class="inline-flex items-center cursor-pointer group">
-                    <input type="checkbox" name="status" value="active" class="sr-only peer" {{ old('status', $product->status) == 'active' ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
-                    <span class="ms-3 text-sm font-semibold text-zinc-700">Active</span>
-                </label>
-                <label class="inline-flex items-center cursor-pointer group">
-                    <input type="checkbox" name="is_featured" value="1" class="sr-only peer" {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
-                    <span class="ms-3 text-sm font-semibold text-zinc-700">Featured</span>
-                </label>
-                <label class="inline-flex items-center cursor-pointer group">
-                    <input type="checkbox" name="is_new" value="1" class="sr-only peer" {{ old('is_new', $product->is_new) ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
-                    <span class="ms-3 text-sm font-semibold text-zinc-700">New Arrival</span>
-                </label>
-                <label class="inline-flex items-center cursor-pointer group">
-                    <input type="checkbox" name="is_bestseller" value="1" class="sr-only peer" {{ old('is_bestseller', $product->is_bestseller) ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
-                    <span class="ms-3 text-sm font-semibold text-zinc-700">Bestseller</span>
-                </label>
-                <label class="inline-flex items-center cursor-pointer group">
-                    <input type="checkbox" name="is_ready_to_stock" value="1" class="sr-only peer" {{ old('is_ready_to_stock', $product->is_ready_to_stock) ? 'checked' : '' }}>
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 group-hover:shadow-md transition-all"></div>
-                    <span class="ms-3 text-sm font-semibold text-zinc-700">Ready To Stock</span>
-                </label>
-            </div>
-        </div>
-
-        {{-- 2. Media --}}
-        <div class="mb-8 border-b border-gray-100 pb-6">
-            <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Media</h2>
-            <div class="flex gap-6 mb-6">
-                <!-- Current Main Image -->
-                @if($product->image)
-                <div class="w-32 h-32 relative border rounded bg-gray-50 flex items-center justify-center overflow-hidden">
-                    <img src="{{ Storage::url($product->image) }}" class="max-h-full max-w-full object-contain">
-                </div>
                 @endif
-                <div class="flex-1">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block font-semibold text-zinc-700 mb-2">Update Main Image</label>
-                            <input type="file" name="image" class="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100">
-                        </div>
-                        <div>
-                            <label class="block font-semibold text-zinc-700 mb-2">Video URL</label>
-                            <input type="url" name="video_url" value="{{ old('video_url', $product->video_url) }}" placeholder="https://..." class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block font-semibold text-zinc-700 mb-2">Add More Gallery Images</label>
-                            <input type="file" name="images[]" multiple class="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-zinc-50 file:text-zinc-700 hover:file:bg-zinc-100">
-                        </div>
+            </div>
+
+            {{-- 3. Detailed Info (Jewellery) --}}
+            <div class="mb-8 border-b border-gray-100 pb-6">
+                <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Jewellery
+                    Specifications</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Material</label>
+                        <input type="text" name="material" value="{{ old('material', $product->material) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Total Weight (grams)</label>
+                        <input type="number" step="0.001" name="weight" value="{{ old('weight', $product->weight) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Metal Type (Master)</label>
+                        <select name="metal_type" class="w-full border-gray-300 rounded-lg p-2.5">
+                            <option value="">Select Metal</option>
+                            @foreach($metals as $metal)
+                                <option value="{{ $metal->name }}" {{ old('metal_type', $product->metal_type) == $metal->name ? 'selected' : '' }}>{{ $metal->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Metal Purity</label>
+                        <input type="text" name="metal_purity" value="{{ old('metal_purity', $product->metal_purity) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Metal Color</label>
+                        <select name="metal_color_id" class="w-full border-gray-300 rounded-lg p-2.5">
+                            <option value="">Select Color</option>
+                            @foreach($metalColors as $mc)
+                                <option value="{{ $mc->id }}" {{ old('metal_color_id', $product->metal_color_id) == $mc->id ? 'selected' : '' }}>{{ $mc->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Gender</label>
+                        <select name="gender" class="w-full border-gray-300 rounded-lg p-2.5">
+                            <option value="">Select Gender</option>
+                            <option value="Women" {{ old('gender', $product->gender) == 'Women' ? 'selected' : '' }}>Women
+                            </option>
+                            <option value="Men" {{ old('gender', $product->gender) == 'Men' ? 'selected' : '' }}>Men</option>
+                            <option value="Unisex" {{ old('gender', $product->gender) == 'Unisex' ? 'selected' : '' }}>Unisex
+                            </option>
+                            <option value="Kids" {{ old('gender', $product->gender) == 'Kids' ? 'selected' : '' }}>Kids
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Occasion</label>
+                        <input type="text" name="occasion" value="{{ old('occasion', $product->occasion) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Making Charges (Specs)</label>
+                        <input type="number" step="0.01" name="making_charges"
+                            value="{{ old('making_charges', $product->making_charges) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Tax Rate (%)</label>
+                        <input type="number" step="0.01" name="tax_rate"
+                            value="{{ old('tax_rate', $product->tax_rate ?? 3.00) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
                     </div>
                 </div>
             </div>
 
-            <!-- Current Gallery -->
-            @if($product->images->count() > 0)
-            <div class="mb-4">
-                <label class="block font-semibold text-zinc-700 mb-2">Current Gallery Images (Select to Remove)</label>
-                <div class="grid grid-cols-4 md:grid-cols-6 gap-4">
-                    @foreach($product->images as $img)
-                    <div class="relative group border rounded-lg overflow-hidden h-24 bg-gray-50 flex items-center justify-center">
-                        <img src="{{ Storage::url($img->image_path) }}" class="max-h-full max-w-full">
-                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <input type="checkbox" name="remove_images[]" value="{{ $img->id }}" class="w-5 h-5 text-red-600 rounded">
-                        </div>
+            {{-- 4. Diamond Details --}}
+            <div class="mb-8 border-b border-gray-100 pb-6">
+                <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Diamond
+                    Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Stone Type</label>
+                        <input type="text" name="diamond_type" value="{{ old('diamond_type', $product->diamond_type) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
                     </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
-        </div>
-
-        {{-- 3. Detailed Info (Jewellery) --}}
-        <div class="mb-8 border-b border-gray-100 pb-6">
-            <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Jewellery Specifications</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Material</label>
-                    <input type="text" name="material" value="{{ old('material', $product->material) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Total Weight (grams)</label>
-                    <input type="number" step="0.001" name="weight" value="{{ old('weight', $product->weight) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Metal Type (Master)</label>
-                    <select name="metal_type" class="w-full border-gray-300 rounded-lg p-2.5">
-                        <option value="">Select Metal</option>
-                        @foreach($metals as $metal)
-                        <option value="{{ $metal->name }}" {{ old('metal_type', $product->metal_type) == $metal->name ? 'selected' : '' }}>{{ $metal->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Metal Purity</label>
-                    <input type="text" name="metal_purity" value="{{ old('metal_purity', $product->metal_purity) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Metal Color</label>
-                    <select name="metal_color_id" class="w-full border-gray-300 rounded-lg p-2.5">
-                        <option value="">Select Color</option>
-                        @foreach($metalColors as $mc)
-                        <option value="{{ $mc->id }}" {{ old('metal_color_id', $product->metal_color_id) == $mc->id ? 'selected' : '' }}>{{ $mc->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Gender</label>
-                    <select name="gender" class="w-full border-gray-300 rounded-lg p-2.5">
-                        <option value="">Select Gender</option>
-                        <option value="Women" {{ old('gender', $product->gender) == 'Women' ? 'selected' : '' }}>Women</option>
-                        <option value="Men" {{ old('gender', $product->gender) == 'Men' ? 'selected' : '' }}>Men</option>
-                        <option value="Unisex" {{ old('gender', $product->gender) == 'Unisex' ? 'selected' : '' }}>Unisex</option>
-                        <option value="Kids" {{ old('gender', $product->gender) == 'Kids' ? 'selected' : '' }}>Kids</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Occasion</label>
-                    <input type="text" name="occasion" value="{{ old('occasion', $product->occasion) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Making Charges (Specs)</label>
-                    <input type="number" step="0.01" name="making_charges" value="{{ old('making_charges', $product->making_charges) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Tax Rate (%)</label>
-                    <input type="number" step="0.01" name="tax_rate" value="{{ old('tax_rate', $product->tax_rate ?? 3.00) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
-                </div>
-            </div>
-        </div>
-
-        {{-- 4. Diamond Details --}}
-        <div class="mb-8 border-b border-gray-100 pb-6">
-            <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Diamond Details</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Stone Type</label>
-                    <input type="text" name="diamond_type" value="{{ old('diamond_type', $product->diamond_type) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Shape</label>
-                    <select name="diamond_shape_id" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                        <option value="">Select Shape</option>
-                        @foreach($shapes as $shape)
-                        <option value="{{ $shape->id }}" {{ old('diamond_shape_id', $product->diamond_shape_id) == $shape->id ? 'selected' : '' }}>{{ $shape->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Color</label>
-                    <select name="diamond_color" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                        <option value="">Select Color</option>
-                        @foreach($colors as $color)
-                        <option value="{{ $color->name }}" {{ old('diamond_color', $product->diamond_color) == $color->name ? 'selected' : '' }}>{{ $color->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Clarity</label>
-                    <select name="diamond_clarity" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                        <option value="">Select Clarity</option>
-                        @foreach($diamondQualities as $clarity)
-                        <option value="{{ $clarity->name }}" {{ old('diamond_clarity', $product->diamond_clarity) == $clarity->name ? 'selected' : '' }}>{{ $clarity->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Carat</label>
-                    <input type="number" step="0.001" name="diamond_carat" value="{{ old('diamond_carat', $product->diamond_carat) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Count</label>
-                    <input type="number" name="diamond_count" value="{{ old('diamond_count', $product->diamond_count) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Weight</label>
-                    <input type="number" step="0.001" name="diamond_weight" value="{{ old('diamond_weight', $product->diamond_weight) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Price</label>
-                    <input type="number" step="0.01" name="diamond_price" value="{{ old('diamond_price', $product->diamond_price) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-            </div>
-        </div>
-
-        {{-- 5. Price Breakup --}}
-        <div class="mb-8 border-b border-gray-100 pb-6">
-            <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Price Breakup</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Gold Value</label>
-                    <input type="number" step="0.01" name="price_gold_value" value="{{ old('price_gold_value', $product->price_gold_value) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Diamond Value</label>
-                    <input type="number" step="0.01" name="price_diamond_value" value="{{ old('price_diamond_value', $product->price_diamond_value) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Making Charges</label>
-                    {{-- Note: we use 'making_charges' column in DB, but form field can be consistent with create --}}
-                    <input type="number" step="0.01" name="price_making_charges" value="{{ old('price_making_charges', $product->making_charges) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">GST Amount</label>
-                    <input type="number" step="0.01" name="price_gst" value="{{ old('price_gst', $product->price_gst) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Subtotal</label>
-                    <input type="number" step="0.01" name="price_subtotal" value="{{ old('price_subtotal', $product->price_subtotal) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Grand Total</label>
-                    <input type="number" step="0.01" name="price_grand_total" value="{{ old('price_grand_total', $product->price_grand_total) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-zinc-600 mb-1">Selling Price</label>
-                    <input type="number" step="0.01" name="selling_price" value="{{ old('selling_price', $product->selling_price) }}" class="w-full bg-amber-50 border-amber-300 rounded-lg shadow-sm p-2 text-sm font-bold text-amber-900">
-                </div>
-            </div>
-        </div>
-
-        {{-- 6. Variants --}}
-        <div class="mb-8 border-b border-gray-100 pb-6">
-            <div class="flex justify-between items-center mb-4 border-l-4 border-amber-500 pl-3">
-                <h2 class="text-xl font-bold text-zinc-900 font-heading">Variants (Sizes & Stock)</h2>
-                <button type="button" @click="variants.push({size: '', stock: ''})" class="bg-zinc-800 text-white px-3 py-1 rounded hover:bg-zinc-700 text-sm">
-                    + Add Size Variant
-                </button>
-            </div>
-
-            <template x-if="variants.length === 0">
-                <p class="text-gray-500 italic mb-4">No variants added. Product will use global stock.</p>
-            </template>
-
-            <div class="space-y-3">
-                <template x-for="(variant, index) in variants" :key="index">
-                    <div class="flex items-end gap-3 p-3 bg-zinc-50 border rounded-lg">
-                        <div class="w-1/3">
-                            <label class="text-xs font-bold text-gray-500 uppercase">Size</label>
-                            <select :name="`variants[${index}][size]`" x-model="variant.size" class="w-full border-gray-300 rounded text-sm h-9">
-                                <option value="">Select Size</option>
-                                @foreach($sizes as $size)
-                                <option value="{{ $size->number ?? $size->name }}">{{ $size->number ?? $size->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="w-1/3">
-                            <label class="text-xs font-bold text-gray-500 uppercase">Stock</label>
-                            <input type="number" :name="`variants[${index}][stock]`" x-model="variant.stock" placeholder="Qty" class="w-full border-gray-300 rounded text-sm h-9">
-                        </div>
-                        <div>
-                            <button type="button" @click="variants.splice(index, 1)" class="text-red-500 text-sm font-semibold hover:underline">Remove</button>
-                        </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Shape</label>
+                        <select name="diamond_shape_id" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                            <option value="">Select Shape</option>
+                            @foreach($shapes as $shape)
+                                <option value="{{ $shape->id }}" {{ old('diamond_shape_id', $product->diamond_shape_id) == $shape->id ? 'selected' : '' }}>{{ $shape->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Color</label>
+                        <select name="diamond_color" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                            <option value="">Select Color</option>
+                            @foreach($colors as $color)
+                                <option value="{{ $color->name }}" {{ old('diamond_color', $product->diamond_color) == $color->name ? 'selected' : '' }}>{{ $color->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Clarity</label>
+                        <select name="diamond_clarity" class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                            <option value="">Select Clarity</option>
+                            @foreach($diamondQualities as $clarity)
+                                <option value="{{ $clarity->name }}" {{ old('diamond_clarity', $product->diamond_clarity) == $clarity->name ? 'selected' : '' }}>{{ $clarity->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Carat</label>
+                        <input type="number" step="0.001" name="diamond_carat"
+                            value="{{ old('diamond_carat', $product->diamond_carat) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Count</label>
+                        <input type="number" name="diamond_count"
+                            value="{{ old('diamond_count', $product->diamond_count) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Weight</label>
+                        <input type="number" step="0.001" name="diamond_weight"
+                            value="{{ old('diamond_weight', $product->diamond_weight) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Price</label>
+                        <input type="number" step="0.01" name="diamond_price"
+                            value="{{ old('diamond_price', $product->diamond_price) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                </div>
+            </div>
+
+            {{-- 5. Price Breakup --}}
+            <div class="mb-8 border-b border-gray-100 pb-6">
+                <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">Price Breakup
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Gold Value</label>
+                        <input type="number" step="0.01" name="price_gold_value"
+                            value="{{ old('price_gold_value', $product->price_gold_value) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Diamond Value</label>
+                        <input type="number" step="0.01" name="price_diamond_value"
+                            value="{{ old('price_diamond_value', $product->price_diamond_value) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Making Charges</label>
+                        {{-- Note: we use 'making_charges' column in DB, but form field can be consistent with create --}}
+                        <input type="number" step="0.01" name="price_making_charges"
+                            value="{{ old('price_making_charges', $product->making_charges) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">GST Amount</label>
+                        <input type="number" step="0.01" name="price_gst"
+                            value="{{ old('price_gst', $product->price_gst) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Subtotal</label>
+                        <input type="number" step="0.01" name="price_subtotal"
+                            value="{{ old('price_subtotal', $product->price_subtotal) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Grand Total</label>
+                        <input type="number" step="0.01" name="price_grand_total"
+                            value="{{ old('price_grand_total', $product->price_grand_total) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-600 mb-1">Selling Price</label>
+                        <input type="number" step="0.01" name="selling_price"
+                            value="{{ old('selling_price', $product->selling_price) }}"
+                            class="w-full bg-amber-50 border-amber-300 rounded-lg shadow-sm p-2 text-sm font-bold text-amber-900">
+                    </div>
+                </div>
+            </div>
+
+            {{-- 6. Variants --}}
+            <div class="mb-8 border-b border-gray-100 pb-6">
+                <div class="flex justify-between items-center mb-4 border-l-4 border-amber-500 pl-3">
+                    <h2 class="text-xl font-bold text-zinc-900 font-heading">Variants (Combinations & Prices)</h2>
+                    <button type="button"
+                        @click="variants.push({size: '', color: '', diamond_quality: '', material_purity: '', shape: '', stock: '', price: ''})"
+                        class="bg-zinc-800 text-white px-3 py-1 rounded hover:bg-zinc-700 text-sm">
+                        + Add Variant
+                    </button>
+                </div>
+
+                <template x-if="variants.length === 0">
+                    <p class="text-gray-500 italic mb-4">No variants added. Product will use global stock and base price.
+                    </p>
                 </template>
-            </div>
-        </div>
 
-        {{-- 7. SEO Info --}}
-        <div class="mb-8">
-            <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">SEO Details</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Meta Title</label>
-                    <input type="text" name="meta_title" value="{{ old('meta_title', $product->meta_title) }}" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Meta Description</label>
-                    <textarea name="meta_description" rows="2" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">{{ old('meta_description', $product->meta_description) }}</textarea>
-                </div>
-                <div>
-                    <label class="block font-semibold text-zinc-700 mb-2">Meta Keywords</label>
-                    <input type="text" name="meta_keywords" value="{{ old('meta_keywords', $product->meta_keywords) }}" placeholder="Comma separated keywords" class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
+                <div class="space-y-3">
+                    <template x-for="(variant, index) in variants" :key="index">
+                        <div class="flex flex-wrap items-end gap-3 p-3 bg-zinc-50 border rounded-lg relative pr-16">
+                            <div class="flex-1 min-w-[120px]"
+                                x-show="categoryNames[selectedCategoryId]?.toLowerCase().includes('ring')">
+                                <label class="text-xs font-bold text-gray-500 uppercase">Size</label>
+                                <select :name="`variants[${index}][size]`" x-model="variant.size"
+                                    class="w-full border-gray-300 rounded text-sm h-9">
+                                    <option value="">Any Size</option>
+                                    @foreach($sizes as $size)
+                                        <option value="{{ $size->number ?? $size->name }}">{{ $size->number ?? $size->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex-1 min-w-[120px]">
+                                <label class="text-xs font-bold text-gray-500 uppercase">Metal Color</label>
+                                <select :name="`variants[${index}][color]`" x-model="variant.color"
+                                    class="w-full border-gray-300 rounded text-sm h-9">
+                                    <option value="">Any Color</option>
+                                    @foreach($metalColors as $mc)
+                                        <option value="{{ $mc->name }}">{{ $mc->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex-1 min-w-[120px]">
+                                <label class="text-xs font-bold text-gray-500 uppercase">Purity</label>
+                                <select :name="`variants[${index}][material_purity]`" x-model="variant.material_purity"
+                                    class="w-full border-gray-300 rounded text-sm h-9">
+                                    <option value="">Any Purity</option>
+                                    @foreach($metals as $metal)
+                                        <option value="{{ $metal->name }}">{{ $metal->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex-1 min-w-[120px]">
+                                <label class="text-xs font-bold text-gray-500 uppercase">Diamond</label>
+                                <select :name="`variants[${index}][diamond_quality]`" x-model="variant.diamond_quality"
+                                    class="w-full border-gray-300 rounded text-sm h-9">
+                                    <option value="">Any Quality</option>
+                                    @foreach($diamondQualities as $dq)
+                                        <option value="{{ $dq->name }}">{{ $dq->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex-1 min-w-[120px]">
+                                <label class="text-xs font-bold text-gray-500 uppercase">Shape</label>
+                                <select :name="`variants[${index}][shape]`" x-model="variant.shape"
+                                    class="w-full border-gray-300 rounded text-sm h-9">
+                                    <option value="">Any Shape</option>
+                                    @foreach($shapes as $shape)
+                                        <option value="{{ $shape->name }}">{{ $shape->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="flex-1 min-w-[100px]">
+                                <label class="text-xs font-bold text-gray-500 uppercase">Flat Price <span
+                                        class="text-red-500">*</span></label>
+                                <input type="number" step="0.01" :name="`variants[${index}][price]`" x-model="variant.price"
+                                    placeholder="Required" class="w-full border-gray-300 rounded text-sm h-9" required>
+                            </div>
+                            <div class="flex-1 max-w-[80px]">
+                                <label class="text-xs font-bold text-gray-500 uppercase">Stock</label>
+                                <input type="number" :name="`variants[${index}][stock]`" x-model="variant.stock"
+                                    placeholder="Qty" class="w-full border-gray-300 rounded text-sm h-9">
+                            </div>
+                            <div class="absolute right-3 top-1/2 -translate-y-1/2 mt-2">
+                                <button type="button" @click="variants.splice(index, 1)"
+                                    class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded relative group"
+                                    title="Remove Variant">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </div>
-        </div>
 
-        <div class="flex justify-between items-center pt-6 border-t border-zinc-100 mt-8">
-            <div class="text-sm text-zinc-500 font-medium">
-                <p>Created: {{ $product->created_at->format('d M Y, h:i A') }}</p>
-                <p>Last Updated: {{ $product->updated_at->format('d M Y, h:i A') }}</p>
+            {{-- 7. SEO Info --}}
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-zinc-900 mb-4 font-heading border-l-4 border-amber-500 pl-3">SEO Details
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Meta Title</label>
+                        <input type="text" name="meta_title" value="{{ old('meta_title', $product->meta_title) }}"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Meta Description</label>
+                        <textarea name="meta_description" rows="2"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">{{ old('meta_description', $product->meta_description) }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-zinc-700 mb-2">Meta Keywords</label>
+                        <input type="text" name="meta_keywords" value="{{ old('meta_keywords', $product->meta_keywords) }}"
+                            placeholder="Comma separated keywords"
+                            class="w-full border-gray-300 rounded-lg shadow-sm p-2.5">
+                    </div>
+                </div>
             </div>
-            <div class="flex gap-4">
-                <a href="{{ route('admin.products.index') }}" class="px-8 py-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold rounded-lg shadow-sm transition-all">
-                    Cancel
-                </a>
-                <button type="submit" class="px-8 py-3 btn-gold hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5 rounded-lg shadow-md">
-                    Update Product
-                </button>
-            </div>
-        </div>
 
-    </form>
-</div>
+            <div class="flex justify-between items-center pt-6 border-t border-zinc-100 mt-8">
+                <div class="text-sm text-zinc-500 font-medium">
+                    <p>Created: {{ $product->created_at->format('d M Y, h:i A') }}</p>
+                    <p>Last Updated: {{ $product->updated_at->format('d M Y, h:i A') }}</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="{{ route('admin.products.index') }}"
+                        class="px-8 py-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold rounded-lg shadow-sm transition-all">
+                        Cancel
+                    </a>
+                    <button type="submit"
+                        class="px-8 py-3 btn-gold hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5 rounded-lg shadow-md">
+                        Update Product
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 @endsection

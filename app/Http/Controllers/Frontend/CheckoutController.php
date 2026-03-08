@@ -10,6 +10,11 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderPlaced;
+use App\Notifications\AdminOrderPlaced;
+use App\Models\User;
+use Illuminate\Support\Facades\Notification;
 
 class CheckoutController extends Controller
 {
@@ -191,15 +196,53 @@ class CheckoutController extends Controller
             $cart->delete();
         });
 
+        // Get the order after transaction 
+        $order = Order::with('items')->where('user_id', Auth::id())->latest()->first();
+
+        if ($order) {
+            // Send Email to Customer
+            try {
+                Mail::to($order->email)->send(new OrderPlaced($order));
+            } catch (\Exception $e) {
+                \Log::error("Failed to send customer order email: " . $e->getMessage());
+            }
+
+            // Notify Admins
+            try {
+                $admins = User::where('is_admin', 1)->get();
+                if ($admins->isEmpty()) {
+                    // Fallback to searching by email if is_admin is not set or used
+                    $admins = User::where('email', 'admin@example.com')->get();
+                }
+
+                Notification::send($admins, new AdminOrderPlaced($order));
+            } catch (\Exception $e) {
+                \Log::error("Failed to send admin order notifications: " . $e->getMessage());
+            }
+        }
+
         session()->forget('selected_address_id');
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Order placed successfully!'
+                'message' => 'Order placed successfully!',
+                'redirect_url' => route('checkout.success', $order->id)
             ]);
         }
 
-        return redirect()->route('home')->with('order_success', 'Order placed successfully!');
+        return redirect()->route('checkout.success', $order->id)->with('order_success', 'Order placed successfully!');
+    }
+
+    public function success($order_id)
+    {
+        $order = Order::with(['items', 'address'])->findOrFail($order_id);
+
+        // Ensure user owns this order
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('frontend.checkout.success', compact('order'));
     }
 }

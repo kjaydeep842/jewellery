@@ -12,7 +12,7 @@
         activeImage: 0,
         images: {{ $allImages->toJson() }}
     }"
-    class="bg-white border border-[#D7D7DA] hover:border-[#CBA65A] hover:shadow-lg transition-all duration-300 rounded-[8px] overflow-hidden p-[6px] md:p-[10px] relative group flex flex-col h-full">
+    class="bg-white border border-[#D7D7DA] transition-all duration-300 rounded-[8px] overflow-hidden p-[6px] md:p-[10px] relative group flex flex-col h-full">
 
     <!-- Image Area -->
     <div
@@ -52,10 +52,10 @@
             </template>
         </a>
 
-        <!-- Slider Arrows (Always visible if multiple images) -->
+        <!-- Slider Arrows (Visible on Hover) -->
         <template x-if="images.length > 1">
             <div
-                class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between transition-opacity pointer-events-none z-10">
+                class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none z-10">
                 <button @click.prevent.stop="activeImage = activeImage === 0 ? images.length - 1 : activeImage - 1"
                     class="w-[20px] h-[24px] md:w-[24px] md:h-[30px] bg-[#D7D7DA] hover:bg-[#CBA65A] rounded-r-full flex items-center justify-center shadow-sm cursor-pointer pointer-events-auto transition-colors group/btn">
                     <i
@@ -87,12 +87,14 @@
                 <div class="w-6 h-6 sm:w-9 sm:h-9 flex-shrink-0"></div> <!-- Placeholder to retain spacing -->
             @endif
 
-            <!-- Add to Cart (Visible on Hover) -->
+            <!-- Add to Cart (Hidden for now to satisfy "Only Arrow" request) -->
+            {{--
             <button onclick="window.location.href='{{ route('product.details', $product->slug) }}'"
                 class="flex-grow h-6 sm:h-9 text-white text-[9px] sm:text-xs shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-['Outfit'] whitespace-nowrap"
                 style="background: linear-gradient(90deg, #D9BE87 0%, #BE933C 100%), #D5D9E2; border-radius: 6px;">
                 Add to Cart
             </button>
+            --}}
 
             <!-- Expand Button -->
             <div @click.prevent.stop="zoomImages = images; zoomIndex = activeImage; zoomOpen = true"

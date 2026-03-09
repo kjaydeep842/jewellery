@@ -26,7 +26,7 @@
     </div>
     @endif
 
-    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg border border-zinc-100 p-8" x-data="{ variants: [] }">
+    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg border border-zinc-100 p-8" x-data="{ variants: [], selectedCategoryId: '{{ old('category_id') }}', categoryNames: @json($categories->pluck('name', 'id')) }">
         @csrf
 
         {{-- 1. Basic Product Info --}}
@@ -50,7 +50,7 @@
                 {{-- Categories & Masters --}}
                 <div>
                     <label class="block font-semibold text-zinc-700 mb-2">Category <span class="text-red-500">*</span></label>
-                    <select name="category_id" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500" required>
+                    <select name="category_id" x-model="selectedCategoryId" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-amber-500 focus:border-amber-500" required>
                         <option value="">-- Select Category --</option>
                         @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -344,34 +344,76 @@
         {{-- 6. Variants --}}
         <div class="mb-8 border-b border-gray-100 pb-6">
             <div class="flex justify-between items-center mb-4 border-l-4 border-amber-500 pl-3">
-                <h2 class="text-xl font-bold text-zinc-900 font-heading">Variants (Sizes & Stock)</h2>
-                <button type="button" @click="variants.push({size: '', stock: ''})" class="bg-zinc-800 text-white px-3 py-1 rounded hover:bg-zinc-700 text-sm">
-                    + Add Size Variant
+                <h2 class="text-xl font-bold text-zinc-900 font-heading">Variants (Combinations & Prices)</h2>
+                <button type="button" @click="variants.push({size: '', color: '', diamond_quality: '', material_purity: '', shape: '', stock: '', price: ''})" class="bg-zinc-800 text-white px-3 py-1 rounded hover:bg-zinc-700 text-sm">
+                    + Add Variant
                 </button>
             </div>
 
             <template x-if="variants.length === 0">
-                <p class="text-gray-500 italic mb-4">No variants added. Product will use global stock.</p>
+                <p class="text-gray-500 italic mb-4">No variants added. Product will use global stock and base price.</p>
             </template>
 
             <div class="space-y-3">
                 <template x-for="(variant, index) in variants" :key="index">
-                    <div class="flex items-end gap-3 p-3 bg-zinc-50 border rounded-lg">
-                        <div class="w-1/3">
+                    <div class="flex flex-wrap items-end gap-3 p-3 bg-zinc-50 border rounded-lg relative pr-16">
+                        <div class="flex-1 min-w-[120px]" x-show="categoryNames[selectedCategoryId]?.toLowerCase().includes('ring')">
                             <label class="text-xs font-bold text-gray-500 uppercase">Size</label>
                             <select :name="`variants[${index}][size]`" x-model="variant.size" class="w-full border-gray-300 rounded text-sm h-9">
-                                <option value="">Select Size</option>
+                                <option value="">Any Size</option>
                                 @foreach($sizes as $size)
                                 <option value="{{ $size->number ?? $size->name }}">{{ $size->number ?? $size->name }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="w-1/3">
+                        <div class="flex-1 min-w-[120px]">
+                            <label class="text-xs font-bold text-gray-500 uppercase">Metal Color</label>
+                            <select :name="`variants[${index}][color]`" x-model="variant.color" class="w-full border-gray-300 rounded text-sm h-9">
+                                <option value="">Any Color</option>
+                                @foreach($metalColors as $mc)
+                                <option value="{{ $mc->name }}">{{ $mc->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[120px]">
+                            <label class="text-xs font-bold text-gray-500 uppercase">Purity</label>
+                            <select :name="`variants[${index}][material_purity]`" x-model="variant.material_purity" class="w-full border-gray-300 rounded text-sm h-9">
+                                <option value="">Any Purity</option>
+                                @foreach($metals as $metal)
+                                <option value="{{ $metal->name }}">{{ $metal->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[120px]">
+                            <label class="text-xs font-bold text-gray-500 uppercase">Diamond</label>
+                            <select :name="`variants[${index}][diamond_quality]`" x-model="variant.diamond_quality" class="w-full border-gray-300 rounded text-sm h-9">
+                                <option value="">Any Quality</option>
+                                @foreach($diamondQualities as $dq)
+                                <option value="{{ $dq->name }}">{{ $dq->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[120px]">
+                            <label class="text-xs font-bold text-gray-500 uppercase">Shape</label>
+                            <select :name="`variants[${index}][shape]`" x-model="variant.shape" class="w-full border-gray-300 rounded text-sm h-9">
+                                <option value="">Any Shape</option>
+                                @foreach($shapes as $shape)
+                                <option value="{{ $shape->name }}">{{ $shape->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[100px]">
+                            <label class="text-xs font-bold text-gray-500 uppercase">Flat Price <span class="text-red-500">*</span></label>
+                            <input type="number" step="0.01" :name="`variants[${index}][price]`" x-model="variant.price" placeholder="Required" class="w-full border-gray-300 rounded text-sm h-9" required>
+                        </div>
+                        <div class="flex-1 max-w-[80px]">
                             <label class="text-xs font-bold text-gray-500 uppercase">Stock</label>
                             <input type="number" :name="`variants[${index}][stock]`" x-model="variant.stock" placeholder="Qty" class="w-full border-gray-300 rounded text-sm h-9">
                         </div>
-                        <div>
-                            <button type="button" @click="variants.splice(index, 1)" class="text-red-500 text-sm font-semibold hover:underline">Remove</button>
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 mt-2">
+                            <button type="button" @click="variants.splice(index, 1)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded relative group" title="Remove Variant">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
                         </div>
                     </div>
                 </template>

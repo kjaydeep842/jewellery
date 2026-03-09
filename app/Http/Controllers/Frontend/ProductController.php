@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\MetalColor;
-
 use App\Models\Shape;
+use App\Models\DiamondQuality;
+use App\Models\Metal;
+use App\Models\ProductVariant;
 
 class ProductController extends Controller
 {
@@ -242,9 +244,146 @@ class ProductController extends Controller
             ->latest()
             ->first();
 
-        return view('frontend.products.show', compact('product', 'relatedProducts', 'banners', 'verticalBanner'));
+        // Fetch attributes for dynamic selection
+        $metals = Metal::where('status', 1)->orderBy('sort_order', 'asc')->get();
+        $diamondQualities = DiamondQuality::where('status', 1)->orderBy('sort_order', 'asc')->get();
+        $shapes = Shape::where('status', 1)->get();
+        $metalColors = MetalColor::where('status', 1)->get();
+
+        return view('frontend.products.show', compact(
+            'product',
+            'relatedProducts',
+            'banners',
+            'verticalBanner',
+            'metals',
+            'diamondQualities',
+            'shapes',
+            'metalColors'
+        ));
 
     }
+
+    /**
+     * Calculate dynamic price via AJAX when variations change.
+     */
+    public function calculatePrice(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        $size = $request->input('size');
+        $color = $request->input('color');
+        $purity = $request->input('purity');
+        $diamondQuality = $request->input('diamond_quality');
+        $shape = $request->input('shape');
+
+        $variants = ProductVariant::where('product_id', $product->id)->get();
+
+        $bestVariant = null;
+
+        foreach ($variants as $variant) {
+            $isMatch = true;
+
+            // Check Size (if variant has it)
+            if (!empty($variant->size)) {
+                if (!$size || strtolower(trim($variant->size)) !== strtolower(trim($size))) {
+                    $isMatch = false;
+                }
+            } elseif ($size) {
+                // Variant has no size but user selected one
+                $isMatch = false;
+            }
+
+            if (!$isMatch)
+                continue;
+
+            // Check Color
+            if (!empty($variant->color)) {
+                if (!$color || strtolower(trim($variant->color)) !== strtolower(trim($color))) {
+                    $isMatch = false;
+                }
+            } elseif ($color) {
+                $isMatch = false;
+            }
+
+            if (!$isMatch)
+                continue;
+
+            // Check Purity
+            if (!empty($variant->material_purity)) {
+                if (!$purity || strtolower(trim($variant->material_purity)) !== strtolower(trim($purity))) {
+                    $isMatch = false;
+                }
+            } elseif ($purity) {
+                $isMatch = false;
+            }
+
+            if (!$isMatch)
+                continue;
+
+            // Check Diamond Quality
+            if (!empty($variant->diamond_quality)) {
+                if (!$diamondQuality || strtolower(trim($variant->diamond_quality)) !== strtolower(trim($diamondQuality))) {
+                    $isMatch = false;
+                }
+            } elseif ($diamondQuality) {
+                $isMatch = false;
+            }
+
+            if (!$isMatch)
+                continue;
+
+            // Check Shape
+            if (!empty($variant->shape)) {
+                if (!$shape || strtolower(trim($variant->shape)) !== strtolower(trim($shape))) {
+                    $isMatch = false;
+                }
+            } elseif ($shape) {
+                $isMatch = false;
+            }
+
+            if ($isMatch) {
+                $bestVariant = $variant;
+                break; // Found an exact match
+            }
+        }
+
+        // Fallback to base product selling price if variant not matched perfectly
+        $finalPrice = $bestVariant ? $bestVariant->price : $product->selling_price;
+
+        // 2. Proportionally break down the flat variant price according to original base base structures
+        $baseGold = (float) $product->price_gold_value ?: 1;
+        $baseDiamond = (float) $product->price_diamond_value ?: 0;
+        $baseMaking = (float) $product->making_charges ?: 0;
+
+        $baseSubtotal = $baseGold + $baseDiamond + $baseMaking;
+        if ($baseSubtotal <= 0)
+            $baseSubtotal = 1;
+
+        $goldRatio = $baseGold / $baseSubtotal;
+        $diamondRatio = $baseDiamond / $baseSubtotal;
+        $makingRatio = $baseMaking / $baseSubtotal;
+
+        $variantSubtotal = (float) $finalPrice;
+        $calculatedGst = round($variantSubtotal * 0.03, 2);
+        $grandTotal = round($variantSubtotal * 1.03, 2);
+
+        $newGold = round($variantSubtotal * $goldRatio, 2);
+        $newDiamond = round($variantSubtotal * $diamondRatio, 2);
+        $newMaking = round($variantSubtotal * $makingRatio, 2);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'productGoldRate' => $newGold,
+                'productDiamondAmount' => $newDiamond,
+                'productMakingCharge' => $newMaking,
+                'productGSTCharge' => $calculatedGst,
+                'productFinalAmountWithGST' => $grandTotal,
+                'rawGrandTotal' => $grandTotal
+            ]
+        ]);
+    }
+
     /**
      * Fetch products by category for AJAX calls.
      *

@@ -12,6 +12,7 @@ class ProductVariant extends Model
         'color',
         'material_purity',
         'diamond_quality',
+        'shape',
         'sku',
         'price',
         'stock_quantity'

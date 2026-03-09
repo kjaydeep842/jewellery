@@ -36,8 +36,25 @@ class CartController extends Controller
     public function index()
     {
         $cart = $this->getCart();
-        $cartItems = $cart->items()->with(['product', 'variant'])->get();
-        return view('frontend.checkout.cart', compact('cartItems'));
+        $cartItems = $cart->items()->with(['product', 'variant', 'product.images', 'product.metalColor'])->get();
+
+        $totalMrp = $cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+        $discount = 0;
+        $platformFee = 20;
+        $totalAmount = $totalMrp - $discount + $platformFee;
+
+        // Fetch similar products
+        $similarProducts = Product::active()->inRandomOrder()->take(4)->get();
+
+        // Fetch default address
+        $address = Auth::check() ? Auth::user()->addresses()->where('is_default', true)->first() : null;
+        if (!$address && Auth::check()) {
+            $address = Auth::user()->addresses()->first();
+        }
+
+        return view('frontend.checkout.cart', compact('cartItems', 'totalMrp', 'discount', 'platformFee', 'totalAmount', 'similarProducts', 'address'));
     }
 
     public function headerIndex()
@@ -111,5 +128,15 @@ class CartController extends Controller
     {
         CartItem::destroy($id);
         return redirect()->back()->with('success', 'Item removed from cart.');
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        $ids = $request->ids;
+        if ($ids && is_array($ids)) {
+            $cart = $this->getCart();
+            $cart->items()->whereIn('id', $ids)->delete();
+        }
+        return redirect()->back()->with('success', 'Selected items removed from cart.');
     }
 }

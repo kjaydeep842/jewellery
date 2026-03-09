@@ -13,13 +13,15 @@
 <div id="header-placeholder">
     <header class="bg-white z-50 shadow-sm w-full transition-all duration-300">
         <div id="header-main-container"
-            class="md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto px-6 py-4 flex flex-wrap md:flex-nowrap justify-between items-center gap-y-4 lg:gap-0 transition-all duration-300">
-            <div id="header-logo-section" class="flex items-center gap-2 order-1 md:flex-1 transition-all duration-300">
-                <button id="mobile-menu-btn" class="lg:hidden mr-1 text-gray-800 hover:text-[#B39359]">
+            class="md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto px-4 sm:px-6 py-4 flex flex-wrap lg:flex-nowrap justify-between items-center gap-2 lg:gap-0 transition-all duration-300">
+            <div id="header-logo-section"
+                class="flex items-center gap-2 order-1 w-auto lg:flex-1 transition-all duration-300">
+                <button id="mobile-menu-btn"
+                    class="lg:hidden mr-0 sm:mr-1 text-gray-800 hover:text-[#B39359] flex-shrink-0">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
                 <div
-                    class="w-[140px] sm:w-[180px] md:w-[212px] h-auto min-[2000px]:w-[350px] flex items-center justify-center transition-all duration-300">
+                    class="w-[110px] sm:w-[130px] md:w-[180px] lg:w-[212px] h-auto min-[2000px]:w-[350px] flex items-center justify-center transition-all duration-300 flex-shrink-0">
                     <a href="{{ route('home') }}" class="block w-full">
                         <img src="{{ asset('assets/logo_black.png') }}" alt="logo"
                             class="w-full h-auto transition-all duration-300">
@@ -29,7 +31,7 @@
             </div>
 
             <div id="header-search-section"
-                class="flex-shrink-0 w-full lg:w-auto order-3 lg:order-2 transition-all duration-300">
+                class="flex-shrink-0 w-full lg:w-auto order-3 lg:order-2 transition-all duration-300 mt-2 lg:mt-0">
                 <div class="relative group w-full lg:w-[445px] mx-auto flex flex-row items-center justify-between px-4 sm:px-6 gap-[10px] h-[48px] bg-[#F2F2F3] border border-transparent focus-within:border-[#B39359]/30 rounded-[100px] transition-all duration-300"
                     id="search-container">
                     <input type="text" id="search-input"
@@ -147,7 +149,7 @@
             </div>
 
             <div id="header-icons-section"
-                class="flex items-center justify-end gap-[20px] min-[2000px]:gap-8 text-gray-600 order-2 md:order-3 md:flex-1 transition-all duration-300">
+                class="flex items-center justify-end gap-[12px] sm:gap-[20px] min-[2000px]:gap-8 text-gray-600 order-2 w-auto lg:order-3 lg:flex-1 transition-all duration-300 flex-shrink-0">
                 @auth
                     <div class="relative inline-block text-left" id="user-menu-container">
                         <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
@@ -292,8 +294,8 @@
 
                 // Restore Logo
                 if (logoContainer) {
-                    logoContainer.classList.add('w-[212px]', 'h-[68px]');
-                    logoContainer.classList.remove('w-[140px]', 'h-auto');
+                    logoContainer.style.width = '';
+                    logoContainer.classList.remove('py-1');
                 }
 
                 // --- RESET LAYOUT ---
@@ -304,8 +306,8 @@
                 }
 
                 if (headerMainContainer) {
-                    headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                    headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap');
+                    headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-4', 'sm:px-6', 'flex-wrap');
+                    headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap', 'py-2');
                     headerMainContainer.style.width = '';
                 }
                 if (mainNav) {
@@ -330,6 +332,18 @@
                         header.classList.add('fixed', 'top-0', 'left-0');
                     }
 
+                    // Compact layout on mobile (hide search)
+                    if (window.innerWidth < 1024) {
+                        if (searchSection) searchSection.classList.add('hidden');
+                        if (logoContainer) {
+                            logoContainer.style.width = '100px';
+                        }
+                        if (headerMainContainer) {
+                            headerMainContainer.classList.remove('py-4');
+                            headerMainContainer.classList.add('py-2');
+                        }
+                    }
+
                     // ALWAYS COMPACT (Scrolling Down OR Up, as long as not at top)
                     // Only compact layout on desktop screens
                     if (window.innerWidth >= 1024) {
@@ -337,10 +351,9 @@
                         if (searchSection) searchSection.classList.add('hidden');
                         if (iconsSection) iconsSection.classList.add('hidden');
 
-                        // Shrink Logo (Targeting the container width)
+                        // Shrink Logo
                         if (logoContainer) {
-                            logoContainer.classList.remove('w-[212px]', 'h-[68px]');
-                            logoContainer.classList.add('w-[140px]', 'h-auto');
+                            logoContainer.style.width = '140px';
                         }
 
                         // --- NEW: INLINE LAYOUT ---

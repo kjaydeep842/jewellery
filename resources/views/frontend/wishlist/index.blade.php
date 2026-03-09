@@ -59,7 +59,7 @@
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[1600px]:grid-cols-5 gap-3 md:gap-5"
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1600px]:grid-cols-4 gap-4 md:gap-6"
                             x-data="{ zoomOpen: false, zoomImages: [], zoomIndex: 0 }">
                             @foreach($wishlists as $item)
                                 @include('frontend.partials.wishlist-card', ['product' => $item->product, 'wishlist_item_id' => $item->id])

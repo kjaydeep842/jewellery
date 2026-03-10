@@ -13,8 +13,9 @@ class HomeController extends Controller
 {
     public function index()
     {
+
         // Fetch specific categories if needed, or just all for now
-        $categories = Category::all();
+        $categories = Category::where('status', 'active')->get();
 
         // Fetch categories that specifically have new arrival products
         $newArrivalCategories = Category::whereHas('products', function ($query) {

@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
-@section('title', 'Categories')
+@section('title', 'Navigation Menus')
 
 @section('content')
 
 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-    <h1 class="text-2xl sm:text-3xl font-premium font-bold text-zinc-900 tracking-wide">Categories</h1>
+    <h1 class="text-2xl sm:text-3xl font-premium font-bold text-zinc-900 tracking-wide">Navigation Menus</h1>
 
-    <a href="{{ route('admin.categories.create') }}"
+    <a href="{{ route('admin.navigation_menus.create') }}"
         class="flex items-center space-x-2 px-6 py-2.5 btn-gold rounded-lg shadow-lg hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5">
         <span class="text-xl">+</span>
-        <span>Add Category</span>
+        <span>Add Menu Item</span>
     </a>
 </div>
 
@@ -24,40 +24,38 @@
 </div>
 @endif
 
-<div class="bg-white border border-zinc-100 rounded-xl shadow-lg shadow-zinc-200/50 overflow-x-auto animate-enter p-4">
-    <table id="categoriesTable" class="w-full text-left border-collapse stripe hover">
+<div class="bg-white border border-zinc-100 rounded-xl shadow-lg shadow-zinc-200/50 overflow-x-auto p-4">
+    <table id="menusTable" class="w-full text-left border-collapse stripe hover">
         <thead class="bg-zinc-50 text-zinc-900 border-b border-zinc-200">
             <tr>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">ID</th>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Image</th>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Name</th>
-                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Slug</th>
+                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Order</th>
+                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Title</th>
+                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Route/URL</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Status</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-zinc-100 text-sm">
-            @foreach($categories as $category)
+            @foreach($menus as $menu)
             <tr class="group hover:bg-amber-50/50 transition-colors">
-                <td class="p-4 text-zinc-500">#{{ $category->id }}</td>
-                <td class="p-4">
-                    @if($category->image)
-                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="w-12 h-12 rounded object-cover border border-zinc-200">
+                <td class="p-4 text-zinc-500">{{ $menu->order }}</td>
+                <td class="p-4 font-bold text-zinc-800">{{ $menu->title }}</td>
+                <td class="p-4 text-zinc-600">
+                    @if($menu->route_name)
+                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">Route: {{ $menu->route_name }}</span>
                     @else
-                    <span class="text-zinc-400 italic">No Image</span>
+                    <span class="bg-purple-50 text-purple-700 px-2 py-1 rounded text-xs">URL: {{ $menu->url }}</span>
                     @endif
                 </td>
-                <td class="p-4 font-bold text-zinc-800">{{ $category->name }}</td>
-                <td class="p-4 text-zinc-600">{{ $category->slug }}</td>
                 <td class="p-4">
-                    <button onclick="toggleStatus({{ $category->id }})" id="status-btn-{{ $category->id }}"
-                        class="px-3 py-1 rounded-full text-xs font-bold transition-all {{ $category->status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
-                        {{ ucfirst($category->status) }}
+                    <button onclick="toggleStatus({{ $menu->id }})" id="status-btn-{{ $menu->id }}"
+                        class="px-3 py-1 rounded-full text-xs font-bold transition-all {{ $menu->status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
+                        {{ ucfirst($menu->status) }}
                     </button>
                 </td>
                 <td class="p-4">
                     <div class="flex items-center space-x-2">
-                        <a href="{{ route('admin.categories.edit', $category->id) }}"
+                        <a href="{{ route('admin.navigation_menus.edit', $menu->id) }}"
                             class="p-2 bg-white border border-zinc-200 rounded-lg text-amber-600 hover:bg-amber-50 hover:border-amber-200 transition-all shadow-sm"
                             title="Edit">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,7 +64,7 @@
                                 </path>
                             </svg>
                         </a>
-                        <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST"
+                        <form action="{{ route('admin.navigation_menus.destroy', $menu->id) }}" method="POST"
                             class="inline-block" onsubmit="return confirm('Are you sure?');">
                             @csrf
                             @method('DELETE')
@@ -92,7 +90,7 @@
 <script>
     function toggleStatus(id) {
         $.ajax({
-            url: `{{ url('admin/categories') }}/${id}/toggle`,
+            url: `{{ url('admin/navigation_menus') }}/${id}/toggle`,
             type: 'PATCH',
             data: {
                 _token: '{{ csrf_token() }}'
@@ -111,18 +109,11 @@
     }
 
     $(document).ready(function() {
-        $('#categoriesTable').DataTable({
+        $('#menusTable').DataTable({
             responsive: false,
             autoWidth: false,
-            language: {
-                search: "_INPUT_",
-                searchPlaceholder: "Search categories...",
-                lengthMenu: "Show _MENU_ entries"
-            },
-            columnDefs: [{
-                    orderable: false,
-                    targets: 5
-                } // Disable sorting on Action column
+            order: [
+                [0, 'asc']
             ]
         });
     });

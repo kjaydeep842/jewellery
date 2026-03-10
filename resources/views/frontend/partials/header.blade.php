@@ -94,24 +94,24 @@
                             <div
                                 class="flex flex-row flex-wrap items-center content-start p-[14px_16px] gap-[8px] w-full min-h-[120px] box-border flex-shrink-0">
                                 @if(isset($topSearchCategories) && $topSearchCategories->count() > 0)
-                                    @foreach($topSearchCategories as $topCat)
-                                        <button data-search="{{ $topCat->name }}"
-                                            class="search-top-btn flex items-center gap-[8px] border border-[#E6E6E6] hover:border-[#D4AF37] rounded-[16px] p-[8px] pr-[12px] transition-all bg-white hover:shadow-md group flex-none">
-                                            <div
-                                                class="w-[40px] h-[40px] rounded-[8px] bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center overflow-hidden">
-                                                @if($topCat->product_image)
-                                                    <img src="{{ asset('storage/' . $topCat->product_image) }}"
-                                                        alt="{{ $topCat->name }}"
-                                                        class="w-full h-full object-contain mix-blend-multiply">
-                                                @else
-                                                    <img src="{{ asset('assets/logo.png') }}" alt="{{ $topCat->name }}"
-                                                        class="w-5 h-5 object-contain opacity-30">
-                                                @endif
-                                            </div>
-                                            <span
-                                                class="text-[#2E2E2E] font-['Outfit'] text-[12px] font-normal group-hover:text-[#5C4522] whitespace-nowrap">{{ $topCat->name }}</span>
-                                        </button>
-                                    @endforeach
+                                @foreach($topSearchCategories as $topCat)
+                                <button data-search="{{ $topCat->name }}"
+                                    class="search-top-btn flex items-center gap-[8px] border border-[#E6E6E6] hover:border-[#D4AF37] rounded-[16px] p-[8px] pr-[12px] transition-all bg-white hover:shadow-md group flex-none">
+                                    <div
+                                        class="w-[40px] h-[40px] rounded-[8px] bg-[#FAF7F2] flex flex-shrink-0 items-center justify-center overflow-hidden">
+                                        @if($topCat->product_image)
+                                        <img src="{{ asset('storage/' . $topCat->product_image) }}"
+                                            alt="{{ $topCat->name }}"
+                                            class="w-full h-full object-contain mix-blend-multiply">
+                                        @else
+                                        <img src="{{ asset('assets/logo.png') }}" alt="{{ $topCat->name }}"
+                                            class="w-5 h-5 object-contain opacity-30">
+                                        @endif
+                                    </div>
+                                    <span
+                                        class="text-[#2E2E2E] font-['Outfit'] text-[12px] font-normal group-hover:text-[#5C4522] whitespace-nowrap">{{ $topCat->name }}</span>
+                                </button>
+                                @endforeach
                                 @endif
                             </div>
                         </div>
@@ -151,52 +151,52 @@
             <div id="header-icons-section"
                 class="flex items-center justify-end gap-[12px] sm:gap-[20px] min-[2000px]:gap-8 text-gray-600 order-2 w-auto lg:order-3 lg:flex-1 transition-all duration-300 flex-shrink-0">
                 @auth
-                    <div class="relative inline-block text-left" id="user-menu-container">
-                        <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
-                            @if(Auth::user()->profile_picture)
-                                <img src="{{ Auth::user()->profile_picture_url }}" alt="user"
-                                    class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full object-cover">
-                            @else
-                                <div
-                                    class="w-8 h-8 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[8px] min-[2000px]:text-[12px] font-bold text-[#000000] uppercase border border-[#EADDCC]">
-                                    {{ Auth::user()->initials }}
-                                </div>
-                            @endif
-                        </button>
+                <div class="relative inline-block text-left" id="user-menu-container">
+                    <button id="user-menu-btn" class="hover:text-gold focus:outline-none flex items-center">
+                        @if(Auth::user()->profile_picture)
+                        <img src="{{ Auth::user()->profile_picture_url }}" alt="user"
+                            class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full object-cover">
+                        @else
+                        <div
+                            class="w-8 h-8 min-[2000px]:w-8 min-[2000px]:h-8 rounded-full bg-[#EFE4CD] flex items-center justify-center text-[8px] min-[2000px]:text-[12px] font-bold text-[#000000] uppercase border border-[#EADDCC]">
+                            {{ Auth::user()->initials }}
+                        </div>
+                        @endif
+                    </button>
 
-                        <!-- Dropdown menu for authenticated users -->
-                        <div id="user-dropdown-menu"
-                            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
-                            <div class="py-1">
-                                <div class="px-4 py-3 border-b border-gray-100">
-                                    <p class="text-sm font-['Outfit'] font-semibold text-[#1A1A1A]">{{ Auth::user()->name }}
-                                    </p>
-                                    @if(Auth::user()->phone)
-                                        <p class="text-xs font-['Outfit'] text-gray-500">{{ Auth::user()->phone }}</p>
-                                    @endif
-                                </div>
-
-                                <a href="{{ route('profile.edit') }}"
-                                    class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">
-                                    Profile
-                                </a>
-
-                                <form method="POST" action="{{ route('frontend.auth.logout') }}">
-                                    @csrf
-                                    <a href="{{ route('frontend.auth.logout') }}"
-                                        onclick="event.preventDefault(); this.closest('form').submit();"
-                                        class="block px-4 py-3 text-sm text-red-600 hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium border-t border-gray-100">
-                                        Logout
-                                    </a>
-                                </form>
+                    <!-- Dropdown menu for authenticated users -->
+                    <div id="user-dropdown-menu"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
+                        <div class="py-1">
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <p class="text-sm font-['Outfit'] font-semibold text-[#1A1A1A]">{{ Auth::user()->name }}
+                                </p>
+                                @if(Auth::user()->phone)
+                                <p class="text-xs font-['Outfit'] text-gray-500">{{ Auth::user()->phone }}</p>
+                                @endif
                             </div>
+
+                            <a href="{{ route('profile.edit') }}"
+                                class="block px-4 py-3 text-sm text-[#1A1A1A] hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium">
+                                Profile
+                            </a>
+
+                            <form method="POST" action="{{ route('frontend.auth.logout') }}">
+                                @csrf
+                                <a href="{{ route('frontend.auth.logout') }}"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                                    class="block px-4 py-3 text-sm text-red-600 hover:bg-[#F2F2F2] transition-colors font-['Outfit'] font-medium border-t border-gray-100">
+                                    Logout
+                                </a>
+                            </form>
                         </div>
                     </div>
+                </div>
                 @else
-                    <a href="{{ route('frontend.auth.mobile') }}" class="hover:text-gold flex items-center">
-                        <img src="{{ asset('assets/ic_User.png') }}" alt="user"
-                            class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
-                    </a>
+                <a href="{{ route('frontend.auth.mobile') }}" class="hover:text-gold flex items-center">
+                    <img src="{{ asset('assets/ic_User.png') }}" alt="user"
+                        class="w-5 h-5 min-[2000px]:w-8 min-[2000px]:h-8">
+                </a>
                 @endauth
 
                 <a href="{{ route('wishlist.header') }}" class="relative hover:text-gold">
@@ -217,192 +217,160 @@
 
         <nav id="main-navigation"
             class="hidden lg:flex items-center justify-center flex-nowrap lg:gap-4 xl:gap-5 2xl:gap-[40px] min-[2000px]:gap-12 lg:text-[14px] xl:text-[15px] 2xl:text-[18px] min-[2000px]:text-2xl font-Alexandria font-normal tracking-normal leading-none transition-all duration-300 md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1250px] min-[2000px]:max-w-[1450px] mx-auto">
+            @foreach($navigationMenus as $menu)
             <div class="relative group">
-                <a href="{{ route('page.new-arrivals') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">New
-                    Arrivals</a>
+                <a href="{{ $menu->route_name ? route($menu->route_name) : url($menu->url) }}"
+                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">{{ $menu->title }}</a>
             </div>
-            <div class="relative group">
-                <a href="{{ route('page.best-seller') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Best
-                    Seller</a>
-            </div>
-            <div class="relative group">
-                <a href="{{ route('page.18kt') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">18KT
-                    Jewellery</a>
-            </div>
-            <div class="relative group">
-                <a href="{{ route('page.tattsvisfavourite') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Tattsvi's
-                    Favourite</a>
-            </div>
-            {{-- <div class="relative group">
-                <a href="{{ route('page.exhibition') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Exhibition</a>
-            </div> --}}
-            <div class="relative group">
-                <a href="{{ route('page.readytostock') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Ready To
-                    Stock</a>
-            </div>
-            <div class="relative group">
-                <a href="{{ route('page.contact') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">Contact
-                    Us</a>
-            </div>
-            <div class="relative group">
-                <a href="{{ route('page.about') }}"
-                    class="flex items-center gap-1 text-[#0D0D0E] hover:text-gold py-2 whitespace-nowrap">About Us</a>
-            </div>
+            @endforeach
         </nav>
     </header>
 </div>
 
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const header = document.querySelector('header');
-            const placeholder = document.getElementById('header-placeholder');
-            const headerMainContainer = document.getElementById('header-main-container');
-            const mainNav = document.getElementById('main-navigation');
-            const searchSection = document.getElementById('header-search-section');
-            const iconsSection = document.getElementById('header-icons-section');
-            const logoSection = document.getElementById('header-logo-section');
-            const logoImg = logoSection ? logoSection.querySelector('img') : null;
-            const logoContainer = logoSection ? logoSection.querySelector('div') : null;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const header = document.querySelector('header');
+        const placeholder = document.getElementById('header-placeholder');
+        const headerMainContainer = document.getElementById('header-main-container');
+        const mainNav = document.getElementById('main-navigation');
+        const searchSection = document.getElementById('header-search-section');
+        const iconsSection = document.getElementById('header-icons-section');
+        const logoSection = document.getElementById('header-logo-section');
+        const logoImg = logoSection ? logoSection.querySelector('img') : null;
+        const logoContainer = logoSection ? logoSection.querySelector('div') : null;
 
-            let lastScrollTop = 0;
-            const threshold = 40;
-            const delta = 5;
+        let lastScrollTop = 0;
+        const threshold = 40;
+        const delta = 5;
 
-            // Add transition to logo for smooth resizing
-            if (logoImg) logoImg.classList.add('transition-all', 'duration-300');
-            if (logoContainer) logoContainer.classList.add('transition-all', 'duration-300');
+        // Add transition to logo for smooth resizing
+        if (logoImg) logoImg.classList.add('transition-all', 'duration-300');
+        if (logoContainer) logoContainer.classList.add('transition-all', 'duration-300');
 
-            function resetHeaderState() {
-                // Return to normal unstuck state
-                if (header.classList.contains('fixed')) {
-                    header.classList.remove('fixed', 'top-0', 'left-0');
-                    header.classList.add('relative');
-                    if (placeholder) placeholder.style.height = 'auto';
-                }
-
-                // Show All
-                if (searchSection) searchSection.classList.remove('hidden');
-                if (iconsSection) iconsSection.classList.remove('hidden');
-
-                // Restore Logo
-                if (logoContainer) {
-                    logoContainer.style.width = '';
-                    logoContainer.classList.remove('py-1');
-                }
-
-                // --- RESET LAYOUT ---
-                header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
-
-                if (logoSection) {
-                    logoSection.classList.remove('lg:ml-14');
-                }
-
-                if (headerMainContainer) {
-                    headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-4', 'sm:px-6', 'flex-wrap');
-                    headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap', 'py-2');
-                    headerMainContainer.style.width = '';
-                }
-                if (mainNav) {
-                    mainNav.classList.add('justify-center');
-                }
+        function resetHeaderState() {
+            // Return to normal unstuck state
+            if (header.classList.contains('fixed')) {
+                header.classList.remove('fixed', 'top-0', 'left-0');
+                header.classList.add('relative');
+                if (placeholder) placeholder.style.height = 'auto';
             }
 
-            function updateHeader() {
-                const st = window.scrollY;
+            // Show All
+            if (searchSection) searchSection.classList.remove('hidden');
+            if (iconsSection) iconsSection.classList.remove('hidden');
 
-                // Make sure they scroll more than delta
-                if (Math.abs(lastScrollTop - st) <= delta)
-                    return;
-
-                if (st > threshold) {
-                    // We are scrolled past the top
-
-                    // Ensure Fixed Positioning
-                    if (!header.classList.contains('fixed')) {
-                        if (placeholder) placeholder.style.height = header.offsetHeight + 'px';
-                        header.classList.remove('relative');
-                        header.classList.add('fixed', 'top-0', 'left-0');
-                    }
-
-                    // Compact layout on mobile (hide search)
-                    if (window.innerWidth < 1024) {
-                        if (searchSection) searchSection.classList.add('hidden');
-                        if (logoContainer) {
-                            logoContainer.style.width = '100px';
-                        }
-                        if (headerMainContainer) {
-                            headerMainContainer.classList.remove('py-4');
-                            headerMainContainer.classList.add('py-2');
-                        }
-                    }
-
-                    // ALWAYS COMPACT (Scrolling Down OR Up, as long as not at top)
-                    // Only compact layout on desktop screens
-                    if (window.innerWidth >= 1024) {
-                        // Hide Search & Icons
-                        if (searchSection) searchSection.classList.add('hidden');
-                        if (iconsSection) iconsSection.classList.add('hidden');
-
-                        // Shrink Logo
-                        if (logoContainer) {
-                            logoContainer.style.width = '140px';
-                        }
-
-                        // --- NEW: INLINE LAYOUT ---
-                        // Force header to be a flex row container, CENTERED
-                        header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
-
-                        if (headerMainContainer) {
-                            // Collapse the main container to just fit the logo
-                            headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
-                            headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
-                            // Ensure it doesn't take full width
-                            headerMainContainer.style.width = 'auto';
-                        }
-
-                        if (logoSection) {
-                            // Move logo little bit right side as requested
-                            logoSection.classList.add('lg:ml-14');
-                        }
-
-                        if (mainNav) {
-                            // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
-                            mainNav.classList.remove('justify-center');
-                            // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
-                        }
-                    }
-                } else {
-                    resetHeaderState();
-                }
-
-                lastScrollTop = st;
+            // Restore Logo
+            if (logoContainer) {
+                logoContainer.style.width = '';
+                logoContainer.classList.remove('py-1');
             }
 
-            window.addEventListener('scroll', function () {
-                updateHeader();
-            });
+            // --- RESET LAYOUT ---
+            header.classList.remove('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
 
-            window.addEventListener('resize', function () {
-                if (window.innerWidth < 1024 && window.scrollY > threshold) {
-                    resetHeaderState(); // clears compact styles
-                    // immediately re-apply sticky behavior
+            if (logoSection) {
+                logoSection.classList.remove('lg:ml-14');
+            }
+
+            if (headerMainContainer) {
+                headerMainContainer.classList.add('mx-auto', 'py-4', 'max-w-[1600px]', 'px-4', 'sm:px-6', 'flex-wrap');
+                headerMainContainer.classList.remove('w-auto', 'p-0', 'flex-nowrap', 'py-2');
+                headerMainContainer.style.width = '';
+            }
+            if (mainNav) {
+                mainNav.classList.add('justify-center');
+            }
+        }
+
+        function updateHeader() {
+            const st = window.scrollY;
+
+            // Make sure they scroll more than delta
+            if (Math.abs(lastScrollTop - st) <= delta)
+                return;
+
+            if (st > threshold) {
+                // We are scrolled past the top
+
+                // Ensure Fixed Positioning
+                if (!header.classList.contains('fixed')) {
                     if (placeholder) placeholder.style.height = header.offsetHeight + 'px';
                     header.classList.remove('relative');
                     header.classList.add('fixed', 'top-0', 'left-0');
-                } else if (window.innerWidth < 1024) {
-                    resetHeaderState();
-                } else {
-                    updateHeader();
                 }
-            });
+
+                // Compact layout on mobile (hide search)
+                if (window.innerWidth < 1024) {
+                    if (searchSection) searchSection.classList.add('hidden');
+                    if (logoContainer) {
+                        logoContainer.style.width = '100px';
+                    }
+                    if (headerMainContainer) {
+                        headerMainContainer.classList.remove('py-4');
+                        headerMainContainer.classList.add('py-2');
+                    }
+                }
+
+                // ALWAYS COMPACT (Scrolling Down OR Up, as long as not at top)
+                // Only compact layout on desktop screens
+                if (window.innerWidth >= 1024) {
+                    // Hide Search & Icons
+                    if (searchSection) searchSection.classList.add('hidden');
+                    if (iconsSection) iconsSection.classList.add('hidden');
+
+                    // Shrink Logo
+                    if (logoContainer) {
+                        logoContainer.style.width = '140px';
+                    }
+
+                    // --- NEW: INLINE LAYOUT ---
+                    // Force header to be a flex row container, CENTERED
+                    header.classList.add('flex', 'flex-row', 'flex-nowrap', 'items-center', 'justify-center', 'px-6', 'gap-10');
+
+                    if (headerMainContainer) {
+                        // Collapse the main container to just fit the logo
+                        headerMainContainer.classList.remove('mx-auto', 'py-4', 'max-w-[1600px]', 'px-6', 'flex-wrap');
+                        headerMainContainer.classList.add('w-auto', 'p-0', 'flex-nowrap');
+                        // Ensure it doesn't take full width
+                        headerMainContainer.style.width = 'auto';
+                    }
+
+                    if (logoSection) {
+                        // Move logo little bit right side as requested
+                        logoSection.classList.add('lg:ml-14');
+                    }
+
+                    if (mainNav) {
+                        // Move nav to the LEFT (remove justify-center), keep normal visibility (hidden on mobile, flex on desktop)
+                        mainNav.classList.remove('justify-center');
+                        // Do NOT remove 'hidden' or force 'flex' indiscriminately. relying on existing classes.
+                    }
+                }
+            } else {
+                resetHeaderState();
+            }
+
+            lastScrollTop = st;
+        }
+
+        window.addEventListener('scroll', function() {
+            updateHeader();
         });
-    </script>
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth < 1024 && window.scrollY > threshold) {
+                resetHeaderState(); // clears compact styles
+                // immediately re-apply sticky behavior
+                if (placeholder) placeholder.style.height = header.offsetHeight + 'px';
+                header.classList.remove('relative');
+                header.classList.add('fixed', 'top-0', 'left-0');
+            } else if (window.innerWidth < 1024) {
+                resetHeaderState();
+            } else {
+                updateHeader();
+            }
+        });
+    });
+</script>
 @endpush

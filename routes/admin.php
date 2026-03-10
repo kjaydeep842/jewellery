@@ -82,6 +82,7 @@ Route::middleware(['auth', 'admin'])
         Route::resource('metals', \App\Http\Controllers\Admin\MetalController::class);
         Route::resource('units', \App\Http\Controllers\Admin\UnitController::class);
         Route::resource('colors', \App\Http\Controllers\Admin\ColorController::class);
+        Route::resource('navigation_menus', \App\Http\Controllers\Admin\NavigationMenuController::class);
 
         // Customer Service
         Route::resource('faqs', FaqController::class);
@@ -94,6 +95,9 @@ Route::middleware(['auth', 'admin'])
 
         // AJAX / Custom Operations
         Route::get('categories/{category}/subcategories', [SubcategoryController::class, 'byCategory'])->name('categories.subcategories');
+        Route::patch('categories/{category}/toggle', [CategoryController::class, 'toggleStatus'])->name('categories.toggle');
+        Route::patch('subcategories/{subcategory}/toggle', [SubcategoryController::class, 'toggleStatus'])->name('subcategories.toggle');
+        Route::patch('navigation_menus/{navigation_menu}/toggle', [\App\Http\Controllers\Admin\NavigationMenuController::class, 'toggleStatus'])->name('navigation_menus.toggle');
         Route::patch('banners/{banner}/toggle', [BannerController::class, 'toggleStatus'])->name('banners.toggle');
         Route::patch('styles/{style}/toggle', [\App\Http\Controllers\Admin\StyleController::class, 'toggleStatus'])->name('styles.toggle');
         Route::patch('features/{feature}/toggle', [\App\Http\Controllers\Admin\FeatureController::class, 'toggleStatus'])->name('features.toggle');

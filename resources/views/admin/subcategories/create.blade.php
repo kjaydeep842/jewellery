@@ -36,6 +36,15 @@
             @error('image')<p class="text-red-600 text-sm">{{ $message }}</p>@enderror
         </div>
 
+        <div class="mb-6">
+            <label class="font-bold text-zinc-700 mb-2 block font-heading">Status</label>
+            <select name="status" required
+                class="w-full border-zinc-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow p-2.5">
+                <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
+                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+            </select>
+        </div>
+
         <button
             class="px-8 py-3 btn-gold rounded-lg font-bold text-lg tracking-wide transform hover:-translate-y-1 transition-all shadow-lg">Save
             Subcategory</button>

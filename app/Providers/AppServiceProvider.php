@@ -45,7 +45,6 @@ class AppServiceProvider extends ServiceProvider
 
                 // Wishlist Count
                 $wishlistCount = \App\Models\Wishlist::where('user_id', $userId)->count();
-
             } else {
                 // Cart Count for Guest
                 $sessionId = session()->get('cart_session_id');
@@ -60,8 +59,14 @@ class AppServiceProvider extends ServiceProvider
             $view->with('cartCount', $cartCount);
             $view->with('wishlistCount', $wishlistCount);
 
+            // Fetch dynamic Navigation Menus
+            $navigationMenus = \App\Models\NavigationMenu::where('status', 'active')
+                ->orderBy('order')
+                ->get();
+            $view->with('navigationMenus', $navigationMenus);
+
             // Top Search Categories with product images
-            $topSearchCategories = \App\Models\Category::whereHas('products', function ($q) {
+            $topSearchCategories = \App\Models\Category::where('status', 'active')->whereHas('products', function ($q) {
                 $q->where('status', 'active');
             })->take(6)->get()->map(function ($cat) {
                 $product = $cat->products()->where('status', 'active')->whereNotNull('image')->first();

@@ -305,7 +305,7 @@
 
     @stack('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const globalLoader = document.getElementById('page-loader');
 
             // --- Global Loader Logic for Links, Forms & Programmatic Actions ---
@@ -314,7 +314,7 @@
                 // 1. Monkey-patch form.submit() to catch programmatic submissions
                 // (Fixes "View More" buttons and Shape filters that call submit() via JS)
                 const originalSubmit = HTMLFormElement.prototype.submit;
-                HTMLFormElement.prototype.submit = function () {
+                HTMLFormElement.prototype.submit = function() {
                     // Check for opt-out
                     if (!this.dataset.noLoader) {
                         globalLoader.classList.remove('hidden');
@@ -323,7 +323,7 @@
                 };
 
                 // 2. Handle Link Clicks & Heuristic OnClick Navigation
-                document.addEventListener('click', function (e) {
+                document.addEventListener('click', function(e) {
                     const link = e.target.closest('a');
                     const elementWithOnclick = e.target.closest('[onclick]');
 
@@ -349,10 +349,10 @@
                     if (elementWithOnclick) {
                         const code = elementWithOnclick.getAttribute('onclick');
                         if (code && (
-                            code.includes('window.location') ||
-                            code.includes('location.href') ||
-                            code.includes('.submit()')
-                        )) {
+                                code.includes('window.location') ||
+                                code.includes('location.href') ||
+                                code.includes('.submit()')
+                            )) {
                             // Double check it's not a new tab action (harder to detect in raw string, but usually location.href is current tab)
                             globalLoader.classList.remove('hidden');
                         }
@@ -360,7 +360,7 @@
                 });
 
                 // 3. Handle Standard Form Submissions (for type="submit" buttons)
-                document.addEventListener('submit', function (e) {
+                document.addEventListener('submit', function(e) {
                     const form = e.target;
                     if (!form.dataset.noLoader && !e.defaultPrevented) {
                         globalLoader.classList.remove('hidden');
@@ -368,7 +368,7 @@
                 });
 
                 // 4. Handle Browser Back Button (Hide Loader from Cache)
-                window.addEventListener('pageshow', function (event) {
+                window.addEventListener('pageshow', function(event) {
                     if (event.persisted) {
                         globalLoader.classList.add('hidden');
                     }
@@ -392,7 +392,7 @@
 
             // Global Filter Accordion Logic
             // Using capture phase (true) to ensure we handle the click before other scripts might stop propagation
-            document.addEventListener('click', function (e) {
+            document.addEventListener('click', function(e) {
                 // Filter Accordion - Toggle Visibility
                 const header = e.target.closest('.filter-accordion-header');
                 if (header) {
@@ -435,31 +435,31 @@
             }, true); // Enable capture phase
             // --- SweetAlert2 Session Message Handler (Order Success ONLY) ---
             @if(session('order_success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: "{{ session('order_success') }}",
-                    confirmButtonColor: '#CBA65A',
-                    fontFamily: 'Outfit',
-                    iconColor: '#CBA65A',
-                });
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('order_success') }}",
+                confirmButtonColor: '#CBA65A',
+                fontFamily: 'Outfit',
+                iconColor: '#CBA65A',
+            });
             @endif
 
             // --- Toast Session Message Handlers ---
             @if(session('success'))
-                if (window.showToast) window.showToast("{{ session('success') }}", "success");
+            if (window.showToast) window.showToast("{{ session('success') }}", "success");
             @endif
 
             @if(session('error'))
-                if (window.showToast) window.showToast("{{ session('error') }}", "error");
+            if (window.showToast) window.showToast("{{ session('error') }}", "error");
             @endif
 
             @if(session('info'))
-                if (window.showToast) window.showToast("{{ session('info') }}", "info");
+            if (window.showToast) window.showToast("{{ session('info') }}", "info");
             @endif
 
             @if(session('warning'))
-                if (window.showToast) window.showToast("{{ session('warning') }}", "warning");
+            if (window.showToast) window.showToast("{{ session('warning') }}", "warning");
             @endif
         });
     </script>

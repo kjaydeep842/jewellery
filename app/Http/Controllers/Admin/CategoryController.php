@@ -30,6 +30,7 @@ class CategoryController extends Controller
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'status'      => 'required|in:active,inactive',
         ]);
 
         try {
@@ -37,6 +38,7 @@ class CategoryController extends Controller
                 'name'        => $request->name,
                 'slug'        => Str::slug($request->name),
                 'description' => $request->description,
+                'status'      => $request->status,
             ];
 
             if ($request->hasFile('image')) {
@@ -63,6 +65,7 @@ class CategoryController extends Controller
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'status'      => 'required|in:active,inactive',
         ]);
 
         try {
@@ -70,6 +73,7 @@ class CategoryController extends Controller
                 'name'        => $request->name,
                 'slug'        => Str::slug($request->name),
                 'description' => $request->description,
+                'status'      => $request->status,
             ];
 
             if ($request->hasFile('image')) {
@@ -94,6 +98,17 @@ class CategoryController extends Controller
                 ->with('success', 'Category deleted successfully.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Failed to delete category. ' . $e->getMessage()]);
+        }
+    }
+    public function toggleStatus(Category $category)
+    {
+        try {
+            $category->status = $category->status === 'active' ? 'inactive' : 'active';
+            $category->save();
+
+            return response()->json(['success' => true, 'status' => $category->status]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

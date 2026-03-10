@@ -34,6 +34,7 @@ class SubcategoryController extends Controller
             'category_id' => 'required|exists:categories,id',
             'name'        => 'required|string|max:255',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'status'      => 'required|in:active,inactive',
         ]);
 
         try {
@@ -41,6 +42,7 @@ class SubcategoryController extends Controller
                 'category_id' => $request->category_id,
                 'name'        => $request->name,
                 'slug'        => Str::slug($request->name),
+                'status'      => $request->status,
             ];
 
             if ($request->hasFile('image')) {
@@ -68,6 +70,7 @@ class SubcategoryController extends Controller
             'category_id' => 'required|exists:categories,id',
             'name'        => 'required|string|max:255',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'status'      => 'required|in:active,inactive',
         ]);
 
         try {
@@ -75,6 +78,7 @@ class SubcategoryController extends Controller
                 'category_id' => $request->category_id,
                 'name'        => $request->name,
                 'slug'        => Str::slug($request->name),
+                'status'      => $request->status,
             ];
 
             if ($request->hasFile('image')) {
@@ -114,6 +118,17 @@ class SubcategoryController extends Controller
             );
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to load subcategories'], 500);
+        }
+    }
+    public function toggleStatus(Subcategory $subcategory)
+    {
+        try {
+            $subcategory->status = $subcategory->status === 'active' ? 'inactive' : 'active';
+            $subcategory->save();
+
+            return response()->json(['success' => true, 'status' => $subcategory->status]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

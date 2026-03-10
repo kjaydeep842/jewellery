@@ -33,6 +33,7 @@
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Name</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Category</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Slug</th>
+                <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Status</th>
                 <th class="p-4 font-bold font-heading text-sm uppercase tracking-wider">Actions</th>
             </tr>
         </thead>
@@ -53,6 +54,12 @@
                         class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs font-bold">{{ $sub->category->name }}</span>
                 </td>
                 <td class="p-4 text-zinc-500">{{ $sub->slug }}</td>
+                <td class="p-4">
+                    <button onclick="toggleStatus({{ $sub->id }})" id="status-btn-{{ $sub->id }}"
+                        class="px-3 py-1 rounded-full text-xs font-bold transition-all {{ $sub->status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
+                        {{ ucfirst($sub->status) }}
+                    </button>
+                </td>
                 <td class="p-4">
                     <div class="flex items-center space-x-2">
                         <a href="{{ route('admin.subcategories.edit', $sub->id) }}"
@@ -88,6 +95,26 @@
 
 @push('scripts')
 <script>
+    function toggleStatus(id) {
+        $.ajax({
+            url: `{{ url('admin/subcategories') }}/${id}/toggle`,
+            type: 'PATCH',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    const btn = $(`#status-btn-${id}`);
+                    if (response.status === 'active') {
+                        btn.removeClass('bg-red-100 text-red-700').addClass('bg-emerald-100 text-emerald-700').text('Active');
+                    } else {
+                        btn.removeClass('bg-emerald-100 text-emerald-700').addClass('bg-red-100 text-red-700').text('Inactive');
+                    }
+                }
+            }
+        });
+    }
+
     $(document).ready(function() {
         $('#subcategoriesTable').DataTable({
             responsive: false,
@@ -99,7 +126,7 @@
             },
             columnDefs: [{
                     orderable: false,
-                    targets: 4
+                    targets: 6
                 } // Action column
             ]
         });

@@ -87,14 +87,12 @@
                 <div class="w-6 h-6 sm:w-9 sm:h-9 flex-shrink-0"></div> <!-- Placeholder to retain spacing -->
             @endif
 
-            <!-- Add to Cart (Hidden for now to satisfy "Only Arrow" request) -->
-            {{--
+            <!-- Add to Cart (Restored on hover) -->
             <button onclick="window.location.href='{{ route('product.details', $product->slug) }}'"
                 class="flex-grow h-6 sm:h-9 text-white text-[9px] sm:text-xs shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-['Outfit'] whitespace-nowrap"
                 style="background: linear-gradient(90deg, #D9BE87 0%, #BE933C 100%), #D5D9E2; border-radius: 6px;">
                 Add to Cart
             </button>
-            --}}
 
             <!-- Expand Button -->
             <div @click.prevent.stop="zoomImages = images; zoomIndex = activeImage; zoomOpen = true"

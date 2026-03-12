@@ -24,6 +24,7 @@ use App\Models\Size;
 use App\Models\Brand;
 use App\Models\Unit;
 use App\Models\Color;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -72,7 +73,7 @@ class ProductController extends Controller
         ]);
 
         try {
-            \Illuminate\Support\Facades\DB::beginTransaction();
+            DB::beginTransaction();
 
             $data = $request->except(['tags', 'images', 'variants', 'image', 'remove_images']);
 
@@ -103,10 +104,6 @@ class ProductController extends Controller
                 $data['sku'] = 'SKU-' . strtoupper(Str::random(8));
             }
 
-            // Main Image
-            if ($request->hasFile('image')) {
-                $data['image'] = $request->file('image')->store('products', 'public');
-            }
 
             // Create Product
             $product = Product::create($data);
@@ -116,14 +113,45 @@ class ProductController extends Controller
                 $product->tags()->sync($request->tags);
             }
 
+            // Initialize ImageKit
+            $imageKit = new \ImageKit\ImageKit(
+                env('IMAGEKIT_PUBLIC_KEY', 'public_S27pY9bOfwZ6hIzvL7PeLV31E/g='),
+                env('IMAGEKIT_PRIVATE_KEY', 'private_WoGKR8PLIbT9fTWa+mk1Bt/dpkk='),
+                env('IMAGEKIT_URL_ENDPOINT', 'https://ik.imagekit.io/qfu5tz9sf')
+            );
+
+            // Main Image
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $upload = $imageKit->uploadFile([
+                    'file' => fopen($file->getRealPath(), 'r'),
+                    'fileName' => $file->getClientOriginalName(),
+                    'folder' => 'main'
+                ]);
+                if (empty($upload->error) && !empty($upload->result)) {
+                    $data['image'] = $upload->result->url;
+                } else {
+                    $errorMsg = is_string($upload->error) ? $upload->error : (isset($upload->error->message) ? $upload->error->message : 'Unknown error');
+                    throw new \Exception('Main Image Upload Failed: ' . $errorMsg);
+                }
+            }
             // Gallery Images
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $file) {
-                    $path = $file->store('products/gallery', 'public');
-                    ProductImage::create([
-                        'product_id' => $product->id,
-                        'image_path' => $path,
+                    $upload = $imageKit->uploadFile([
+                        'file' => fopen($file->getRealPath(), 'r'),
+                        'fileName' => $file->getClientOriginalName(),
+                        'folder' => 'gallery'
                     ]);
+                    if (empty($upload->error) && !empty($upload->result)) {
+                        ProductImage::create([
+                            'product_id' => $product->id,
+                            'image_path' => $upload->result->url,
+                        ]);
+                    } else {
+                        $errorMsg = is_string($upload->error) ? $upload->error : (isset($upload->error->message) ? $upload->error->message : 'Unknown error');
+                        throw new \Exception('Gallery Image Upload Failed: ' . $errorMsg);
+                    }
                 }
             }
 
@@ -150,11 +178,11 @@ class ProductController extends Controller
                 }
             }
 
-            \Illuminate\Support\Facades\DB::commit();
+            DB::commit();
 
             return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\DB::rollBack();
+            DB::rollBack();
             return back()->withInput()->withErrors(['error' => 'Failed to create product: ' . $e->getMessage()]);
         }
     }
@@ -222,12 +250,30 @@ class ProductController extends Controller
                 }
             }
 
+            // Initialize ImageKit
+            $imageKit = new \ImageKit\ImageKit(
+                env('IMAGEKIT_PUBLIC_KEY', 'public_S27pY9bOfwZ6hIzvL7PeLV31E/g='),
+                env('IMAGEKIT_PRIVATE_KEY', 'private_WoGKR8PLIbT9fTWa+mk1Bt/dpkk='),
+                env('IMAGEKIT_URL_ENDPOINT', 'https://ik.imagekit.io/qfu5tz9sf')
+            );
+
             // Main Image
             if ($request->hasFile('image')) {
-                if ($product->image && Storage::disk('public')->exists($product->image)) {
+                if ($product->image && !filter_var($product->image, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($product->image)) {
                     Storage::disk('public')->delete($product->image);
                 }
-                $data['image'] = $request->file('image')->store('products', 'public');
+                $file = $request->file('image');
+                $upload = $imageKit->uploadFile([
+                    'file' => fopen($file->getRealPath(), 'r'),
+                    'fileName' => $file->getClientOriginalName(),
+                    'folder' => 'main'
+                ]);
+                if (empty($upload->error) && !empty($upload->result)) {
+                    $data['image'] = $upload->result->url;
+                } else {
+                    $errorMsg = is_string($upload->error) ? $upload->error : (isset($upload->error->message) ? $upload->error->message : 'Unknown error');
+                    throw new \Exception('Main Image Upload Failed: ' . $errorMsg);
+                }
             }
 
             $product->update($data);
@@ -242,11 +288,20 @@ class ProductController extends Controller
             // Gallery Images Add
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $file) {
-                    $path = $file->store('products/gallery', 'public');
-                    ProductImage::create([
-                        'product_id' => $product->id,
-                        'image_path' => $path,
+                    $upload = $imageKit->uploadFile([
+                        'file' => fopen($file->getRealPath(), 'r'),
+                        'fileName' => $file->getClientOriginalName(),
+                        'folder' => 'gallery'
                     ]);
+                    if (empty($upload->error) && !empty($upload->result)) {
+                        ProductImage::create([
+                            'product_id' => $product->id,
+                            'image_path' => $upload->result->url,
+                        ]);
+                    } else {
+                        $errorMsg = is_string($upload->error) ? $upload->error : (isset($upload->error->message) ? $upload->error->message : 'Unknown error');
+                        throw new \Exception('Gallery Image Upload Failed: ' . $errorMsg);
+                    }
                 }
             }
 
@@ -255,7 +310,7 @@ class ProductController extends Controller
                 $idsToRemove = $request->input('remove_images');
                 $images = ProductImage::whereIn('id', $idsToRemove)->where('product_id', $product->id)->get();
                 foreach ($images as $img) {
-                    if (Storage::disk('public')->exists($img->image_path)) {
+                    if (!filter_var($img->image_path, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($img->image_path)) {
                         Storage::disk('public')->delete($img->image_path);
                     }
                     $img->delete();
@@ -298,7 +353,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         try {
-            if ($product->image && Storage::disk('public')->exists($product->image)) {
+            if ($product->image && !filter_var($product->image, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($product->image)) {
                 Storage::disk('public')->delete($product->image);
             }
             $product->delete();

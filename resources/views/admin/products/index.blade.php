@@ -77,7 +77,7 @@
             <tr class="group hover:bg-amber-50/50 transition-colors">
                 <td class="p-4">
                     @if($product->image)
-                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}"
+                    <img src="{{ $product->image }}" alt="{{ $product->name }}"
                         class="w-12 h-12 rounded-lg object-cover border border-zinc-200">
                     @else
                     <div

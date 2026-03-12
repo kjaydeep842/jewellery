@@ -26,7 +26,12 @@
     </div>
     @endif
 
-    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg border border-zinc-100 p-8" x-data="{ variants: [], selectedCategoryId: '{{ old('category_id') }}', categoryNames: @json($categories->pluck('name', 'id')) }">
+    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg border border-zinc-100 p-8" x-data="{ 
+            isSubmitting: false, 
+            variants: [], 
+            selectedCategoryId: {{ json_encode(old('category_id', '')) }}, 
+            categoryNames: {{ json_encode($categories->pluck('name', 'id')) }} 
+        }" x-on:submit="isSubmitting = true">
         @csrf
 
         {{-- 1. Basic Product Info --}}
@@ -443,8 +448,12 @@
             <a href="{{ route('admin.products.index') }}" class="px-8 py-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold rounded-lg shadow-sm transition-all">
                 Cancel
             </a>
-            <button type="submit" class="px-8 py-3 btn-gold hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5 rounded-lg shadow-md">
-                Save Product
+            <button type="submit" class="px-8 py-3 btn-gold hover:shadow-xl transition-all font-bold tracking-wide transform hover:-translate-y-0.5 rounded-lg shadow-md flex items-center justify-center min-w-[160px]" x-bind:disabled="isSubmitting" :class="{'opacity-75 cursor-not-allowed': isSubmitting}">
+                <span x-show="!isSubmitting">Save Product</span>
+                <span x-show="isSubmitting" style="display: none;" class="flex items-center gap-2">
+                    <svg class="animate-spin h-5 w-5 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    Saving...
+                </span>
             </button>
         </div>
 
